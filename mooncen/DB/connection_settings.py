@@ -71,12 +71,17 @@ def database_sslmode(host: str, environment: str | None = None) -> str:
 def database_connect_options(host: str, application_name: str) -> dict[str, Any]:
     statement_timeout_ms = bounded_env_int("DB_STATEMENT_TIMEOUT_MS", 15_000, 100, 600_000)
     lock_timeout_ms = bounded_env_int("DB_LOCK_TIMEOUT_MS", 3_000, 100, 120_000)
+    use_migrator = os.getenv("DB_USE_MIGRATOR", "").strip().lower() in {"1", "true", "yes", "on"}
+    # Runtime sessions keep pg_catalog first so unqualified built-ins resolve to
+    # trusted system objects. Schema migrations intentionally create application
+    # objects with unqualified DDL, so their first writable schema must be public.
+    search_path = "public,pg_catalog" if use_migrator else "pg_catalog,public"
     options: dict[str, Any] = {
         "connect_timeout": bounded_env_int("DB_CONNECT_TIMEOUT", 5, 1, 60),
         "application_name": application_name,
         "sslmode": database_sslmode(host),
         "options": (
-            "-c search_path=pg_catalog,public "
+            f"-c search_path={search_path} "
             f"-c statement_timeout={statement_timeout_ms} "
             f"-c lock_timeout={lock_timeout_ms}"
         ),
