@@ -1,0 +1,21 @@
+[Unit]
+Description=MoonCen an2p Ops service status publisher
+After=mooncen-development-runtime.target
+Wants=mooncen-development-runtime.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/src/project/mooncen
+EnvironmentFile=%h/.config/mooncen-an2p/status-agent.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=%h/src/project/mooncen/.venv/bin/python -m ops_agent.status_agent --interval 30
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+
+[Install]
+WantedBy=default.target

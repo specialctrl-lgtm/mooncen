@@ -1,0 +1,65 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - bot:9090
+        labels:
+          node: bot
+          alerting: enabled
+
+  - job_name: node_exporter
+    static_configs:
+      - targets:
+          - bot:9100
+        labels:
+          node: bot
+          role: monitoring
+          alerting: enabled
+      - targets:
+          - cloud:9100
+        labels:
+          node: cloud
+          role: linux
+          alerting: enabled
+      - targets:
+          - gen1crawler:9100
+        labels:
+          node: gen1crawler
+          role: crawler
+          worker_key: gen1crawler
+          rollout_order: "2"
+          distributed_desired: pending_disabled
+          worker_installation: blocked_not_ready
+          alerting: enabled
+      - targets:
+          - gen1db:9100
+        labels:
+          node: gen1db
+          role: crawler-control
+          # Keep pending while production_topology.json has crawlerMode=legacy.
+          # Promote only after the exact distributed release is deployed, the
+          # legacy scheduler/applier are stopped, and all central unit evidence
+          # documented in deploy/monitoring/README.md is green from bot.
+          alerting: pending
+      - targets:
+          - wtr-linux:9100
+        labels:
+          node: wtr-linux
+          role: crawler-worker
+          worker_key: wtr-linux
+          rollout_order: "1"
+          distributed_desired: pending_disabled
+          worker_installation: blocked_not_ready
+          alerting: pending
+
+  - job_name: windows_exporter
+    static_configs:
+      - targets:
+          - victus:9182
+        labels:
+          role: windows
+          alerting: pending

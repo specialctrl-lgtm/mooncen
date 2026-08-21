@@ -1,0 +1,646 @@
+# MoonCen public course crawler target registry.
+# Scope: 사회복지관, 도서관, 문화센터, 시청/구청 통합예약, 평생학습/강좌신청.
+# Status flow: candidate -> discovery -> ready -> implementing -> testing -> active -> paused/rejected.
+
+version: 1
+updated_at: "2026-05-24"
+
+collection_policy:
+  purpose: "지역 공공/복지/도서관/문화/평생학습 강좌 수집 대상 후보 관리"
+  include:
+    - "온라인에서 강좌 목록 또는 강좌 신청 목록을 공개하는 사이트"
+    - "사회복지관, 종합사회복지관, 노인복지관, 장애인복지관 프로그램"
+    - "공공도서관 문화강좌, 독서교실, 평생교육 프로그램"
+    - "시청/구청/군청 통합예약의 교육/강좌/문화행사"
+    - "평생학습관, 주민자치센터, 여성/가족/문화회관 강좌"
+  exclude:
+    - "로그인 후에만 목록이 보이는 개인 신청 내역"
+    - "단순 공지 PDF만 있고 현재 강좌 목록 URL이 없는 페이지"
+    - "수강권/바우처 안내만 있고 실제 강좌 목록이 없는 페이지"
+
+required_fields:
+  - provider
+  - name
+  - category
+  - base_url
+  - list_url
+  - owner_type
+  - status
+  - priority
+  - access
+
+desired_course_fields:
+  - title
+  - provider_course_id
+  - branch
+  - category_raw
+  - target
+  - status
+  - fee
+  - period
+  - schedule_raw
+  - location
+  - address
+  - raw_url
+  - description
+  - instructor
+
+source_categories:
+  integrated_reservation:
+    label: "통합예약"
+    examples:
+      - "시청/구청 통합예약"
+      - "교육청 통합예약"
+      - "시설관리공단 예약"
+  lifelong_learning:
+    label: "평생학습"
+    examples:
+      - "평생학습포털"
+      - "평생학습관"
+      - "주민자치센터 강좌"
+  public_library:
+    label: "도서관"
+    examples:
+      - "구립도서관 문화강좌"
+      - "교육청 도서관 평생교육"
+      - "독서교실/문화행사"
+  welfare_center:
+    label: "사회복지관"
+    examples:
+      - "종합사회복지관 프로그램"
+      - "노인복지관 평생교육"
+      - "장애인복지관 문화여가"
+  public_culture_center:
+    label: "공공 문화센터/문화회관"
+    examples:
+      - "여성문화회관"
+      - "문화의집"
+      - "생활문화센터"
+
+discovery_queries:
+  generic:
+    - '"강좌신청" "통합예약" "교육/강좌"'
+    - '"수강신청" "평생학습" "구청"'
+    - '"문화강좌" "도서관" "신청"'
+    - '"프로그램 신청" "사회복지관"'
+    - '"주민자치센터" "수강신청"'
+  site_scoped:
+    - 'site:.go.kr "강좌신청" "통합예약"'
+    - 'site:.go.kr "교육/강좌" "예약"'
+    - 'site:.or.kr "사회복지관" "프로그램 신청"'
+    - 'site:lib.*.kr "문화강좌" "수강신청"'
+    - 'site:*.lib.go.kr "독서교실" "신청"'
+    - 'site:*.edu "평생교육" "수강신청"'
+  by_owner_type:
+    city_hall:
+      - '"시청" "통합예약" "강좌/교육"'
+      - '"시청" "평생학습" "수강신청"'
+    district_office:
+      - '"구청" "통합예약" "강좌신청"'
+      - '"구청" "주민자치센터" "수강신청"'
+    library:
+      - '"도서관" "문화강좌" "접수중"'
+      - '"도서관" "수강신청" "강좌"'
+    welfare:
+      - '"종합사회복지관" "프로그램 신청"'
+      - '"노인복지관" "평생교육" "수강신청"'
+      - '"장애인복지관" "문화여가" "신청"'
+
+targets:
+  - provider: SEOUL_PUBLIC_SERVICE
+    name: 서울시 공공서비스예약
+    category: integrated_reservation
+    owner_type: city_hall
+    region: 서울특별시
+    priority: 1
+    status: generated
+    base_url: "https://yeyak.seoul.go.kr"
+    list_url: "https://yeyak.seoul.go.kr/web/search/selectPageListDetailSearchImg.do"
+    category_codes:
+      - code: T200
+        label: 문화체험
+        url: "https://yeyak.seoul.go.kr/web/search/selectPageListDetailSearchImg.do?code=T200"
+      - code: T000
+        label: 교육강좌
+        url: "https://yeyak.seoul.go.kr/web/search/selectPageListDetailSearchImg.do?code=T000"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "교육강좌"
+      - "문화행사"
+      - "체험/견학"
+      - "공간시설 일부"
+    notes:
+      - "서울시 및 산하기관/구청/도서관/복지센터 프로그램이 섞여 있는 우선순위 1 통합 소스."
+      - "상세 URL, 장소명, 대상, 접수기간, 이용기간, 지역 필드 수집 필요."
+
+  - provider: SEOUL_LIFELONG_LEARNING
+    name: 서울시 평생학습포털
+    category: lifelong_learning
+    owner_type: city_hall
+    region: 서울특별시
+    priority: 2
+    status: candidate
+    base_url: "https://sll.seoul.go.kr"
+    list_url: "https://sll.seoul.go.kr"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    notes:
+      - "온라인/오프라인 평생학습 강좌 후보. 신청 가능 강좌 목록 구조 확인 필요."
+
+  - provider: GANGBUK_RESERVATION
+    name: 강북구청 통합예약
+    category: integrated_reservation
+    owner_type: district_office
+    region: 서울특별시 강북구
+    priority: 2
+    status: ready
+    base_url: "https://office.gangbuk.go.kr"
+    list_url: "https://office.gangbuk.go.kr/rsvt/cntedu/lctre/list.do?menuNo=800039"
+    collection_type: active_status_filters+detail_html
+    service_group: 공공강좌
+    service_group_policy: locked
+    municipality_code: "1130500000"
+    full_snapshot_required: true
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "통합 강좌/교육 신청"
+      - "문화행사프로그램"
+      - "수시접수프로그램"
+      - "정기접수프로그램"
+    notes:
+      - "구청 통합예약형 샘플. 서울시 공공서비스예약과 중복 여부 확인 필요."
+
+  - provider: GANGSEO_RESERVATION
+    name: 강서구청 통합예약
+    category: integrated_reservation
+    owner_type: district_office
+    region: 서울특별시 강서구
+    priority: 2
+    status: candidate
+    base_url: "https://www.gangseo.seoul.kr"
+    list_url: "https://www.gangseo.seoul.kr/reserve/re010200"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "정보화교육"
+      - "강좌 신청"
+    notes:
+      - "접수 마감 후 추첨형 강좌가 있으므로 모집상태와 신청기간 분리 필요."
+
+  - provider: BUSAN_RESERVATION
+    name: 부산광역시 통합예약
+    category: integrated_reservation
+    owner_type: city_hall
+    region: 부산광역시
+    priority: 1
+    status: discovery
+    base_url: "https://reserve.busan.go.kr"
+    list_url: "https://reserve.busan.go.kr"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "강좌/교육"
+      - "여성문화회관"
+      - "하하센터"
+      - "시 산하기관 프로그램"
+    notes:
+      - "부산시 여성문화회관 수강신청 안내에서 통합예약 강좌/교육 신청 경로 확인."
+
+  - provider: BUSAN_DONGGU_RESERVATION
+    name: 부산 동구 통합예약
+    category: integrated_reservation
+    owner_type: district_office
+    region: 부산광역시 동구
+    priority: 2
+    status: candidate
+    base_url: "https://www.bsdonggu.go.kr"
+    list_url: "https://www.bsdonggu.go.kr/reserve/index.donggu"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "평생교육"
+      - "정보화교육"
+      - "도서관"
+      - "일반"
+    notes:
+      - "강좌검색 표에 강좌명/접수기간/교육기간/대상/모집/접수여부가 노출됨."
+
+  - provider: SASANG_RESERVATION
+    name: 부산 사상구 통합예약
+    category: integrated_reservation
+    owner_type: district_office
+    region: 부산광역시 사상구
+    priority: 2
+    status: candidate
+    base_url: "https://www.sasang.go.kr"
+    list_url: "https://www.sasang.go.kr/index.sasang?menuCd=DOM_000001003008000000"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "교육/강좌/공연"
+      - "사상구노인복지관"
+    notes:
+      - "복지관 프로그램이 구청 통합예약 페이지에 포함되는 케이스."
+
+  - provider: BUSAN_LIFELONG_PLATFORM
+    name: 부산평생학습플랫폼
+    category: lifelong_learning
+    owner_type: city_hall
+    region: 부산광역시
+    priority: 2
+    status: candidate
+    base_url: "https://lll.busan.go.kr"
+    list_url: "https://lll.busan.go.kr"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    notes:
+      - "기관별/강좌별 강의정보와 신청 링크 확인 필요."
+
+  - provider: INCHEON_RESERVATION
+    name: 인천광역시 온라인통합예약
+    category: integrated_reservation
+    owner_type: city_hall
+    region: 인천광역시
+    priority: 1
+    status: candidate
+    base_url: "https://www.incheon.go.kr"
+    list_url: "https://www.incheon.go.kr/res/"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "강좌/교육"
+      - "문화행사"
+      - "박물관/기관 교육"
+    notes:
+      - "메인에 강좌/교육 카드 노출. 상세 목록 endpoint 확인 필요."
+
+  - provider: DAEGU_RESERVATION
+    name: 대구광역시 통합예약
+    category: integrated_reservation
+    owner_type: city_hall
+    region: 대구광역시
+    priority: 1
+    status: ready
+    base_url: "https://www.daegu.go.kr"
+    list_url: "https://yeyak.daegu.go.kr/expr"
+    access:
+      login_required: false
+      selenium_required: false
+      api_available: true
+    coverage:
+      - "견학/체험 예약"
+      - "박물관/기관 해설"
+      - "공공시설 체험"
+    notes:
+      - "체험/견학 예약은 yeyak.daegu.go.kr 공개 JSON API로 수집 가능."
+      - "교육/강좌 API는 NetFUNNEL 브라우저 게이트로 직접 호출이 차단된다."
+
+  - provider: MUNI_WWW_BUK_DAEGU_KR_RESERVATION
+    name: 대구 북구 통합예약
+    category: integrated_reservation
+    owner_type: district_office
+    region: 대구광역시 북구
+    priority: 2
+    status: ready
+    base_url: "https://www.buk.daegu.kr"
+    list_url: "https://www.buk.daegu.kr/reserve/index.do?menu_id=00002617"
+    list_urls:
+      - "https://www.buk.daegu.kr/reserve/index.do?menu_id=00002617"
+      - "https://www.buk.daegu.kr/reserve/index.do?menu_id=00002777"
+      - "https://www.buk.daegu.kr/reserve/index.do?menu_id=00002965"
+      - "https://www.buk.daegu.kr/reserve/index.do?menu_id=00002619"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: false
+    coverage:
+      - "평생학습프로그램"
+      - "정보화 교육"
+      - "외국어 교육"
+      - "주민자치센터 강좌"
+      - "심폐소생술교육 안내"
+    notes:
+      - "평생학습, 정보화, 외국어, 주민자치센터 강좌는 buk.daegu.kr의 lec_list HTML과 상세 테이블로 수집한다."
+      - "심폐소생술교육은 보건소 안내/외부 무료교육 신청 흐름이라 현재 강좌 목록 수집 대상에서는 제외한다."
+      - "방문접수 강좌도 있으므로 application_method_raw를 보존한다."
+
+  - provider: GWANGJU_RESERVATION
+    name: 광주광역시 바로예약
+    category: integrated_reservation
+    owner_type: city_hall
+    region: 광주광역시
+    priority: 1
+    status: candidate
+    base_url: "https://www.gwangju.go.kr"
+    list_url: "https://www.gwangju.go.kr/reserve/main.do"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "교육/강좌"
+      - "문화도시"
+      - "김치타운"
+      - "역사민속박물관"
+      - "농업기술센터"
+    notes:
+      - "광주시 온라인예약신청 통합 플랫폼."
+
+  - provider: DAEJEON_OK_RESERVATION
+    name: 대전광역시 OK예약서비스
+    category: integrated_reservation
+    owner_type: city_hall
+    region: 대전광역시
+    priority: 1
+    status: candidate
+    base_url: "https://www.daejeon.go.kr"
+    list_url: "https://www.daejeon.go.kr/okr2019"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "강좌/교육"
+      - "문화시설"
+      - "공공시설"
+    notes:
+      - "OK예약서비스 강좌홈 구조 확인 필요."
+
+  - provider: ULSAN_EDU_BOOKING
+    name: 울산광역시교육청 통합예약
+    category: lifelong_learning
+    owner_type: education_office
+    region: 울산광역시
+    priority: 2
+    status: candidate
+    base_url: "https://use.go.kr"
+    list_url: "https://use.go.kr/booking/user/reservation/Edu/BD_selectReservationMngList.do"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "교육청 체험/교육"
+      - "학생/학부모 프로그램"
+    notes:
+      - "교육청 교육신청 목록을 평생학습 계열로 수집한다."
+
+  - provider: ULSAN_BUKGU_PUBLIC_RESERVATION
+    name: 울산 북구 공공시설예약서비스
+    category: integrated_reservation
+    owner_type: district_office
+    region: 울산광역시 북구
+    priority: 2
+    status: candidate
+    base_url: "https://crs.ubimc.or.kr"
+    list_url: "https://crs.ubimc.or.kr/yeyak"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "강좌/교육"
+      - "체육센터 강좌"
+    notes:
+      - "체육강좌 중심. 시설관리공단형 크롤러 후보."
+
+  - provider: SEJONG_LIFELONG_EDU
+    name: 세종특별자치시교육청 평생교육원
+    category: lifelong_learning
+    owner_type: education_office
+    region: 세종특별자치시
+    priority: 2
+    status: candidate
+    base_url: "https://life.sje.go.kr"
+    list_url: "https://life.sje.go.kr"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "수강신청"
+      - "평생교육"
+      - "도서관 프로그램"
+    notes:
+      - "상단 강좌/신청 > 수강신청 구조 확인 필요."
+
+  - provider: GYEONGGI_GSEEK
+    name: 경기도 평생학습포털 GSEEK
+    category: lifelong_learning
+    owner_type: province
+    region: 경기도
+    priority: 2
+    status: candidate
+    base_url: "https://www.gseek.kr"
+    list_url: "https://www.gseek.kr/?site=new"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "오프라인학습"
+      - "온라인학습"
+      - "화상학습"
+      - "지역별/기관별 강좌"
+    notes:
+      - "온라인 강좌가 많아 MoonCen의 오프라인 지도 중심 데이터와 분리 정책 필요."
+
+  - provider: GYEYANG_LIFELONG
+    name: 계양구 평생학습포털
+    category: lifelong_learning
+    owner_type: district_office
+    region: 인천광역시 계양구
+    priority: 3
+    status: candidate
+    base_url: "https://gylle.gyeyang.go.kr"
+    list_url: "https://gylle.gyeyang.go.kr/main.jsp"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "강좌 검색"
+      - "주민자치센터 수강신청 안내"
+    notes:
+      - "강좌 목록 endpoint 및 접수상태 필드 확인 필요."
+
+  - provider: ESHARE_PUBLIC_COURSE
+    name: 공유누리 교육/강좌
+    category: integrated_reservation
+    owner_type: national_platform
+    region: 전국
+    priority: 2
+    status: candidate
+    base_url: "https://www.eshare.go.kr"
+    list_url: "https://www.eshare.go.kr"
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+    coverage:
+      - "교육/강좌"
+      - "공유신청/예약"
+      - "주민센터/문화센터 일부"
+    notes:
+      - "전국 공공자원 예약 플랫폼. 위치/기관/카테고리 정규화가 중요."
+
+  - provider: PUBLIC_DATA_COURSE_RESERVATION
+    name: 공공데이터포털 문화행사/공공서비스예약 데이터
+    category: open_data
+    owner_type: national_platform
+    region: 전국
+    priority: 2
+    status: candidate
+    base_url: "https://www.data.go.kr"
+    list_url: "https://www.data.go.kr"
+    access:
+      login_required: false
+      selenium_required: false
+      api_available: true
+    coverage:
+      - "문화행사 공공서비스예약 정보"
+      - "서비스ID"
+      - "서비스명"
+      - "장소명"
+      - "바로가기 URL"
+      - "좌표"
+      - "접수기간"
+    notes:
+      - "기관별 데이터셋 품질 차이가 큼. API/파일 데이터 갱신주기 확인 필요."
+      - "서울 강북구 문화행사 공공서비스예약 정보 같은 지역별 파일/API를 발견 대상으로 삼음."
+
+  - provider: SPORTS_VOUCHER
+    name: 스포츠강좌이용권 시설/강좌 후보
+    category: public_welfare_voucher
+    owner_type: national_platform
+    region: 전국
+    priority: 4
+    status: candidate
+    base_url: "https://svoucher.kspo.or.kr"
+    list_url: "https://svoucher.kspo.or.kr"
+    access:
+      login_required: unknown
+      selenium_required: unknown
+      api_available: unknown
+    notes:
+      - "바우처 안내가 많고 실제 강좌 목록 접근성 확인 필요."
+      - "MoonCen 기본 문화강좌와 성격이 달라 별도 도메인으로 분리 가능."
+
+  - provider: SEONGNAM_BAEUMSOOP
+    name: "성남시 평생학습 통합플랫폼 배움숲"
+    category: lifelong_learning
+    owner_type: city_hall
+    region: "경기도 성남시"
+    priority: 1
+    status: generated
+    base_url: "https://sugang.seongnam.go.kr"
+    list_url: "https://sugang.seongnam.go.kr/ilms/learning/officeList.do"
+    access:
+      login_required: false
+      selenium_required: true
+      api_available: unknown
+      queue_protection: "TRACER/WELLCONN access waiting layer"
+    coverage:
+      - "평생학습 강좌 수강신청"
+      - "기관별 강좌 목록"
+      - "생활체육 강좌 수강신청"
+    observed:
+      page_title: "성남시 평생학습 통합플랫폼 - 배움숲"
+      list_endpoint: "/ilms/learning/officeList.do"
+      course_list_endpoint: "/ilms/learning/learningList.do"
+      physical_course_list_endpoint: "/ilms/physicalLearning/physicalLearningOfficeList.do"
+      known_course_list_pattern: "https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition3={office_code}"
+      office_code_pattern: "OFFICE_########"
+      query_params_seen:
+        - "office_pageUnit"
+        - "pageIndex"
+        - "searchCondition"
+        - "searchKeyword"
+        - "searchCondition3"
+      tracer_notice:
+        - "서비스 접근 대기 중입니다."
+        - "현재 접속하신 아이피에서는 접속이 불가능합니다."
+        - "접속량이 많아 접속이 불가능합니다."
+    field_mapping_hints:
+      branch: "officeList.do 기관 목록의 기관명"
+      branch_code: "learningList.do searchCondition3=OFFICE_... 값"
+      title: "learningList.do 강좌명"
+      raw_url: "강좌 상세 또는 learningList.do의 강좌별 링크"
+      status: "접수상태/신청상태"
+      period: "교육기간"
+      schedule_raw: "교육시간/요일"
+      target: "참여대상"
+      fee: "수강료"
+      pagination: "pageIndex 또는 더보기/페이징 영역 확인"
+    notes:
+      - "브라우저/대기열 통과 후 실제 기관 목록과 강좌 목록 DOM을 확인해야 한다."
+      - "검색 결과에서 OFFICE_00000680, OFFICE_00000681, OFFICE_00000670 같은 기관 코드가 확인된다."
+      - "TRACER 대기/차단 레이어가 있어 requests 단독 수집은 실패할 수 있으므로 Selenium 또는 세션 쿠키 유지가 필요하다."
+
+crawler_patterns:
+  integrated_reservation_common:
+    expected_list_fields:
+      - "강좌명"
+      - "접수기간"
+      - "교육기간"
+      - "대상"
+      - "신청/모집"
+      - "접수여부"
+    pagination_signals:
+      - ".pagination"
+      - ".paging"
+      - "pageIndex"
+      - "pageNo"
+      - "더보기"
+    detail_signals:
+      - "상세보기"
+      - "신청"
+      - "접수"
+  public_library_common:
+    expected_list_fields:
+      - "행사명"
+      - "강좌명"
+      - "대상"
+      - "장소"
+      - "접수기간"
+      - "행사기간"
+      - "접수상태"
+    notes:
+      - "도서관은 통합도서관 솔루션별로 URL 패턴이 갈리므로 지역별 샘플링 필요."
+  welfare_center_common:
+    expected_list_fields:
+      - "프로그램명"
+      - "대상"
+      - "기간"
+      - "요일/시간"
+      - "수강료"
+      - "접수방법"
+    notes:
+      - "사회복지관은 온라인 신청보다 전화/방문 접수가 많아 raw_url과 안내 텍스트 중심 수집."
+
+next_steps:
+  - "priority 1 통합예약 포털부터 discovery crawler 실행"
+  - "각 사이트에서 목록 endpoint, pagination, 상세 URL, 로그인 필요 여부 확인"
+  - "중복 소스는 통합예약 우선, 개별 기관 페이지는 상세 보강용으로 분리"
+  - "좌표는 수집 후 Kakao Local API로 보정"
+  - "ready 상태가 된 target만 production crawler 구현"

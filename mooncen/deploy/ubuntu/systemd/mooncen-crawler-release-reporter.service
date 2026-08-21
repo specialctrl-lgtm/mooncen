@@ -1,0 +1,38 @@
+[Unit]
+Description=Ingest MoonCen crawler release reports into the shared staging DB
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/mooncen/crawler-release-reporter.env
+
+[Service]
+Type=oneshot
+User=mooncen-crawler-reporter
+Group=mooncen-crawler-reporter
+WorkingDirectory=/opt/mooncen-worker/current
+EnvironmentFile=/etc/mooncen/crawler-release-reporter.env
+ExecStartPre=/opt/mooncen-worker/current/.venv/bin/python -I -X utf8 /opt/mooncen-worker/current/tools/run_crawler_release_reporter.py --preflight
+ExecStart=/opt/mooncen-worker/current/.venv/bin/python -I -X utf8 /opt/mooncen-worker/current/tools/run_crawler_release_reporter.py
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/mooncen-crawler-release-agent
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+ProcSubset=pid
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictNamespaces=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

@@ -1,0 +1,7 @@
+[Unit]
+Description=MoonCen node textfile metrics
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/mooncen_node_metrics.sh

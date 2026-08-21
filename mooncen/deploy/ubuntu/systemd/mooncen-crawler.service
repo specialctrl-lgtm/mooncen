@@ -1,0 +1,52 @@
+[Unit]
+Description=MoonCen crawler worker
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=mooncen-crawler
+Group=mooncen-crawler
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/crawler.env
+Environment=TZ=Asia/Seoul
+Environment=HOME=/tmp
+Environment=XDG_CACHE_HOME=/tmp/.cache
+Environment=XDG_CONFIG_HOME=/tmp/.config
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=/opt/mooncen/.venv/bin/python -I /opt/mooncen/tools/chrome_sandbox_smoke.py
+ExecStart=/bin/bash -lc '/opt/mooncen/.venv/bin/python -X utf8 run_crawlers.py --providers ${CRAWLER_PROVIDERS:-HOMEPLUS EMART LOTTE EXPERIENCE_TARGETS MUNICIPAL_RESERVATION_TARGETS} --parallel --max-workers "${CRAWLER_MAX_WORKERS:-4}" --run-interval "${CRAWLER_RUN_INTERVAL:-86400}" --ignore-active-window ${CRAWLER_COORDINATE_BACKFILL_LIMIT:+--coordinate-backfill-limit "$CRAWLER_COORDINATE_BACKFILL_LIMIT"} --coordinate-backfill-delay "${CRAWLER_COORDINATE_BACKFILL_DELAY:-0.5}"'
+Restart=always
+# Exit 75 is a confirmed active duplicate, not a successful crawl. Keep it
+# visible as failed without creating a restart storm behind the lock holder.
+RestartPreventExitStatus=75
+RestartSec=30
+TimeoutStopSec=300
+KillMode=control-group
+MemoryHigh=70%
+MemoryMax=80%
+TasksMax=512
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/mooncen/logs
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ProtectProc=invisible
+ProcSubset=pid
+
+[Install]
+WantedBy=multi-user.target

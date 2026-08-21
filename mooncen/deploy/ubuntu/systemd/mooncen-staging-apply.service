@@ -1,0 +1,34 @@
+[Unit]
+Description=Promote latest pinned MoonCen crawler staging batch to primary
+After=network.target
+
+[Service]
+Type=oneshot
+User=mooncen-applier
+Group=mooncen-applier
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/applier.env
+ExecStart=/opt/mooncen/.venv/bin/python -I -X utf8 tools/promote_latest_staging_batch.py --runtime-directory /run/mooncen-staging-apply
+RuntimeDirectory=mooncen-staging-apply
+RuntimeDirectoryMode=0700
+TimeoutStartSec=2h
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

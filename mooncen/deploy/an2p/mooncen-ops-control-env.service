@@ -1,0 +1,16 @@
+[Unit]
+Description=MoonCen an2p production Ops control credential refresh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/src/project/mooncen
+ExecStart=%h/src/project/mooncen/.venv/bin/python %h/src/project/mooncen/tools/prepare_an2p_ops_control.py
+RemainAfterExit=yes
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+
+[Install]
+WantedBy=default.target

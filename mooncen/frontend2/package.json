@@ -1,0 +1,45 @@
+{
+  "name": "mooncen-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --max-warnings=0",
+    "test": "vitest run --environment jsdom",
+    "test:e2e": "playwright test",
+    "audit:css": "node tools/css-audit.mjs",
+    "maintain:css": "node tools/prune-css.mjs && node tools/split-css.mjs",
+    "check": "npm run lint && npm run test && npm run build",
+    "preview": "vite preview --host 0.0.0.0",
+    "start": "serve -s dist -n --no-port-switching"
+  },
+  "dependencies": {
+    "lucide-react": "^1.26.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "serve": "^14.2.6"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^6.0.3",
+    "eslint": "^10.6.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.16",
+    "purgecss": "^8.0.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.63.0",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
+  }
+}

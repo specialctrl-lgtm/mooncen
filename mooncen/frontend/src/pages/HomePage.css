@@ -1,0 +1,167 @@
+.home-page {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    /* Turn on Flexbox for split view */
+}
+
+/* Sidebar List (Desktop Only) */
+.sidebar-list {
+    width: 400px;
+    background: white;
+    height: 100%;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-glass);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    z-index: 550;
+    /* Above map but below header overlay if needed */
+    display: none;
+    /* Hidden on mobile by default */
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-glass);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* Map Container */
+.map-container-wrapper {
+    flex: 1;
+    position: relative;
+    height: 100%;
+}
+
+
+/* Map Overlay Controls - Adjusted for Desktop Sidebar */
+.map-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    padding: 16px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+    .sidebar-list {
+        display: flex;
+        /* Show sidebar on desktop */
+    }
+
+    /* On desktop, the search bar might need to move or behave differently. 
+     For now, we keep the floating header over the map, but maybe shift it? 
+     Let's keep it simple: Map Header overlays the Map part only. 
+  */
+    .map-header {
+        /* If sidebar is present, map header is relative to map-container-wrapper */
+    }
+}
+
+.search-container {
+    pointer-events: auto;
+    margin-bottom: 12px;
+}
+
+.search-input-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-glass);
+}
+
+.search-input-wrapper input {
+    border: none;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+    color: var(--text-primary);
+}
+
+.filter-chips {
+    pointer-events: auto;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    /* Scrollbar space */
+}
+
+.filter-chip {
+    background: #fff;
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-primary);
+}
+
+.filter-chip.active {
+    background: var(--accent-primary);
+    color: #fff;
+    border-color: var(--accent-primary);
+}
+
+/* Bottom Sheet */
+.bottom-sheet {
+    position: absolute;
+    bottom: 0px;
+    /* Accounts for bottom-nav padding in MainLayout? No, MainLayout has padding-bottom. Parent is relative. */
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 24px;
+    z-index: 600;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(110%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bottom-sheet.open {
+    transform: translateY(0);
+}
+
+.sheet-header {
+    margin-bottom: 16px;
+}
+
+.sheet-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+
+.sheet-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.sheet-action {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}

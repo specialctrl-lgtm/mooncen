@@ -1,0 +1,27 @@
+[Unit]
+Description=Recover MoonCen crawler when standby crawler is not active
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -lc 'role=$(cat /etc/mooncen-node-role 2>/dev/null || echo unknown); enabled=$(systemctl is-enabled mooncen-crawler.service 2>/dev/null || true); state=$(systemctl is-active mooncen-crawler.service 2>/dev/null || true); if [ "$role" = "standby" ] && [ "$enabled" = "enabled" ] && [ "$state" != "active" ]; then logger -t mooncen-crawler-watchdog "recovering mooncen-crawler state=$state"; systemctl reset-failed mooncen-crawler.service || true; systemctl restart mooncen-crawler.service; fi'
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX

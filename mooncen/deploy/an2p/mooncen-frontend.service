@@ -1,0 +1,25 @@
+[Unit]
+Description=MoonCen an2p user development frontend
+After=mooncen-api.service
+Wants=mooncen-api.service
+Before=mooncen-development-runtime.target
+ConditionPathExists=!/etc/mooncen-an2p/docker-development-enabled
+
+[Service]
+Type=simple
+WorkingDirectory=%h/src/project/mooncen/frontend2
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=VITE_DEV_HOST=127.0.0.1
+Environment=VITE_DEV_PORT=5174
+Environment=VITE_API_PROXY_TARGET=http://127.0.0.1:8001
+ExecStartPre=%h/src/project/mooncen/.venv/bin/python %h/.local/share/mooncen-an2p/wait_for_an2p_http.py http://127.0.0.1:8001/health --timeout 90
+ExecStart=%h/.local/bin/npm run dev
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+
+[Install]
+WantedBy=mooncen-development-runtime.target

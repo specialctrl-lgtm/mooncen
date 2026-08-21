@@ -1,0 +1,55 @@
+version: 1
+environment: n100
+scope: education
+include_inactive: false
+checked_at: '2026-07-18T08:00:26+09:00'
+source: production_api_courses_exact_provider_filter + readonly_db_existing_owner_audit; provider set reconciled to 2026-07-24 schedule
+summary:
+  queried_providers: 33
+  active_courses: 484
+  providers_with_active_courses: 21
+providers:
+- {provider: MUNI_DOKSEODANG_SD_GO_KR_A8C20229, active_course_count: 22, note: readonly_db_verified_existing_owner}
+- {provider: MUNI_JANGAN_SUWON_GO_KR_D82A0EAE, active_course_count: 0}
+- {provider: MUNI_LEARNING_SUWON_GO_KR_3AF2DB76, active_course_count: 20}
+- {provider: MUNI_LEARNING_SUWON_GO_KR_402954DA, active_course_count: 20}
+- {provider: MUNI_LEARNING_SUWON_GO_KR_6ABE3488, active_course_count: 0}
+- {provider: MUNI_LEARNING_SUWON_GO_KR_A915395E, active_course_count: 20}
+- {provider: MUNI_PALDAL_SUWON_GO_KR_7F5BC8C6, active_course_count: 0}
+- {provider: MUNI_PALDAL_SUWON_GO_KR_D78BD1B4, active_course_count: 0}
+- {provider: MUNI_YEYAK_SYF_OR_KR_7D3E2EF5, active_course_count: 20}
+- {provider: SEONGNAM_BAEUMSOOP, active_course_count: 18}
+- provider: ANYANG_LIFELONG_LEARNING
+  active_course_count: 10
+  active_urls: []
+  evidence_note: legacy 10-row production evidence was not source-URL-bound; require canonical live validation
+- {provider: YONGIN_LIFELONG_LEARNING, active_course_count: 1}
+- {provider: BUSAN_RESERVATION, active_course_count: 1, active_branch_count: 1}
+- provider: DAEGU_RESERVATION
+  active_course_count: 17
+  active_branch_count: 9
+  active_urls:
+  - https://yeyak.daegu.go.kr/expr/list
+  note: experience_scope_only
+- provider: DAEJEON_OK_RESERVATION
+  active_course_count: 2
+  active_urls: []
+  evidence_note: legacy 2-row production evidence was not source-URL-bound; require canonical live validation
+- {provider: GWANGJU_RESERVATION, active_course_count: 7, active_branch_count: 4}
+- {provider: INCHEON_RESERVATION, active_course_count: 45, active_branch_count: 1}
+- {provider: MUNI_RESERVE_ANSAN_GO_KR_02253999, active_course_count: 0, note: experience_scope_only}
+- {provider: MUNI_WWW_GWANGJU_GO_KR_82EF77CD, active_course_count: 0}
+- {provider: MUNI_SUGANG_ASAN_GO_KR_FF504CD1, active_course_count: 0}
+- {provider: MUNI_WWW_GN_GO_KR_5623F7DB, active_course_count: 6}
+- {provider: MUNI_WWW_DANGJIN_GO_KR_3C378AA6, active_course_count: 0}
+- {provider: MUNI_WWW_DONGGU_GO_KR_9A7A5E6F, active_course_count: 0}
+- {provider: MUNI_WWW_GURO_GO_KR_A4A5D3E3, active_course_count: 155}
+- {provider: MUNI_WWW_DAEDEOK_GO_KR_360B9B7C, active_course_count: 73}
+- {provider: MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E, active_course_count: 4}
+- {provider: MUNI_SUGANG_SEONGNAM_GO_KR_D447262D, active_course_count: 4}
+- {provider: MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B, active_course_count: 6}
+- {provider: MUNI_WWW_YANGJU_GO_KR_1A2AECAC, active_course_count: 0}
+- {provider: MUNI_WWW_BONGHWA_GO_KR_A33FDB5A, active_course_count: 0}
+- {provider: MUNI_WWW_GONGJU_GO_KR_7CBA2D38, active_course_count: 2}
+- {provider: MUNI_JHED_JNE_GO_KR_16474ED5, active_course_count: 31}
+- {provider: MUNI_YEDU_YONGSAN_GO_KR_4E97CC33, active_course_count: 0}

@@ -1,0 +1,32 @@
+[Unit]
+Description=MoonCen dry-run latest crawler staging batch apply
+After=network.target
+
+[Service]
+Type=oneshot
+User=mooncen-applier
+Group=mooncen-applier
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/applier.env
+ExecStart=/opt/mooncen/.venv/bin/python -X utf8 tools/apply_staging_batch.py --dry-run
+TimeoutStartSec=2h
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

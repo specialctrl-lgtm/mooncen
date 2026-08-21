@@ -1,0 +1,280 @@
+# Branches whose crawler payload does not contain a usable municipality.
+# Keep every override tied to an exact provider/branch pair and an auditable source.
+version: 1
+updated_at: "2026-08-05"
+
+overrides:
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립횡성숲체원
+    municipality_full_name: 강원특별자치도 횡성군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립칠곡숲체원
+    municipality_full_name: 경상북도 칠곡군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립장성숲체원
+    municipality_full_name: 전남광주통합특별시 장성군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립청도숲체원
+    municipality_full_name: 경상북도 청도군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립춘천숲체원
+    municipality_full_name: 강원특별자치도 춘천시
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=283
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립나주숲체원
+    municipality_full_name: 전남광주통합특별시 나주시
+    evidence_url: https://www.sooperang.go.kr/rep/ari/selectGnrlRsrvtList.do?hmpgId=FA00007
+    evidence_note: 숲e랑 공식 시설 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립양평치유의숲
+    municipality_full_name: 경기도 양평군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립김천치유의숲
+    municipality_full_name: 경상북도 김천시
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립제천치유의숲
+    municipality_full_name: 충청북도 제천시
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립예산치유의숲
+    municipality_full_name: 충청남도 예산군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립곡성치유의숲
+    municipality_full_name: 전남광주통합특별시 곡성군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립화순치유의숲
+    municipality_full_name: 전남광주통합특별시 화순군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=417
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립고창치유의숲
+    municipality_full_name: 전북특별자치도 고창군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=422
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립진안고원산림치유원
+    municipality_full_name: 전북특별자치도 진안군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=415
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립익산치유의숲
+    municipality_full_name: 전북특별자치도 익산시
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=448
+    evidence_note: 한국산림복지진흥원 소속기관 공식 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립산림치유원
+    municipality_full_name: 경상북도 영주시
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립부산승학산치유의숲
+    municipality_full_name: 부산광역시 사하구
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=425
+    evidence_note: 한국산림복지진흥원 기관 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립대관령치유의숲
+    municipality_full_name: 강원특별자치도 강릉시
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립대전숲체원
+    municipality_full_name: 대전광역시 유성구
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=277
+    evidence_note: 한국산림복지진흥원 소속기관 주소
+  - provider: NATIONAL_FOREST_EDUCATION_CENTER
+    branch: 국립대운산치유의숲
+    municipality_full_name: 울산광역시 울주군
+    evidence_url: https://www.fowi.or.kr/user/contents/contentsView.do?cntntsId=161
+    evidence_note: 한국산림복지진흥원 기관 주소
+
+  - provider: NATIONAL_SCIENCE_MUSEUM
+    branch: 국립중앙과학관
+    municipality_full_name: 대전광역시 유성구
+    evidence_url: https://rsvn.science.go.kr/
+    evidence_note: 국립중앙과학관 공식 예약 페이지
+  - provider: DAEGU_NATIONAL_SCIENCE_MUSEUM
+    branch: 국립대구과학관
+    municipality_full_name: 대구광역시 달성군
+    evidence_url: https://www.dnsm.or.kr/
+    evidence_note: 국립대구과학관 공식 홈페이지 주소
+  - provider: BUSAN_NATIONAL_SCIENCE_MUSEUM
+    branch: 국립부산과학관
+    municipality_full_name: 부산광역시 기장군
+    evidence_url: https://www.sciport.or.kr/kor/CMS/Contents/Contents.do?mCode=MN212
+    evidence_note: 국립부산과학관 공식 오시는 길
+  - provider: GWANGJU_NATIONAL_SCIENCE_MUSEUM
+    branch: 국립광주과학관
+    municipality_full_name: 전남광주통합특별시 북구
+    evidence_url: https://www.sciencecenter.or.kr/kor/menu/sub.do?menuId=20_58_60
+    evidence_note: 국립광주과학관 공식 오시는 길
+  - provider: HONAM_BIOLOGICAL_RESOURCES
+    branch: 국립호남권생물자원관
+    municipality_full_name: 전남광주통합특별시 목포시
+    evidence_url: https://www.alioplus.go.kr/organization/organByTypeList.do?schApbaId=C1334
+    evidence_note: 공공기관 알리오플러스 공식 기관 주소
+  - provider: KOREA_NATIONAL_MARITIME_MUSEUM
+    branch: 국립해양박물관
+    municipality_full_name: 부산광역시 영도구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립해양박물관 주소
+  - provider: NATIONAL_AVIATION_MUSEUM
+    branch: 국립항공박물관
+    municipality_full_name: 서울특별시 강서구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립항공박물관 주소
+  - provider: NATIONAL_FOLK_MUSEUM
+    branch: 국립민속박물관
+    municipality_full_name: 서울특별시 종로구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립민속박물관 본관 주소
+  - provider: NATIONAL_GUGAK_CENTER
+    branch: 국립국악원
+    municipality_full_name: 서울특별시 서초구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립국악원 소재지 주소
+  - provider: NATIONAL_HANGEUL_MUSEUM
+    branch: 국립한글박물관
+    municipality_full_name: 서울특별시 용산구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립한글박물관 주소
+  - provider: NATIONAL_METEOROLOGICAL_MUSEUM
+    branch: 국립기상박물관
+    municipality_full_name: 서울특별시 종로구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립기상박물관 주소
+  - provider: NATIONAL_PALACE_MUSEUM
+    branch: 국립고궁박물관
+    municipality_full_name: 서울특별시 종로구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 국립고궁박물관 주소
+
+  - provider: ULSAN_EDU_BOOKING
+    branch: 울산과학관
+    municipality_full_name: 울산광역시 남구
+    evidence_url: https://use.go.kr/usm/introduce/location.jsp
+    evidence_note: 울산과학관 공식 오시는 길
+  - provider: ULSAN_EDU_BOOKING
+    branch: 울산광역시교육연구정보원
+    municipality_full_name: 울산광역시 남구
+    evidence_url: https://use.go.kr/edu/centerInfo/centerInfo_6.jsp
+    evidence_note: 울산광역시교육연구정보원 공식 오시는 길
+  - provider: ULSAN_EDU_BOOKING
+    branch: 울산수학문화관
+    municipality_full_name: 울산광역시 북구
+    evidence_url: https://use.go.kr/usmcc/usmccInfo/usmccInfo_5.jsp
+    evidence_note: 울산수학문화관 공식 오시는 길
+  - provider: ULSAN_EDU_BOOKING
+    branch: 울산들꽃학습원
+    municipality_full_name: 울산광역시 울주군
+    evidence_url: https://use.go.kr/uwf
+    evidence_note: 울산들꽃학습원 공식 홈페이지 주소
+  - provider: ULSAN_EDU_BOOKING
+    branch: 울산광역시교육청 중구 북부순환도로
+    municipality_full_name: 울산광역시 중구
+    evidence_url: https://use.go.kr/booking/user/reservation/Edu/BD_selectReservationMngList.do
+    evidence_note: 울산광역시교육청 공식 예약 장소 주소
+
+  - provider: JNE_LIBRARY_LECTURE_INTEGRATED
+    branch: 전남광주통합특별시교육청전남학생교육문화회관
+    municipality_full_name: 전남광주통합특별시 여수시
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 직속기관 소재지
+  - provider: JNE_LIBRARY_LECTURE_INTEGRATED
+    branch: 전남광주통합특별시교육청남평도서관
+    municipality_full_name: 전남광주통합특별시 나주시
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 주소
+  - provider: JNE_LIBRARY_LECTURE_INTEGRATED
+    branch: 전남광주통합특별시교육청벌교도서관
+    municipality_full_name: 전남광주통합특별시 보성군
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 주소
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청전남창의융합교육원
+    municipality_full_name: 전남광주통합특별시 나주시
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 직속기관 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청안전체험학습장
+    municipality_full_name: 전남광주통합특별시 영광군
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 직속기관 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청전남유아교육진흥원
+    municipality_full_name: 전남광주통합특별시 순천시
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 직속기관 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청전남학생교육원
+    municipality_full_name: 전남광주통합특별시 해남군
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 직속기관 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청국제교육원
+    municipality_full_name: 전남광주통합특별시 여수시
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 직속기관 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청나로도학생수련장
+    municipality_full_name: 전남광주통합특별시 고흥군
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 학생수련장 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청백운학생수련장
+    municipality_full_name: 전남광주통합특별시 광양시
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 학생수련장 소재지
+  - provider: MUNI_JHED_JNE_GO_KR_16474ED5
+    branch: 전남광주통합특별시교육청지리산학생수련장
+    municipality_full_name: 전남광주통합특별시 구례군
+    evidence_url: https://www.jne.go.kr/main/cm/cntnts/cntntsView.do?cntntsId=41&mi=236
+    evidence_note: 교육청 학생수련장 소재지
+
+  - provider: NATIONAL_MUSEUM_OF_MODERN_ART
+    branch: 서울
+    municipality_full_name: 서울특별시 종로구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 서울관 주소
+  - provider: NATIONAL_MUSEUM_OF_MODERN_ART
+    branch: 덕수궁
+    municipality_full_name: 서울특별시 중구
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 덕수궁관 주소
+  - provider: NATIONAL_MUSEUM_OF_MODERN_ART
+    branch: 어린이미술관
+    municipality_full_name: 경기도 과천시
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 과천관 내 어린이미술관 주소
+  - provider: NATIONAL_MUSEUM_OF_MODERN_ART
+    branch: 과천
+    municipality_full_name: 경기도 과천시
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 2025 전국 문화기반시설 총람 과천관 주소
+  - provider: NATIONAL_MUSEUM_OF_MODERN_ART
+    branch: 과천 어린이미술관
+    municipality_full_name: 경기도 과천시
+    evidence_source: config/facility_registry_crawl_targets.yaml
+    evidence_note: 과천관 내 어린이미술관 주소
+  - provider: NATIONAL_MUSEUM_OF_MODERN_ART
+    branch: 청주
+    municipality_full_name: 충청북도 청주시 청원구
+    evidence_url: https://www.mmca.go.kr/visitingInfo/cheongjuInfo.do
+    evidence_note: 국립현대미술관 공식 청주관 오시는 길

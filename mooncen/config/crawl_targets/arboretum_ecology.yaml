@@ -1,0 +1,43 @@
+version: 1
+generated_at: '2026-07-26T23:34:17+09:00'
+domain_category: 수목원/생태
+source_group: arboretum_ecology
+summary:
+  targets: 1
+  by_status:
+    ready: 1
+  by_service_group: {}
+  by_collection_type:
+    current_application_boundary+detail: 1
+targets:
+- provider: HONAM_BIOLOGICAL_RESOURCES
+  name: 국립호남권생물자원관
+  branch: 국립호남권생물자원관
+  collection_category: 수목원/생태
+  domain_category: 수목원/생태
+  operator_type: 국립/공공기관
+  source_group: arboretum_ecology
+  collection_type: current_application_boundary+detail
+  crawler_status: ready
+  priority: 1
+  url: https://resve.hnibr.re.kr/index.do?menu_id=00000440
+  source: ops_console_url_update
+  origin: manual
+  municipality_code: '1211000000'
+  last_quality:
+    collected: 18
+    score: 100.0
+    grade: A
+    parser: honam_bio_cards
+    error_kind: ''
+    checked_at: '2026-07-26T22:33:15+09:00'
+    source_pages: 3
+    detail_pages: 18
+    saved: 10
+    snapshot_complete: true
+  parser_assigned: honam_bio_cards
+  discover_from_main_url: false
+  target_id: a3e5b843491b4fc6
+  updated_at: '2026-06-05T16:33:53'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:33:53'

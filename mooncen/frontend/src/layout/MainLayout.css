@@ -1,0 +1,53 @@
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+}
+
+.content-container {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+    /* Padding bottom to account for nav bar */
+    padding-bottom: 70px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    background: var(--bg-card);
+    /* Fallback */
+    border-top: 1px solid var(--border-glass);
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    width: 100%;
+}
+
+.nav-item.active {
+    color: var(--accent-primary);
+}
+
+.nav-label {
+    font-size: 10px;
+    font-weight: 500;
+}

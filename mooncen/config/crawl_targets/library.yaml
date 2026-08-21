@@ -1,0 +1,1777 @@
+version: 1
+generated_at: '2026-08-06T02:17:25+09:00'
+domain_category: 도서관
+source_group: library
+service_group: 공공강좌
+summary:
+  targets: 64
+  by_status:
+    ready: 58
+    duplicate_url:MUNI_BSLIB_JNE_GO_KR_34227E33: 1
+    duplicate_url:MUNI_DYLIB_JNE_GO_KR_1412DDEF: 2
+    duplicate_url:MUNI_WWW_SEOGU_GO_KR_E4434123: 2
+    duplicate_url:MUNI_YEYAK_HSCITY_GO_KR_2DFD650A: 1
+  by_service_group:
+    공공강좌: 34
+  by_collection_type:
+    static_html: 41
+    duplicate: 6
+    ? damyang_library_three_complete_catalogues+empty_sentinels+stable_page1+current_detail_status_capacity+login_gate+pii_allowlist
+    : 1
+    browser_or_retry: 1
+    gokseong_jne_lecture_complete_pages+empty_sentinel+current_detail: 1
+    gokseong_jne_reading_event_complete_pages+empty_sentinel+current_detail: 1
+    ? wonju_gwe_wjecc_complete_zero_based_pages+exact_page6_empty+all_current_details+training_shell_exclusion+stable_boundaries+application_login_registration_attachment_no_fetch+pii_allowlist
+    : 1
+    ? tongyeong_gne_library_complete_pages+empty_post_last_sentinel+stable_first_last_and_sentinel+current_details+visible_application_and_register_identity+single_facility_branch+pii_allowlist
+    : 1
+    ? tongyeong_municipal_library_declared_last+all_pages+empty_post_last_sentinel+stable_first_last_and_sentinel+late_current_rows+current_details+identity_bound_receive_without_private_check_fetch+facility_branches+pii_allowlist
+    : 1
+    ulsan_bukgu_library_edusat+edusat2_declared_pages+last_page_clamps+current_details+semantic_offering_collapse: 1
+    sejong_library_edusat_54+declared_pages+exact_last_page_clamp+stable_first_last+all_current_details+privacy_safe_controls: 1
+    ? national_sejong_library_pro043+complete_declared_pages+empty_post_last_sentinel+stable_first_last+all_current_public_details+privacy_safe_controls
+    : 1
+    ? yeongdeok_gbelib_complete_current_ledger+child_adult_partition+four_group_partition+seven_status_partition+stable_full_recheck+all_current_details+compound_identity_application_controls_no_fetch+attachment_instructor_contact_and_free_text_exclusion
+    : 1
+    ? busan_yeongdo_complete_education_idx_pages+clamped_last_sentinel+stable_first_last+busan_reserve_gugun14_office33_complete+empty_sentinel+lifelong_office00002680_pageunit1000_two_stable_complete_censuses+external_lecidx_duplicate_suppression+native_learning_current_details+identity_bound_apply_no_form_fetch+pii_allowlist+atomic_three_ledger_snapshot
+    : 1
+    ? hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+    : 1
+    icheon_library_declared_total+empty_sentinel+stable_edges+all_current_details: 1
+    jne_integrated_reading_all_pages+empty_sentinel+official_branch_registry+canonical_owner_exclusion: 1
+    goyang_library_all_branches_status_partitions+empty_sentinel+stable_edges+all_current_details: 1
+    jne_integrated_lecture_current_year+empty_sentinel+official_branch_registry+canonical_owner_exclusion: 1
+targets:
+- provider: CNALL_LECTURE
+  name: 충청남도교육청평생교육정보시스템
+  branch: 충청남도교육청
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 1
+  url: https://www.cnall.or.kr/lecture/lectureList.do?organAllYn=Y&areaCd=&targetCd=&lectureDiv1Cd=&lectureDiv2Cd=&costYn=&applyTypeCd=&organAllChk=Y&searchCondition=&searchKeyword=
+  source: ops_console_url_update
+  origin: manual
+  region: 충청남도
+  last_quality:
+    collected: 3
+    score: 100.0
+    grade: A
+    parser: cnall_lecture_cards+detail
+    error_kind: ''
+  target_id: a312fc53ea1de165
+  updated_at: '2026-06-05T16:37:38'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:37:38'
+- provider: MUNI_DYLIB_JNE_GO_KR_0EC67D8E
+  name: 전남광주통합특별시교육청보성도서관 교차 호스트 별칭
+  branch: 전남광주통합특별시 보성군
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_BSLIB_JNE_GO_KR_34227E33
+  priority: 2
+  url: https://dylib.jne.go.kr/lecture.es?mid=a80402000000
+  source: municipal_integrated_reservation_manual_verification
+  origin: duplicate
+  region: 전남광주통합특별시
+  duplicate_of: MUNI_BSLIB_JNE_GO_KR_34227E33
+  blocked_reason: duplicate_of:MUNI_BSLIB_JNE_GO_KR_34227E33
+  notes: dylib 호스트 별칭이지만 live title·og:url·강좌 identity가 모두 보성도서관 a804 원장과 일치한다.
+  last_quality:
+    collected: 0
+    parser: duplicate_of:MUNI_BSLIB_JNE_GO_KR_34227E33
+    error_kind: duplicate_of:MUNI_BSLIB_JNE_GO_KR_34227E33
+  crawler_notes:
+  - 담양 소유자가 아니며 보성 canonical https://bslib.jne.go.kr/lecture.es?mid=a80402000000 하나만 실행한다.
+- provider: MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  name: 전남광주통합특별시교육청담양도서관 전체 교육 강좌
+  branch: 전남광주통합특별시교육청담양도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: damyang_library_three_complete_catalogues+empty_sentinels+stable_page1+current_detail_status_capacity+login_gate+pii_allowlist
+  crawler_status: ready
+  priority: 2
+  url: https://dylib.jne.go.kr/lecture.es?mid=a60402000000
+  ownership_aliases:
+  - https://dylib.jne.go.kr/lecture.es?mid=a60402000000&act=view
+  - https://dylib.jne.go.kr/lecture.es?mid=a60202000000
+  - https://dylib.jne.go.kr/lecture.es?mid=a60202000000&act=view
+  - https://dylib.jne.go.kr/lecture.es?mid=a61102000000
+  - https://dylib.jne.go.kr/menu.es?mid=a61101000000
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  region: 전남광주통합특별시
+  full_snapshot_required: true
+  ownership_scope: damyang_library_three_disjoint_complete_lecture_catalogues
+  municipality_code: '1271000000'
+  municipality_full_name: 전남광주통합특별시 담양군
+  covered_municipalities:
+  - code: '1271000000'
+    sido: 전남광주통합특별시
+    sigungu: 담양군
+    full_name: 전남광주통합특별시 담양군
+  notes: 독서문화·평생학습·인문학 3개 완전 분리 catalogue를 기존 primary provider 하나로 합집합 수집한다.
+  last_quality:
+    collected: 14
+    parser: damyang_library_three_complete_catalogues+empty_sentinels+stable_page1+current_detail_status_capacity+login_gate+pii_allowlist
+    error_kind: ''
+    checked_at: '2026-07-21T16:26:43+09:00'
+    no_current_data: false
+    source_total: 25
+    source_pages: 3
+    list_requests: 9
+    detail_pages: 14
+    pages: 23
+    returned_count: 14
+    source_status_counts:
+      신청하기: 5
+      대기자신청하기: 5
+      마감: 14
+      접수전: 1
+    status_counts:
+      OPEN: 10
+      CLOSED: 3
+      SCHEDULED: 1
+    identity_duplicate_count: 0
+    pii_payload_persisted: false
+    snapshot_complete: true
+  crawler_notes:
+  - 독서문화 10건·평생학습 10건·인문학 5건의 각 데이터 페이지, 빈 sentinel, 1페이지 재검증과 현재·향후 상세 14건을 모두 검증했다.
+  - sibling provider A2AEEC45·A99A023A는 같은 원장의 포함 범위이므로 별도 실행하지 않는다.
+- provider: MUNI_DYLIB_JNE_GO_KR_A2AEEC45
+  name: 전라남도교육청담양도서관
+  branch: 전라남도 담양군
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  priority: 2
+  url: https://dylib.jne.go.kr/lecture.es?mid=a60202000000
+  ownership_aliases:
+  - https://dylib.jne.go.kr/lecture.es?mid=a60202000000&act=view
+  source: municipal_integrated_reservation_manual_verification
+  origin: duplicate
+  region: 전남광주통합특별시
+  duplicate_of: MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  blocked_reason: duplicate_of:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  notes: primary provider가 a602 독서문화 catalogue를 포함하므로 별도 스케줄을 비활성화한다.
+  last_quality:
+    collected: 0
+    parser: duplicate_of:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+    error_kind: duplicate_of:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  crawler_notes:
+  - a602의 10건은 primary 1412DDEF의 전체 합집합에서 한 번만 수집한다.
+- provider: MUNI_DYLIB_JNE_GO_KR_A99A023A
+  name: 전라남도교육청담양도서관
+  branch: 전라남도 담양군
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  priority: 2
+  url: https://dylib.jne.go.kr/lecture.es?mid=a61102000000
+  ownership_aliases:
+  - https://dylib.jne.go.kr/menu.es?mid=a61101000000
+  source: municipal_integrated_reservation_manual_verification
+  origin: duplicate
+  region: 전남광주통합특별시
+  duplicate_of: MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  blocked_reason: duplicate_of:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  notes: primary provider가 a611 인문학 catalogue를 포함하므로 별도 스케줄을 비활성화한다.
+  last_quality:
+    collected: 0
+    parser: duplicate_of:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+    error_kind: duplicate_of:MUNI_DYLIB_JNE_GO_KR_1412DDEF
+  crawler_notes:
+  - a611의 5건은 primary 1412DDEF의 전체 합집합에서 한 번만 수집한다.
+- provider: MUNI_GRLIB_JNE_GO_KR_133262C9
+  name: 전남광주통합특별시교육청구례도서관 독서문화프로그램
+  branch: 전남광주통합특별시교육청구례도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://grlib.jne.go.kr/lecture.es?mid=a70202010000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전남광주통합특별시
+  notes: JNE lecture list confirmed; previous URL had act=view without el_seq.
+  last_quality:
+    collected: 8
+    score: 100.0
+    grade: A
+    parser: jne_library_lecture_table
+    error_kind: ''
+  crawler_notes:
+  - '2026-06-29: Existing jne_library_lecture_table parser verified after SSL retry fallback. Added venue_name branch fallback.'
+- provider: MUNI_GRLIB_JNE_GO_KR_E6838F98
+  name: 전남광주통합특별시교육청구례도서관 평생교육 수강 신청
+  branch: 전남광주통합특별시교육청구례도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: browser_or_retry
+  crawler_status: ready
+  priority: 2
+  url: https://grlib.jne.go.kr/lecture.es?mid=a70402000000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전남광주통합특별시
+  notes: JNE lecture list confirmed; previous URL had act=view without el_seq.
+  last_quality:
+    collected: 8
+    score: 100.0
+    grade: A
+    parser: jne_library_lecture_table
+    error_kind: ''
+- provider: MUNI_GSLIB_JNE_GO_KR_80914C01
+  name: 전남광주통합특별시교육청곡성교육문화회관 평생학습강좌
+  branch: 전남광주통합특별시교육청곡성교육문화회관
+  collection_category: 도서관
+  domain_category: 교육·강좌
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: gokseong_jne_lecture_complete_pages+empty_sentinel+current_detail
+  crawler_status: ready
+  priority: 2
+  url: https://gslib.jne.go.kr/lecture.es?mid=c10402000000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전남광주통합특별시
+  municipality_code: '1272000000'
+  municipality_full_name: 전남광주통합특별시 곡성군
+  full_snapshot_required: true
+  notes: JNE lecture list confirmed.
+  last_quality:
+    collected: 7
+    score: 100.0
+    grade: A
+    parser: gokseong_jne_lecture_complete_pages+empty_sentinel+current_detail
+    error_kind: ''
+    checked_at: '2026-07-20T10:14:40+09:00'
+    no_current_data: false
+- provider: MUNI_GSLIB_JNE_GO_KR_F1BD0233
+  name: 전남광주통합특별시교육청곡성교육문화회관 독서문화행사
+  branch: 전남광주통합특별시교육청곡성교육문화회관
+  collection_category: 도서관
+  domain_category: 교육·강좌
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: gokseong_jne_reading_event_complete_pages+empty_sentinel+current_detail
+  crawler_status: ready
+  priority: 2
+  url: https://gslib.jne.go.kr/education.es?mid=c10208000000&eid=0130
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전남광주통합특별시
+  municipality_code: '1272000000'
+  municipality_full_name: 전남광주통합특별시 곡성군
+  full_snapshot_required: true
+  notes: JNE education/event application table confirmed.
+  last_quality:
+    collected: 2
+    score: 100.0
+    grade: A
+    parser: gokseong_jne_reading_event_complete_pages+empty_sentinel+current_detail
+    error_kind: ''
+    checked_at: '2026-08-05T04:15:00+09:00'
+    no_current_data: false
+    source_rows: 25
+    current_count: 2
+    expired_count: 23
+    returned_count: 2
+    pages: 6
+    detail_pages: 2
+    snapshot_complete: true
+- provider: MUNI_GYLIB_JNE_GO_KR_15EB3C2E
+  name: 전남광주통합특별시교육청광양도서관
+  branch: 전남광주통합특별시교육청광양도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://gylib.jne.go.kr/lecture.es?mid=a50402000000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전남광주통합특별시
+  last_quality:
+    collected: 63
+    score: 100.0
+    grade: A
+    parser: jne_library_lecture_table
+    error_kind: ''
+  notes: 2026-07-14 corrected to the official course-registration menu and verified HTTPS with a host-scoped TLS 1.2 AES256-GCM-SHA384 compatibility profile; certificate-chain
+    and hostname verification remain enabled.
+- provider: MUNI_HNLIB_JNE_GO_KR_3E3E5BCA
+  name: 전남광주통합특별시교육청해남도서관
+  branch: 전남광주통합특별시교육청해남도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://hnlib.jne.go.kr/lecture.es?mid=b30402000000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전남광주통합특별시
+  notes: JNE lecture list confirmed; previous URL had act=view without el_seq.
+  last_quality:
+    collected: 136
+    score: 100.0
+    grade: A
+    parser: jne_library_lecture_table
+    error_kind: ''
+- provider: MUNI_LIB_GEOJE_GO_KR_401A2022
+  name: 거제시 시립도서관
+  branch: 경상남도 거제시
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.geoje.go.kr/com/requestPage.do?selMenuNo=104010000&returnUrl=/culture/d010200.do?year=2026&month=5
+  source: ops_console_url_update
+  origin: manual
+  region: 경상남도
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: geoje_library_course_table
+    error_kind: ''
+  crawler_notes:
+  - 실제 강좌 목록은 /culture/d030200.do 강좌 신청하기 페이지에서 수집한다.
+  - 상세 페이지는 비로그인 상태에서 로그인으로 이동하므로 목록 테이블의 강좌명, 지점, 대상, 모집인원, 강좌기간, 접수기간, 상태를 사용한다.
+  - 수강료는 안내 페이지 정책에 따라 무료로 저장한다.
+  service_group: 공공강좌
+  target_id: eb494b2ed56468ea
+  updated_at: '2026-06-29T22:23:00'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:23:00'
+- provider: MUNI_LIB_GWE_GO_KR_303FFE72
+  name: 삼척교육문화관
+  branch: 강원특별자치도 삼척시
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.gwe.go.kr/samecc/menu/3560/lecture-event/list/all
+  source: ops_console_url_update
+  origin: manual
+  region: 강원특별자치도
+  last_quality:
+    collected: 4
+    score: 95.0
+    grade: A
+    parser: gwe_library_lecture_event+detail
+    error_kind: ''
+  service_group: 공공강좌
+  target_id: 1bc94a8d35c478d1
+  updated_at: '2026-06-29T22:36:57'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:36:57'
+- provider: MUNI_LIB_GWE_GO_KR_5D9C27C1
+  name: 원주교육문화관 전체 교육강좌
+  branch: 원주교육문화관
+  address: 강원특별자치도 원주시 북원로 2312 (단계동) 원주교육문화관
+  collection_category: 교육·강좌
+  domain_category: 도서관·교육
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: wonju_gwe_wjecc_complete_zero_based_pages+exact_page6_empty+all_current_details+training_shell_exclusion+stable_boundaries+application_login_registration_attachment_no_fetch+pii_allowlist
+  crawler_status: ready
+  crawler_module: Crawler.municipal_wonju
+  crawler_callable: collect
+  parser_assigned: wonju_gwe_wjecc_complete_zero_based_pages+exact_page6_empty+all_current_details+training_shell_exclusion+stable_boundaries+application_login_registration_attachment_no_fetch+pii_allowlist
+  priority: 1
+  url: https://lib.gwe.go.kr/wjecc/menu/4555/lecture-event/list/all
+  list_urls:
+  - https://lib.gwe.go.kr/wjecc/menu/4555/lecture-event/list/all
+  ownership_alias_urls:
+  - https://lib.gwe.go.kr/wjecc/main
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 강원특별자치도 원주시
+  municipality_code: '5113000000'
+  municipality_full_name: 강원특별자치도 원주시
+  max_pages: 100
+  detail_limit: 500
+  full_snapshot_required: true
+  ownership_scope: gangwon_education_office_wonju_education_culture_center_complete_lecture_ledger
+  covered_municipalities:
+  - code: '5113000000'
+    sido: 강원특별자치도
+    sigungu: 원주시
+    full_name: 강원특별자치도 원주시
+  last_quality:
+    collected: 9
+    score: 100.0
+    grade: A
+    parser: wonju_gwe_wjecc_complete_zero_based_pages+exact_page6_empty+all_current_details+training_shell_exclusion+stable_boundaries+application_login_registration_attachment_no_fetch+pii_allowlist
+    error_kind: ''
+    checked_at: '2026-07-28T10:46:39+09:00'
+    source_total: 51
+    date_current_source_count: 9
+    expired_source_count: 42
+    excluded_training_count: 1
+    returned_count: 8
+    data_pages: 6
+    zero_based_final_page: 5
+    final_page_rows: 1
+    empty_sentinel_page: 6
+    list_requests: 10
+    detail_pages: 9
+    source_requests: 19
+    branch_count: 1
+    branch_counts:
+      원주교육문화관: 8
+    status_counts:
+      CLOSED: 3
+      WAITING: 3
+      OPEN: 2
+    application_control_identities_before_exclusion: 6
+    application_controls_observed_before_exclusion: 6
+    application_url_count: 5
+    attachment_controls_discarded: 7
+    application_endpoint_requests: 0
+    login_endpoint_requests: 0
+    registration_endpoint_requests: 0
+    attachment_endpoint_requests: 0
+    download_endpoint_requests: 0
+    applicant_endpoint_requests: 0
+    pii_values_persisted: 0
+    required_field_counts:
+      target: 8
+      fee: 8
+      date: 8
+      place: 8
+      category: 8
+      time: 8
+    source_identity_sha256: 94a928b2b890678b60abac15cc9660251b07d3047b95e890a912b1643b305bb2
+    pagination_complete: true
+    details_complete: true
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_provider: MUNI_LIB_GWE_GO_KR_5D9C27C1
+    provider_decision: retain_separate_education_office_owner_from_municipal_reservation
+    municipal_identity_overlap: 0
+    municipal_exact_title_overlap: 0
+  crawler_notes:
+  - zero-based page=0~5의 51건과 page=6 정확한 빈 sentinel, 첫·끝·sentinel 재검사를 모두 통과해야 저장한다.
+  - 현재 9건 상세를 전수한 뒤 수강신청 연습 identity 8648 한 건을 제외하며 신청·로그인·등록확인·첨부·PII endpoint는 호출하지 않는다.
+  - 정원과 대기 정원이 모두 찬 강좌만 생략된 상태 버튼을 신청마감으로 판정하며 접수·대기 버튼은 목록과 상세 identity를 대조한다.
+- provider: MUNI_LIB_GWE_GO_KR_8D8033C9
+  name: 화천교육도서관
+  branch: 화천교육도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.gwe.go.kr/hwlib/menu/3130/lecture-event/list/all
+  source: ops_console_url_update
+  origin: manual
+  region: 강원특별자치도
+  last_quality:
+    collected: 7
+    score: 95.0
+    grade: A
+    parser: gwe_library_lecture_event+detail
+    error_kind: ''
+  service_group: 공공강좌
+  target_id: 602949e1fcfb2825
+  updated_at: '2026-06-29T22:34:45'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:34:45'
+- provider: MUNI_LIB_GWE_GO_KR_90FD6E6A
+  name: 영월교육도서관
+  branch: 영월교육도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.gwe.go.kr/ywlib/menu/2700/lecture-event/list/all
+  source: official_gwe_library_live_audit
+  origin: live_validated
+  region: 강원특별자치도
+  discover_from_main_url: false
+  last_quality:
+    collected: 1
+    score: 100.0
+    grade: A
+    parser: gwe_library_lecture_event+detail
+    error_kind: ''
+- provider: MUNI_LIB_GWE_GO_KR_E49C8D9C
+  name: 철원교육도서관
+  branch: 철원교육도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.gwe.go.kr/cwlib/menu/3302/lecture-event/list/all
+  discover_from_main_url: false
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: gwe_library_lecture_event+detail
+    error_kind: ''
+- provider: MUNI_LIB_ICE_GO_KR_019A3D01
+  name: 인천광역시교육청서구도서관
+  branch: 인천광역시교육청서구도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.ice.go.kr/seogu/module/teach/index.do?menu_idx=85
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 20
+    score: 90.0
+    grade: A
+    parser: ice_library_teach_detail
+    error_kind: ''
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 울진남부도서관
+  branch: 울진남부도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=46
+  source: ops_console_url_update
+  origin: manual
+  region: 경상북도 울진군
+  last_quality:
+    collected: 2
+    score: 100.0
+    grade: A
+    parser: uljin_library_calendar
+    error_kind: ''
+  service_group: 공공강좌
+  target_id: 3f0bdde1b9cc4b7f
+  updated_at: '2026-06-29T22:03:47'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:03:47'
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 북울진도서관
+  branch: 북울진도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=47
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 울진작은도서관
+  branch: 울진작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=48
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 근남작은도서관
+  branch: 근남작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=49
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 매화작은도서관
+  branch: 매화작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=50
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 기성작은도서관
+  branch: 기성작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=51
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 평해작은도서관
+  branch: 평해작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=52
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 온정작은도서관
+  branch: 온정작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=53
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 흥부작은도서관
+  branch: 흥부작은도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=143
+  source: user_requested
+  origin: manual
+  region: 경상북도 울진군
+  service_group: 공공강좌
+- provider: MUNI_TYLIB_GNE_GO_KR_7D159AC1
+  name: 경상남도교육청 통영도서관 전체 교육강좌
+  branch: 경상남도교육청 통영도서관
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 교육청/도서관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: tongyeong_gne_library_complete_pages+empty_post_last_sentinel+stable_first_last_and_sentinel+current_details+visible_application_and_register_identity+single_facility_branch+pii_allowlist
+  crawler_status: ready
+  priority: 2
+  url: https://tylib.gne.go.kr/usr_gne/lec_list.es?mid=b20402000000&cate_no=10
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  region: 경상남도
+  municipality_code: '4822000000'
+  municipality_full_name: 경상남도 통영시
+  full_snapshot_required: true
+  ownership_scope: gyeongnam_education_office_tongyeong_library_complete_lecture_catalogue
+  excluded_scope: private_lec_reqin_forms_applicants_instructors_contacts_attachments_and_free_text
+  last_quality:
+    collected: 9
+    score: 100.0
+    grade: A
+    parser: tongyeong_gne_library_complete_pages+empty_post_last_sentinel+stable_first_last_and_sentinel+current_details+visible_application_and_register_identity+single_facility_branch+pii_allowlist
+    error_kind: ''
+    checked_at: '2026-07-22T12:40:00+09:00'
+    source_total: 9
+    current_source_count: 9
+    detail_pages: 9
+    status_counts:
+      OPEN: 2
+      SCHEDULED: 6
+      CLOSED: 1
+    application_control_count: 2
+    branch_counts:
+      경상남도교육청 통영도서관: 9
+    snapshot_complete: true
+  crawler_notes:
+  - 공식 강좌 원장 9건과 다음 빈 페이지, 첫·끝·sentinel 경계를 재검증하고 현재·향후 상세 9건을 모두 대조한다.
+  - 모집중 2건의 공개 신청 identity만 보존하며 lec_reqin 신청자 폼과 개인정보는 요청하지 않는다.
+  target_id: afe13a5bc68493ef
+  updated_at: '2026-06-29T21:59:31'
+  manual_action: update
+  manual_updated_at: '2026-06-29T21:59:31'
+- provider: MUNI_WWW_TONGYEONGLIB_OR_KR_F370713B
+  name: 통영시립도서관 전체 교육강좌
+  branch: 경상남도 통영시
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공도서관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: tongyeong_municipal_library_declared_last+all_pages+empty_post_last_sentinel+stable_first_last_and_sentinel+late_current_rows+current_details+identity_bound_receive_without_private_check_fetch+facility_branches+pii_allowlist
+  crawler_status: ready
+  priority: 2
+  url: https://www.tongyeonglib.or.kr/library/index.php?g_page=culture&m_page=culture02
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  region: 경상남도 통영시
+  municipality_code: '4822000000'
+  municipality_full_name: 경상남도 통영시
+  full_snapshot_required: true
+  ownership_scope: tongyeong_city_owned_municipal_library_complete_culture_course_catalogue
+  excluded_scope: private_registration_check_forms_applicants_instructors_plans_preparation_free_text_and_images
+  last_quality:
+    collected: 31
+    score: 100.0
+    grade: A
+    parser: tongyeong_municipal_library_declared_last+all_pages+empty_post_last_sentinel+stable_first_last_and_sentinel+late_current_rows+current_details+identity_bound_receive_without_private_check_fetch+facility_branches+pii_allowlist
+    error_kind: ''
+    checked_at: '2026-07-22T12:40:00+09:00'
+    source_total: 266
+    data_pages: 27
+    current_source_count: 31
+    expired_count: 235
+    detail_pages: 31
+    status_counts:
+      OPEN: 9
+      CLOSED: 22
+    source_status_counts:
+      신청하기: 6
+      대기자신청: 3
+      접수마감: 22
+    application_control_count: 9
+    branch_counts:
+      통영시립도서관: 12
+      통영시립충무도서관: 11
+      꿈이랑도서관: 4
+      더팰리스작은도서관: 2
+      안정작은도서관: 2
+    snapshot_complete: true
+  crawler_notes:
+  - 공식 강좌 원장 266건·27페이지와 다음 빈 페이지, 첫·끝·sentinel 경계를 재검증하고 현재·향후 31건의 상세를 모두 대조한다.
+  - 5개 공식 도서관 지점과 9개 공개 신청 identity만 보존하며 등록확인 폼·신청자·강사·계획서·자유본문·이미지는 요청하지 않는다.
+- provider: MUNI_LIB_SEJONG_GO_KR_026D075C
+  name: 세종시립도서관 독서문화 교육 프로그램
+  branch: 세종시립도서관
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  ops_scopes:
+  - education
+  collection_type: sejong_library_edusat_54+declared_pages+exact_last_page_clamp+stable_first_last+all_current_details+privacy_safe_controls
+  crawler_module: Crawler.municipal_sejong_library
+  crawler_callable: collect
+  parser_assigned: sejong_library_edusat_54+declared_pages+exact_last_page_clamp+stable_first_last+all_current_details+privacy_safe_controls
+  crawler_status: ready
+  priority: 1
+  url: https://lib.sejong.go.kr/main/edusat/list.do?sh_ct_idx2=54
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 세종특별자치시
+  municipality_code: '3611000000'
+  municipality_full_name: 세종특별자치시
+  covered_municipalities:
+  - code: '3611000000'
+    sido: 세종특별자치시
+    sigungu: 세종특별자치시
+    full_name: 세종특별자치시
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 공식 독서문화 프로그램 신청 원장의 신청기간·운영기간·모집인원을 갖춘 강좌 행만 현재 운영종료일과 공개 상세로 대조한다.
+  ownership_scope: sejong_city_library_edusat_54_current_and_future_reading_culture_education
+  excluded_scope: notices_navigation_application_registration_lookup_login_attachment_download_images_free_text_and_pii_routes
+  max_pages: 20
+  detail_limit: 50
+  last_quality:
+    collected: 4
+    score: 100.0
+    grade: A
+    parser: sejong_library_edusat_54+declared_pages+exact_last_page_clamp+stable_first_last+all_current_details+privacy_safe_controls
+    error_kind: ''
+    checked_at: '2026-08-06T01:36:38+09:00'
+    source_total: 278
+    data_pages: 14
+    sentinel_page: 15
+    current_source_count: 4
+    expired_count: 274
+    detail_pages: 4
+    status_counts:
+      OPEN: 1
+      CLOSED: 3
+    application_control_count: 1
+    branch_counts:
+      세종시립도서관: 4
+    snapshot_complete: true
+  crawler_notes:
+  - 공식 강좌 원장 278건·14페이지와 마지막 페이지 반복 sentinel, 첫·끝 경계를 재검증하고 운영 종료일이 남은 4건의 상세를 모두 대조한다.
+  - 신청중 1건뿐 아니라 신청이 끝났어도 교육이 진행 중이거나 예정된 3건을 포함하며, 공지·메뉴·빈 강좌 행은 구조적으로 제외한다.
+  - 신청 제어는 강좌 identity만 확인하고 신청·등록확인·로그인·첨부·다운로드·이미지·신청자 개인정보 경로는 호출하지 않는다.
+- provider: MUNI_SEJONG_NL_GO_KR_7F55E25D
+  name: 국립세종도서관 특별프로그램 교육
+  branch: 국립세종도서관
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 국립/공공기관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: national_sejong_library_pro043+complete_declared_pages+empty_post_last_sentinel+stable_first_last+all_current_public_details+privacy_safe_controls
+  crawler_module: Crawler.municipal_national_sejong_library
+  crawler_callable: collect
+  parser_assigned: national_sejong_library_pro043+complete_declared_pages+empty_post_last_sentinel+stable_first_last+all_current_public_details+privacy_safe_controls
+  crawler_status: ready
+  priority: 1
+  url: https://sejong.nl.go.kr/html/c3/c320.jsp?codeId=PRO043&menuId=O365&upperMenuId=O300&sel=O360
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 세종특별자치시
+  municipality_code: '3611000000'
+  municipality_full_name: 세종특별자치시
+  covered_municipalities:
+  - code: '3611000000'
+    sido: 세종특별자치시
+    sigungu: 세종특별자치시
+    full_name: 세종특별자치시
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 공식 교육신청 원장의 과정명·교육기간·신청기간·모집현황을 갖춘 프로그램 행만 교육 종료일과 공개 상세로 대조한다.
+  ownership_scope: national_sejong_library_pro043_current_and_future_special_program_education
+  excluded_scope: notices_navigation_application_login_member_library_attachment_download_images_free_text_and_pii_routes
+  max_pages: 30
+  detail_limit: 50
+  last_quality:
+    collected: 1
+    score: 100.0
+    grade: A
+    parser: national_sejong_library_pro043+complete_declared_pages+empty_post_last_sentinel+stable_first_last+all_current_public_details+privacy_safe_controls
+    error_kind: ''
+    checked_at: '2026-08-06T02:17:25+09:00'
+    source_total: 188
+    data_pages: 19
+    sentinel_page: 20
+    current_source_count: 1
+    expired_count: 187
+    detail_pages: 1
+    status_counts:
+      OPEN: 1
+    source_status_counts:
+      대기자 접수중: 1
+    application_control_count: 1
+    branch_counts:
+      국립세종도서관: 1
+    snapshot_complete: true
+  crawler_notes:
+  - 공식 교육신청 원장 188건·19페이지와 20페이지 빈 sentinel, 첫·끝 경계를 재검증하고 교육 종료일이 남은 프로그램의 공개 상세를 모두 대조한다.
+  - 화면의 페이지 분모 10은 전체 페이지 수가 아닌 현재 pagination 묶음이므로 선언 총건수와 페이지당 10건으로 19페이지를 계산한다.
+  - 신청 제어는 강좌 identity와 공개 상태만 확인하고 신청·로그인·회원·내서재·첨부·다운로드·이미지·신청자 개인정보 경로는 호출하지 않는다.
+- provider: MUNI_USBL_BUKGU_ULSAN_KR_A68023CB
+  name: 울산광역시 북구도서관 전체 교육강좌·행사
+  branch: 울산광역시 북구
+  collection_category: 교육·강좌
+  domain_category: 교육·강좌
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: ulsan_bukgu_library_edusat+edusat2_declared_pages+last_page_clamps+current_details+semantic_offering_collapse
+  crawler_status: ready
+  priority: 1
+  url: https://usbl.bukgu.ulsan.kr/main/edusat/list.do
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  region: 울산광역시 북구
+  service_group: 공공강좌
+  service_group_policy: locked
+  municipality_code: '3120000000'
+  municipality_full_name: 울산광역시 북구
+  full_snapshot_required: true
+  ownership_scope: ulsan_bukgu_library_edusat_and_edusat2_complete_catalogues
+  ownership_aliases:
+  - https://usbl.bukgu.ulsan.kr/main/edusat2/list.do
+  covered_municipalities:
+  - code: '3120000000'
+    sido: 울산광역시
+    sigungu: 북구
+    full_name: 울산광역시 북구
+  last_quality:
+    collected: 50
+    score: 100.0
+    grade: A
+    parser: ulsan_bukgu_library_edusat+edusat2_declared_pages+last_page_clamps+current_details+semantic_offering_collapse
+    error_kind: ''
+    checked_at: '2026-07-21'
+    source_total: 150
+    course_source_total: 76
+    event_source_total: 74
+    current_future_count: 55
+    expired_count: 95
+    semantic_duplicate_groups: 5
+    semantic_duplicate_collapsed: 5
+    detail_pages: 55
+    application_control_count: 1
+    clamp_requests: 2
+    snapshot_complete: true
+  target_id: adb6acfcb5a5ca6c
+  updated_at: '2026-06-29T22:26:50'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:26:50'
+- provider: MUNI_WWW_BCL_GO_KR_DDAE2544
+  name: 부천시도서관
+  branch: 경기도 부천시
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.bcl.go.kr/site/reservation/lecture/lectureList?menuid=019003001001002
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 10
+    score: 80.0
+    grade: B
+    parser: detail+table
+    error_kind: ''
+- provider: MUNI_WWW_GBELIB_KR_04DB1B82
+  name: 경상북도교육청 영덕도서관 전체 교육강좌
+  branch: 경상북도교육청 영덕도서관
+  address: 경북 영덕군 영덕읍 영덕로 201
+  collection_category: 교육·강좌
+  domain_category: 도서관·교육
+  operator_type: 교육청/도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: yeongdeok_gbelib_complete_current_ledger+child_adult_partition+four_group_partition+seven_status_partition+stable_full_recheck+all_current_details+compound_identity_application_controls_no_fetch+attachment_instructor_contact_and_free_text_exclusion
+  crawler_status: ready
+  crawler_module: Crawler.municipal_yeongdeok
+  crawler_callable: collect
+  parser_assigned: yeongdeok_gbelib_complete_current_ledger+child_adult_partition+four_group_partition+seven_status_partition+stable_full_recheck+all_current_details+compound_identity_application_controls_no_fetch+attachment_instructor_contact_and_free_text_exclusion
+  priority: 1
+  url: https://www.gbelib.kr/yd/module/teach/index.do?menu_idx=173&searchCate1=18
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경상북도 영덕군
+  municipality_code: '4777000000'
+  municipality_full_name: 경상북도 영덕군
+  max_pages: 2
+  detail_limit: 50
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 영덕도서관 평생교육 5건을 어린이·성인, 4개 대상그룹, 7개 접수상태 분할의 합집합으로 검증하여 하나의 완전한 공공강좌 owner로 수집한다.
+  classification_evidence_url: https://www.gbelib.kr/yd/module/teach/index.do?menu_idx=173&searchCate1=18
+  covered_municipalities:
+  - code: '4777000000'
+    sido: 경상북도
+    sigungu: 영덕군
+    full_name: 경상북도 영덕군
+  last_quality:
+    collected: 5
+    score: 100.0
+    grade: A
+    parser: yeongdeok_gbelib_complete_current_ledger+child_adult_partition+four_group_partition+seven_status_partition+stable_full_recheck+all_current_details+compound_identity_application_controls_no_fetch+attachment_instructor_contact_and_free_text_exclusion
+    error_kind: ''
+    checked_at: '2026-07-23T03:30:28+09:00'
+    source_total: 5
+    source_rows: 5
+    current_count: 5
+    returned_count: 5
+    list_requests: 15
+    detail_pages: 5
+    source_requests: 20
+    boundary_rechecks: 1
+    age_filter_counts:
+      '11': 5
+      '13': 0
+    group_filter_counts:
+      '5': 0
+      '6': 5
+      '7': 0
+      '8': 0
+    status_filter_counts:
+      '0': 2
+      '1': 2
+      '2': 0
+      '3': 0
+      '4': 0
+      '5': 1
+      '6': 0
+    status_counts:
+      OPEN: 2
+      WAITLIST: 2
+      CLOSED: 1
+    application_controls: 4
+    identity_duplicate_count: 0
+    semantic_duplicate_count: 0
+    application_endpoints_called: 0
+    attachment_endpoints_called: 0
+    pii_endpoints_called: 0
+    full_snapshot_validated: true
+- provider: MUNI_WWW_PTLIB_GO_KR_D9537B1F
+  name: 평택시도서관
+  branch: 경기도 평택시
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.ptlib.go.kr/intro/menu/10025/program/30025/lectureList.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 32
+    score: 66.7
+    grade: A
+    parser: ptlib_lecture_list
+    error_kind: ''
+  crawler_notes:
+  - manageCd 도서관 선택값을 순환하면서 lectureList.do를 수집한다.
+  - fnDetail lectureIdx를 lectureDetail.do 상세 URL로 변환해 모집기간, 교육기간, 시간, 장소, 대상, 정원을 보강한다.
+  - 교육기간이 지난 강좌는 제외한다.
+  - 상세 페이지에 수강료와 강좌 소개 본문이 없어 fee와 description은 비어 있을 수 있다.
+- provider: MUNI_WWW_SEOGU_GO_KR_A27782FE
+  name: 대전광역시 서구청
+  branch: 대전광역시 서구
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_WWW_SEOGU_GO_KR_E4434123
+  duplicate_of: MUNI_WWW_SEOGU_GO_KR_E4434123
+  superseded_by: MUNI_WWW_SEOGU_GO_KR_E4434123
+  disabled_reason: superseded_by:MUNI_WWW_SEOGU_GO_KR_E4434123
+  blocked_reason: duplicate_of:MUNI_WWW_SEOGU_GO_KR_E4434123
+  priority: 2
+  url: https://www.seogu.go.kr/library/wolpyeonglib/index.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대전광역시
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: seogu_library_classes+detail
+    error_kind: ''
+  crawler_notes: 월평도서관 메인에서 행사 및 강좌 신청 목록으로 이동해 표와 상세 페이지를 수집한다.
+- provider: MUNI_WWW_SEOGU_GO_KR_FD57747F
+  name: 둔산도서관
+  branch: 둔산도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_WWW_SEOGU_GO_KR_E4434123
+  duplicate_of: MUNI_WWW_SEOGU_GO_KR_E4434123
+  superseded_by: MUNI_WWW_SEOGU_GO_KR_E4434123
+  disabled_reason: superseded_by:MUNI_WWW_SEOGU_GO_KR_E4434123
+  blocked_reason: duplicate_of:MUNI_WWW_SEOGU_GO_KR_E4434123
+  priority: 2
+  url: https://www.seogu.go.kr/library/dunsanlib/contents/learning/lib/02/lib.02.001.motion?mnucd=MENU0400030
+  source: user_requested
+  origin: manual
+  region: 대전광역시
+  last_quality:
+    collected: 4
+    score: 50.0
+    grade: C
+    parser: card+detail+table
+    error_kind: ''
+  service_group: 공공강좌
+  crawler_notes:
+  - '2026-06-29: Corrected provider as Dunsan Library and switched from a single detail page to the course list URL.'
+- provider: MUNI_WWW_YEONGDO_GO_KR_33400564
+  name: 부산광역시 영도구 전체 교육 원장
+  branch: 부산광역시 영도구
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: busan_yeongdo_complete_education_idx_pages+clamped_last_sentinel+stable_first_last+busan_reserve_gugun14_office33_complete+empty_sentinel+lifelong_office00002680_pageunit1000_two_stable_complete_censuses+external_lecidx_duplicate_suppression+native_learning_current_details+identity_bound_apply_no_form_fetch+pii_allowlist+atomic_three_ledger_snapshot
+  crawler_status: ready
+  priority: 2
+  url: https://www.yeongdo.go.kr/reserve/01785/01791.web
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  region: 부산광역시
+  municipality_code: '2620000000'
+  municipality_full_name: 부산광역시 영도구
+  covered_municipalities:
+  - code: '2620000000'
+    sido: 부산광역시
+    sigungu: 영도구
+    full_name: 부산광역시 영도구
+  full_snapshot_required: true
+  ownership_scope: yeongdo_complete_education_catalogue_resident_councils_and_native_lifelong_platform_courses
+  excluded_scope: non_education_events_experiences_external_platform_idx_duplicates_notice_board_library_information_third_party_directory_application_forms_attachments_free_text_contact_and_pii
+  last_quality:
+    collected: 93
+    score: 100.0
+    grade: A
+    parser: busan_yeongdo_complete_education_idx_pages+clamped_last_sentinel+stable_first_last+busan_reserve_gugun14_office33_complete+empty_sentinel+lifelong_office00002680_pageunit1000_two_stable_complete_censuses+external_lecidx_duplicate_suppression+native_learning_current_details+identity_bound_apply_no_form_fetch+pii_allowlist+atomic_three_ledger_snapshot
+    error_kind: ''
+    checked_at: '2026-07-22T16:55:00+09:00'
+    source_total: 3198
+    unique_education_source_rows: 2352
+    expired_count: 2259
+    current_source_count: 93
+    detail_pages: 93
+    list_requests: 242
+    application_control_count: 38
+    status_counts:
+      OPEN: 38
+      SCHEDULED: 4
+      CLOSED: 51
+    application_types:
+      ONLINE: 29
+      WAITLIST: 9
+      INFO: 55
+    district_source_total: 2306
+    district_education_total: 2278
+    district_current_count: 45
+    platform_source_total: 884
+    platform_native_total: 66
+    platform_native_current_count: 40
+    platform_external_duplicate_total: 818
+    platform_external_unique_total: 818
+    platform_external_repeated_total: 0
+    busan_city_resident_total: 8
+    busan_city_resident_current_count: 8
+    snapshot_complete: true
+  crawler_notes:
+  - 영도구 정본 2,306건 231페이지, 부산평생학습 OFFICE_00002680 884건, 부산시 주민자치 8건의 세 원장을 원자적으로 완주한다.
+  - 공유 플랫폼 external 818건은 정본 idx와 전부 동일해 억제하고, 독립 LEARNING identity 현재 40건만 전용 소유자에 포함한다.
+  - 현재·미래 93건의 안전한 상세만 읽으며 신청서·예약이력·첨부·강사·연락처·자유서술·신청자 개인정보는 요청하거나 저장하지 않는다.
+- provider: MUNI_WWW_YJLIB_GO_KR_ED9BCD30
+  name: 여주시립도서관
+  branch: 경기도 여주시
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.yjlib.go.kr/web/menu/10071/program/30020/lectureList.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 360
+    score: 95.0
+    grade: A
+    parser: yjlib_article_cards+detail
+    error_kind: ''
+- provider: MUNI_YEYAK_HSCITY_GO_KR_E7FCC3C0
+  name: 화성특례시 통합예약시스템
+  branch: 경기도 화성시
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청/도서관
+  source_group: library
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_YEYAK_HSCITY_GO_KR_2DFD650A
+  duplicate_of: MUNI_YEYAK_HSCITY_GO_KR_2DFD650A
+  blocked_reason: duplicate_of:MUNI_YEYAK_HSCITY_GO_KR_2DFD650A
+  priority: 2
+  url: https://yeyak.hscity.go.kr/1002/3001/lectureList.do?currentPageNo=1&recordCountPerPage=10&searchCondition=lectureNm&searchInstitutionTypeCd=INS01&searchAreaEmd=&statusCd=&freeYn=&targetCd=
+  source: ops_console_url_update
+  origin: manual
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: DUPLICATE
+    parser: hscity_lecture_all_list+detail
+    error_kind: duplicate_of:MUNI_YEYAK_HSCITY_GO_KR_2DFD650A
+  target_id: 79e9eaccfb299bc9
+  updated_at: '2026-06-07T23:49:28'
+  manual_action: update
+  manual_updated_at: '2026-06-07T23:49:28'
+- provider: SUWON_LIBRARY_MA
+  name: 수원시도서관 선경 독서문화프로그램
+  branch: 선경도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MA&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MB
+  name: 수원시도서관 중앙 독서문화프로그램
+  branch: 중앙도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MB&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MV
+  name: 수원시도서관 창룡 독서문화프로그램
+  branch: 창룡도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MV&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_SB
+  name: 수원시도서관 화서다산 독서문화프로그램
+  branch: 화서다산도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SB&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MY
+  name: 수원시도서관 호매실 독서문화프로그램
+  branch: 호매실도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MY&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MG
+  name: 수원시도서관 서수원 독서문화프로그램
+  branch: 서수원도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MG&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MU
+  name: 수원시도서관 한림 독서문화프로그램
+  branch: 한림도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MU&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MW
+  name: 수원시도서관 버드내 독서문화프로그램
+  branch: 버드내도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MW&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MH
+  name: 수원시도서관 북수원 독서문화프로그램
+  branch: 북수원도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MH&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MT
+  name: 수원시도서관 대추골 독서문화프로그램
+  branch: 대추골도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MT&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MZ
+  name: 수원시도서관 일월 독서문화프로그램
+  branch: 일월도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MZ&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MX
+  name: 수원시도서관 광교홍재 독서문화프로그램
+  branch: 광교홍재도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MX&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MI
+  name: 수원시도서관 태장마루 독서문화프로그램
+  branch: 태장마루도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MI&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_SC
+  name: 수원시도서관 광교푸른숲 독서문화프로그램
+  branch: 광교푸른숲도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SC&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_SD
+  name: 수원시도서관 매여울 독서문화프로그램
+  branch: 매여울도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SD&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_SE
+  name: 수원시도서관 망포글빛 독서문화프로그램
+  branch: 망포글빛도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SE&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MD
+  name: 수원시도서관 슬기샘 독서문화프로그램
+  branch: 슬기샘도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MD&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_MF
+  name: 수원시도서관 지혜샘 독서문화프로그램
+  branch: 지혜샘도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MF&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: SUWON_LIBRARY_ME
+  name: 수원시도서관 바른샘 독서문화프로그램
+  branch: 바른샘도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 공공도서관
+  source_group: library
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=ME&recordCountPerPage=10&currentPageNo=1
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+- provider: MUNI_WWW_HANAMLIB_GO_KR_EE810F0A
+  name: 하남시립도서관 8개관 전체 교육강좌
+  branch: 하남시립도서관
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 공공도서관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+  crawler_module: Crawler.municipal_hanam
+  crawler_callable: collect
+  parser_assigned: hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+  crawler_status: ready
+  priority: 1
+  url: https://www.hanamlib.go.kr/silib/selectWebEdcLctreList.do?key=163
+  list_urls:
+  - https://www.hanamlib.go.kr/silib/selectWebEdcLctreList.do?key=163
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경기도 하남시
+  municipality_code: '4145000000'
+  municipality_full_name: 경기도 하남시
+  max_pages: 240
+  detail_limit: 650
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 하남시립도서관 8개관의 강좌 identity·교육기간·접수기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_evidence_url: https://www.hanamlib.go.kr/silib/selectWebEdcLctreList.do?key=163
+  ownership_scope: hanam_public_library_eight_branch_current_lecture_ledgers
+  covered_municipalities:
+  - code: '4145000000'
+    sido: 경기도
+    sigungu: 하남시
+    full_name: 경기도 하남시
+  last_quality:
+    collected: 58
+    score: 100.0
+    grade: A
+    parser: hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+    error_kind: ''
+    checked_at: '2026-07-23T08:29:40+09:00'
+    source_total: 58
+    current_count: 58
+    returned_count: 58
+    branch_count: 8
+    detail_pages: 58
+    pagination_complete: true
+    details_complete: true
+    pii_payload_persisted: false
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_provider: MUNI_WWW_HANAMLIB_GO_KR_EE810F0A
+    canonical_candidate_id: MUNI_IR_CAA8D8AA5532
+    provider_decision: add_single_owner_for_eight_official_library_branch_ledgers
+  crawler_notes:
+  - 신장·나룰·미사·덕풍·위례·일가·세미·디지털도서관의 페이지와 각 빈 sentinel·경계 재검사를 완료하고 현재 58건을 저장한다.
+  - 공개 상세 58건을 검증하되 강사명·문의전화는 저장하지 않고 발견한 신청 URL도 호출하지 않는다.
+- provider: MUNI_WWW_ICHEONLIB_GO_KR_76E3CE6D
+  name: 이천시립도서관 6개관 전체 교육강좌
+  branch: 이천시립도서관
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 공공도서관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: icheon_library_declared_total+empty_sentinel+stable_edges+all_current_details
+  crawler_module: Crawler.municipal_icheon
+  crawler_callable: collect
+  parser_assigned: icheon_library_declared_total+empty_sentinel+stable_edges+all_current_details
+  crawler_status: ready
+  priority: 1
+  url: https://www.icheonlib.go.kr/education/list
+  list_urls:
+  - https://www.icheonlib.go.kr/education/list
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경기도 이천시
+  municipality_code: '4150000000'
+  municipality_full_name: 경기도 이천시
+  max_pages: 450
+  detail_limit: 500
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 이천시립도서관 6개관의 강좌 identity·교육기간·접수기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_evidence_url: https://www.icheonlib.go.kr/education/list
+  ownership_scope: icheon_public_library_six_branch_complete_education_ledger
+  covered_municipalities:
+  - code: '4150000000'
+    sido: 경기도
+    sigungu: 이천시
+    full_name: 경기도 이천시
+  last_quality:
+    collected: 100
+    score: 100.0
+    grade: A
+    parser: icheon_library_declared_total+empty_sentinel+stable_edges+all_current_details
+    error_kind: ''
+    checked_at: '2026-07-23T08:49:56+09:00'
+    source_total: 3312
+    source_pages: 332
+    sentinel_page: 333
+    current_count: 100
+    returned_count: 100
+    branch_count: 6
+    pagination_complete: true
+    details_complete: true
+    pii_payload_persisted: false
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_provider: MUNI_WWW_ICHEONLIB_GO_KR_76E3CE6D
+    canonical_candidate_id: MUNI_IR_1227B4EA45D5
+    provider_decision: add_one_owner_for_six_official_library_branch_ledgers
+  crawler_notes:
+  - 공식 선언 전체 3,312건·332개 데이터 페이지와 333페이지 빈 sentinel·경계를 검증하고 현재·향후 100건의 공개 상세만 저장한다.
+  - 시립·청미·효양·어린이·마장·서희도서관의 공식 이름을 지점으로 보존하며 신청·내목록·첨부 경로는 호출하지 않는다.
+- provider: JNE_LIBRARY_READING_INTEGRATED
+  name: 전남광주통합특별시교육청 전남통합도서관 독서문화참여
+  branch: 전남광주통합특별시교육청 전남통합도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: jne_integrated_reading_all_pages+empty_sentinel+official_branch_registry+canonical_owner_exclusion
+  crawler_status: ready
+  priority: 1
+  url: https://jnelib.jne.go.kr/educationIntegration.es?mid=d50401000000
+  source: official_jne_integrated_library
+  origin: live_validated
+  region: 전남광주통합특별시
+  discover_from_main_url: false
+  excluded_branch_sids:
+  - c1
+  - c4
+  canonical_branch_providers:
+    c1: MUNI_GSLIB_JNE_GO_KR_F1BD0233
+    c4: MUNI_GHLIFE_JNE_GO_KR_0B6360AE
+  classification_locked: true
+  classification_reason: JNE 통합도서관의 독서문화참여 목록을 공식 기관명으로 분리하며 독립 교육행사 소유자가 있는 지점은 제외한다.
+  crawler_notes:
+  - 공식 지점 선택 목록을 매 실행 검증하고 각 행의 기관명을 branch로 저장한다.
+  - 곡성교육문화회관과 고흥평생교육관의 독서문화행사는 기존 전용 수집기가 소유하므로 중앙 fallback에서 중복 수집하지 않는다.
+- provider: MUNI_WWW_GOYANGLIB_OR_KR_FFF7B1F8
+  name: 고양시도서관 통합 교육강좌
+  branch: 고양시 공공도서관 18개관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 지자체/공공도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: goyang_library_all_branches_status_partitions+empty_sentinel+stable_edges+all_current_details
+  crawler_module: Crawler.municipal_goyang_library
+  crawler_callable: collect
+  parser_assigned: goyang_library_all_branches_status_partitions+empty_sentinel+stable_edges+all_current_details
+  crawler_status: ready
+  priority: 1
+  url: https://www.goyanglib.or.kr/MH/program/lectureList.do
+  list_urls:
+  - https://www.goyanglib.or.kr/MH/program/lectureList.do
+  source: official_goyang_library
+  origin: live_validated
+  region: 경기도 고양시
+  municipality_code: '4128100000'
+  municipality_full_name: 경기도 고양시
+  max_pages: 100
+  detail_limit: 500
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 고양시 18개 공공도서관의 강의 기간, 접수 기간, 대상, 장소, 수강료, 상태를 직접 소유하는 공식 통합 강좌 원장이다.
+  ownership_scope: goyang_public_library_eighteen_branch_complete_lecture_ledger
+  covered_municipalities:
+  - code: '4128100000'
+    sido: 경기도
+    sigungu: 고양시
+    full_name: 경기도 고양시
+  crawler_notes:
+  - 공통과 18개 도서관 코드를 동시에 선택하고 접수중, 접수예정, 대기접수, 마감, 현장참여 상태를 분할 조회한다.
+  - 각 상태의 빈 다음 페이지와 첫·끝 페이지 재조회로 경계를 검증하고 현재·향후 강좌의 공개 상세만 조회한다.
+  - 신청 폼, 로그인, 첨부파일, 강사명, 자유 서술 본문은 조회하거나 저장하지 않는다.
+- provider: JNE_LIBRARY_LECTURE_INTEGRATED
+  name: 전남광주통합특별시교육청 전남통합도서관 평생학습강좌
+  branch: 전남광주통합특별시교육청 전남통합도서관
+  collection_category: 도서관
+  domain_category: 도서관
+  operator_type: 교육청 도서관
+  source_group: library
+  service_group: 공공강좌
+  service_group_policy: inferred
+  collection_type: jne_integrated_lecture_current_year+empty_sentinel+official_branch_registry+canonical_owner_exclusion
+  crawler_status: ready
+  priority: 1
+  url: https://jnelib.jne.go.kr/lectureIntegration.es?mid=d50402000000
+  source: official_jne_integrated_library
+  origin: live_validated
+  region: 전남광주통합특별시
+  discover_from_main_url: false
+  excluded_branch_sids:
+  - a5
+  - a6
+  - a7
+  - a8
+  - b3
+  - c1
+  - c3
+  - c4
+  canonical_branch_providers:
+    a5: MUNI_GYLIB_JNE_GO_KR_15EB3C2E
+    a6: MUNI_DYLIB_JNE_GO_KR_1412DDEF
+    a7:
+    - MUNI_GRLIB_JNE_GO_KR_133262C9
+    - MUNI_GRLIB_JNE_GO_KR_E6838F98
+    a8: MUNI_BSLIB_JNE_GO_KR_34227E33
+    b3: MUNI_HNLIB_JNE_GO_KR_3E3E5BCA
+    c1: MUNI_GSLIB_JNE_GO_KR_80914C01
+    c3: MUNI_GYLIFE_JNE_GO_KR_AFB03FB8
+    c4: MUNI_GHLIFE_JNE_GO_KR_0B6360AE
+  classification_locked: true
+  classification_reason: JNE 통합도서관의 현년도 평생학습강좌를 공식 기관명으로 분리하며 독립 강좌 소유자가 있는 지점은 제외한다.
+  crawler_notes:
+  - 공식 지점 선택 목록과 현년도 전체 페이지 및 빈 다음 페이지를 검증한다.
+  - 기존 8개 지점 전용 수집기의 소유권을 유지하고 중앙 목록은 나머지 JNE 기관의 누락 강좌만 보완한다.

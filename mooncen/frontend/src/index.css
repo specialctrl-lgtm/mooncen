@@ -1,0 +1,66 @@
+:root {
+  /* ClassNow Theme - Warm & Premium */
+  --bg-dark: #FDFBF7;
+  /* Cream/Warm White Background */
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8F8F8;
+
+  --text-primary: #1A1A1A;
+  --text-secondary: #888888;
+  --text-accent: #FF6B4A;
+  /* Orange Brand Color */
+
+  --accent-primary: #FF6B4A;
+  /* Orange 500 */
+  --accent-glow: rgba(255, 107, 74, 0.2);
+
+  --border-glass: #E5E5E5;
+  --border-glass-hover: #FF6B4A;
+
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-soft);
+}
+
+.text-gradient {
+  color: var(--text-primary);
+  /* Remove gradient for cleaner look */
+}
+
+.container {
+  max-width: 600px;
+  /* Mobile focused max-width */
+  margin: 0 auto;
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

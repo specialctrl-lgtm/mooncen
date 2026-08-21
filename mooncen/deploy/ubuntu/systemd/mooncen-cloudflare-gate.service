@@ -1,0 +1,34 @@
+[Unit]
+Description=MoonCen local health gate for Cloudflare Tunnel
+After=network-online.target postgresql.service nginx.service mooncen-api.service mooncen-frontend.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Group=mooncen
+WorkingDirectory=/
+EnvironmentFile=/etc/mooncen/gate.env
+EnvironmentFile=-/opt/mooncen/failover/failover.env
+ExecStart=/bin/bash /usr/local/libexec/mooncen-ha/cloudflare_health_gate.sh
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/mooncen/failover
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

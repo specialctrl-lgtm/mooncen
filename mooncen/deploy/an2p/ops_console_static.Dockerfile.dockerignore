@@ -1,0 +1,11 @@
+**
+!ops-console/
+!ops-console/**
+ops-console/.env*
+ops-console/**/.env*
+ops-console/**/.npmrc
+ops-console/**/node_modules
+ops-console/**/dist
+ops-console/**/build
+ops-console/**/coverage
+ops-console/**/test-results

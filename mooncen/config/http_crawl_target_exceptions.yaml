@@ -1,0 +1,15 @@
+version: 1
+reviewed_at: '2026-07-10'
+review_after: '2026-10-10'
+description: Active crawl targets that cannot currently be upgraded to verified HTTPS.
+exceptions:
+  MUNI_WWW_CHEONGJU_GO_KR_6B11C1EE:
+    reason: HTTPS redirects back to HTTP.
+  MUNI_WWW_SUNCHEON_GO_KR_EA7E4FCA:
+    reason: HTTPS redirects back to HTTP.
+  MUNI_SJECAMPUS_COM_ECBA8A53:
+    reason: HTTPS redirects to an expired replacement page.
+  MUNI_WWW_ELOVEJC_KR_A7D60B6C:
+    reason: The provider HTTPS endpoint fails certificate negotiation.
+  MUNI_WWW_JPYOUTH_CO_KR_5E838FBF:
+    reason: The provider HTTPS endpoint fails certificate negotiation.

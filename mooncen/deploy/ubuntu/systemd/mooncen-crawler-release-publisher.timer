@@ -1,0 +1,12 @@
+[Unit]
+Description=Refresh MoonCen crawler desired-state document
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=30s
+AccuracySec=5s
+Persistent=false
+Unit=mooncen-crawler-release-publisher.service
+
+[Install]
+WantedBy=timers.target

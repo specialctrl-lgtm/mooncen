@@ -1,0 +1,1193 @@
+# MoonCen crawler target registry.
+# This file is the operational list of sources to crawl or investigate.
+# Status flow: candidate -> discovery -> ready -> implementing -> testing -> active -> paused/rejected.
+
+version: 1
+updated_at: "2026-05-22"
+
+provider_metadata:
+  HOMEPLUS:
+    label: 홈플러스
+    marker_label: H
+    marker_color: "#d71920"
+    geocode_keywords:
+      - 홈플러스
+      - homeplus
+  EMART:
+    label: 이마트
+    marker_label: E
+    marker_color: "#f5c400"
+    geocode_keywords:
+      - 이마트
+      - emart
+  LOTTE:
+    label: 롯데
+    marker_label: L
+    marker_color: "#7a4a24"
+    geocode_keywords:
+      - 롯데
+      - 롯데문화센터
+      - lotte
+  HYUNDAI_DEPT:
+    label: 현대백화점
+    marker_label: HD
+    marker_color: "#2563eb"
+    geocode_keywords:
+      - 현대백화점
+      - 현대문화센터
+      - hyundai
+  SHINSEGAE_ACADEMY:
+    label: 신세계아카데미
+    marker_label: S
+    marker_color: "#dc2626"
+    geocode_keywords:
+      - 신세계
+      - 신세계아카데미
+      - shinsegae
+  ELAND_RETAIL:
+    label: 이랜드리테일
+    marker_label: ER
+    marker_color: "#059669"
+    geocode_keywords:
+      - 이랜드
+      - 뉴코아
+      - NC
+      - eland
+  AK_PLAZA:
+    label: AK플라자
+    marker_label: A
+    marker_color: "#7c3aed"
+    geocode_keywords:
+      - AK플라자
+      - AK PLAZA
+      - akplaza
+  GALLERIA:
+    label: 갤러리아
+    marker_label: G
+    marker_color: "#db2777"
+    geocode_keywords:
+      - 갤러리아
+      - galleria
+  LOTTE_MART:
+    label: 롯데마트
+    marker_label: M
+    marker_color: "#92400e"
+    geocode_keywords:
+      - 롯데마트
+      - lottemart
+
+defaults:
+  test_limits:
+    discovery: 20
+    validation: 100
+    production_sample: 1000
+  required_fields:
+    - title
+    - provider
+    - provider_course_id
+    - branch
+    - raw_url
+    - status
+    - fee
+    - schedule_raw
+  desired_fields:
+    - category_raw
+    - target
+    - target_age_group
+    - target_min_age
+    - target_max_age
+    - image_url
+    - description
+    - instructor
+    - start_date
+    - end_date
+    - sessions
+
+targets:
+  - provider: HOMEPLUS
+    name: 홈플러스 문화센터
+    group: mart
+    priority: 1
+    status: active
+    base_url: "https://mschool.homeplus.co.kr"
+    list_url: "https://mschool.homeplus.co.kr/Lecture/SearchResult"
+    crawler_module: "Crawler.Crawler_Homeplus"
+    crawler_script: "Crawler/Crawler_Homeplus.py"
+    access:
+      login_required: false
+      selenium_required: false
+      api_available: true
+    notes:
+      - "운영 중인 크롤러."
+      - "가격은 상세 페이지 수강료 기준으로 보정 필요."
+
+  - provider: EMART
+    name: 이마트 문화센터
+    group: mart
+    priority: 1
+    status: active
+    base_url: "https://www.cultureclub.emart.com"
+    list_url: "https://www.cultureclub.emart.com/enrolment"
+    crawler_module: "Crawler.Crawler_Emart"
+    crawler_script: "Crawler/Crawler_Emart.py"
+    access:
+      login_required: false
+      selenium_required: true
+      api_available: true
+    notes:
+      - "운영 중인 크롤러."
+      - "강좌 목록은 AppSync GraphQL getClassByFiltering from/size 페이징으로 수집한다."
+      - "사이트 점검 시 0건 수집될 수 있으므로 stale cleanup 금지 로직 유지."
+
+  - provider: LOTTE
+    name: 롯데 문화센터
+    group: mart_department
+    priority: 1
+    status: active
+    base_url: "https://culture.lotteshopping.com"
+    list_url: "https://culture.lotteshopping.com/application/search/list.do"
+    crawler_module: "Crawler.Crawler_Lotte"
+    crawler_script: "Crawler/Crawler_Lotte.py"
+    access:
+      login_required: false
+      selenium_required: true
+      api_available: unknown
+    notes:
+      - "운영 중인 크롤러."
+      - "다중 강좌 옵션이 있는 상세 페이지는 여러 강좌로 분리 저장해야 함."
+
+  - provider: HYUNDAI_DEPT
+    name: 현대백화점 문화센터
+    group: department_store
+    priority: 1
+    status: active
+    base_url: "https://www.ehyundai.com"
+    list_url: "https://www.ehyundai.com/newCulture/CT/CT010100_L.do"
+    source_url: "https://www.ehyundai.com/newCulture/CT/CT010100_L.do"
+    crawler_module: "Crawler.Crawler_YamlSources"
+    crawler_script: "Crawler/Crawler_YamlSources.py"
+    crawler_args:
+      provider: HYUNDAI_DEPT
+    run_command: "python -X utf8 Crawler/Crawler_YamlSources.py --provider HYUNDAI_DEPT"
+    production:
+      enabled: true
+      included_in_run_crawlers: true
+      coordinate_update_after_crawl: true
+      coordinate_update_mode: missing_only
+      quality_report_required: true
+    access:
+      login_required: false
+      selenium_required: unknown
+      api_available: unknown
+      public_list_visible: true
+    observed:
+      page_title: "강좌찾기 | 문화센터 | 현대백화점"
+      initial_result_count: 624
+      default_branch_filter: "모든지점"
+      branch_selector:
+        text_selector: ".ui-select-text"
+        required_text: "모든지점"
+        value_param: "stCd=ALL"
+        note: "기본값이 무역센터점으로 잡히면 일부 지점만 수집되므로 수집 전 모든지점을 선택하고 검색해야 함. 크롤러는 이 상태를 stCd=ALL 파라미터로 재현한다."
+      page_size_options:
+        - 12
+        - 24
+        - 36
+      sort_options:
+        - 신청상태순
+        - 추천순
+      pagination_visible: true
+      branch_filters:
+        - 모든지점
+        - 무역센터점
+        - 천호점
+        - 신촌점
+        - 미아점
+        - 목동점
+        - 킨텍스점
+        - 충청점
+        - 판교점
+        - 가든파이브
+        - 울산점
+      category_filters:
+        - 모든강좌
+        - 인문예술
+        - 재테크
+        - 외국어
+        - 사진
+        - 여행
+        - 웰니스뷰티
+        - 쿠킹
+        - 취미
+        - 미술
+        - 기악
+        - 노래
+        - 댄스
+        - 공연이벤트
+        - 엄마랑 아가랑
+        - 어린이
+        - 패밀리
+        - 자녀교육
+        - 프리맘
+      course_type_filters:
+        - 모든강좌
+        - 일반 강좌
+        - 타임세일
+        - 특별쿠폰
+        - 할인
+        - 지인추천
+      course_format_filters:
+        - 1회
+        - 2~4회
+        - 5회이상
+      status_filters:
+        - 마감임박
+        - 신청가능
+        - 중간신청
+        - 마감
+        - 대기신청
+      target_filters:
+        - 전체
+        - 성인
+        - 엄마랑 아가랑
+        - 어린이, 청소년
+        - 유아
+        - 패밀리
+      time_filters:
+        start_hours:
+          - "08"
+          - "09"
+          - "10"
+          - "11"
+          - "12"
+          - "13"
+          - "14"
+          - "15"
+          - "16"
+          - "17"
+          - "18"
+          - "19"
+          - "20"
+          - "21"
+        weekdays:
+          - 월
+          - 화
+          - 수
+          - 목
+          - 금
+          - 토
+          - 일
+      sample_item_shape:
+        - status
+        - category_or_target
+        - title
+        - branch
+        - sessions
+        - instructor
+        - date_or_period
+        - weekday
+        - time_range
+        - fee
+    field_mapping_hints:
+      provider_course_id: "detail link or application course id from course URL"
+      title: "course list link text after status/category removal"
+      branch: "text in square brackets, e.g. [무역센터점]"
+      status: "마감임박/신청가능/중간신청/마감/대기신청"
+      fee: "list text contains amount such as 65,000 원"
+      schedule_raw: "date, weekday, repeat text, and time range from list/detail"
+      target: "성인, 엄마랑 아가랑, 어린이, 유아, 패밀리 or age text in title"
+    next_actions:
+      - "Inspect request parameters for pagination, branch, category, status, target, and page size."
+      - "Before collecting list items, make sure .ui-select-text is set to 모든지점 instead of 무역센터점. HTTP crawler uses stCd=ALL."
+      - "Try HTTP parser first because initial list items are visible in HTML."
+      - "Create Crawler_Hyundai.py after confirming URL patterns and detail page fields."
+      - "Run 20 item discovery, then 100 item validation."
+      - "Add HYUNDAI_DEPT to run_crawlers.py only after quality report passes."
+    quality_targets:
+      title: 0.99
+      branch: 0.99
+      raw_url: 0.99
+      status: 0.95
+      fee: 0.95
+      schedule_raw: 0.95
+      target_age_group: 0.80
+      image_url: 0.70
+      description: 0.70
+    risks:
+      - "세부 검색/페이지네이션 파라미터 조사 필요."
+      - "상세 페이지에서 로그인 없이 신청 상태와 상세 설명이 보이는지 확인 필요."
+      - "마감임박은 OPEN 또는 DEADLINE 중 서비스 정책 결정 필요."
+
+  - provider: SHINSEGAE_ACADEMY
+    name: 신세계 아카데미
+    group: department_store
+    priority: 1
+    status: active
+    base_url: "https://sacademy.shinsegae.com"
+    list_url: "https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/HP0010P0.do#none"
+    source_url: "https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/HP0010P0.do#none"
+    crawler_module: "Crawler.Crawler_YamlSources"
+    crawler_script: "Crawler/Crawler_YamlSources.py"
+    crawler_args:
+      provider: SHINSEGAE_ACADEMY
+    run_command: "python -X utf8 Crawler/Crawler_YamlSources.py --provider SHINSEGAE_ACADEMY"
+    production:
+      enabled: true
+      included_in_run_crawlers: true
+      coordinate_update_after_crawl: true
+      coordinate_update_mode: missing_only
+      quality_report_required: true
+    access:
+      login_required: false
+      selenium_required: likely
+      api_available: true
+      public_list_visible: true
+    observed:
+      page_title: "강좌찾기 - 신세계 아카데미"
+      maintenance_notice: "홈페이지 신세계 아카데미 시스템 점검 중입니다."
+      store_selector:
+        select_selector: "#storeCode"
+        name: "storeCode"
+        code_attribute: "value"
+        label_source: "option text"
+        binding_function: "gfnStoreBindCombo2('storeCode', 'store', '', storeCode, 'fnBindSmstBindCombo')"
+        option_source: "/sdotcom/js/common/combo.js"
+        interaction_note: "#storeCode 값을 변경하면 store_code 쿠키가 저장되고 학기 콤보가 다시 바인딩된다. 지점별 수집은 storeCode를 변경하면서 getLectList.do를 호출한다."
+      store_codes:
+        - code: "ON"
+          name: "신세계 온 아카데미"
+        - code: "01"
+          name: "본점"
+        - code: "03"
+          name: "타임스퀘어 & ON"
+        - code: "14"
+          name: "강남점"
+        - code: "15"
+          name: "마산점"
+        - code: "16"
+          name: "신세계 사우스시티"
+        - code: "18"
+          name: "센텀시티"
+        - code: "19"
+          name: "의정부점"
+        - code: "37"
+          name: "김해점"
+        - code: "40"
+          name: "스타필드하남점"
+        - code: "70"
+          name: "천안아산점"
+        - code: "90"
+          name: "대구신세계"
+        - code: "D1"
+          name: "대전신세계"
+      inactive_store_codes:
+        - code: "50"
+          name: "강남 리틀란드"
+          note: "combo.js에 주석 처리됨"
+        - code: "81"
+          name: "광주신세계"
+          note: "리뉴얼로 combo.js에 주석 처리됨"
+      list_api:
+        method: POST
+        url: "https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/getLectList.do"
+        data_source: "#frm serialize"
+        response_type: json
+        result_key: "lectList"
+        pagination_key: "pageNavi"
+        branch_param: "storeCode"
+        page_param: "curPage"
+        pagination:
+          container_selector: "#pageNavi"
+          page_input_selector: "#curPage"
+          js_function: "fnGoPage(page)"
+          page_param: "curPage"
+          completion_rule: "increment curPage until lectList is empty or pageNavi has no next page."
+      detail_url_pattern: "https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/HP0010P1.do?yearCode={yearCode}&smstCode={smstCode}&storeCode={storeCode}&lectCode={lectCode}#"
+      field_hints_from_json:
+        title: "lectName"
+        branch: "storeName"
+        branch_code: "storeCode"
+        provider_course_id: "yearCode + smstCode + storeCode + lectCode"
+        year_code: "yearCode"
+        semester_code: "smstCode"
+        semester_name: "smstCodeName"
+        schedule_raw: "dayCodeName + lectHm"
+        period: "lectPeriod"
+        sessions: "lectCnt"
+        instructor: "tchName"
+        fee: "lectAmt or lectAmtCurr"
+        status: "lectStat: PR=접수전, RT=접수중, RC=마감, ST=대기등록, LC=강좌종료"
+      filters:
+        on_off:
+          - 전체
+          - 오프라인
+          - 온라인
+        receipt_status:
+          - 전체
+          - 접수전
+          - 접수중
+          - 접수마감
+          - 대기등록
+        weekdays:
+          - 전체
+          - 일
+          - 월
+          - 화
+          - 수
+          - 목
+          - 금
+          - 토
+        times:
+          - 전체
+          - "09:00 ~ 11:59"
+          - "12:00 ~ 16:59"
+          - "17:00 ~"
+        search_conditions:
+          - 전체
+          - 강좌명
+          - 강사명
+          - 검색어
+    field_mapping_hints:
+      branch_code: "#storeCode value"
+      branch_name: "#storeCode option text from combo.js gfnStoreBindCombo2"
+      list_api: "POST /sdotcom/web/HP0010P0/getLectList.do with serialized #frm"
+      list_url_by_branch: "change #storeCode through ON, 01, 03, 14, 15, 16, 18, 19, 37, 40, 70, 90, D1; set storeCode, schSmstCode, curPage then POST getLectList.do"
+      pagination: "increment curPage until lectList is empty or pageNavi has no next page"
+      raw_url: "HP0010P1.do?yearCode={yearCode}&smstCode={smstCode}&storeCode={storeCode}&lectCode={lectCode}#"
+      title: "lectList[].lectName"
+      status: "lectList[].lectStat"
+      fee: "lectList[].lectAmtCurr / lectAmt"
+      schedule_raw: "lectList[].dayCodeName + lectList[].lectHm"
+    next_actions:
+      - "운영 공유 크롤러 Crawler_YamlSources.py로 수집한다."
+      - "POST getLectList.do for each #storeCode option and page until no new rows are returned."
+      - "Validate lectStat mapping against detail pages."
+      - "Run 100 item validation after each selector change."
+      - "After production crawl, run missing-only Google Geocoding address/coordinate update."
+    quality_targets:
+      title: 0.99
+      branch: 0.99
+      raw_url: 0.99
+      status: 0.95
+      fee: 0.95
+      schedule_raw: 0.95
+      target_age_group: 0.80
+      image_url: 0.70
+      description: 0.70
+    risks:
+      - "#storeCode options are populated by JavaScript, so plain HTML fetch sees an empty select."
+      - "The page currently displays a system maintenance notice; list API behavior must be checked at crawler runtime."
+      - "Semester code is store-dependent and must be loaded before list API calls."
+
+  - provider: ELAND_RETAIL
+    name: 이랜드 리테일 문화센터
+    group: department_store
+    priority: 1
+    status: active
+    base_url: https://www.elandretail.com
+    list_url: https://www.elandretail.com/culture/culture07.do
+    source_url: https://www.elandretail.com/culture/culture07.do
+    crawler_module: "Crawler.Crawler_YamlSources"
+    crawler_script: "Crawler/Crawler_YamlSources.py"
+    crawler_args:
+      provider: ELAND_RETAIL
+    run_command: "python -X utf8 Crawler/Crawler_YamlSources.py --provider ELAND_RETAIL"
+    production:
+      enabled: true
+      included_in_run_crawlers: true
+      coordinate_update_after_crawl: true
+      coordinate_update_mode: missing_only
+      quality_report_required: true
+    access:
+      login_required: false
+      selenium_required: false
+      api_available: true
+      public_list: true
+    observed:
+      page_title: ELAND RETAIL 문화센터 강좌 조회·신청
+      store_selector:
+        select_selector: "#selStoreId"
+        option_selector: "#selStoreId option"
+        code_attribute: "value"
+        label_source: "option text"
+        all_option:
+          code: ""
+          name: 지점전체
+          crawler_value: ""
+          note: "전체 수집 기본값이다. #selStoreId를 지점전체(value='')로 변경한 뒤 StoreID 빈 값으로 조회한다."
+        collection_mode:
+          default: all_branches
+          branch_param_value: ""
+          note: "지점별 순회보다 지점전체로 전체 목록을 받은 뒤 응답 행의 지점명을 사용한다."
+      store_codes:
+        - code: "8202"
+          name: 야탑
+        - code: "8205"
+          name: 평촌아울렛
+        - code: "8206"
+          name: 강남패션
+        - code: "8212"
+          name: 순천
+        - code: "8222"
+          name: 부천
+        - code: "8224"
+          name: 송파
+      categories:
+        - 전체
+        - 추천강좌
+        - 신규강좌
+        - 성인
+        - 엄마랑아기랑
+        - 아동
+        - 초등
+        - 성인단기
+        - 아동단기
+        - 성인일일
+        - 기타
+        - 방학특강
+        - 중도수강
+        - 아동일일
+        - 미술관
+        - 엄마랑 아가랑 단기
+      weekdays:
+        - 전체
+        - 월요일
+        - 화요일
+        - 수요일
+        - 목요일
+        - 금요일
+        - 토요일
+        - 일요일
+      statuses:
+        - 전체
+        - 수강신청
+        - 대기신청
+        - 현장문의
+        - 마감
+      list_api:
+        method: POST
+        url: "https://www.elandretail.com/culture/getLectureList.do"
+        content_type: "application/json"
+        response_type: html
+        result_container: "#cultureList7"
+        request_payload:
+          CurrentPage: "#pageNo"
+          PageSize: 10
+          StoreID: "#selStoreId"
+          LecTypeID: "#selLecTypeId"
+          WeekDay: "#selWeekDay"
+          Teacher: "#lecture-teacher"
+          LectureName: "#lecture-name"
+          Status: "#selStauts"
+        all_branch_payload:
+          StoreID: ""
+        pagination:
+          container_selector: ".paging"
+          page_input_selector: "#pageNo"
+          js_function: "page_move(pageNoVal)"
+          page_param: "CurrentPage"
+          page_size_param: "PageSize"
+          page_size: 10
+          completion_rule: "increase CurrentPage until response has no course rows or paging has no next page."
+      detail_url_pattern: "https://www.elandretail.com/culture/culture09.do?storeid={storeid}&semnum={semnum}&lectypeid={lectypeid}&seq={seq}"
+      detail_function: "culture09(storeidVal, semnumVal, lectypeidVal, seqVal)"
+    field_mapping_hints:
+      branch_code: "#selStoreId option value"
+      branch_name: "#selStoreId option text"
+      all_branch_search: "set #selStoreId to empty value from 지점전체 and POST StoreID=''"
+      list_api: "POST /culture/getLectureList.do with JSON payload"
+      pagination: "change #pageNo / CurrentPage according to .paging links or page_move(pageNoVal)"
+      raw_url: "culture09.do?storeid={storeid}&semnum={semnum}&lectypeid={lectypeid}&seq={seq}"
+      title: "parse course rows from getLectureList.do HTML response"
+      status: "course search result status field: 수강신청/대기신청/현장문의/마감"
+      fee: "parse from course row/detail HTML"
+      schedule_raw: "parse from course row/detail HTML"
+    next_actions:
+      - "운영 공유 크롤러 Crawler_YamlSources.py로 수집한다."
+      - "Use StoreID empty value for 지점전체 collection."
+      - "POST /culture/getLectureList.do with CurrentPage starting at 1 and PageSize 10."
+      - "Increment CurrentPage using .paging/page_move until no new course rows are returned."
+      - "Parse detail parameters from culture09(storeid, semnum, lectypeid, seq)."
+      - "Run 100 item validation after each selector change."
+      - "After production crawl, run missing-only Google Geocoding address/coordinate update."
+    quality_targets:
+      title: 0.99
+      branch: 0.99
+      raw_url: 0.99
+      status: 0.95
+      fee: 0.95
+      schedule_raw: 0.95
+      target_age_group: 0.80
+      image_url: 0.60
+      description: 0.70
+    risks:
+      - "The page defaults to 강남패션, so crawler must explicitly use StoreID empty value for 지점전체."
+      - "The list API returns HTML fragments, so row parsing must be validated against several pages."
+      - "Pagination completion depends on .paging/page_move and empty-result detection."
+
+  - provider: AK_PLAZA
+    name: AK PLAZA 문화아카데미
+    group: department_store
+    priority: 1
+    status: active
+    base_url: https://culture.akplaza.com
+    list_url: https://culture.akplaza.com/course/list01
+    source_url: https://culture.akplaza.com/course/list01
+    crawler_module: "Crawler.Crawler_YamlSources"
+    crawler_script: "Crawler/Crawler_YamlSources.py"
+    crawler_args:
+      provider: AK_PLAZA
+    run_command: "python -X utf8 Crawler/Crawler_YamlSources.py --provider AK_PLAZA"
+    production:
+      enabled: true
+      included_in_run_crawlers: true
+      coordinate_update_after_crawl: true
+      coordinate_update_mode: missing_only
+      quality_report_required: true
+    access:
+      login_required: false
+      selenium_required: likely
+      api_available: unknown
+      public_list: unknown
+    observed:
+      page_title: AK PLAZA 문화아카데미 강좌검색
+      default_store: 수원점
+      store_selector:
+        container_selector: "ul.sear-ul.main_store"
+        item_selector: "ul.sear-ul.main_store li"
+        code_attribute: "value"
+        label_source: "li text"
+        interaction_note: "지점 변경은 main_store li의 value를 바꾸거나 해당 li를 클릭하면서 실행해야 한다."
+      store_codes:
+        - code: "02"
+          name: 수원점
+        - code: "03"
+          name: 분당점
+        - code: "04"
+          name: 평택점
+        - code: "05"
+          name: 원주점
+      weekdays:
+        - 전체
+        - 월요일
+        - 화요일
+        - 수요일
+        - 목요일
+        - 금요일
+        - 토요일
+        - 일요일
+      course_types:
+        - 전체
+        - 정규
+        - 단기
+        - 특강
+      sort_options:
+        - 추천순
+        - 인기순
+        - 최신순
+        - 가격순
+      list_api:
+        method: POST
+        url: "https://culture.akplaza.com/course/getPeltList"
+        response_type: json_text
+        result_key: "list"
+        branch_param: "search_store"
+        page_param: "page"
+        request_params:
+          page: page
+          sort_type: sort_type
+          listSize: 1000
+          search_name: search_name
+          store: search_store
+          main_cd: search_main_cd
+          sect_cd: selSect
+          yoil: day_flag
+          subject_fg: subject_fg
+          month_val: baby_month
+        pagination:
+          container_selector: ".paging"
+          render_function: "makePaging(result.page, result.s_page, result.e_page, result.pageNum, 1)"
+          js_function: "pageMoveAjax(nowPage)"
+          page_param: "page"
+          completion_rule: "increment page until result.list is empty or result.page reaches result.pageNum."
+    field_mapping_hints:
+      branch_code: "ul.sear-ul.main_store li value"
+      branch_name: "ul.sear-ul.main_store li text"
+      branch_change: "click or programmatically set the main_store li value before searching"
+      list_api: "POST /course/getPeltList"
+      pagination: "use .paging links generated by makePaging/pageMoveAjax or increment page until pageNum"
+      title: "course search result investigation required"
+      status: "course search result/detail investigation required"
+      fee: "course search result/detail investigation required"
+      schedule_raw: "course search result/detail investigation required"
+    next_actions:
+      - "운영 공유 크롤러 Crawler_YamlSources.py로 수집한다."
+      - "Confirm whether branch selection stores value in a hidden input, cookie, session, or AJAX request."
+      - "Use getPeltList store values 02/03/04/05 and fetch detail page for #lect_info description."
+      - "Check search request parameters for target, category, weekday, course type, and sort."
+      - "Run 100 item validation after each selector change."
+      - "After production crawl, run missing-only Google Geocoding address/coordinate update."
+    quality_targets:
+      title: 0.99
+      branch: 0.99
+      raw_url: 0.99
+      status: 0.95
+      fee: 0.95
+      schedule_raw: 0.95
+      target_age_group: 0.80
+      image_url: 0.70
+      description: 0.70
+    risks:
+      - "The branch selector is a custom ul/li control, not a native select."
+      - "The page says branch changes are done in MY academy, so branch state may depend on session or hidden values."
+      - "Course result endpoints and pagination still need discovery."
+
+  - provider: GALLERIA
+    name: 갤러리아 문화센터
+    group: department_store
+    priority: 1
+    status: active
+    base_url: https://dept.galleria.co.kr
+    list_url: https://dept.galleria.co.kr/g-culture/culture-center/branch
+    source_url: https://dept.galleria.co.kr/g-culture/culture-center/branch
+    crawler_module: "Crawler.Crawler_YamlSources"
+    crawler_script: "Crawler/Crawler_YamlSources.py"
+    crawler_args:
+      provider: GALLERIA
+    run_command: "python -X utf8 Crawler/Crawler_YamlSources.py --provider GALLERIA"
+    production:
+      enabled: true
+      included_in_run_crawlers: true
+      coordinate_update_after_crawl: true
+      coordinate_update_mode: missing_only
+      quality_report_required: true
+    access:
+      login_required: false
+      selenium_required: false
+      api_available: false
+      public_list: true
+    observed:
+      page_title: 문화센터 - 지점 선택 | 갤러리아
+      branch_link_rule:
+        prefix: "https://dept.galleria.co.kr/g-culture/culture-center/branch/"
+        relative_prefix: "/g-culture/culture-center/branch/"
+        exclude_suffixes:
+          - "/open-lecture"
+        exclude_paths:
+          - "/g-culture/culture-center/branch/like/"
+        note: "branch/로 시작하는 URL 중 open-lecture와 like는 지점 자체가 아니므로 제외한다."
+      branch_codes:
+        - code: gwanggyo
+          name: 광교
+          branch_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/gwanggyo
+          course_list_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/gwanggyo/open-lecture
+        - code: timeworld
+          name: 타임월드
+          branch_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/timeworld
+          course_list_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/timeworld/open-lecture
+        - code: centercity
+          name: 센터시티
+          branch_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/centercity
+          course_list_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/centercity/open-lecture
+        - code: jinju
+          name: 진주
+          branch_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/jinju
+          course_list_url: https://dept.galleria.co.kr/g-culture/culture-center/branch/jinju/open-lecture
+      pagination:
+        container_selector: ".pagination"
+        page_link_selector: ".pagination a.page, .pagination a.next, .pagination a.next--last"
+        page_param: "p"
+        page_index_base: zero_based
+        last_page_source: ".pagination a.next--last[data-page]"
+        completion_rule: "follow pagination links or increment p until no course items are returned; first visible page is current page and p=1 renders page 2."
+    field_mapping_hints:
+      branch_code: "last path segment from /g-culture/culture-center/branch/{branch_code}"
+      branch_name: "branch card heading near the branch URL"
+      branch_url: "absolute URL starting with https://dept.galleria.co.kr/g-culture/culture-center/branch/"
+      list_url_by_branch: "https://dept.galleria.co.kr/g-culture/culture-center/branch/{branch_code}/open-lecture"
+      pagination: "use .pagination links and p query parameter from open-lecture pages"
+      title: "open-lecture page investigation required"
+      status: "open-lecture/detail investigation required"
+      fee: "detail page dt text '수강료' next dd text"
+      schedule_raw: "detail page dt text '강의시간' next dd text"
+    next_actions:
+      - "운영 공유 크롤러 Crawler_YamlSources.py로 4개 지점 공개 HTML 목록과 상세를 전량 수집한다."
+      - "원문에 정확한 시각이 없는 외부 스포츠클럽·전시 대관 항목은 주당 횟수와 수업 길이를 보존한다."
+      - "After production crawl, run missing-only Google Geocoding address/coordinate update."
+    quality_targets:
+      title: 0.99
+      branch: 0.99
+      raw_url: 0.99
+      status: 0.95
+      fee: 0.95
+      schedule_raw: 0.95
+      target_age_group: 0.80
+      image_url: 0.70
+      description: 0.70
+    risks:
+      - "The branch listing also contains helper URLs under the same prefix, so crawler must exclude like and open-lecture when discovering branch pages."
+      - "Only four culture-center branch pages were visible on the source page; non-culture department branches are not included."
+      - "Course result endpoints and pagination still need discovery."
+
+  - provider: LOTTE_MART
+    name: 롯데마트 문화센터
+    group: mart
+    priority: 1
+    status: active
+    base_url: https://culture.lottemart.com
+    list_url: https://culture.lottemart.com/cu/gus/course/courseinfo/courselist.do
+    source_url: https://culture.lottemart.com/cu/gus/course/courseinfo/courselist.do?
+    crawler_module: "Crawler.Crawler_YamlSources"
+    crawler_script: "Crawler/Crawler_YamlSources.py"
+    crawler_args:
+      provider: LOTTE_MART
+    run_command: "python -X utf8 Crawler/Crawler_YamlSources.py --provider LOTTE_MART"
+    production:
+      enabled: true
+      included_in_run_crawlers: true
+      coordinate_update_after_crawl: true
+      coordinate_update_mode: missing_only
+      quality_report_required: true
+    access:
+      login_required: false
+      selenium_required: likely
+      api_available: unknown
+      public_list: true
+    observed:
+      page_title: 롯데마트 문화센터 강좌목록
+      store_selector:
+        trigger_selector: "#chooseStore"
+        area_selector: ".inc-store-menu.branch-menu li"
+        store_item_selector: ".branch_find-wrap .branch-con li a"
+        store_code_source: "fn_commChooseStore(this, area_code, store_code, store_name, 'fn_chooseStore', '')"
+        interaction_note: "#chooseStore를 열고 지역/지점 항목을 변경하면서 검색해야 한다."
+      pagination:
+        more_button_selector: ".btn-more"
+        note: "검색 결과는 더보기 버튼을 반복 클릭해야 추가 로드된다."
+      default_branch: 송파점
+      area_codes:
+        - code: "1"
+          name: 서울
+        - code: "2"
+          name: 경기권
+        - code: "3"
+          name: 인천권
+        - code: "4"
+          name: 충청권
+        - code: "5"
+          name: 영남권
+        - code: "6"
+          name: 호남권
+        - code: "7"
+          name: 강원도
+        - code: "8"
+          name: 제주도
+          note: "문화센터 운영점 없음"
+      branch_codes:
+        - area_code: "1"
+          area_name: 서울
+          code: "103"
+          name: MAXX영등포점
+        - area_code: "1"
+          area_name: 서울
+          code: "322"
+          name: 송파점
+        - area_code: "1"
+          area_name: 서울
+          code: "328"
+          name: 양평점
+        - area_code: "1"
+          area_name: 서울
+          code: "342"
+          name: 은평점
+        - area_code: "1"
+          area_name: 서울
+          code: "307"
+          name: 중계점
+        - area_code: "2"
+          area_name: 경기권
+          code: "455"
+          name: 고양점
+        - area_code: "2"
+          area_name: 경기권
+          code: "463"
+          name: 광교점
+        - area_code: "2"
+          area_name: 경기권
+          code: "405"
+          name: 구리점
+        - area_code: "2"
+          area_name: 경기권
+          code: "458"
+          name: 권선점
+        - area_code: "2"
+          area_name: 경기권
+          code: "479"
+          name: 김포한강점
+        - area_code: "2"
+          area_name: 경기권
+          code: "435"
+          name: 동두천점
+        - area_code: "2"
+          area_name: 경기권
+          code: "446"
+          name: 롯데몰수지점
+        - area_code: "2"
+          area_name: 경기권
+          code: "476"
+          name: 시흥배곧점
+        - area_code: "2"
+          area_name: 경기권
+          code: "468"
+          name: 신갈점
+        - area_code: "2"
+          area_name: 경기권
+          code: "415"
+          name: 안산점
+        - area_code: "2"
+          area_name: 경기권
+          code: "417"
+          name: 안성점
+        - area_code: "2"
+          area_name: 경기권
+          code: "410"
+          name: 오산점
+        - area_code: "2"
+          area_name: 경기권
+          code: "409"
+          name: 의왕점
+        - area_code: "2"
+          area_name: 경기권
+          code: "422"
+          name: 이천점
+        - area_code: "2"
+          area_name: 경기권
+          code: "436"
+          name: 평택점
+        - area_code: "3"
+          area_name: 인천권
+          code: "433"
+          name: 검단점
+        - area_code: "3"
+          area_name: 인천권
+          code: "469"
+          name: 계양점
+        - area_code: "3"
+          area_name: 인천권
+          code: "426"
+          name: 부평점
+        - area_code: "3"
+          area_name: 인천권
+          code: "418"
+          name: 삼산점
+        - area_code: "3"
+          area_name: 인천권
+          code: "465"
+          name: 송도점
+        - area_code: "3"
+          area_name: 인천권
+          code: "424"
+          name: 영종도점
+        - area_code: "3"
+          area_name: 인천권
+          code: "461"
+          name: 청라점
+        - area_code: "4"
+          area_name: 충청권
+          code: "516"
+          name: 노은점
+        - area_code: "4"
+          area_name: 충청권
+          code: "515"
+          name: 당진점
+        - area_code: "4"
+          area_name: 충청권
+          code: "508"
+          name: 대덕점
+        - area_code: "4"
+          area_name: 충청권
+          code: "519"
+          name: 상당점
+        - area_code: "4"
+          area_name: 충청권
+          code: "504"
+          name: 서대전점
+        - area_code: "4"
+          area_name: 충청권
+          code: "506"
+          name: 서산점
+        - area_code: "4"
+          area_name: 충청권
+          code: "507"
+          name: 성정점
+        - area_code: "4"
+          area_name: 충청권
+          code: "505"
+          name: 충주점
+        - area_code: "5"
+          area_name: 영남권
+          code: "112"
+          name: MAXX창원중앙점
+        - area_code: "5"
+          area_name: 영남권
+          code: "645"
+          name: 거제점
+        - area_code: "5"
+          area_name: 영남권
+          code: "613"
+          name: 구미점
+        - area_code: "5"
+          area_name: 영남권
+          code: "647"
+          name: 김천점
+        - area_code: "5"
+          area_name: 영남권
+          code: "629"
+          name: 대구율하점
+        - area_code: "5"
+          area_name: 영남권
+          code: "626"
+          name: 부산점
+        - area_code: "5"
+          area_name: 영남권
+          code: "612"
+          name: 사상점
+        - area_code: "5"
+          area_name: 영남권
+          code: "643"
+          name: 양덕점
+        - area_code: "5"
+          area_name: 영남권
+          code: "601"
+          name: 울산점
+        - area_code: "5"
+          area_name: 영남권
+          code: "610"
+          name: 웅상점
+        - area_code: "5"
+          area_name: 영남권
+          code: "609"
+          name: 장유점
+        - area_code: "5"
+          area_name: 영남권
+          code: "614"
+          name: 진장점
+        - area_code: "5"
+          area_name: 영남권
+          code: "611"
+          name: 진해점
+        - area_code: "5"
+          area_name: 영남권
+          code: "608"
+          name: 통영점
+        - area_code: "6"
+          area_name: 호남권
+          code: "109"
+          name: MAXX목포점
+        - area_code: "6"
+          area_name: 호남권
+          code: "108"
+          name: MAXX상무점
+        - area_code: "6"
+          area_name: 호남권
+          code: "110"
+          name: MAXX송천점
+        - area_code: "6"
+          area_name: 호남권
+          code: "707"
+          name: 군산점
+        - area_code: "6"
+          area_name: 호남권
+          code: "715"
+          name: 수완점
+        - area_code: "6"
+          area_name: 호남권
+          code: "705"
+          name: 여수점
+        - area_code: "6"
+          area_name: 호남권
+          code: "706"
+          name: 월드컵점
+        - area_code: "6"
+          area_name: 호남권
+          code: "702"
+          name: 익산점
+        - area_code: "6"
+          area_name: 호남권
+          code: "708"
+          name: 전주점
+        - area_code: "6"
+          area_name: 호남권
+          code: "704"
+          name: 첨단점
+        - area_code: "7"
+          area_name: 강원도
+          code: "802"
+          name: 춘천점
+      filters:
+        semesters:
+          - 2026년 여름
+          - 2026년 봄
+        course_types:
+          - 정규
+          - 단기
+          - 일일
+        weekdays:
+          - 전체
+          - 월
+          - 화
+          - 수
+          - 목
+          - 금
+          - 토
+          - 일
+        times:
+          - "09:00 ~ 13:00"
+          - "13:00 ~ 17:00"
+          - "17:00 이후"
+        targets:
+          - 성인
+          - 어린이/청소년
+          - 유아
+          - 엄마랑함께
+        result_status_tabs:
+          - 전체
+          - 접수가능 / 접수준비
+          - 온라인마감 / 현장접수
+          - 접수마감 / 대기신청
+    field_mapping_hints:
+      branch_code: "store code argument from fn_commChooseStore"
+      branch_name: "store name argument from fn_commChooseStore"
+      area_code: "area code argument from fn_commChooseStore"
+      branch_change: "open #chooseStore, select area, then choose store or call the same JS path used by fn_commChooseStore"
+      pagination: "repeat clicking .btn-more until it disappears or no new courses are appended"
+      detail_url: "https://culture.lottemart.com/cu/gus/course/courseinfo/courseview.do?cls_cd={cls_cd}&search_str_cd={branch_code}"
+      title: "course result row title, detail page title for validation"
+      status: "course result tab/row/detail investigation required"
+      fee: "detail page label '횟수/수강료' value; list row amount is fallback"
+      schedule_raw: "detail page label '강좌시간' value"
+      period: "detail page label '강좌기간' value"
+      instructor: "detail page label '강사' value"
+      room: "detail page label '강의실' value"
+      description: "detail page label '강좌소개' value"
+    next_actions:
+      - "운영 공유 크롤러 Crawler_YamlSources.py로 수집한다."
+      - "Inspect Network tab while selecting #chooseStore and changing branch codes."
+      - "Find hidden inputs or AJAX parameters set by fn_chooseStore/fn_commChooseStore."
+      - "Confirm whether btn-more calls an AJAX endpoint with page number or appends server-rendered fragments."
+      - "Run 100 item validation after each selector change."
+      - "After production crawl, run missing-only Google Geocoding address/coordinate update."
+    quality_targets:
+      title: 0.99
+      branch: 0.99
+      raw_url: 0.99
+      status: 0.95
+      fee: 0.95
+      schedule_raw: 0.95
+      target_age_group: 0.80
+      image_url: 0.70
+      description: 0.70
+    risks:
+      - "The chooseStore element is only a trigger; actual branch codes are in fn_commChooseStore JavaScript arguments."
+      - "The default visible branch is 송파점, so crawler must explicitly switch branch before collecting."
+      - "Result completeness depends on repeatedly clicking .btn-more."

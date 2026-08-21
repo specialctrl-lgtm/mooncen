@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "environment": "production",
+  "generation": 42,
+  "rollout": {
+    "id": "00000000-0000-0000-0000-000000000042",
+    "state": "canary",
+    "target_version": "2026.08.10.1",
+    "baseline_version": "2026.08.09.3",
+    "canary_workers": [
+      "gen1crawler"
+    ]
+  },
+  "artifacts": [
+    {
+      "code_version": "2026.08.10.1",
+      "relative_path": "2026.08.10.1/crawler-release.tar.gz",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "size_bytes": 123456,
+      "config_revision": "crawler-config-20260810",
+      "signature": "cmVwbGFjZS13aXRoLW9wZW5zc2gtc3Noc2ln",
+      "key_id": "mooncen-crawler-release-2026"
+    },
+    {
+      "code_version": "2026.08.09.3",
+      "relative_path": "2026.08.09.3/crawler-release.tar.gz",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "size_bytes": 120000,
+      "config_revision": "crawler-config-20260809",
+      "signature": "cmVwbGFjZS13aXRoLW9wZW5zc2gtc3Noc2ln",
+      "key_id": "mooncen-crawler-release-2026"
+    }
+  ],
+  "workers": [
+    {
+      "worker_id": "gen1crawler",
+      "desired_version": "2026.08.10.1",
+      "config_revision": "crawler-config-20260810",
+      "cohort": "canary",
+      "enabled": true
+    },
+    {
+      "worker_id": "cloud",
+      "desired_version": "2026.08.09.3",
+      "config_revision": "crawler-config-20260809",
+      "cohort": "stable",
+      "enabled": true
+    }
+  ]
+}

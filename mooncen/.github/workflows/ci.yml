@@ -1,0 +1,404 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: "true"
+  TZ: Asia/Seoul
+
+jobs:
+  secret-scan:
+    name: Repository secret scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Install verified Gitleaks binary
+        shell: bash
+        run: |
+          archive="$RUNNER_TEMP/gitleaks.tar.gz"
+          curl --fail --silent --show-error --location \
+            --output "$archive" \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.0/gitleaks_8.30.0_linux_x64.tar.gz
+          echo "79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e  $archive" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" --directory "$RUNNER_TEMP" gitleaks
+
+      - name: Prove Gitleaks default rules detect a synthetic secret
+        shell: bash
+        run: |
+          set -euo pipefail
+          canary_dir="$(mktemp --directory "$RUNNER_TEMP/gitleaks-canary.XXXXXX")"
+          cleanup_canary() {
+            rm --force -- "$canary_dir/probe.txt"
+            rmdir -- "$canary_dir"
+          }
+          trap cleanup_canary EXIT
+
+          canary_prefix="$(printf '\x67\x68\x70\x5f')"
+          printf 'token = "%s%s"\n' \
+            "$canary_prefix" \
+            'fOP5YQKEKPR3SlpzCtaPmDOdfxSBTfgLrTYT' \
+            > "$canary_dir/probe.txt"
+
+          set +e
+          "$RUNNER_TEMP/gitleaks" dir \
+            --config .gitleaks.toml \
+            --redact \
+            --no-banner \
+            "$canary_dir"
+          canary_status=$?
+          set -e
+          if [[ "$canary_status" -ne 1 ]]; then
+            echo "Gitleaks canary failed: expected exit 1, got $canary_status." >&2
+            exit 1
+          fi
+
+      - name: Scan Git history and checked-out files
+        run: |
+          "$RUNNER_TEMP/gitleaks" git --config .gitleaks.toml --redact --no-banner --verbose
+          "$RUNNER_TEMP/gitleaks" dir --config .gitleaks.toml --redact --no-banner --verbose .
+
+  backend:
+    name: Backend Python ${{ matrix.python-version }}, migration, and audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4@sha256:44126d872ac91993766c341e369c539e8196614321765d36a6f1bab0419a5fa5
+        env:
+          POSTGRES_DB: mooncen_ci
+          POSTGRES_USER: mooncen_ci
+          POSTGRES_PASSWORD: mooncen-ci-not-a-production-secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U mooncen_ci -d mooncen_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PYTHONUTF8: "1"
+      ENVIRONMENT: test
+      AUTH_SECRET: ci-only-auth-secret-not-valid-outside-this-job
+      OAUTH_ALLOW_LEGACY_STATE: "false"
+      DB_HOST: 127.0.0.1
+      DB_PORT: "5432"
+      DB_NAME: mooncen_ci
+      DB_USER: mooncen_ci
+      DB_PASSWORD: mooncen-ci-not-a-production-secret
+      DB_USE_MIGRATOR: "true"
+      DB_SSLMODE: disable
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.lock
+
+      - name: Install hash-locked Python dependencies
+        run: python -m pip install --require-hashes -r requirements-dev.lock
+
+      - name: Verify installed dependency graph
+        run: python -m pip check
+
+      - name: Apply PostgreSQL and PostGIS migrations twice
+        run: |
+          python DB/setup_db.py --mode migrate
+          python DB/setup_db.py --mode migrate
+
+      - name: Run Python static checks
+        run: |
+          python -m compileall -q backend DB Crawler tools utils run_crawlers.py service_group.py
+          python -m ruff check .
+
+      - name: Smoke-test immutable production archive
+        shell: bash
+        run: |
+          archive="$RUNNER_TEMP/mooncen-release.tar.gz"
+          release="$RUNNER_TEMP/mooncen-release"
+          git archive --format=tar.gz --output="$archive" HEAD
+          mkdir -p "$release"
+          tar --extract --gzip --file "$archive" --directory "$release"
+          for required in \
+            requirements.lock \
+            deploy/ubuntu/setup_project.sh \
+            tools/ops_service_action.py; do
+            test -f "$release/$required" && test ! -L "$release/$required"
+          done
+          for forbidden in .env .venv deploy.local.ps1 config/deploy_servers.json; do
+            test ! -e "$release/$forbidden" && test ! -L "$release/$forbidden"
+          done
+          if find "$release" -xdev -type f \( \
+            -name '*.key' -o -name '*.pem' -o -name '*.p12' -o -name '*.pfx' -o \
+            -name '*.jks' -o -name '*.p8' -o -name '*.mobileprovision' -o \
+            -name '*.sqlite' -o -name '*.db-wal' -o -name '*.db-shm' -o \
+            -name '*.dump' -o -name '*.dump.*' \
+          \) -print -quit | grep -q .; then
+            echo "Production archive contains a forbidden local or sensitive file."
+            exit 1
+          fi
+          if find "$release" -xdev -type l -print -quit | grep -q .; then
+            echo "Production archive contains a symbolic link."
+            exit 1
+          fi
+          MOONCEN_APP_DIR="$release" python -I -c \
+            'import os,sys; root=os.environ["MOONCEN_APP_DIR"]; sys.path.insert(0,root); from tools import ops_service_action as action; assert "ollama-test" in action.ACTION_ACCOUNT_ENV; assert not hasattr(action, "_dashboard_module")'
+
+      - name: Run Python tests
+        run: python -m pytest -q
+
+      - name: Audit Python dependencies
+        if: ${{ !cancelled() }}
+        run: python -m pip_audit --strict --progress-spinner off -r requirements-dev.lock
+
+  frontend2:
+    name: Primary web frontend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend2/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --fund=false
+
+      - name: Lint without warnings
+        run: npm run lint -- --max-warnings=0
+
+      - name: Run component tests
+        if: ${{ !cancelled() }}
+        run: npm run test
+
+      - name: Build production bundle
+        if: ${{ !cancelled() }}
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        if: ${{ !cancelled() }}
+        run: npx playwright install --with-deps chromium
+
+      - name: Run responsive accessibility smoke tests
+        if: ${{ !cancelled() }}
+        run: npm run test:e2e
+
+      - name: Audit npm dependencies
+        if: ${{ !cancelled() }}
+        run: npm audit --audit-level=moderate
+
+  ops-console:
+    name: Standalone Ops Console
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ops-console
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "22.22.0"
+          cache: npm
+          cache-dependency-path: ops-console/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --fund=false
+
+      - name: Lint without warnings
+        run: npm run lint
+
+      - name: Run component tests
+        if: ${{ !cancelled() }}
+        run: npm run test
+
+      - name: Build production bundle
+        if: ${{ !cancelled() }}
+        run: npm run build
+
+      - name: Audit npm dependencies
+        if: ${{ !cancelled() }}
+        run: npm audit --audit-level=moderate
+
+  legacy-frontend:
+    name: Retired legacy frontend contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "22"
+
+      - name: Verify the Google Maps frontend stays retired
+        shell: bash
+        run: |
+          test -f frontend/RETIRED.md
+          grep -Fq "Google Maps frontend is retired" frontend/package.json
+          if npm --prefix frontend run build; then
+            echo "Retired frontend unexpectedly built successfully" >&2
+            exit 1
+          fi
+
+  expo:
+    name: Expo Android and iOS bundles
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      EXPO_NO_TELEMETRY: "1"
+    defaults:
+      run:
+        working-directory: mooncen-app
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: mooncen-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --fund=false
+
+      - name: Type-check application
+        run: npm run typecheck
+
+      - name: Test API and course-state contracts
+        run: npm test
+
+      - name: Run Expo Doctor
+        if: ${{ !cancelled() }}
+        run: npm run doctor
+
+      - name: Export Android, iOS, and web bundles
+        if: ${{ !cancelled() }}
+        run: npm run export:all
+
+      - name: Audit npm dependencies
+        if: ${{ !cancelled() }}
+        run: npm audit --audit-level=moderate
+
+  deployment-config:
+    name: Shell and Nginx configuration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Install validators
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends nginx shellcheck
+
+      - name: Check deployment shell scripts
+        shell: bash
+        run: |
+          mapfile -d '' scripts < <(find deploy -type f -name '*.sh' -print0)
+          if (( ${#scripts[@]} == 0 )); then
+            echo "No deployment shell scripts found."
+            exit 1
+          fi
+          for script in "${scripts[@]}"; do
+            bash -n "$script"
+          done
+          shellcheck --severity=error "${scripts[@]}"
+
+      - name: Report ShellCheck warnings
+        continue-on-error: true
+        shell: bash
+        run: |
+          mapfile -d '' scripts < <(find deploy -type f -name '*.sh' -print0)
+          shellcheck --severity=warning "${scripts[@]}"
+
+      - name: Parse PowerShell deployment scripts
+        shell: pwsh
+        run: |
+          $scripts = Get-ChildItem -Path . -Recurse -File -Filter '*.ps1' |
+            Where-Object { $_.FullName -notmatch '[\\/]node_modules[\\/]' }
+          if (-not $scripts) {
+            throw 'No PowerShell deployment scripts found.'
+          }
+          $failures = foreach ($script in $scripts) {
+            $tokens = $null
+            $errors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile(
+              $script.FullName,
+              [ref]$tokens,
+              [ref]$errors
+            )
+            foreach ($parseError in $errors) {
+              "{0}:{1}: {2}" -f $script.FullName, $parseError.Extent.StartLineNumber, $parseError.Message
+            }
+          }
+          if ($failures) {
+            $failures | Write-Error
+            throw 'PowerShell syntax validation failed.'
+          }
+
+      - name: Validate Nginx configurations
+        shell: bash
+        run: |
+          validate_nginx() {
+            local source="$1"
+            local name
+            local root
+            name="$(basename "$source" .conf)"
+            root="$RUNNER_TEMP/nginx-$name"
+            mkdir -p "$root/logs"
+
+            cat > "$root/nginx.conf" <<EOF
+          pid $root/nginx.pid;
+          error_log stderr notice;
+          events {}
+          http {
+              access_log off;
+              include /etc/nginx/mime.types;
+              include $GITHUB_WORKSPACE/$source;
+          }
+          EOF
+
+            sudo nginx -t -p "$root/" -c "$root/nginx.conf"
+          }
+
+          validate_nginx deploy/ubuntu/nginx/mooncen.conf
+          validate_nginx deploy/ubuntu/nginx/mooncen_standby.conf

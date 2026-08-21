@@ -1,0 +1,60 @@
+[Unit]
+Description=MoonCen root-installed constrained Docker development stack
+After=network-online.target docker.service mooncen-an2p-runtime-recovery.service
+Wants=network-online.target
+Requires=docker.service mooncen-an2p-runtime-recovery.service
+ConditionPathExists=/etc/mooncen-an2p/docker-development-enabled
+ConditionPathExists=/opt/mooncen-an2p-docker/current/development.env
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=mooncen_docker_operator
+Group=mooncen_docker_operator
+SupplementaryGroups=docker
+WorkingDirectory=/opt/mooncen-an2p-docker/current
+Environment=DOCKER_HOST=unix:///var/run/docker.sock
+Environment=MOONCEN_RUNTIME_CONFIG_FILE=/var/lib/mooncen-docker-operator/runtime-config.js
+ExecStartPre=+/usr/local/libexec/mooncen-an2p-runtime-manager gate-service-start mooncen-docker-dev.service
+ExecStartPre=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/an2p/check_docker_environment.py --system-runtime --reader-group mooncen_docker_operator /opt/mooncen-an2p-docker/current/development.env
+ExecStartPre=/usr/bin/docker info
+ExecStartPre=/usr/bin/docker compose version
+ExecStartPre=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/an2p/validate_docker_release.py --system-runtime --reader-group mooncen_docker_operator --project-root /opt/mooncen-an2p-docker/current --environment-file /opt/mooncen-an2p-docker/current/development.env --runtime-compose-file /opt/mooncen-an2p-docker/current/compose.yaml --activation-file /opt/mooncen-an2p-docker/current/activation.json --allow-expired-receipt
+ExecStartPre=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/docker/render_runtime_config.py --environment-file /opt/mooncen-an2p-docker/current/development.env --output /var/lib/mooncen-docker-operator/runtime-config.js
+ExecStart=/usr/bin/docker compose --project-name mooncen-dev --file /opt/mooncen-an2p-docker/current/compose.yaml --env-file /opt/mooncen-an2p-docker/current/development.env up --detach --no-build --pull never --remove-orphans --wait --wait-timeout 240
+ExecStart=/usr/bin/docker compose --project-name mooncen-dev --file /opt/mooncen-an2p-docker/current/compose.yaml --env-file /opt/mooncen-an2p-docker/current/development.env up --detach --no-build --pull never --force-recreate --no-deps --wait --wait-timeout 240 frontend
+ExecStartPost=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/an2p/validate_docker_release.py --system-runtime --reader-group mooncen_docker_operator --project-root /opt/mooncen-an2p-docker/current --environment-file /opt/mooncen-an2p-docker/current/development.env --runtime-compose-file /opt/mooncen-an2p-docker/current/compose.yaml --activation-file /opt/mooncen-an2p-docker/current/activation.json --require-running --allow-expired-receipt
+ExecReload=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/an2p/validate_docker_release.py --system-runtime --reader-group mooncen_docker_operator --project-root /opt/mooncen-an2p-docker/current --environment-file /opt/mooncen-an2p-docker/current/development.env --runtime-compose-file /opt/mooncen-an2p-docker/current/compose.yaml --activation-file /opt/mooncen-an2p-docker/current/activation.json --require-running --allow-expired-receipt
+ExecReload=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/docker/render_runtime_config.py --environment-file /opt/mooncen-an2p-docker/current/development.env --output /var/lib/mooncen-docker-operator/runtime-config.js
+ExecReload=/usr/bin/docker compose --project-name mooncen-dev --file /opt/mooncen-an2p-docker/current/compose.yaml --env-file /opt/mooncen-an2p-docker/current/development.env up --detach --no-build --pull never --force-recreate --no-deps --wait --wait-timeout 240 frontend
+ExecReload=/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/an2p/validate_docker_release.py --system-runtime --reader-group mooncen_docker_operator --project-root /opt/mooncen-an2p-docker/current --environment-file /opt/mooncen-an2p-docker/current/development.env --runtime-compose-file /opt/mooncen-an2p-docker/current/compose.yaml --activation-file /opt/mooncen-an2p-docker/current/activation.json --require-running --allow-expired-receipt
+ExecStop=-/usr/bin/python3 -I /opt/mooncen-an2p-docker/current/deploy/an2p/validate_docker_release.py --system-runtime --reader-group mooncen_docker_operator --project-root /opt/mooncen-an2p-docker/current --environment-file /opt/mooncen-an2p-docker/current/development.env --runtime-compose-file /opt/mooncen-an2p-docker/current/compose.yaml --activation-file /opt/mooncen-an2p-docker/current/activation.json --require-running --allow-expired-receipt
+ExecStop=/usr/bin/docker compose --project-name mooncen-dev --file /opt/mooncen-an2p-docker/current/compose.yaml --env-file /opt/mooncen-an2p-docker/current/development.env stop --timeout 90
+ExecStopPost=-/usr/bin/docker compose --project-name mooncen-dev --file /opt/mooncen-an2p-docker/current/compose.yaml --env-file /opt/mooncen-an2p-docker/current/development.env stop --timeout 90
+TimeoutStartSec=1800
+TimeoutStopSec=120
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+ReadOnlyPaths=/opt/mooncen-an2p-docker/current
+ReadWritePaths=/var/lib/mooncen-docker-operator
+ReadWritePaths=/var/lib/mooncen-an2p-runtime
+ReadWritePaths=/run/mooncen-an2p-runtime
+InaccessiblePaths=-/etc/mooncen-an2p/ops-api.env
+InaccessiblePaths=-/etc/mooncen-an2p/deployment-worker.env
+InaccessiblePaths=-/etc/mooncen-an2p/deploy-transport
+InaccessiblePaths=-/etc/mooncen-an2p/status-transport
+InaccessiblePaths=-/etc/mooncen-an2p/db-tunnel
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Periodically ingest MoonCen crawler release reports
+
+[Timer]
+OnBootSec=6m
+OnUnitActiveSec=2m
+RandomizedDelaySec=20s
+AccuracySec=10s
+Persistent=false
+Unit=mooncen-crawler-release-reporter.service
+
+[Install]
+WantedBy=timers.target

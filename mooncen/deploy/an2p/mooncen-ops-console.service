@@ -1,0 +1,7 @@
+[Unit]
+Description=RETIRED MoonCen mutable Ops frontend proxy (must remain masked)
+RefuseManualStart=yes
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/false

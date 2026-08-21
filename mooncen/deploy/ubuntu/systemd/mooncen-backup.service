@@ -1,0 +1,43 @@
+[Unit]
+Description=MoonCen NAS backup
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=mooncen-backup
+Group=mooncen-backup
+WorkingDirectory=/
+Environment=APP_DIR=/opt/mooncen
+Environment=BACKUP_HOST=wtr-nas
+Environment=BACKUP_USER=mooncen_backup
+Environment=BACKUP_ROOT=/volume2/homes/mooncen_backup/mooncen-backup
+Environment=BACKUP_IDENTITY_FILE=/etc/mooncen/backup-ssh-key
+Environment=BACKUP_ALLOW_TAILSCALE_IP=1
+Environment=BACKUP_SSH_CONFIG=/dev/null
+Environment=BACKUP_PORT=
+ExecStart=/bin/bash /usr/local/libexec/mooncen-backup/mooncen_backup_to_wtr_nas.sh
+TimeoutStartSec=3600
+RuntimeMaxSec=3600
+MemoryMax=1G
+TasksMax=128
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

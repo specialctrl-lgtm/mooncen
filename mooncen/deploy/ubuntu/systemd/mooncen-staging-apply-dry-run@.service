@@ -1,0 +1,37 @@
+[Unit]
+Description=Validate MoonCen crawler staging batch %i
+After=network.target
+
+[Service]
+Type=oneshot
+User=mooncen-applier
+Group=mooncen-applier
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/applier.env
+ExecStart=/opt/mooncen/.venv/bin/python -I -X utf8 tools/run_pinned_staging_dry_run.py --batch-id %i --result-file /run/mooncen-staging-apply/dry-run-%i.json
+RuntimeDirectory=mooncen-staging-apply
+RuntimeDirectoryMode=0750
+RuntimeDirectoryPreserve=yes
+StandardOutput=null
+StandardError=journal
+TimeoutStartSec=2h
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

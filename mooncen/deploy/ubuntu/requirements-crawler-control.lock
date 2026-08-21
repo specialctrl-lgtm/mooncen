@@ -1,0 +1,8 @@
+# CPython 3.11, Linux x86_64, manylinux2014.  Install only with:
+#   python -m pip install --require-hashes --only-binary=:all: -r <this-file>
+psycopg2-binary==2.9.12 \
+    --hash=sha256:e4e184b1fb6072bf05388aa41c697e1b2d01b3473f107e7ec44f186a32cfd0b8
+python-dotenv==1.2.2 \
+    --hash=sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a
+PyYAML==6.0.3 \
+    --hash=sha256:b8bb0864c5a28024fac8a632c443c87c5aa6f215c0b126c449ae1a150412f31d

@@ -1,0 +1,29 @@
+[Unit]
+Description=Redirect the MoonCen Ops IPv6 loopback origin to reviewed IPv4
+Requires=mooncen-ops-api-ipv6.socket
+After=mooncen-ops-api-ipv6.socket
+
+[Service]
+Type=simple
+User=mooncen_ops_api
+Group=mooncen_ops_api
+ExecStart=/usr/bin/python3 -I /usr/local/libexec/mooncen-an2p-loopback-redirect
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictAddressFamilies=AF_UNIX AF_INET6
+
+[Install]
+WantedBy=multi-user.target

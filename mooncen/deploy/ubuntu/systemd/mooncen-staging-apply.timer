@@ -1,0 +1,12 @@
+[Unit]
+Description=Run MoonCen staging batch apply every hour
+
+[Timer]
+OnCalendar=hourly
+# Activation clears the pre-activation state stamp after applying its reviewed
+# batch, so the first start waits. Later downtime still catches up safely.
+Persistent=true
+Unit=mooncen-staging-apply.service
+
+[Install]
+WantedBy=timers.target

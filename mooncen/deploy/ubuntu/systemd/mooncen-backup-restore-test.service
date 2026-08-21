@@ -1,0 +1,38 @@
+[Unit]
+Description=MoonCen encrypted backup restore verification
+After=network-online.target postgresql.service mooncen-backup.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/
+Environment=APP_DIR=/opt/mooncen
+Environment=TEST_DB=mooncen_restore_contract_test
+LoadCredential=backup-ssh-key:/etc/mooncen/backup-ssh-key
+ExecStart=/bin/bash /usr/local/libexec/mooncen-backup/mooncen_restore_test_from_wtr_nas.sh
+TimeoutStartSec=3600
+RuntimeMaxSec=3600
+MemoryMax=2G
+TasksMax=128
+UMask=0077
+PrivateTmp=true
+NoNewPrivileges=false
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_DAC_READ_SEARCH CAP_CHOWN CAP_AUDIT_WRITE
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

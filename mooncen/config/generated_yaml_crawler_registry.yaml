@@ -1,0 +1,4466 @@
+version: 1
+generated_at: '2026-08-06T02:28:15+09:00'
+source_file: config/crawl_targets
+summary:
+  providers: 188
+  source_targets: 217
+  enabled_providers: 168
+  enabled_targets: 197
+  by_source:
+    municipal_course_candidate_results: 87
+    municipal_integrated_reservation_audit: 2
+    municipal_integrated_reservation_exhaustive_live_audit: 2
+    municipal_integrated_reservation_experience_gap_audit: 1
+    municipal_integrated_reservation_live_audit: 3
+    municipal_integrated_reservation_manual_verification: 6
+    official_goyang_library: 1
+    official_jne_integrated_library: 2
+    official_rda_agricultural_science_museum_reservation_center: 1
+    ops_console_url_add: 1
+    ops_console_url_update: 32
+    welfare_course_targets: 8
+    manual_user_request: 1
+    municipal_course_candidate_results_sugang_sports: 4
+    national_institution_course_search_targets: 10
+    official_gwe_library_live_audit: 1
+    public_course_targets: 6
+    user_requested: 20
+  by_priority:
+    1: 28
+    2: 153
+    3: 4
+    4: 2
+    5: 1
+  by_status:
+    blocked: 11
+    partial: 32
+    ready: 145
+targets:
+- index: 1
+  provider: MUNI_EDU_ICJG_GO_KR_3C098A20
+  name: 인천중구 교육포털 배우는바다
+  source: municipal_course_candidate_results
+  priority: 1
+  url: https://edu.icjg.go.kr/request/all.jsp
+  crawler: Crawler/generated_yaml/MUNI_EDU_ICJG_GO_KR_3C098A20.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_EDU_ICJG_GO_KR_3C098A20.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 2
+  provider: DAEGU_RESERVATION
+  name: 대구광역시 통합예약 전체 교육강좌
+  source: municipal_integrated_reservation_audit
+  priority: 1
+  url: https://yeyak.daegu.go.kr/lect/list
+  crawler: Crawler/generated_yaml/DAEGU_RESERVATION.py
+  command: python -X utf8 Crawler/generated_yaml/DAEGU_RESERVATION.py --save-db --mark-stale --per-target-limit 0 --max-pages 1200 --detail-limit
+    1200
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '1200'
+  - --detail-limit
+  - '1200'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 3
+  provider: MUNI_WWW_CHUNGJU_GO_KR_7EE8620A
+  name: 충주시 통합예약 읍면동 주민자치센터강좌
+  source: municipal_integrated_reservation_audit
+  priority: 1
+  url: https://www.chungju.go.kr/rev/reserve/99?document_category_srl=37
+  crawler: Crawler/generated_yaml/MUNI_WWW_CHUNGJU_GO_KR_7EE8620A.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_CHUNGJU_GO_KR_7EE8620A.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 700
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '700'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 4
+  provider: MUNI_MBIS_POHANG_GO_KR_0407D99A
+  name: 포항시 통합예약 시민정보화교육
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  priority: 1
+  url: https://mbis.pohang.go.kr/apply/lecture/lectureInfoList.do?mid=0101000000
+  crawler: Crawler/generated_yaml/MUNI_MBIS_POHANG_GO_KR_0407D99A.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_MBIS_POHANG_GO_KR_0407D99A.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 5
+  provider: MUNI_SEJONG_NL_GO_KR_7F55E25D
+  name: 국립세종도서관 특별프로그램 교육
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  priority: 1
+  url: https://sejong.nl.go.kr/html/c3/c320.jsp?codeId=PRO043&menuId=O365&upperMenuId=O300&sel=O360
+  crawler: Crawler/generated_yaml/MUNI_SEJONG_NL_GO_KR_7F55E25D.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SEJONG_NL_GO_KR_7F55E25D.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 6
+  provider: MUNI_ORG_JJE_GO_KR_3205C1E8
+  name: 제주특별자치도교육청 통합예약 전체 교육·강좌
+  source: municipal_integrated_reservation_experience_gap_audit
+  priority: 1
+  url: https://org.jje.go.kr/reserve/jjeEducation/list.jje?menuCd=DOM_000000502001000000
+  crawler: Crawler/generated_yaml/MUNI_ORG_JJE_GO_KR_3205C1E8.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_ORG_JJE_GO_KR_3205C1E8.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 7
+  provider: DAEJEON_OK_RESERVATION
+  name: 대전광역시 OK예약서비스 전체 체험·견학
+  source: municipal_integrated_reservation_live_audit
+  priority: 1
+  url: https://www.daejeon.go.kr/okr2019/expRsvtList.do?menuSeq=8201&ntatcDelYn=Y&boardUseYn=N&menuUseYn=N
+  crawler: Crawler/generated_yaml/DAEJEON_OK_RESERVATION.py
+  command: python -X utf8 Crawler/generated_yaml/DAEJEON_OK_RESERVATION.py --save-db --mark-stale --per-target-limit 0 --max-pages 1200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '1200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 8
+  provider: INCHEON_RESERVATION
+  name: 인천광역시 온라인통합예약 전체 강좌·교육
+  source: municipal_integrated_reservation_live_audit
+  priority: 1
+  url: https://www.incheon.go.kr/res/RE010101/lctreEdcList?resveInsttCode=
+  crawler: Crawler/generated_yaml/INCHEON_RESERVATION.py
+  command: python -X utf8 Crawler/generated_yaml/INCHEON_RESERVATION.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    200
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '200'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 9
+  provider: ANYANG_LIFELONG_LEARNING
+  name: 안양시 전체 교육강좌
+  source: municipal_integrated_reservation_manual_verification
+  priority: 1
+  url: https://learning.anyang.go.kr/ay_network/Lecture_Search/list.asp
+  crawler: Crawler/generated_yaml/ANYANG_LIFELONG_LEARNING.py
+  command: python -X utf8 Crawler/generated_yaml/ANYANG_LIFELONG_LEARNING.py --save-db --mark-stale --per-target-limit 0 --max-pages 1200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '1200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 10
+  provider: MUNI_DOKSEODANG_SD_GO_KR_A8C20229
+  name: 성동구 신속예약 전체 교육·강좌
+  source: municipal_integrated_reservation_manual_verification
+  priority: 1
+  url: https://www.sd.go.kr/booking/webEduList.do?key=4833
+  crawler: Crawler/generated_yaml/MUNI_DOKSEODANG_SD_GO_KR_A8C20229.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_DOKSEODANG_SD_GO_KR_A8C20229.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    250 --detail-limit 2000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '250'
+  - --detail-limit
+  - '2000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 11
+  provider: MUNI_WWW_DAEDEOK_GO_KR_360B9B7C
+  name: 대전광역시 대덕구 전체 교육강좌
+  source: municipal_integrated_reservation_manual_verification
+  priority: 1
+  url: https://edu.daedeok.go.kr/damoa/contents/dms/edu/02/edu.02.001.motion?mnucd=MENU0100010
+  crawler: Crawler/generated_yaml/MUNI_WWW_DAEDEOK_GO_KR_360B9B7C.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_DAEDEOK_GO_KR_360B9B7C.py --save-db --mark-stale --per-target-limit 0 --max-pages 350
+    --detail-limit 200
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '350'
+  - --detail-limit
+  - '200'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 12
+  provider: MUNI_WWW_GURO_GO_KR_A4A5D3E3
+  name: 구로구 통합예약 전체 교육강좌
+  source: municipal_integrated_reservation_manual_verification
+  priority: 1
+  url: https://www.guro.go.kr/yeyak/webEdcLctreList.do?key=3589&rep=1&searchLctreGroup=1&jachi=0
+  crawler: Crawler/generated_yaml/MUNI_WWW_GURO_GO_KR_A4A5D3E3.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GURO_GO_KR_A4A5D3E3.py --save-db --mark-stale --per-target-limit 0 --max-pages 10 --detail-limit
+    300
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '10'
+  - --detail-limit
+  - '300'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 13
+  provider: MUNI_WWW_GOYANGLIB_OR_KR_FFF7B1F8
+  name: 고양시도서관 통합 교육강좌
+  source: official_goyang_library
+  priority: 1
+  url: https://www.goyanglib.or.kr/MH/program/lectureList.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_GOYANGLIB_OR_KR_FFF7B1F8.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GOYANGLIB_OR_KR_FFF7B1F8.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 14
+  provider: JNE_LIBRARY_LECTURE_INTEGRATED
+  name: 전남광주통합특별시교육청 전남통합도서관 평생학습강좌
+  source: official_jne_integrated_library
+  priority: 1
+  url: https://jnelib.jne.go.kr/lectureIntegration.es?mid=d50402000000
+  crawler: Crawler/generated_yaml/JNE_LIBRARY_LECTURE_INTEGRATED.py
+  command: python -X utf8 Crawler/generated_yaml/JNE_LIBRARY_LECTURE_INTEGRATED.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 15
+  provider: JNE_LIBRARY_READING_INTEGRATED
+  name: 전남광주통합특별시교육청 전남통합도서관 독서문화참여
+  source: official_jne_integrated_library
+  priority: 1
+  url: https://jnelib.jne.go.kr/educationIntegration.es?mid=d50401000000
+  crawler: Crawler/generated_yaml/JNE_LIBRARY_READING_INTEGRATED.py
+  command: python -X utf8 Crawler/generated_yaml/JNE_LIBRARY_READING_INTEGRATED.py --save-db --mark-stale --per-target-limit 0 --max-pages 250
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '250'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 16
+  provider: RURAL_DEVELOPMENT_ADMINISTRATION
+  name: 농촌진흥청 농업과학관
+  source: official_rda_agricultural_science_museum_reservation_center
+  priority: 1
+  url: https://www.rda.go.kr/aehBoard/aehBoardCenterIns.do
+  crawler: Crawler/generated_yaml/RURAL_DEVELOPMENT_ADMINISTRATION.py
+  command: python -X utf8 Crawler/generated_yaml/RURAL_DEVELOPMENT_ADMINISTRATION.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 17
+  provider: GWANGJU_RESERVATION
+  name: 광주광역시 공유 누리
+  source: ops_console_url_add
+  priority: 1
+  url: https://www.gwangju.go.kr/reserve/openNuriList.do?pageId=reserve1&searchCate1=A
+  crawler: Crawler/generated_yaml/GWANGJU_RESERVATION.py
+  command: python -X utf8 Crawler/generated_yaml/GWANGJU_RESERVATION.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 18
+  provider: BUSAN_NATIONAL_SCIENCE_MUSEUM
+  name: 국립부산과학관
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.sciport.or.kr/kor/CMS/IndivCurriMgr/curriList.do?mCode=MN038
+  crawler: Crawler/generated_yaml/BUSAN_NATIONAL_SCIENCE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/BUSAN_NATIONAL_SCIENCE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 19
+  provider: BUSAN_RESERVATION
+  name: 부산광역시 통합예약
+  source: ops_console_url_update
+  priority: 1
+  url: https://reserve.busan.go.kr/exprn
+  crawler: Crawler/generated_yaml/BUSAN_RESERVATION.py
+  command: python -X utf8 Crawler/generated_yaml/BUSAN_RESERVATION.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 20
+  provider: CNALL_LECTURE
+  name: 충청남도교육청평생교육정보시스템
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.cnall.or.kr/lecture/lectureList.do?organAllYn=Y&areaCd=&targetCd=&lectureDiv1Cd=&lectureDiv2Cd=&costYn=&applyTypeCd=&organAllChk=Y&searchCondition=&searchKeyword=
+  crawler: Crawler/generated_yaml/CNALL_LECTURE.py
+  command: python -X utf8 Crawler/generated_yaml/CNALL_LECTURE.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 21
+  provider: DAEGU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립대구과학관
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.dnsm.or.kr/scienceClassroom/personalScienceEdu.do
+  crawler: Crawler/generated_yaml/DAEGU_NATIONAL_SCIENCE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/DAEGU_NATIONAL_SCIENCE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 22
+  provider: GWACHEON_NATIONAL_SCIENCE_MUSEUM
+  name: 국립과천과학관
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.sciencecenter.go.kr/edu/user/edu/eduList.do
+  crawler: Crawler/generated_yaml/GWACHEON_NATIONAL_SCIENCE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/GWACHEON_NATIONAL_SCIENCE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 23
+  provider: GWANGJU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립광주과학관
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.sciencecenter.or.kr/kor/board/index.do?bid=eduNotice&mode=list&menuId=285_335
+  crawler: Crawler/generated_yaml/GWANGJU_NATIONAL_SCIENCE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/GWANGJU_NATIONAL_SCIENCE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 24
+  provider: HONAM_BIOLOGICAL_RESOURCES
+  name: 국립호남권생물자원관
+  source: ops_console_url_update
+  priority: 1
+  url: https://resve.hnibr.re.kr/index.do?menu_id=00000440
+  crawler: Crawler/generated_yaml/HONAM_BIOLOGICAL_RESOURCES.py
+  command: python -X utf8 Crawler/generated_yaml/HONAM_BIOLOGICAL_RESOURCES.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 25
+  provider: NATIONAL_OCEAN_SCIENCE_MUSEUM
+  name: 국립해양과학관
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.kosm.or.kr/kosm/bbs/board.do?bbsId=BSD0008&type=r
+  crawler: Crawler/generated_yaml/NATIONAL_OCEAN_SCIENCE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_OCEAN_SCIENCE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 26
+  provider: NATIONAL_SCIENCE_MUSEUM
+  name: 국립중앙과학관
+  source: ops_console_url_update
+  priority: 1
+  url: https://www.science.go.kr/mps/1092/allEduPrograms.do
+  crawler: Crawler/generated_yaml/NATIONAL_SCIENCE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_SCIENCE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 27
+  provider: HAMYANG_WELFARE_OFFICIAL_COURSE
+  name: 함양군 종합사회복지관 교육신청/수강신청
+  source: welfare_course_targets
+  priority: 1
+  url: https://www.hygn.go.kr/02125/02126.web
+  crawler: Crawler/generated_yaml/HAMYANG_WELFARE_OFFICIAL_COURSE.py
+  command: python -X utf8 Crawler/generated_yaml/HAMYANG_WELFARE_OFFICIAL_COURSE.py --save-db --mark-stale --per-target-limit 0 --max-pages 160
+    --detail-limit 0
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '160'
+  - --detail-limit
+  - '0'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 28
+  provider: YEONGTONG_WELFARE_ONLINE_COURSE
+  name: 영통종합사회복지관 온라인수강신청
+  source: welfare_course_targets
+  priority: 1
+  url: https://edu.ytsw.or.kr/prog/spt/guide.do
+  crawler: Crawler/generated_yaml/YEONGTONG_WELFARE_ONLINE_COURSE.py
+  command: python -X utf8 Crawler/generated_yaml/YEONGTONG_WELFARE_ONLINE_COURSE.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 29
+  provider: MUNI_WWW_GN_GO_KR_5623F7DB
+  name: 강릉시청 체험/견학
+  source: manual_user_request
+  priority: 2
+  url: https://www.gn.go.kr/yeyak/selectUnityExprnWebList.do?key=5532
+  crawler: Crawler/generated_yaml/MUNI_WWW_GN_GO_KR_5623F7DB.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GN_GO_KR_5623F7DB.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 30
+  provider: MUNI_CNC_CACF_OR_KR_7A12B48E
+  name: 충남문화포털
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://cnc.cacf.or.kr/main/html/sub02/0201.html
+  crawler: Crawler/generated_yaml/MUNI_CNC_CACF_OR_KR_7A12B48E.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_CNC_CACF_OR_KR_7A12B48E.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 31
+  provider: MUNI_EDU_ICJG_GO_KR_99553B01
+  name: 인천중구 교육포털 배우는바다
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://edu.icjg.go.kr/request/info.jsp
+  crawler: Crawler/generated_yaml/MUNI_EDU_ICJG_GO_KR_99553B01.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_EDU_ICJG_GO_KR_99553B01.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 32
+  provider: MUNI_GRLIB_JNE_GO_KR_133262C9
+  name: 전남광주통합특별시교육청구례도서관 독서문화프로그램
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://grlib.jne.go.kr/lecture.es?mid=a70202010000
+  crawler: Crawler/generated_yaml/MUNI_GRLIB_JNE_GO_KR_133262C9.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_GRLIB_JNE_GO_KR_133262C9.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 33
+  provider: MUNI_GRLIB_JNE_GO_KR_E6838F98
+  name: 전남광주통합특별시교육청구례도서관 평생교육 수강 신청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://grlib.jne.go.kr/lecture.es?mid=a70402000000
+  crawler: Crawler/generated_yaml/MUNI_GRLIB_JNE_GO_KR_E6838F98.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_GRLIB_JNE_GO_KR_E6838F98.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 34
+  provider: MUNI_GYLIB_JNE_GO_KR_15EB3C2E
+  name: 전남광주통합특별시교육청광양도서관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://gylib.jne.go.kr/lecture.es?mid=a50402000000
+  crawler: Crawler/generated_yaml/MUNI_GYLIB_JNE_GO_KR_15EB3C2E.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_GYLIB_JNE_GO_KR_15EB3C2E.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 35
+  provider: MUNI_GYLIFE_JNE_GO_KR_AFB03FB8
+  name: 전남광주통합특별시교육청광양평생교육관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://gylife.jne.go.kr/lecture.es?mid=c30402010100
+  crawler: Crawler/generated_yaml/MUNI_GYLIFE_JNE_GO_KR_AFB03FB8.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_GYLIFE_JNE_GO_KR_AFB03FB8.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 36
+  provider: MUNI_HNLIB_JNE_GO_KR_3E3E5BCA
+  name: 전남광주통합특별시교육청해남도서관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://hnlib.jne.go.kr/lecture.es?mid=b30402000000
+  crawler: Crawler/generated_yaml/MUNI_HNLIB_JNE_GO_KR_3E3E5BCA.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_HNLIB_JNE_GO_KR_3E3E5BCA.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 37
+  provider: MUNI_JANGAN_SUWON_GO_KR_D82A0EAE
+  name: 수원시 장안구 교육프로그램 접수 결제시스템
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://jangan.suwon.go.kr/edu/_bbsplus/skin/learning_request/search_lst.asp?sbd_room=3
+  crawler: Crawler/generated_yaml/MUNI_JANGAN_SUWON_GO_KR_D82A0EAE.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_JANGAN_SUWON_GO_KR_D82A0EAE.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 38
+  provider: MUNI_LEARNING_SUWON_GO_KR_3AF2DB76
+  name: 수원시 글로벌 평생학습관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://learning.suwon.go.kr/lmth/03_suwon02_view.asp?idx=255
+  crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_3AF2DB76.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_3AF2DB76.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 39
+  provider: MUNI_LEARNING_SUWON_GO_KR_402954DA
+  name: 수원시 글로벌 평생학습관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://learning.suwon.go.kr/lmth/01_lecture01.asp
+  crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_402954DA.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_402954DA.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 40
+  provider: MUNI_LEARNING_SUWON_GO_KR_6ABE3488
+  name: 수원시 글로벌 평생학습관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://learning.suwon.go.kr/lmth/01_lecture01.asp?s_cate=28
+  crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_6ABE3488.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_6ABE3488.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 41
+  provider: MUNI_LEARNING_SUWON_GO_KR_A915395E
+  name: 수원시 글로벌 평생학습관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://learning.suwon.go.kr/
+  crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_A915395E.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_A915395E.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 42
+  provider: MUNI_LIB_GWE_GO_KR_E49C8D9C
+  name: 철원교육도서관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://lib.gwe.go.kr/cwlib/menu/3302/lecture-event/list/all
+  crawler: Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_E49C8D9C.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_E49C8D9C.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 43
+  provider: MUNI_LIB_ICE_GO_KR_019A3D01
+  name: 인천광역시교육청서구도서관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://lib.ice.go.kr/seogu/module/teach/index.do?menu_idx=85
+  crawler: Crawler/generated_yaml/MUNI_LIB_ICE_GO_KR_019A3D01.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_ICE_GO_KR_019A3D01.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 44
+  provider: MUNI_PALDAL_SUWON_GO_KR_7F5BC8C6
+  name: 행궁동 주민자치센터
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://paldal.suwon.go.kr/edu/lmth/02_gorp/gorp_list.asp?sbd_room=1
+  crawler: Crawler/generated_yaml/MUNI_PALDAL_SUWON_GO_KR_7F5BC8C6.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_PALDAL_SUWON_GO_KR_7F5BC8C6.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 45
+  provider: MUNI_PALDAL_SUWON_GO_KR_D78BD1B4
+  name: 수원시 팔달구 교육프로그램 접수
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://paldal.suwon.go.kr/edu/lmth/02_gorp/gorp_list.asp?sbd_room=4
+  crawler: Crawler/generated_yaml/MUNI_PALDAL_SUWON_GO_KR_D78BD1B4.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_PALDAL_SUWON_GO_KR_D78BD1B4.py --save-db --mark-stale --per-target-limit 0 --max-pages 20
+    --detail-limit 100
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '20'
+  - --detail-limit
+  - '100'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 46
+  provider: MUNI_PORTAL_ICBP_GO_KR_3A04F811
+  name: 부평구청소년수련관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://portal.icbp.go.kr/bpy/education/program.asp
+  crawler: Crawler/generated_yaml/MUNI_PORTAL_ICBP_GO_KR_3A04F811.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_PORTAL_ICBP_GO_KR_3A04F811.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 47
+  provider: MUNI_RESERVE_ANSAN_GO_KR_8236CAF0
+  name: 안산시 통합예약 교육 부분수집 차단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://reserve.ansan.go.kr/edu/E01/eduList.do?currentMenuNo=567
+  crawler: Crawler/generated_yaml/MUNI_RESERVE_ANSAN_GO_KR_8236CAF0.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_ANSAN_GO_KR_8236CAF0.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 48
+  provider: MUNI_RESERVE_BUSAN_GO_KR_3A0E6D4C
+  name: 부산광역시 통합예약
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://reserve.busan.go.kr/lctre/list?srchGugun=12&srchResveInsttCd=33
+  crawler: Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_3A0E6D4C.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_3A0E6D4C.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 49
+  provider: MUNI_RESERVE_BUSAN_GO_KR_3E32BFF4
+  name: 부산광역시 통합예약
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://reserve.busan.go.kr/lctre/list?resveGroupSn=&progrmSn=&srchGugun=&srchResveInsttCd=32&srchCtgry=&srchBeginDe=&srchEndDe=&srchVal=%EA%B0%95%EC%84%9C%EC%88%98%EC%98%81%EC%9E%A5+%EC%9E%90%EC%9C%A0%EC%88%98%EC%98%81
+  crawler: Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_3E32BFF4.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_3E32BFF4.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 50
+  provider: MUNI_RESERVE_BUSAN_GO_KR_506834D2
+  name: '[6. 18.(목) 동래구 부산사회복지종합센터 305호] TCI를 활용한 마음지도 부모교육 신청'
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://reserve.busan.go.kr/lctre/view?resveGroupSn=112&progrmSn=24717
+  crawler: Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_506834D2.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_506834D2.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 51
+  provider: MUNI_RESERVE_BUSAN_GO_KR_B5B9B420
+  name: 부산광역시 통합예약
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://reserve.busan.go.kr/lctre/list.do?srchResveInsttCd=13
+  crawler: Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_B5B9B420.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_B5B9B420.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 52
+  provider: MUNI_SJECAMPUS_COM_ECBA8A53
+  name: 세종시민대학 집현전
+  source: municipal_course_candidate_results
+  priority: 2
+  url: http://sjecampus.com/sugang/student/consent_list.php?s_LB_type=H1
+  crawler: Crawler/generated_yaml/MUNI_SJECAMPUS_COM_ECBA8A53.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SJECAMPUS_COM_ECBA8A53.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 53
+  provider: MUNI_SPORTS_CAUC_OR_KR_05B3AD85
+  name: 천안도시공사 인터넷 통합예약시스템
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://sports.cauc.or.kr/lecture/llist/index/CHEONAN03/2001/A/100/1/2/3/4/5/6/7/1/-/-/1/3
+  crawler: Crawler/generated_yaml/MUNI_SPORTS_CAUC_OR_KR_05B3AD85.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SPORTS_CAUC_OR_KR_05B3AD85.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 54
+  provider: MUNI_SPORTS_CAUC_OR_KR_BA3A849E
+  name: 천안도시공사 인터넷 통합예약시스템
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://sports.cauc.or.kr/lecture/llist/index/CHEONAN03/2001/L/1000010001/1/2/3/4/5/6/7/1/-/-/1/2
+  crawler: Crawler/generated_yaml/MUNI_SPORTS_CAUC_OR_KR_BA3A849E.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SPORTS_CAUC_OR_KR_BA3A849E.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 55
+  provider: MUNI_SPORTS_IDONGJAK_OR_KR_41E7189B
+  name: 동작구시설관리공단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://sports.idongjak.or.kr/home/171?center=DONGJAK01&action=list
+  crawler: Crawler/generated_yaml/MUNI_SPORTS_IDONGJAK_OR_KR_41E7189B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SPORTS_IDONGJAK_OR_KR_41E7189B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 56
+  provider: MUNI_SUGANG_SEONGNAM_GO_KR_278F9A5D
+  name: 배움숲
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://sugang.seongnam.go.kr/ilms/learning/officeList.do?&searchCondition=0&searchKeyword=%EC%95%BC%ED%83%912%EB%8F%99
+  crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_278F9A5D.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_278F9A5D.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 57
+  provider: MUNI_SUGANG_SEONGNAM_GO_KR_6D95D2AD
+  name: 배움숲
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://sugang.seongnam.go.kr/ilms/learning/officeList.do?&office_pageUnit=32&pageIndex=1&searchCondition=0&searchKeyword=%EB%8F%84%EC%84%9C%EA%B4%80
+  crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_6D95D2AD.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_6D95D2AD.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 58
+  provider: MUNI_WCENTER_GOYANG_GO_KR_51AFB12D
+  name: 고양시여성회관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://wcenter.goyang.go.kr/edu/class_list.do
+  crawler: Crawler/generated_yaml/MUNI_WCENTER_GOYANG_GO_KR_51AFB12D.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WCENTER_GOYANG_GO_KR_51AFB12D.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 59
+  provider: MUNI_WWW_BCL_GO_KR_DDAE2544
+  name: 부천시도서관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.bcl.go.kr/site/reservation/lecture/lectureList?menuid=019003001001002
+  crawler: Crawler/generated_yaml/MUNI_WWW_BCL_GO_KR_DDAE2544.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BCL_GO_KR_DDAE2544.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 60
+  provider: MUNI_WWW_BOSEONG_GO_KR_3A38AD03
+  name: 전라남도 보성군
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.boseong.go.kr/www/life_welfare/education_info/edu_reserve
+  crawler: Crawler/generated_yaml/MUNI_WWW_BOSEONG_GO_KR_3A38AD03.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BOSEONG_GO_KR_3A38AD03.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 61
+  provider: MUNI_WWW_BSDONGGU_GO_KR_32321CF0
+  name: 부산광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.bsdonggu.go.kr/index.donggu?menuCd=DOM_000000602002000000
+  crawler: Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_32321CF0.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_32321CF0.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 62
+  provider: MUNI_WWW_BSDONGGU_GO_KR_6798361C
+  name: 부산광역시동구 평생학습관 홈페이지
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.bsdonggu.go.kr/
+  crawler: Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_6798361C.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_6798361C.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 63
+  provider: MUNI_WWW_BSDONGGU_GO_KR_D420B75B
+  name: 부산광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.bsdonggu.go.kr/index.donggu?_csrf=549d5e4a-c2f4-47fd-890d-af43133556dc&menuCd=DOM_000000701001000000&dummy_Data_Gbn=LifeLong&search_Status=T&data_Title=
+  crawler: Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_D420B75B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_D420B75B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 64
+  provider: MUNI_WWW_BSDONGGU_GO_KR_E6250EC2
+  name: 부산광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.bsdonggu.go.kr/index.donggu?menuCd=DOM_000000701000000000
+  crawler: Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_E6250EC2.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BSDONGGU_GO_KR_E6250EC2.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 65
+  provider: MUNI_WWW_BUAN_GO_KR_8AA2A8DE
+  name: 부안군 평생교육(부안군평생학습관)
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.buan.go.kr/bale/index.buan?menuCd=DOM_000002105001000000
+  crawler: Crawler/generated_yaml/MUNI_WWW_BUAN_GO_KR_8AA2A8DE.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BUAN_GO_KR_8AA2A8DE.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 66
+  provider: MUNI_WWW_CHANGWON_GO_KR_C06A834D
+  name: 창원시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.changwon.go.kr/booking/10030/10036/10409.web
+  crawler: Crawler/generated_yaml/MUNI_WWW_CHANGWON_GO_KR_C06A834D.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_CHANGWON_GO_KR_C06A834D.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 67
+  provider: MUNI_WWW_CHEONGJU_GO_KR_6B11C1EE
+  name: 충청북도 청주시 서원구
+  source: municipal_course_candidate_results
+  priority: 2
+  url: http://edu.cheongju.go.kr/
+  crawler: Crawler/generated_yaml/MUNI_WWW_CHEONGJU_GO_KR_6B11C1EE.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_CHEONGJU_GO_KR_6B11C1EE.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 68
+  provider: MUNI_WWW_CHEONGJU_GO_KR_AB0C903B
+  name: 청주시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.cheongju.go.kr/www/contents.do?key=24122
+  crawler: Crawler/generated_yaml/MUNI_WWW_CHEONGJU_GO_KR_AB0C903B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_CHEONGJU_GO_KR_AB0C903B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 69
+  provider: MUNI_WWW_CHEONGJU_GO_KR_D84B5214
+  name: 청주시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.cheongju.go.kr/cheongwon/selectBbsNttView.do?key=1309&bbsNo=512&nttNo=144833&integrDeptCode=000100251
+  crawler: Crawler/generated_yaml/MUNI_WWW_CHEONGJU_GO_KR_D84B5214.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_CHEONGJU_GO_KR_D84B5214.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 70
+  provider: MUNI_WWW_DGS_GO_KR_566C09FF
+  name: 대구광역시 서구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.dgs.go.kr/reserve/edu/list.do?mid=0101020000
+  crawler: Crawler/generated_yaml/MUNI_WWW_DGS_GO_KR_566C09FF.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_DGS_GO_KR_566C09FF.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 71
+  provider: MUNI_WWW_DONGGU_ULSAN_KR_A2E89759
+  name: 울산광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.donggu.ulsan.kr/edu/us/prg/eduAppLec/edu/list.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_DONGGU_ULSAN_KR_A2E89759.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_DONGGU_ULSAN_KR_A2E89759.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 72
+  provider: MUNI_WWW_ESONGPA_OR_KR_43BE2341
+  name: 송파구체육문화회관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.esongpa.or.kr/lecture/list/20000001
+  crawler: Crawler/generated_yaml/MUNI_WWW_ESONGPA_OR_KR_43BE2341.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ESONGPA_OR_KR_43BE2341.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 73
+  provider: MUNI_WWW_GANGHWA_GO_KR_40F3B480
+  name: 인천광역시 강화군청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ganghwa.go.kr/
+  crawler: Crawler/generated_yaml/MUNI_WWW_GANGHWA_GO_KR_40F3B480.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GANGHWA_GO_KR_40F3B480.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 74
+  provider: MUNI_WWW_GANGHWA_GO_KR_6C213DF5
+  name: 인천광역시 강화군청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ganghwa.go.kr/open_content/main/bbs/bbsMsgDetail.do?bcd=report&msg_seq=19068
+  crawler: Crawler/generated_yaml/MUNI_WWW_GANGHWA_GO_KR_6C213DF5.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GANGHWA_GO_KR_6C213DF5.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 75
+  provider: MUNI_WWW_GJCF_OR_KR_F9585EF3
+  name: 광주문화재단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.gjcf.or.kr/cf/cultureart/list/calendar.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_GJCF_OR_KR_F9585EF3.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GJCF_OR_KR_F9585EF3.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - ready
+- index: 76
+  provider: MUNI_WWW_GNDAMOA_OR_KR_8127C6EE
+  name: 경상남도평생교육진흥원
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.gndamoa.or.kr/01297/01318/01318.web?amode=view&idx=459
+  crawler: Crawler/generated_yaml/MUNI_WWW_GNDAMOA_OR_KR_8127C6EE.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GNDAMOA_OR_KR_8127C6EE.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 77
+  provider: MUNI_WWW_GNDAMOA_OR_KR_CBAEF94B
+  name: 경상남도평생교육진흥원
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.gndamoa.or.kr/01297/01318.web?amode=view&idx=4462
+  crawler: Crawler/generated_yaml/MUNI_WWW_GNDAMOA_OR_KR_CBAEF94B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GNDAMOA_OR_KR_CBAEF94B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 78
+  provider: MUNI_WWW_GONGJU_GO_KR_178131DF
+  name: 공주시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.gongju.go.kr/nurim/html/intro.jsp
+  crawler: Crawler/generated_yaml/MUNI_WWW_GONGJU_GO_KR_178131DF.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GONGJU_GO_KR_178131DF.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 79
+  provider: MUNI_WWW_GUMIGX_KR_2CBF84FC
+  name: 구미시근로자 문화센터
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.gumigx.kr/course/info.asp
+  crawler: Crawler/generated_yaml/MUNI_WWW_GUMIGX_KR_2CBF84FC.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GUMIGX_KR_2CBF84FC.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 80
+  provider: MUNI_WWW_GURO_GO_KR_6DABB565
+  name: 구로구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.guro.go.kr/www/selectBbsNttView.do?bbsNo=665&nttNo=222916&key=1793
+  crawler: Crawler/generated_yaml/MUNI_WWW_GURO_GO_KR_6DABB565.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GURO_GO_KR_6DABB565.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 81
+  provider: MUNI_WWW_HFCT_OR_KR_05C08858
+  name: 화순군문화관광재단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.hfct.or.kr/edu.do?S=S01&M=0502010000
+  crawler: Crawler/generated_yaml/MUNI_WWW_HFCT_OR_KR_05C08858.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_HFCT_OR_KR_05C08858.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 82
+  provider: MUNI_WWW_HONGCHEON_GO_KR_910402B0
+  name: 홍천군
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.hongcheon.go.kr/
+  crawler: Crawler/generated_yaml/MUNI_WWW_HONGCHEON_GO_KR_910402B0.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_HONGCHEON_GO_KR_910402B0.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 83
+  provider: MUNI_WWW_ICDONGGU_GO_KR_0A1287CE
+  name: 인천광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.icdonggu.go.kr/lll/education/nadeuli.jsp
+  crawler: Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_0A1287CE.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_0A1287CE.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 84
+  provider: MUNI_WWW_ICDONGGU_GO_KR_3A5C8E4B
+  name: 인천광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.icdonggu.go.kr/lll/
+  crawler: Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_3A5C8E4B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_3A5C8E4B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 85
+  provider: MUNI_WWW_ICDONGGU_GO_KR_E8AB69F4
+  name: 인천광역시 동구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.icdonggu.go.kr/lll/education/lifelong.jsp?acptrun=y
+  crawler: Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_E8AB69F4.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_E8AB69F4.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 86
+  provider: MUNI_WWW_ICDONGGU_GO_KR_FC8E533C
+  name: 인천광역시 동구 평생학습관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.icdonggu.go.kr/lll/education/future_edu.jsp
+  crawler: Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_FC8E533C.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ICDONGGU_GO_KR_FC8E533C.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 87
+  provider: MUNI_WWW_ICJG_GO_KR_A42FEEF4
+  name: 인천 중구 교육포털
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://edu.icjg.go.kr/
+  crawler: Crawler/generated_yaml/MUNI_WWW_ICJG_GO_KR_A42FEEF4.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ICJG_GO_KR_A42FEEF4.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 88
+  provider: MUNI_WWW_INCHEON_GO_KR_5E6030DA
+  name: 인천광역시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.incheon.go.kr/res/RE010101/lctreEdcExtrlList?resveInsttCode=
+  crawler: Crawler/generated_yaml/MUNI_WWW_INCHEON_GO_KR_5E6030DA.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_INCHEON_GO_KR_5E6030DA.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 89
+  provider: MUNI_WWW_JJSS_OR_KR_97515B87
+  name: 전주시시설관리공단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.jjss.or.kr/reserv/index.9is?contentUid=ff8080816c5f9de6016cd70081190dd8
+  crawler: Crawler/generated_yaml/MUNI_WWW_JJSS_OR_KR_97515B87.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_JJSS_OR_KR_97515B87.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 90
+  provider: MUNI_WWW_JPYOUTH_CO_KR_5E838FBF
+  name: 증평군청소년수련관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: http://www.jpyouth.co.kr/sub.php?menukey=54
+  crawler: Crawler/generated_yaml/MUNI_WWW_JPYOUTH_CO_KR_5E838FBF.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_JPYOUTH_CO_KR_5E838FBF.py --save-db --per-target-limit 50 --allow-partial-save --max-pages
+    14 --detail-limit 250
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  - --max-pages
+  - '14'
+  - --detail-limit
+  - '250'
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 91
+  provider: MUNI_WWW_ONGJIN_GO_KR_9B7F8E38
+  name: 옹진군 온라인 평생학습 안내
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ongjin.go.kr/open_content/main/community/education/cyber_incheon.jsp
+  crawler: Crawler/generated_yaml/MUNI_WWW_ONGJIN_GO_KR_9B7F8E38.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ONGJIN_GO_KR_9B7F8E38.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: duplicate_of:MUNI_WWW_ONGJIN_GO_KR_0243B215
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 92
+  provider: MUNI_WWW_SACHEON_GO_KR_8643DE0C
+  name: 사천시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.sacheon.go.kr/news/00009/04236.web?idx=2087723&amode=view
+  crawler: Crawler/generated_yaml/MUNI_WWW_SACHEON_GO_KR_8643DE0C.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_SACHEON_GO_KR_8643DE0C.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 93
+  provider: MUNI_WWW_SASANG_GO_KR_B3935ADC
+  name: 사상구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.sasang.go.kr/lll/index.sasang
+  crawler: Crawler/generated_yaml/MUNI_WWW_SASANG_GO_KR_B3935ADC.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_SASANG_GO_KR_B3935ADC.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 94
+  provider: MUNI_WWW_SB_GO_KR_FF615DE7
+  name: 성북구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.sb.go.kr/yeyak/selectUnityProgrmWebList.do?key=6508&insttTy=URINTY01&searchInsttNo=84
+  crawler: Crawler/generated_yaml/MUNI_WWW_SB_GO_KR_FF615DE7.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_SB_GO_KR_FF615DE7.py --save-db --per-target-limit 50 --allow-partial-save --max-pages
+    30 --detail-limit 1200
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  - --max-pages
+  - '30'
+  - --detail-limit
+  - '1200'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 95
+  provider: MUNI_WWW_SEO_INCHEON_KR_3E7B6F1F
+  name: 인천광역시 서구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.seo.incheon.kr/lll/program/programInfoDetail.do?prgm_seq=12777&prgmdiv=lifelong&pgno=3
+  crawler: Crawler/generated_yaml/MUNI_WWW_SEO_INCHEON_KR_3E7B6F1F.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_SEO_INCHEON_KR_3E7B6F1F.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 96
+  provider: MUNI_WWW_SEO_INCHEON_KR_E42D9C5B
+  name: 인천광역시 서구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.seo.incheon.kr/pmainp/program/programInfoList.do?prgmdiv=lifelong
+  crawler: Crawler/generated_yaml/MUNI_WWW_SEO_INCHEON_KR_E42D9C5B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_SEO_INCHEON_KR_E42D9C5B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 97
+  provider: MUNI_WWW_SUNCHEON_GO_KR_EA7E4FCA
+  name: 순천시
+  source: municipal_course_candidate_results
+  priority: 2
+  url: http://www.suncheon.go.kr/kr/news/0006/0001/?mode=view&seq=68887
+  crawler: Crawler/generated_yaml/MUNI_WWW_SUNCHEON_GO_KR_EA7E4FCA.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_SUNCHEON_GO_KR_EA7E4FCA.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 98
+  provider: MUNI_WWW_ULSANNAMGU_GO_KR_55028B5E
+  name: 울산광역시 남구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ulsannamgu.go.kr/inhParticipation/residentAutonomy.do?pageIndex=7
+  crawler: Crawler/generated_yaml/MUNI_WWW_ULSANNAMGU_GO_KR_55028B5E.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ULSANNAMGU_GO_KR_55028B5E.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 99
+  provider: MUNI_WWW_ULSANNAMGU_GO_KR_8750CCDD
+  name: 울산광역시 남구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ulsannamgu.go.kr/edu/board/eduBoard/512675/view.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_ULSANNAMGU_GO_KR_8750CCDD.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ULSANNAMGU_GO_KR_8750CCDD.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 100
+  provider: MUNI_WWW_ULSANNAMGU_GO_KR_E36CF0FF
+  name: 울산광역시 남구청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ulsannamgu.go.kr/inhParticipation/residentAutonomy.do?dongName=12
+  crawler: Crawler/generated_yaml/MUNI_WWW_ULSANNAMGU_GO_KR_E36CF0FF.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_ULSANNAMGU_GO_KR_E36CF0FF.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 101
+  provider: MUNI_WWW_YC_GO_KR_FCF54276
+  name: 영천시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yc.go.kr/news/ycNews/view.do?newsEpctNo=26277&mId=0200000000
+  crawler: Crawler/generated_yaml/MUNI_WWW_YC_GO_KR_FCF54276.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YC_GO_KR_FCF54276.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 102
+  provider: MUNI_WWW_YD21_GO_KR_12C12550
+  name: 영동군청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yd21.go.kr/kr/html/sub02/020110.html?mode=V&no=af338fbe3e1cf4d306bc1e4d926fd8c9
+  crawler: Crawler/generated_yaml/MUNI_WWW_YD21_GO_KR_12C12550.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YD21_GO_KR_12C12550.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 103
+  provider: MUNI_WWW_YDCT_ORG_9BB7628B
+  name: 영덕문화관광재단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.ydct.org/lecture2/list
+  crawler: Crawler/generated_yaml/MUNI_WWW_YDCT_ORG_9BB7628B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YDCT_ORG_9BB7628B.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 104
+  provider: MUNI_WWW_YEONSU_GO_KR_AFBFF9A3
+  name: 인천광역시 연수구 평생교육센터
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yeonsu.go.kr/lll/institution/edu_local.asp
+  crawler: Crawler/generated_yaml/MUNI_WWW_YEONSU_GO_KR_AFBFF9A3.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YEONSU_GO_KR_AFBFF9A3.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 105
+  provider: MUNI_WWW_YEONSU_GO_KR_B2B6DF58
+  name: 연수문화포털
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yeonsu.go.kr/culture/show/friday_art/reservation.asp
+  crawler: Crawler/generated_yaml/MUNI_WWW_YEONSU_GO_KR_B2B6DF58.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YEONSU_GO_KR_B2B6DF58.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 106
+  provider: MUNI_WWW_YEOSU_GO_KR_37E703DC
+  name: 여수시 평생교육
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yeosu.go.kr/edu
+  crawler: Crawler/generated_yaml/MUNI_WWW_YEOSU_GO_KR_37E703DC.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YEOSU_GO_KR_37E703DC.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 107
+  provider: MUNI_WWW_YJLIB_GO_KR_ED9BCD30
+  name: 여주시립도서관
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yjlib.go.kr/web/menu/10071/program/30020/lectureList.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_YJLIB_GO_KR_ED9BCD30.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YJLIB_GO_KR_ED9BCD30.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 108
+  provider: MUNI_WWW_YUMCORP_OR_KR_FD06010A
+  name: 여수시도시관리공단
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://www.yumcorp.or.kr/sports/lecture/list.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_YUMCORP_OR_KR_FD06010A.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YUMCORP_OR_KR_FD06010A.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 109
+  provider: MUNI_YDPLLC_SEN_GO_KR_A218D860
+  name: 평생학습교실 수강신청 방법
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://ydpllc.sen.go.kr/ydpllc/html.do?menu_idx=141
+  crawler: Crawler/generated_yaml/MUNI_YDPLLC_SEN_GO_KR_A218D860.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YDPLLC_SEN_GO_KR_A218D860.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 110
+  provider: MUNI_YEOSU_GO_KR_F146E7EC
+  name: 여수시청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://yeosu.go.kr/www/govt/news/hotnews?mode=view&idx=489011
+  crawler: Crawler/generated_yaml/MUNI_YEOSU_GO_KR_F146E7EC.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YEOSU_GO_KR_F146E7EC.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - partial
+- index: 111
+  provider: MUNI_YES_ULSAN_GO_KR_2706643A
+  name: 울산광역시 공공시설예약서비스
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://yes.ulsan.go.kr/lecture
+  crawler: Crawler/generated_yaml/MUNI_YES_ULSAN_GO_KR_2706643A.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YES_ULSAN_GO_KR_2706643A.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 112
+  provider: MUNI_YES_ULSAN_GO_KR_DF916A91
+  name: 울산광역시 공공시설예약서비스
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://yes.ulsan.go.kr/lecture/step1?lecId=L0064658
+  crawler: Crawler/generated_yaml/MUNI_YES_ULSAN_GO_KR_DF916A91.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YES_ULSAN_GO_KR_DF916A91.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 113
+  provider: MUNI_YEYAK_DAEGU_GO_KR_2685A3EB
+  name: 대구통합예약시스템
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://yeyak.daegu.go.kr/camp/detail/DSS_INST_00000103
+  crawler: Crawler/generated_yaml/MUNI_YEYAK_DAEGU_GO_KR_2685A3EB.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YEYAK_DAEGU_GO_KR_2685A3EB.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 114
+  provider: MUNI_YEYAK_SYF_OR_KR_7D3E2EF5
+  name: 수원시청소년청년재단 통합예약 수강신청
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://yeyak.syf.or.kr/www/11
+  crawler: Crawler/generated_yaml/MUNI_YEYAK_SYF_OR_KR_7D3E2EF5.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YEYAK_SYF_OR_KR_7D3E2EF5.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 115
+  provider: MUNI_YSSPORTS_YONG_SAN_OR_KR_67C8F87B
+  name: 용산구문화체육센터
+  source: municipal_course_candidate_results
+  priority: 2
+  url: https://yssports.yong-san.or.kr/fmcs/8?center=YGSN01
+  crawler: Crawler/generated_yaml/MUNI_YSSPORTS_YONG_SAN_OR_KR_67C8F87B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YSSPORTS_YONG_SAN_OR_KR_67C8F87B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 116
+  provider: MUNI_LLE_JONGNO_GO_KR_CF61BBD0
+  name: 종로교육포털
+  source: municipal_course_candidate_results_sugang_sports
+  priority: 2
+  url: https://lle.jongno.go.kr/site/main/program/all/list
+  crawler: Crawler/generated_yaml/MUNI_LLE_JONGNO_GO_KR_CF61BBD0.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LLE_JONGNO_GO_KR_CF61BBD0.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 117
+  provider: MUNI_WWW_IJONGNO_CO_KR_4B285EA8
+  name: 종로구시설관리공단
+  source: municipal_course_candidate_results_sugang_sports
+  priority: 2
+  url: https://www.ijongno.co.kr/www/128?document_category_srl=5
+  crawler: Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_4B285EA8.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_4B285EA8.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 118
+  provider: MUNI_WWW_IJONGNO_CO_KR_D4C024C6
+  name: 종로구시설관리공단
+  source: municipal_course_candidate_results_sugang_sports
+  priority: 2
+  url: https://www.ijongno.co.kr/fmcs/3?center=JONGNO02&action=list&page=1&event=1000000000&class=1000010000
+  crawler: Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_D4C024C6.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_D4C024C6.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 119
+  provider: MUNI_WWW_IJONGNO_CO_KR_F9ED1CA5
+  name: 종로구시설관리공단
+  source: municipal_course_candidate_results_sugang_sports
+  priority: 2
+  url: https://www.ijongno.co.kr/fmcs/3
+  crawler: Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_F9ED1CA5.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_F9ED1CA5.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 120
+  provider: MUNI_LLL_BUSAN_GO_KR_944C621B
+  name: 부산평생학습플랫폼 부산광역시 직속 교육
+  source: municipal_integrated_reservation_live_audit
+  priority: 2
+  url: https://lll.busan.go.kr/yeyak/ilms/learning/officeList.do
+  crawler: Crawler/generated_yaml/MUNI_LLL_BUSAN_GO_KR_944C621B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LLL_BUSAN_GO_KR_944C621B.py --save-db --mark-stale --per-target-limit 0 --max-pages 200
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 121
+  provider: MUNI_WWW_GEOJE_GO_KR_GBG_EDU
+  name: 거제시 교육프로그램
+  source: municipal_integrated_reservation_manual_verification
+  priority: 2
+  url: https://www.geoje.go.kr/gbg/index.geoje?menuCd=DOM_000008804001000000
+  crawler: Crawler/generated_yaml/MUNI_WWW_GEOJE_GO_KR_GBG_EDU.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GEOJE_GO_KR_GBG_EDU.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 122
+  provider: MUNI_WWW_JEONGSEON_GO_KR_38CBA90A
+  name: 정선군 평생학습 전체 교육 강좌
+  source: municipal_integrated_reservation_manual_verification
+  priority: 2
+  url: https://edu.jeongseon.go.kr/lecture?quarter=LifeEdu
+  crawler: Crawler/generated_yaml/MUNI_WWW_JEONGSEON_GO_KR_38CBA90A.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_JEONGSEON_GO_KR_38CBA90A.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - blocked
+- index: 123
+  provider: NATIONAL_AGRICULTURAL_MUSEUM
+  name: 국립농업박물관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://www.namuk.or.kr/kr/204/subview.do
+  crawler: Crawler/generated_yaml/NATIONAL_AGRICULTURAL_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_AGRICULTURAL_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 124
+  provider: NATIONAL_AVIATION_MUSEUM
+  name: 국립항공박물관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://aviation.moonhwain.net:451/rsvc/rsv_pm.html?lang=kr&b_id=aviation&stk_idx=2
+  crawler: Crawler/generated_yaml/NATIONAL_AVIATION_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_AVIATION_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 125
+  provider: NATIONAL_FOLK_MUSEUM
+  name: 국립민속박물관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://www.nfm.go.kr/
+  crawler: Crawler/generated_yaml/NATIONAL_FOLK_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_FOLK_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 126
+  provider: NATIONAL_FOREST_EDUCATION_CENTER
+  name: 숲e랑 산림복지 일일체험
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://www.sooperang.go.kr/rep/ari/selectPrgmRsrvtList.do?menuNo=1020000
+  crawler: Crawler/generated_yaml/NATIONAL_FOREST_EDUCATION_CENTER.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_FOREST_EDUCATION_CENTER.py --save-db --mark-stale --per-target-limit 0 --max-pages 1000
+    --detail-limit 100
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '1000'
+  - --detail-limit
+  - '100'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 127
+  provider: NATIONAL_METEOROLOGICAL_MUSEUM
+  name: 국립기상박물관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://science.kma.go.kr/museum/education/education
+  crawler: Crawler/generated_yaml/NATIONAL_METEOROLOGICAL_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_METEOROLOGICAL_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 128
+  provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립중앙박물관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=1
+  crawler: Crawler/generated_yaml/NATIONAL_MUSEUM_OF_KOREA.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_MUSEUM_OF_KOREA.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 14
+  enabled_target_count: 14
+  target_statuses:
+  - ready
+- index: 129
+  provider: NATIONAL_MUSEUM_OF_MODERN_ART
+  name: 국립현대미술관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://www.mmca.go.kr/educations/eduChildList.do
+  crawler: Crawler/generated_yaml/NATIONAL_MUSEUM_OF_MODERN_ART.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_MUSEUM_OF_MODERN_ART.py --save-db --mark-stale --per-target-limit 0 --max-pages 500
+    --detail-limit 3000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '500'
+  - --detail-limit
+  - '3000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 130
+  provider: NATIONAL_PALACE_MUSEUM
+  name: 국립고궁박물관
+  source: national_institution_course_search_targets
+  priority: 2
+  url: https://www.gogung.go.kr/gogung/pgm/cultureEventReg/edu/list.do?menuNo=800212
+  crawler: Crawler/generated_yaml/NATIONAL_PALACE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_PALACE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 131
+  provider: MUNI_LIB_GWE_GO_KR_90FD6E6A
+  name: 영월교육도서관
+  source: official_gwe_library_live_audit
+  priority: 2
+  url: https://lib.gwe.go.kr/ywlib/menu/2700/lecture-event/list/all
+  crawler: Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_90FD6E6A.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_90FD6E6A.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 132
+  provider: KOREA_NATIONAL_MARITIME_MUSEUM
+  name: 국립해양박물관
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.mmk.or.kr/?folder=education&page=list&type=E&status=present
+  crawler: Crawler/generated_yaml/KOREA_NATIONAL_MARITIME_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/KOREA_NATIONAL_MARITIME_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 133
+  provider: MUNI_HOME_PEN_GO_KR_92635850
+  name: 부산광역시 동래구
+  source: ops_console_url_update
+  priority: 2
+  url: https://home.pen.go.kr/yeyak/exprn/selectExprnList.do?mi=14438&srchRsSysId=&srchRsType=&srchRsType=A&srchRsType=B&srchRsType=C&srchRsType=D&srchRsType=E&srchRsvSttus=&srchRsvSttus=REQST&srchRsvSttus=PREV&srchRsvSttus=END&srchPeriodDiv=rcept&srchRsvBgnde=&srchRsvEndde=&srchRceptTrget=G&srchRceptTrget=A&srchRceptTrget=B&srchRceptTrget=C&srchRceptTrget=D&srchRceptTrget=E&srchRceptTrget=F&srchRceptTrget=H&srchRceptTrget=B_002&srchRceptTrget=C_002&srchRceptTrget=D_002&srchRceptTrget=E_002&srchRceptTrget=H_002&srchRceptTrget=B_003&srchRceptTrget=C_003&srchRceptTrget=D_003&srchRceptTrget=E_003&srchRceptTrget=H_003&srchRceptTrget=B_004&srchRceptTrget=C_004&srchRceptTrget=D_004&srchRceptTrget=E_004&srchRceptTrget=H_004&srchRceptTrget=B_005&srchRceptTrget=C_005&srchRceptTrget=D_005&srchRceptTrget=E_005&srchRceptTrget=H_005&srchRceptTrget=B_006&srchRceptTrget=C_006&srchRceptTrget=D_006&srchRceptTrget=E_006&srchRceptTrget=H_006&srchRsvAreaSe=A&srchRsvAreaSe=B&srchRsvAreaSe=C&srchRsvAreaSe=D&srchRsvAreaSe=E&srchRsvAreaSe=F&srchRsvAreaSe=G&srchRsvAreaSe=H&srchRsvAreaSe=I&srchRsvAreaSe=J&srchRsvAreaSe=K&srchRsvAreaSe=L&srchRsvAreaSe=M&srchRsvAreaSe=N&srchRsvAreaSe=O&srchRsvAreaSe=P&srchRsvValue=
+  crawler: Crawler/generated_yaml/MUNI_HOME_PEN_GO_KR_92635850.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_HOME_PEN_GO_KR_92635850.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 134
+  provider: MUNI_JHED_JNE_GO_KR_16474ED5
+  name: 전남광주통합특별시교육청 체험예약 전체 기관
+  source: ops_console_url_update
+  priority: 2
+  url: https://yeyak.jne.kr/yeyak/exprn/selectExprnList.do?mi=10205166&srchAt=Y&pageIndex=10&srchRsSysId=
+  crawler: Crawler/generated_yaml/MUNI_JHED_JNE_GO_KR_16474ED5.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_JHED_JNE_GO_KR_16474ED5.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 135
+  provider: MUNI_LIB_GEOJE_GO_KR_401A2022
+  name: 거제시 시립도서관
+  source: ops_console_url_update
+  priority: 2
+  url: https://lib.geoje.go.kr/com/requestPage.do?selMenuNo=104010000&returnUrl=/culture/d010200.do?year=2026&month=5
+  crawler: Crawler/generated_yaml/MUNI_LIB_GEOJE_GO_KR_401A2022.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_GEOJE_GO_KR_401A2022.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 136
+  provider: MUNI_LIB_GWE_GO_KR_303FFE72
+  name: 삼척교육문화관
+  source: ops_console_url_update
+  priority: 2
+  url: https://lib.gwe.go.kr/samecc/menu/3560/lecture-event/list/all
+  crawler: Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_303FFE72.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_303FFE72.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 137
+  provider: MUNI_LIB_GWE_GO_KR_8D8033C9
+  name: 화천교육도서관
+  source: ops_console_url_update
+  priority: 2
+  url: https://lib.gwe.go.kr/hwlib/menu/3130/lecture-event/list/all
+  crawler: Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_8D8033C9.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_GWE_GO_KR_8D8033C9.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 138
+  provider: MUNI_LIB_ULJIN_GO_KR_84BA0199
+  name: 울진남부도서관
+  source: ops_console_url_update
+  priority: 2
+  url: https://lib.uljin.go.kr/content/02schedule/01_01.php?p_cate=46
+  crawler: Crawler/generated_yaml/MUNI_LIB_ULJIN_GO_KR_84BA0199.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LIB_ULJIN_GO_KR_84BA0199.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 9
+  enabled_target_count: 9
+  target_statuses:
+  - ready
+- index: 139
+  provider: MUNI_LLL_SUSEONG_KR_C40B81D9
+  name: 대구광역시 수성구
+  source: ops_console_url_update
+  priority: 2
+  url: https://lll.suseong.kr/index.do?menu_id=00001883&menu_link=/front/education/searchEdu.do
+  crawler: Crawler/generated_yaml/MUNI_LLL_SUSEONG_KR_C40B81D9.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LLL_SUSEONG_KR_C40B81D9.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 140
+  provider: MUNI_SLL_SEOUL_GO_KR_529FCCEC
+  name: 서울특별시 금천구
+  source: ops_console_url_update
+  priority: 2
+  url: https://sll.seoul.go.kr/lms/simin_course/courseRequest/doListView.do?main_se=ssu&simin_yn=M%2CDC%2CMD%2CO%2CR%2CRG&mnid=202501604868
+  crawler: Crawler/generated_yaml/MUNI_SLL_SEOUL_GO_KR_529FCCEC.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SLL_SEOUL_GO_KR_529FCCEC.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 2
+  enabled_target_count: 2
+  target_statuses:
+  - partial
+  - ready
+- index: 141
+  provider: MUNI_SLL_SEOUL_GO_KR_A0D6D8A2
+  name: 서울런4050 신청형 강좌
+  source: ops_console_url_update
+  priority: 2
+  url: https://sll.seoul.go.kr/lms/front/boardItem/doViewBoardItem.do?board_no=50&boarditem_no=531051&page=1&mnid=201511712595
+  crawler: Crawler/generated_yaml/MUNI_SLL_SEOUL_GO_KR_A0D6D8A2.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SLL_SEOUL_GO_KR_A0D6D8A2.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: false
+  disabled_reason: excluded_url_shape
+  target_count: 1
+  enabled_target_count: 0
+  target_statuses:
+  - ready
+- index: 142
+  provider: MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E
+  name: 성남 배움숲 중원구청 시민정보화교육
+  source: ops_console_url_update
+  priority: 2
+  url: https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition=1&pageIndex=1&searchCondition3=OFFICE_00000681
+  crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 143
+  provider: MUNI_SUGANG_SEONGNAM_GO_KR_D447262D
+  name: 배움숲
+  source: ops_console_url_update
+  priority: 2
+  url: https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition3=OFFICE_00000670
+  crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_D447262D.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_D447262D.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 144
+  provider: MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B
+  name: 배움숲
+  source: ops_console_url_update
+  priority: 2
+  url: https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition3=OFFICE_00000680
+  crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 145
+  provider: MUNI_WWW_DANGJIN_GO_KR_3C378AA6
+  name: 충청남도 당진시
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.dangjin.go.kr/prog/reprsntInfrmEdu/kor/sub05_07_01/list.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_DANGJIN_GO_KR_3C378AA6.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_DANGJIN_GO_KR_3C378AA6.py --save-db --mark-stale --per-target-limit 0 --max-pages 20
+    --detail-limit 100
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '20'
+  - --detail-limit
+  - '100'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 146
+  provider: MUNI_WWW_DDC_GO_KR_33877EF5
+  name: 동두천미디어센터 디지털강의실
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.ddc.go.kr/media/selectBbsNttList.do?bbsNo=201&key=2136
+  crawler: Crawler/generated_yaml/MUNI_WWW_DDC_GO_KR_33877EF5.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_DDC_GO_KR_33877EF5.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 147
+  provider: MUNI_WWW_GBE_KR_98673AC8
+  name: 경상북도울진교육지원청 프로그램 신청
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.gbe.kr/uj/eq/view/selectEqList.do?mi=22841
+  crawler: Crawler/generated_yaml/MUNI_WWW_GBE_KR_98673AC8.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GBE_KR_98673AC8.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 148
+  provider: MUNI_WWW_GONGJU_GO_KR_7CBA2D38
+  name: 공주시청
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.gongju.go.kr/prog/nurimLeaEducate/E01/nurim/sub03_01/list.do
+  crawler: Crawler/generated_yaml/MUNI_WWW_GONGJU_GO_KR_7CBA2D38.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GONGJU_GO_KR_7CBA2D38.py --save-db --mark-stale --per-target-limit 0 --max-pages 50
+    --detail-limit 500
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '50'
+  - --detail-limit
+  - '500'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 149
+  provider: MUNI_WWW_GWANGJU_GO_KR_82EF77CD
+  name: 광주광역시 통합예약 교육강좌
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.gwangju.go.kr/reserve/bookingList.do?pageId=reserve1&searchCate1=A
+  crawler: Crawler/generated_yaml/MUNI_WWW_GWANGJU_GO_KR_82EF77CD.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_GWANGJU_GO_KR_82EF77CD.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 150
+  provider: MUNI_WWW_IDGSPORTS_OR_KR_8157C7B5
+  name: 인천광역시 동구체육회 프로그램예약
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.idgsports.or.kr/program/programInfoList.do?prgmdiv=pingpong
+  crawler: Crawler/generated_yaml/MUNI_WWW_IDGSPORTS_OR_KR_8157C7B5.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_IDGSPORTS_OR_KR_8157C7B5.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 151
+  provider: MUNI_WWW_YANGJU_GO_KR_1A2AECAC
+  name: 경기도 양주시
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.yangju.go.kr/lll/selectEduLctreWebList.do?key=1838&lllKind=1
+  crawler: Crawler/generated_yaml/MUNI_WWW_YANGJU_GO_KR_1A2AECAC.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YANGJU_GO_KR_1A2AECAC.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 152
+  provider: NATIONAL_HANGEUL_MUSEUM
+  name: 국립한글박물관
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.hangeul.go.kr/education?curr_menu_cd=0103010000
+  crawler: Crawler/generated_yaml/NATIONAL_HANGEUL_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_HANGEUL_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 153
+  provider: NATIONAL_INTANGIBLE_HERITAGE_CENTER
+  name: 국립무형유산원
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.nihc.go.kr/planweb/board/list.9is?contentUid=ff8080816ed8ebd3016ee9793c53019c&boardUid=ff8080816ecaefcf016ecfc31e210243&year=2026&month=7
+  crawler: Crawler/generated_yaml/NATIONAL_INTANGIBLE_HERITAGE_CENTER.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_INTANGIBLE_HERITAGE_CENTER.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 154
+  provider: NATIONAL_LIGHTHOUSE_MUSEUM
+  name: 국립등대박물관
+  source: ops_console_url_update
+  priority: 2
+  url: https://www.lighthouse-museum.or.kr/prog/evntPrgrm/kor/sub01_02/list.do
+  crawler: Crawler/generated_yaml/NATIONAL_LIGHTHOUSE_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_LIGHTHOUSE_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 155
+  provider: ESHARE_PUBLIC_COURSE
+  name: 공유누리 교육/강좌
+  source: public_course_targets
+  priority: 2
+  url: https://www.eshare.go.kr/UserPortal/adv/resources/AdvEsSearchResourcesMainView.do?rsrcClsCd=040000
+  crawler: Crawler/generated_yaml/ESHARE_PUBLIC_COURSE.py
+  command: python -X utf8 Crawler/generated_yaml/ESHARE_PUBLIC_COURSE.py --save-db --mark-stale --per-target-limit 0 --max-pages 20 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '20'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 156
+  provider: GYEONGGI_GSEEK
+  name: 경기도 평생학습포털 GSEEK
+  source: public_course_targets
+  priority: 2
+  url: https://www.gseek.kr/user/course/offline/list
+  crawler: Crawler/generated_yaml/GYEONGGI_GSEEK.py
+  command: python -X utf8 Crawler/generated_yaml/GYEONGGI_GSEEK.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 157
+  provider: MUNI_WWW_BUK_DAEGU_KR_RESERVATION
+  name: 대구 북구 통합예약
+  source: public_course_targets
+  priority: 2
+  url: https://www.buk.daegu.kr/reserve/index.do?menu_id=00002617
+  crawler: Crawler/generated_yaml/MUNI_WWW_BUK_DAEGU_KR_RESERVATION.py
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_BUK_DAEGU_KR_RESERVATION.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 158
+  provider: SEJONG_LIFELONG_EDU
+  name: 세종특별자치시교육청 평생교육원
+  source: public_course_targets
+  priority: 2
+  url: https://life.sje.go.kr/edu/community/events/program-list
+  crawler: Crawler/generated_yaml/SEJONG_LIFELONG_EDU.py
+  command: python -X utf8 Crawler/generated_yaml/SEJONG_LIFELONG_EDU.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 159
+  provider: SEOUL_LIFELONG_LEARNING
+  name: 서울시 평생학습포털
+  source: public_course_targets
+  priority: 2
+  url: https://sll.seoul.go.kr/main/doLifeLongEduInstListView.do?main_se=lie&mnid=202501953013
+  crawler: Crawler/generated_yaml/SEOUL_LIFELONG_LEARNING.py
+  command: python -X utf8 Crawler/generated_yaml/SEOUL_LIFELONG_LEARNING.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 160
+  provider: ULSAN_EDU_BOOKING
+  name: 울산광역시교육청 통합예약
+  source: public_course_targets
+  priority: 2
+  url: https://use.go.kr/booking/user/reservation/Edu/BD_selectReservationMngList.do
+  crawler: Crawler/generated_yaml/ULSAN_EDU_BOOKING.py
+  command: python -X utf8 Crawler/generated_yaml/ULSAN_EDU_BOOKING.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    3000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '3000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 161
+  provider: NATIONAL_MAP_MUSEUM
+  name: 국립지도박물관
+  source: user_requested
+  priority: 2
+  url: https://www.ngii.go.kr/map/content.do?sq=329
+  crawler: Crawler/generated_yaml/NATIONAL_MAP_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_MAP_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 162
+  provider: SUWON_LIBRARY_MA
+  name: 수원시도서관 선경 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MA&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MA.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MA.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 163
+  provider: SUWON_LIBRARY_MB
+  name: 수원시도서관 중앙 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MB&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MB.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MB.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 164
+  provider: SUWON_LIBRARY_MD
+  name: 수원시도서관 슬기샘 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MD&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MD.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MD.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 165
+  provider: SUWON_LIBRARY_ME
+  name: 수원시도서관 바른샘 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=ME&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_ME.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_ME.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 166
+  provider: SUWON_LIBRARY_MF
+  name: 수원시도서관 지혜샘 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MF&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MF.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MF.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 167
+  provider: SUWON_LIBRARY_MG
+  name: 수원시도서관 서수원 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MG&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MG.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MG.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 168
+  provider: SUWON_LIBRARY_MH
+  name: 수원시도서관 북수원 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MH&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MH.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MH.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 169
+  provider: SUWON_LIBRARY_MI
+  name: 수원시도서관 태장마루 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MI&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MI.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MI.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 170
+  provider: SUWON_LIBRARY_MT
+  name: 수원시도서관 대추골 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MT&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MT.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MT.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 171
+  provider: SUWON_LIBRARY_MU
+  name: 수원시도서관 한림 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MU&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MU.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MU.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 172
+  provider: SUWON_LIBRARY_MV
+  name: 수원시도서관 창룡 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MV&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MV.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MV.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 173
+  provider: SUWON_LIBRARY_MW
+  name: 수원시도서관 버드내 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MW&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MW.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MW.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 174
+  provider: SUWON_LIBRARY_MX
+  name: 수원시도서관 광교홍재 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MX&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MX.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MX.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 175
+  provider: SUWON_LIBRARY_MY
+  name: 수원시도서관 호매실 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MY&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MY.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MY.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 176
+  provider: SUWON_LIBRARY_MZ
+  name: 수원시도서관 일월 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=MZ&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_MZ.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_MZ.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 177
+  provider: SUWON_LIBRARY_SB
+  name: 수원시도서관 화서다산 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SB&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_SB.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_SB.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 178
+  provider: SUWON_LIBRARY_SC
+  name: 수원시도서관 광교푸른숲 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SC&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_SC.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_SC.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 179
+  provider: SUWON_LIBRARY_SD
+  name: 수원시도서관 매여울 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SD&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_SD.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_SD.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 180
+  provider: SUWON_LIBRARY_SE
+  name: 수원시도서관 망포글빛 독서문화프로그램
+  source: user_requested
+  priority: 2
+  url: https://www.suwonlib.go.kr/reserve/lecture/lectureList.do?searchManageCdAll=N&searchManageCdArray=SE&recordCountPerPage=10&currentPageNo=1
+  crawler: Crawler/generated_yaml/SUWON_LIBRARY_SE.py
+  command: python -X utf8 Crawler/generated_yaml/SUWON_LIBRARY_SE.py --save-db --mark-stale --per-target-limit 0 --max-pages 200 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '200'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 181
+  provider: ICHEON_WORKER_WELFARE
+  name: 이천시 노동자 복지관 평생학습 프로그램
+  source: welfare_course_targets
+  priority: 2
+  url: https://www.icheon-hrd.or.kr/main/program/rule.jsp
+  crawler: Crawler/generated_yaml/ICHEON_WORKER_WELFARE.py
+  command: python -X utf8 Crawler/generated_yaml/ICHEON_WORKER_WELFARE.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 182
+  provider: NATIONAL_GUGAK_CENTER
+  name: 국립국악원
+  source: national_institution_course_search_targets
+  priority: 3
+  url: https://www.gugak.go.kr/
+  crawler: Crawler/generated_yaml/NATIONAL_GUGAK_CENTER.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_GUGAK_CENTER.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 183
+  provider: NATIONAL_RAILROAD_MUSEUM
+  name: 철도박물관
+  source: national_institution_course_search_targets
+  priority: 3
+  url: https://www.railroadmuseum.co.kr/
+  crawler: Crawler/generated_yaml/NATIONAL_RAILROAD_MUSEUM.py
+  command: python -X utf8 Crawler/generated_yaml/NATIONAL_RAILROAD_MUSEUM.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 184
+  provider: GIMHAE_DONGBU_SENIOR_NOTICE
+  name: 김해시동부노인종합복지관 수강신청 안내
+  source: welfare_course_targets
+  priority: 3
+  url: https://gimhaedongbu.e-ncom.co.kr/
+  crawler: Crawler/generated_yaml/GIMHAE_DONGBU_SENIOR_NOTICE.py
+  command: python -X utf8 Crawler/generated_yaml/GIMHAE_DONGBU_SENIOR_NOTICE.py --save-db --mark-stale --per-target-limit 0 --max-pages 10 --detail-limit
+    200
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '10'
+  - --detail-limit
+  - '200'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 185
+  provider: SASANG_SENIOR_CLASS_DIRECTORY
+  name: 부산 사상구 노인교실/사회복지관 부설 프로그램 현황
+  source: welfare_course_targets
+  priority: 3
+  url: https://www.sasang.go.kr/index.sasang?menuCd=DOM_000000103005002006
+  crawler: Crawler/generated_yaml/SASANG_SENIOR_CLASS_DIRECTORY.py
+  command: python -X utf8 Crawler/generated_yaml/SASANG_SENIOR_CLASS_DIRECTORY.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial
+- index: 186
+  provider: SAHA_SOCIAL_WELFARE_DIRECTORY
+  name: 부산 사하구 작은도서관 강좌
+  source: welfare_course_targets
+  priority: 4
+  url: https://health.saha.go.kr/reserve/lectureLib/list.do?mId=0500000000
+  crawler: Crawler/generated_yaml/SAHA_SOCIAL_WELFARE_DIRECTORY.py
+  command: python -X utf8 Crawler/generated_yaml/SAHA_SOCIAL_WELFARE_DIRECTORY.py --save-db --mark-stale --per-target-limit 0 --max-pages 50 --detail-limit
+    100
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '50'
+  - --detail-limit
+  - '100'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 187
+  provider: SUNCHEON_SENIOR_WELFARE_NOTICE
+  name: 순천시 3개 노인복지관 프로그램
+  source: welfare_course_targets
+  priority: 4
+  url: https://www.sc.go.kr/silver/community/0001/0003/?boardId=bbs_0000000000000063
+  crawler: Crawler/generated_yaml/SUNCHEON_SENIOR_WELFARE_NOTICE.py
+  command: python -X utf8 Crawler/generated_yaml/SUNCHEON_SENIOR_WELFARE_NOTICE.py --save-db --mark-stale --per-target-limit 0 --max-pages 5 --detail-limit
+    10
+  arguments:
+  - --save-db
+  - --mark-stale
+  - --per-target-limit
+  - '0'
+  - --max-pages
+  - '5'
+  - --detail-limit
+  - '10'
+  status: ready
+  target_status: ready
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - ready
+- index: 188
+  provider: SIMIN_WELFARE_FACILITY_SEED
+  name: 시민종합사회복지관 시설/강당 신청 seed
+  source: welfare_course_targets
+  priority: 5
+  url: https://si-min.or.kr/board_intro/intro_E1.asp
+  crawler: Crawler/generated_yaml/SIMIN_WELFARE_FACILITY_SEED.py
+  command: python -X utf8 Crawler/generated_yaml/SIMIN_WELFARE_FACILITY_SEED.py --save-db --per-target-limit 50 --allow-partial-save
+  arguments:
+  - --save-db
+  - --per-target-limit
+  - '50'
+  - --allow-partial-save
+  status: partial
+  target_status: partial
+  enabled: true
+  disabled_reason: ''
+  target_count: 1
+  enabled_target_count: 1
+  target_statuses:
+  - partial

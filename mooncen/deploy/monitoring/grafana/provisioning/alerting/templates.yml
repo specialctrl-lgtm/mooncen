@@ -1,0 +1,23 @@
+apiVersion: 1
+
+templates:
+  - orgId: 1
+    name: mooncen_telegram_template
+    template: |
+      {{ define "mooncen.telegram.message" }}
+      {{ if gt (len .Alerts.Firing) 0 -}}
+      [MoonCen 장애] {{ len .Alerts.Firing }}건
+      {{ range .Alerts.Firing -}}
+      - {{ .Labels.alertname }} / {{ .Labels.instance }}
+        {{ .Annotations.summary }}
+        {{ .Annotations.description }}
+      {{ end -}}
+      {{ end -}}
+      {{ if gt (len .Alerts.Resolved) 0 -}}
+      [MoonCen 복구] {{ len .Alerts.Resolved }}건
+      {{ range .Alerts.Resolved -}}
+      - {{ .Labels.alertname }} / {{ .Labels.instance }}
+        {{ .Annotations.summary }}
+      {{ end -}}
+      {{ end -}}
+      {{ end }}

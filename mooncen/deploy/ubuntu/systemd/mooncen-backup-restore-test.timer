@@ -1,0 +1,11 @@
+[Unit]
+Description=Monthly MoonCen backup restore verification
+
+[Timer]
+OnCalendar=monthly
+Persistent=true
+RandomizedDelaySec=6h
+Unit=mooncen-backup-restore-test.service
+
+[Install]
+WantedBy=timers.target

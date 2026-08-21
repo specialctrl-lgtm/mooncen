@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>MoonCen 크롤러 품질 문서</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { margin: 0; background: #f4f7f5; color: #17332b; }
+    main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+    header { margin-bottom: 28px; }
+    h1 { margin: 0 0 10px; font-size: clamp(1.8rem, 4vw, 2.7rem); }
+    p { line-height: 1.65; }
+    .notice { padding: 14px 16px; border: 1px solid #b7d1c5; border-radius: 12px; background: #e9f4ef; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 24px; }
+    article { padding: 20px; border: 1px solid #d7e2dd; border-radius: 16px; background: #fff; box-shadow: 0 8px 24px rgb(23 51 43 / 6%); }
+    h2 { margin: 0 0 8px; font-size: 1.15rem; }
+    article p { min-height: 3.3em; margin: 0 0 18px; color: #50635c; }
+    .actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    a { display: inline-block; padding: 9px 12px; border-radius: 9px; color: #17332b; font-weight: 650; text-decoration: none; background: #e8eeeb; }
+    a.primary { color: #fff; background: #176b50; }
+    a:hover, a:focus-visible { outline: 3px solid #efc35b; outline-offset: 2px; }
+    footer { margin-top: 28px; color: #65766f; font-size: .93rem; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>MoonCen 크롤러 품질 문서</h1>
+    <p>오탐·미탐 수정 아키텍처, 개선 우선순위, 운영 절차를 Word 또는 Markdown으로 제공합니다.</p>
+    <p class="notice">Word 버튼을 누르면 파일이 PC로 내려갑니다. 서버 안에서 바로 읽으려면 Markdown을 선택하고 VS Code Preview를 사용하세요.</p>
+  </header>
+
+  <section class="grid" aria-label="문서 목록">
+    <article>
+      <h2>품질 아키텍처 간략본</h2>
+      <p>의사결정자와 운영 책임자를 위한 핵심 문제, 목표 구조, 도입 순서.</p>
+      <div class="actions"><a class="primary" download href="./MoonCen_크롤러_품질_아키텍처_간략본.docx">Word 다운로드</a><a href="./MoonCen_크롤러_품질_아키텍처_간략본.md">Markdown</a></div>
+    </article>
+    <article>
+      <h2>품질 아키텍처 상세본</h2>
+      <p>정답셋, 룰 DSL, 저장 모델, 재현·배포·보안까지 포함한 기술 설계.</p>
+      <div class="actions"><a class="primary" download href="./MoonCen_크롤러_품질_아키텍처_상세본.docx">Word 다운로드</a><a href="./MoonCen_크롤러_품질_아키텍처_상세본.md">Markdown</a></div>
+    </article>
+    <article>
+      <h2>개선방안·우선순위 간략본</h2>
+      <p>P0~P3, MVP, 기대효과와 완료 기준을 빠르게 확인하는 문서.</p>
+      <div class="actions"><a class="primary" download href="./MoonCen_크롤러_개선방안_우선순위_간략본.docx">Word 다운로드</a><a href="./MoonCen_크롤러_개선방안_우선순위_간략본.md">Markdown</a></div>
+    </article>
+    <article>
+      <h2>개선방안·우선순위 상세본</h2>
+      <p>기술 리드와 실행 팀을 위한 작업 패키지, 의존성, 위험, 검증 기준.</p>
+      <div class="actions"><a class="primary" download href="./MoonCen_크롤러_개선방안_우선순위_상세본.docx">Word 다운로드</a><a href="./MoonCen_크롤러_개선방안_우선순위_상세본.md">Markdown</a></div>
+    </article>
+    <article>
+      <h2>품질 운영 가이드</h2>
+      <p>검수, 리플레이, 승인, 카나리, 롤백, 지표와 장애 대응 절차.</p>
+      <div class="actions"><a class="primary" download href="./MoonCen_크롤러_품질_운영_가이드.docx">Word 다운로드</a><a href="./MoonCen_크롤러_품질_운영_가이드.md">Markdown</a></div>
+    </article>
+  </section>
+
+  <footer><a href="./README.md">문서 묶음 설명</a> · 서버는 127.0.0.1:8765에만 바인딩됩니다.</footer>
+</main>
+</body>
+</html>

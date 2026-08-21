@@ -1,0 +1,150 @@
+version: 1
+generated_at: '2026-08-05T15:03:25+09:00'
+domain_category: 검토필요
+source_group: generated_review
+summary:
+  targets: 4
+  by_status:
+    ready: 3
+    excluded_url_shape: 1
+  by_service_group:
+    체험: 2
+  by_collection_type:
+    sooperang_booking_policy_dates+program_cards: 1
+    excluded_url_shape: 1
+    two_education_sections+detail: 1
+    static_html+detail: 1
+targets:
+- provider: NATIONAL_FOREST_EDUCATION_CENTER
+  name: 숲e랑 산림복지 일일체험
+  branch: 숲e랑 산림복지 일일체험
+  collection_category: 체험
+  domain_category: 산림체험
+  operator_type: 국립/공공기관
+  source_group: national_institution
+  service_group: 체험
+  service_group_policy: locked
+  collection_type: sooperang_booking_policy_dates+program_cards
+  crawler_status: ready
+  priority: 2
+  url: https://www.sooperang.go.kr/rep/ari/selectPrgmRsrvtList.do?menuNo=1020000
+  source: national_institution_course_search_targets
+  origin: live_validated
+  region: 전국
+  row_municipality_codes:
+  - '1217000000'
+  - '1272000000'
+  - '1276000000'
+  - '1284000000'
+  - '2638000000'
+  - '3020000000'
+  - '3171000000'
+  - '4183000000'
+  - '4315000000'
+  - '4481000000'
+  - '4715000000'
+  - '4721000000'
+  - '4782000000'
+  - '4785000000'
+  - '5111000000'
+  - '5115000000'
+  - '5173000000'
+  - '5214000000'
+  - '5272000000'
+  - '5279000000'
+  full_snapshot_required: true
+  public_field_limitations:
+    time: 공개 목록은 소요시간만 제공하며 회차 시작·종료 시각은 로그인 후 확인
+    fee: 공개 목록은 금액을 제공하지 않아 기관별 요금 확인 필요
+  last_quality:
+    collected: 882
+    score: 100.0
+    grade: A
+    parser: sooperang_complete_booking_dates
+    error_kind: ''
+    saved: 882
+    checked_at: '2026-08-05T15:03:25+09:00'
+    source_pages: 540
+    detail_pages: 0
+    snapshot_complete: true
+- provider: NATIONAL_FOREST_RECREATION
+  name: 숲나들e
+  branch: 숲나들e
+  collection_category: 검토필요
+  domain_category: 검토필요
+  operator_type: 기타
+  source_group: generated_review
+  collection_type: excluded_url_shape
+  crawler_status: excluded_url_shape
+  priority: 2
+  url: https://www.foresttrip.go.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 전국
+  last_quality:
+    collected: 0
+    score: 100.0
+    grade: A
+    parser: none
+    error_kind: reservation_portal_root_no_program_list
+- provider: NATIONAL_INTANGIBLE_HERITAGE_CENTER
+  name: 국립무형유산원
+  branch: 국립무형유산원
+  collection_category: 박물관/과학관
+  domain_category: 문화유산/체험
+  operator_type: 국립/공공기관
+  source_group: national_institution
+  collection_type: two_education_sections+detail
+  crawler_status: ready
+  priority: 2
+  url: https://www.nihc.go.kr/planweb/board/list.9is?contentUid=ff8080816ed8ebd3016ee9793c53019c&boardUid=ff8080816ecaefcf016ecfc31e210243&year=2026&month=7
+  source: ops_console_url_update
+  origin: manual
+  region: 전라북도 전주시
+  robots_policy: disallow_all
+  last_quality:
+    collected: 3
+    score: 100.0
+    grade: A
+    parser: nihc_type_thumb_detail
+    error_kind: ''
+    saved: 3
+    checked_at: '2026-07-26T22:33:15+09:00'
+    source_pages: 33
+    detail_pages: 3
+    snapshot_complete: true
+  service_group: 체험
+  target_id: 1a36ba977e3cf235
+  updated_at: '2026-06-29T22:03:11'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:03:11'
+- provider: NATIONAL_GUGAK_CENTER
+  name: 국립국악원
+  branch: 국립국악원
+  collection_category: 문화예술
+  domain_category: 공연전시/문화예술교육
+  operator_type: 국가기관
+  source_group: generated_review
+  collection_type: static_html+detail
+  crawler_status: ready
+  priority: 3
+  url: https://www.gugak.go.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 서울특별시
+  municipality_code: '1165000000'
+  last_quality:
+    collected: 449
+    score: 100.0
+    grade: A
+    parser: gugak_academy_performance+detail
+    error_kind: ''
+    checked_at: '2026-07-26T22:12:03+09:00'
+    source_pages: 26
+    detail_pages: 449
+    snapshot_complete: true
+  crawler_notes:
+  - '2026-06-29: Added gugak_academy_performance+detail collector. Academy courses are read from academy.gugak.go.kr list/detail pages; performances and exhibitions
+    are read from gugak.go.kr monthly calendar/detail pages.'
+  - '2026-07-26: Academy and current-to-12-month performance scopes now publish explicit pagination/detail completeness, and unused academy detail capacity is reassigned
+    to performance details.'

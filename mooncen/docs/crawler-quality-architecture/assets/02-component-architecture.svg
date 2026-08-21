@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">MoonCen target crawler quality component architecture</title>
+  <desc id="desc">Target components spanning an Ops quality workbench, control API and database, evidence store, replay sandbox, safe rule compiler, current adapters, staging and the existing promotion gate.</desc>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#476782"/></marker>
+    <marker id="d" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#a94442"/></marker>
+    <filter id="s"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#17324d" flood-opacity=".12"/></filter>
+    <style>.title{font:700 35px Arial,sans-serif;fill:#132238}.sub{font:17px Arial,sans-serif;fill:#5a687a}.lane{font:700 15px Arial,sans-serif;letter-spacing:1px;fill:#476782}.h{font:700 20px Arial,sans-serif;fill:#17324d}.t{font:15px Arial,sans-serif;fill:#273444}.sm{font:14px Arial,sans-serif;fill:#5e6d7c}.arr{fill:none;stroke:#476782;stroke-width:4;marker-end:url(#a)}.dash{fill:none;stroke:#a94442;stroke-width:4;stroke-dasharray:11 8;marker-end:url(#d)}</style>
+  </defs>
+  <rect width="1600" height="980" fill="#f6f8fb"/><text x="65" y="62" class="title">Target Component Architecture</text><text x="65" y="102" class="sub">Extend the current control, staging and promotion boundaries; add a dedicated quality evidence and replay plane</text>
+
+  <rect x="48" y="135" width="1504" height="194" rx="22" fill="#ffffff" stroke="#d7e0e8" stroke-width="2"/><text x="75" y="169" class="lane">EXPERIENCE PLANE</text>
+  <g filter="url(#s)"><rect x="85" y="198" width="295" height="101" rx="16" fill="#e8f1ff" stroke="#5f8ecb" stroke-width="3"/><rect x="450" y="198" width="295" height="101" rx="16" fill="#eaf7f2" stroke="#4f9b7a" stroke-width="3"/><rect x="815" y="198" width="295" height="101" rx="16" fill="#ede9ff" stroke="#7868b4" stroke-width="3"/><rect x="1180" y="198" width="295" height="101" rx="16" fill="#edf7fb" stroke="#5791aa" stroke-width="3"/></g>
+  <text x="232" y="236" text-anchor="middle" class="h">Quality Inbox</text><text x="232" y="269" text-anchor="middle" class="t">signals, cases, assignment, SLA</text>
+  <text x="597" y="236" text-anchor="middle" class="h">Evidence &amp; Label Viewer</text><text x="597" y="269" text-anchor="middle" class="t">raw ↔ candidate ↔ source highlight</text>
+  <text x="962" y="236" text-anchor="middle" class="h">Guided Rule Builder</text><text x="962" y="269" text-anchor="middle" class="t">form + validated YAML preview</text>
+  <text x="1327" y="236" text-anchor="middle" class="h">Replay / Diff / Release</text><text x="1327" y="269" text-anchor="middle" class="t">gates, review, canary, rollback</text>
+
+  <rect x="48" y="365" width="1504" height="300" rx="22" fill="#ffffff" stroke="#d7e0e8" stroke-width="2"/><text x="75" y="399" class="lane">QUALITY CONTROL PLANE · ENVIRONMENT BOUND</text>
+  <g filter="url(#s)"><rect x="82" y="438" width="310" height="170" rx="17" fill="#eaf7f2" stroke="#4f9b7a" stroke-width="3"/><rect x="460" y="438" width="310" height="170" rx="17" fill="#fff4df" stroke="#d29b3d" stroke-width="3"/><rect x="838" y="438" width="310" height="170" rx="17" fill="#ede9ff" stroke="#7868b4" stroke-width="3"/><rect x="1216" y="438" width="300" height="170" rx="17" fill="#edf7fb" stroke="#5791aa" stroke-width="3"/></g>
+  <text x="237" y="480" text-anchor="middle" class="h">Ops Quality API</text><text x="237" y="513" text-anchor="middle" class="t">RBAC · audit · revision fences</text><text x="237" y="538" text-anchor="middle" class="t">case / label / rule / replay</text><text x="237" y="570" text-anchor="middle" class="sm">extends Crawler Studio boundaries</text>
+  <text x="615" y="480" text-anchor="middle" class="h">Control PostgreSQL</text><text x="615" y="513" text-anchor="middle" class="t">append-only evidence metadata</text><text x="615" y="538" text-anchor="middle" class="t">reviews · assignments · metrics</text><text x="615" y="570" text-anchor="middle" class="sm">not primary course authority</text>
+  <text x="993" y="480" text-anchor="middle" class="h">Evidence Object Store</text><text x="993" y="513" text-anchor="middle" class="t">redacted HTML / JSON / trace</text><text x="993" y="538" text-anchor="middle" class="t">content SHA · retention · ACL</text><text x="993" y="570" text-anchor="middle" class="sm">immutable, encrypted, no PII</text>
+  <text x="1366" y="480" text-anchor="middle" class="h">Replay Sandbox</text><text x="1366" y="513" text-anchor="middle" class="t">networkless · read-only fixture</text><text x="1366" y="538" text-anchor="middle" class="t">CPU/time/memory/output limits</text><text x="1366" y="570" text-anchor="middle" class="sm">baseline and candidate artifacts</text>
+  <path d="M237 329 V438" class="arr"/><path d="M597 329 V438 H615" class="arr"/><path d="M962 329 V412 H237 V438" class="arr"/><path d="M1327 329 V438" class="arr"/><path d="M392 523 H460" class="arr"/><path d="M770 523 H838" class="arr"/><path d="M1148 523 H1216" class="arr"/>
+
+  <rect x="48" y="701" width="1504" height="220" rx="22" fill="#ffffff" stroke="#d7e0e8" stroke-width="2"/><text x="75" y="735" class="lane">DATA PLANE · REUSE CURRENT FAIL-CLOSED PATH</text>
+  <g filter="url(#s)"><rect x="82" y="770" width="245" height="112" rx="16" fill="#ede9ff" stroke="#7868b4" stroke-width="3"/><rect x="385" y="770" width="245" height="112" rx="16" fill="#e8f1ff" stroke="#5f8ecb" stroke-width="3"/><rect x="688" y="770" width="245" height="112" rx="16" fill="#fff4df" stroke="#d29b3d" stroke-width="3"/><rect x="991" y="770" width="245" height="112" rx="16" fill="#fdeeED" stroke="#c55f55" stroke-width="3"/><rect x="1294" y="770" width="222" height="112" rx="16" fill="#eaf7f2" stroke="#4f9b7a" stroke-width="3"/></g>
+  <text x="204" y="811" text-anchor="middle" class="h">Source Adapters</text><text x="204" y="846" text-anchor="middle" class="t">transport / session / paging</text>
+  <text x="507" y="811" text-anchor="middle" class="h">Rule Runtime</text><text x="507" y="846" text-anchor="middle" class="t">signed, pinned rule artifact</text>
+  <text x="810" y="811" text-anchor="middle" class="h">Crawl Staging</text><text x="810" y="846" text-anchor="middle" class="t">normalized row snapshots</text>
+  <text x="1113" y="811" text-anchor="middle" class="h">Promotion Gate</text><text x="1113" y="846" text-anchor="middle" class="t">reviewed fingerprint / apply</text>
+  <text x="1405" y="811" text-anchor="middle" class="h">Primary DB</text><text x="1405" y="846" text-anchor="middle" class="t">courses / branches</text>
+  <path d="M327 826 H385" class="arr"/><path d="M630 826 H688" class="arr"/><path d="M933 826 H991" class="arr"/><path d="M1236 826 H1294" class="arr"/>
+  <path d="M1366 608 V680 H507 V770" class="dash"/><text x="820" y="692" class="sm" fill="#a94442">approved rule artifact only; no arbitrary Python from browser</text>
+  <path d="M615 608 V650 H1113 V770" class="arr"/>
+  <text x="65" y="955" class="sm">Initial rollout remains on the current legacy + staging path. Distributed workers are not a prerequisite for this architecture.</text>
+</svg>

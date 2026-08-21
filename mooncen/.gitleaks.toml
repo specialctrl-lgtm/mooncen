@@ -1,0 +1,18 @@
+title = "MoonCen secret scanning policy"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Pinned public Node release-keyring Git commit, not a credential"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''^deploy/ubuntu/install_system_packages\.sh$''']
+regexes = ['''^890d535527789c9ebccdccdafd708f60dbd56786$''']
+
+[[allowlists]]
+description = "Fixed municipal provider metadata identifier, not a credential"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''^Crawler/municipal_gyeongnam_changnyeong\.py$''']
+regexes = ['''^MUNI_IR_633F4DEC9CBE$''']

@@ -1,0 +1,11 @@
+[Unit]
+Description=Collect MoonCen node textfile metrics every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=60s
+AccuracySec=10s
+Unit=mooncen-node-metrics.service
+
+[Install]
+WantedBy=timers.target

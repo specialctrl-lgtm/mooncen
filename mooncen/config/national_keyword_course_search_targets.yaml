@@ -1,0 +1,801 @@
+version: 1
+generated_at: '2026-05-25'
+scope: 국립/공공기관의 체험, 해설, 강의, 탐방, 박물관 예약 후보 URL 탐색용 키워드 검색 큐
+collection_policy:
+  include:
+  - 공식 예약/신청/교육/체험 목록 페이지
+  - 국립 또는 공공기관이 운영하는 박물관, 과학관, 생태원, 수목원, 국립공원, 전시관 프로그램
+  - 교육, 강의, 해설, 체험, 탐방, 가족/어린이 프로그램
+  exclude:
+  - 블로그 후기, 언론 기사, 여행 후기, 단순 장소 소개
+  - 민간 체험 업체, 사설 학원, 학교 내부 공지
+  - 예약 가능한 프로그램 목록 없이 공지만 있는 페이지
+  preferred_domains:
+  - .go.kr
+  - .or.kr
+  - .re.kr
+  - 공식 기관 도메인
+domain_scopes:
+- id: go_kr
+  query_prefix: site:.go.kr
+  label: 정부 도메인
+- id: or_kr
+  query_prefix: site:.or.kr
+  label: 공공기관 도메인
+- id: re_kr
+  query_prefix: site:.re.kr
+  label: 연구/공공기관 도메인
+targets:
+- id: national_experience_reservation
+  label: 국립 체험 예약
+  category: national_experience
+  status: search_seed
+  priority: 1
+  seed_keywords:
+  - 국립 체험 예약
+  expanded_keywords:
+  - 국립 체험 신청
+  - 국립 체험 프로그램
+  - 국립 어린이 체험 예약
+  - 국립 가족 체험 예약
+  - 국립 주말 체험 예약
+  query_count: 24
+  queries:
+  - type: keyword
+    keyword: 국립 체험 예약
+    query: 국립 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 체험 신청
+    query: 국립 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - type: keyword
+    keyword: 국립 체험 프로그램
+    query: 국립 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: keyword
+    keyword: 국립 어린이 체험 예약
+    query: 국립 어린이 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 가족 체험 예약
+    query: 국립 가족 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 주말 체험 예약
+    query: 국립 주말 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 체험 예약
+    query: site:.go.kr 국립 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 체험 신청
+    query: site:.go.kr 국립 체험 신청
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 체험 프로그램
+    query: site:.go.kr 국립 체험 프로그램
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 어린이 체험 예약
+    query: site:.go.kr 국립 어린이 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 가족 체험 예약
+    query: site:.go.kr 국립 가족 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 주말 체험 예약
+    query: site:.go.kr 국립 주말 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 체험 예약
+    query: site:.or.kr 국립 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 체험 신청
+    query: site:.or.kr 국립 체험 신청
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 체험 프로그램
+    query: site:.or.kr 국립 체험 프로그램
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 어린이 체험 예약
+    query: site:.or.kr 국립 어린이 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 가족 체험 예약
+    query: site:.or.kr 국립 가족 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 주말 체험 예약
+    query: site:.or.kr 국립 주말 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 체험 예약
+    query: site:.re.kr 국립 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 체험 신청
+    query: site:.re.kr 국립 체험 신청
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 체험 프로그램
+    query: site:.re.kr 국립 체험 프로그램
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 어린이 체험 예약
+    query: site:.re.kr 국립 어린이 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 가족 체험 예약
+    query: site:.re.kr 국립 가족 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 주말 체험 예약
+    query: site:.re.kr 국립 주말 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+- id: national_guided_tour_reservation
+  label: 국립 해설 예약
+  category: national_guided_tour
+  status: search_seed
+  priority: 1
+  seed_keywords:
+  - 국립 해설 예약
+  expanded_keywords:
+  - 국립 해설 신청
+  - 국립 전시 해설 예약
+  - 국립 생태 해설 예약
+  - 국립 숲 해설 예약
+  - 국립 문화해설 예약
+  query_count: 24
+  queries:
+  - type: keyword
+    keyword: 국립 해설 예약
+    query: 국립 해설 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 해설 신청
+    query: 국립 해설 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%8B%A0%EC%B2%AD
+  - type: keyword
+    keyword: 국립 전시 해설 예약
+    query: 국립 전시 해설 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 생태 해설 예약
+    query: 국립 생태 해설 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 숲 해설 예약
+    query: 국립 숲 해설 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%88%B2+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 문화해설 예약
+    query: 국립 문화해설 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EB%AC%B8%ED%99%94%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 해설 예약
+    query: site:.go.kr 국립 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 해설 신청
+    query: site:.go.kr 국립 해설 신청
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 전시 해설 예약
+    query: site:.go.kr 국립 전시 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 생태 해설 예약
+    query: site:.go.kr 국립 생태 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 숲 해설 예약
+    query: site:.go.kr 국립 숲 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%88%B2+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 문화해설 예약
+    query: site:.go.kr 국립 문화해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EB%AC%B8%ED%99%94%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 해설 예약
+    query: site:.or.kr 국립 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 해설 신청
+    query: site:.or.kr 국립 해설 신청
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 전시 해설 예약
+    query: site:.or.kr 국립 전시 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 생태 해설 예약
+    query: site:.or.kr 국립 생태 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 숲 해설 예약
+    query: site:.or.kr 국립 숲 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%88%B2+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 문화해설 예약
+    query: site:.or.kr 국립 문화해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EB%AC%B8%ED%99%94%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 해설 예약
+    query: site:.re.kr 국립 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 해설 신청
+    query: site:.re.kr 국립 해설 신청
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%ED%95%B4%EC%84%A4+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 전시 해설 예약
+    query: site:.re.kr 국립 전시 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 생태 해설 예약
+    query: site:.re.kr 국립 생태 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 숲 해설 예약
+    query: site:.re.kr 국립 숲 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%88%B2+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 문화해설 예약
+    query: site:.re.kr 국립 문화해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EB%AC%B8%ED%99%94%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+- id: national_lecture_reservation
+  label: 국립 강의 예약
+  category: national_lecture
+  status: search_seed
+  priority: 1
+  seed_keywords:
+  - 국립 강의 예약
+  expanded_keywords:
+  - 국립 강좌 예약
+  - 국립 교육 예약
+  - 국립 교육 신청
+  - 국립 강의 신청
+  - 국립 특강 예약
+  query_count: 24
+  queries:
+  - type: keyword
+    keyword: 국립 강의 예약
+    query: 국립 강의 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 강좌 예약
+    query: 국립 강좌 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%A2%8C+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 교육 예약
+    query: 국립 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 교육 신청
+    query: 국립 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: keyword
+    keyword: 국립 강의 신청
+    query: 국립 강의 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%8B%A0%EC%B2%AD
+  - type: keyword
+    keyword: 국립 특강 예약
+    query: 국립 특강 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%ED%8A%B9%EA%B0%95+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 강의 예약
+    query: site:.go.kr 국립 강의 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 강좌 예약
+    query: site:.go.kr 국립 강좌 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%A2%8C+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 교육 예약
+    query: site:.go.kr 국립 교육 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 교육 신청
+    query: site:.go.kr 국립 교육 신청
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 강의 신청
+    query: site:.go.kr 국립 강의 신청
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 특강 예약
+    query: site:.go.kr 국립 특강 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%ED%8A%B9%EA%B0%95+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 강의 예약
+    query: site:.or.kr 국립 강의 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 강좌 예약
+    query: site:.or.kr 국립 강좌 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%A2%8C+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 교육 예약
+    query: site:.or.kr 국립 교육 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 교육 신청
+    query: site:.or.kr 국립 교육 신청
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 강의 신청
+    query: site:.or.kr 국립 강의 신청
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 특강 예약
+    query: site:.or.kr 국립 특강 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%ED%8A%B9%EA%B0%95+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 강의 예약
+    query: site:.re.kr 국립 강의 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 강좌 예약
+    query: site:.re.kr 국립 강좌 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%A2%8C+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 교육 예약
+    query: site:.re.kr 국립 교육 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 교육 신청
+    query: site:.re.kr 국립 교육 신청
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 강의 신청
+    query: site:.re.kr 국립 강의 신청
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EA%B0%95%EC%9D%98+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 특강 예약
+    query: site:.re.kr 국립 특강 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%ED%8A%B9%EA%B0%95+%EC%98%88%EC%95%BD
+- id: national_exploration_reservation
+  label: 국립 탐방 예약
+  category: national_exploration
+  status: search_seed
+  priority: 1
+  seed_keywords:
+  - 국립 탐방 예약
+  expanded_keywords:
+  - 국립 탐방 신청
+  - 국립 생태탐방 예약
+  - 국립공원 탐방 예약
+  - 국립공원 탐방프로그램 예약
+  - 국립 자연탐방 예약
+  query_count: 24
+  queries:
+  - type: keyword
+    keyword: 국립 탐방 예약
+    query: 국립 탐방 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 탐방 신청
+    query: 국립 탐방 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%8B%A0%EC%B2%AD
+  - type: keyword
+    keyword: 국립 생태탐방 예약
+    query: 국립 생태탐방 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립공원 탐방 예약
+    query: 국립공원 탐방 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립공원 탐방프로그램 예약
+    query: 국립공원 탐방프로그램 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 자연탐방 예약
+    query: 국립 자연탐방 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EC%9E%90%EC%97%B0%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 탐방 예약
+    query: site:.go.kr 국립 탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 탐방 신청
+    query: site:.go.kr 국립 탐방 신청
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 생태탐방 예약
+    query: site:.go.kr 국립 생태탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립공원 탐방 예약
+    query: site:.go.kr 국립공원 탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립공원 탐방프로그램 예약
+    query: site:.go.kr 국립공원 탐방프로그램 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 자연탐방 예약
+    query: site:.go.kr 국립 자연탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EC%9E%90%EC%97%B0%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 탐방 예약
+    query: site:.or.kr 국립 탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 탐방 신청
+    query: site:.or.kr 국립 탐방 신청
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 생태탐방 예약
+    query: site:.or.kr 국립 생태탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립공원 탐방 예약
+    query: site:.or.kr 국립공원 탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립공원 탐방프로그램 예약
+    query: site:.or.kr 국립공원 탐방프로그램 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 자연탐방 예약
+    query: site:.or.kr 국립 자연탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EC%9E%90%EC%97%B0%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 탐방 예약
+    query: site:.re.kr 국립 탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 탐방 신청
+    query: site:.re.kr 국립 탐방 신청
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%ED%83%90%EB%B0%A9+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 생태탐방 예약
+    query: site:.re.kr 국립 생태탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%83%9D%ED%83%9C%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립공원 탐방 예약
+    query: site:.re.kr 국립공원 탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립공원 탐방프로그램 예약
+    query: site:.re.kr 국립공원 탐방프로그램 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90+%ED%83%90%EB%B0%A9%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 자연탐방 예약
+    query: site:.re.kr 국립 자연탐방 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EC%9E%90%EC%97%B0%ED%83%90%EB%B0%A9+%EC%98%88%EC%95%BD
+- id: museum_reservation
+  label: 박물관 예약
+  category: museum_reservation
+  status: search_seed
+  priority: 1
+  seed_keywords:
+  - 박물관 예약
+  expanded_keywords:
+  - 박물관 교육 예약
+  - 박물관 체험 예약
+  - 박물관 해설 예약
+  - 국립 박물관 예약
+  - 국립박물관 교육 신청
+  - 국립박물관 체험 프로그램
+  query_count: 28
+  queries:
+  - type: keyword
+    keyword: 박물관 예약
+    query: 박물관 예약
+    google_search_url: https://www.google.com/search?q=%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 박물관 교육 예약
+    query: 박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 박물관 체험 예약
+    query: 박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 박물관 해설 예약
+    query: 박물관 해설 예약
+    google_search_url: https://www.google.com/search?q=%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립 박물관 예약
+    query: 국립 박물관 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: keyword
+    keyword: 국립박물관 교육 신청
+    query: 국립박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: keyword
+    keyword: 국립박물관 체험 프로그램
+    query: 국립박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 박물관 예약
+    query: site:.go.kr 박물관 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 박물관 교육 예약
+    query: site:.go.kr 박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 박물관 체험 예약
+    query: site:.go.kr 박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 박물관 해설 예약
+    query: site:.go.kr 박물관 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립 박물관 예약
+    query: site:.go.kr 국립 박물관 예약
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립박물관 교육 신청
+    query: site:.go.kr 국립박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: go_kr
+    domain_scope_label: 정부 도메인
+    keyword: 국립박물관 체험 프로그램
+    query: site:.go.kr 국립박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=site%3A.go.kr+%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 박물관 예약
+    query: site:.or.kr 박물관 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 박물관 교육 예약
+    query: site:.or.kr 박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 박물관 체험 예약
+    query: site:.or.kr 박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 박물관 해설 예약
+    query: site:.or.kr 박물관 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립 박물관 예약
+    query: site:.or.kr 국립 박물관 예약
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립박물관 교육 신청
+    query: site:.or.kr 국립박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: or_kr
+    domain_scope_label: 공공기관 도메인
+    keyword: 국립박물관 체험 프로그램
+    query: site:.or.kr 국립박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=site%3A.or.kr+%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 박물관 예약
+    query: site:.re.kr 박물관 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 박물관 교육 예약
+    query: site:.re.kr 박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 박물관 체험 예약
+    query: site:.re.kr 박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 박물관 해설 예약
+    query: site:.re.kr 박물관 해설 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립 박물관 예약
+    query: site:.re.kr 국립 박물관 예약
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD+%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%98%88%EC%95%BD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립박물관 교육 신청
+    query: site:.re.kr 국립박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - type: site_scoped_keyword
+    domain_scope: re_kr
+    domain_scope_label: 연구/공공기관 도메인
+    keyword: 국립박물관 체험 프로그램
+    query: site:.re.kr 국립박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=site%3A.re.kr+%EA%B5%AD%EB%A6%BD%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+summary:
+  target_count: 5
+  query_count: 124
+  seed_keywords:
+  - 국립 체험 예약
+  - 국립 해설 예약
+  - 국립 강의 예약
+  - 국립 탐방 예약
+  - 박물관 예약
+  categories:
+  - national_experience
+  - national_guided_tour
+  - national_lecture
+  - national_exploration
+  - museum_reservation

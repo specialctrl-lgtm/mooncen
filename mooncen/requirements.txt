@@ -1,0 +1,27 @@
+# Web Scraping
+requests==2.34.2
+beautifulsoup4==4.15.0
+lxml==6.1.1
+defusedxml==0.7.1
+selenium==4.45.0
+
+# Database
+psycopg2-binary==2.9.12
+SQLAlchemy==2.0.51
+
+# Environment Variables
+python-dotenv==1.2.2
+
+# Data Processing
+pandas==3.0.3
+PyYAML==6.0.3
+
+# Backend
+fastapi==0.139.0
+uvicorn==0.51.0
+pydantic==2.13.4
+PyJWT==2.13.0
+argon2-cffi==25.1.0
+
+# Utilities
+geopy==2.4.1

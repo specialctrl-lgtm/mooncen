@@ -1,0 +1,146 @@
+version: 1
+generated_at: '2026-07-23T08:31:15+09:00'
+domain_category: 청소년
+source_group: youth
+summary:
+  targets: 4
+  by_status:
+    ready: 1
+    partial: 1
+    blocked: 1
+    duplicate_url:MUNI_SUGANG_ULL_OR_KR_8EC76DA5: 1
+  by_service_group:
+    공공강좌: 1
+  by_collection_type:
+    ? hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+    : 1
+    static_html: 2
+    duplicate: 1
+targets:
+- provider: MUNI_ONLINE_HNYOUTH_KR_6F390C33
+  name: 하남시청소년수련관 전체 교육강좌
+  branch: 하남시청소년수련관
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 청소년재단
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+  crawler_module: Crawler.municipal_hanam
+  crawler_callable: collect
+  parser_assigned: hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+  crawler_status: ready
+  priority: 1
+  url: https://online.hnyouth.kr/HnYouth/
+  list_urls:
+  - https://online.hnyouth.kr/HnYouth/
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경기도 하남시
+  municipality_code: '4145000000'
+  municipality_full_name: 경기도 하남시
+  max_pages: 240
+  detail_limit: 650
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 하남시청소년수련관의 강좌 identity·운영기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_evidence_url: https://online.hnyouth.kr/HnYouth/
+  ownership_scope: hanam_youth_training_centre_current_lecture_ledger
+  covered_municipalities:
+  - code: '4145000000'
+    sido: 경기도
+    sigungu: 하남시
+    full_name: 경기도 하남시
+  last_quality:
+    collected: 8
+    score: 100.0
+    grade: A
+    parser: hanam_owner_dispatch+complete_pagination+empty_sentinels+stable_edges+all_current_safe_details+official_branches+pii_minimized+no_application_calls
+    error_kind: ''
+    checked_at: '2026-07-23T08:28:32+09:00'
+    source_total: 8
+    current_count: 8
+    returned_count: 8
+    sentinel_page: 2
+    detail_pages: 8
+    pagination_complete: true
+    details_complete: true
+    pii_payload_persisted: false
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_provider: MUNI_ONLINE_HNYOUTH_KR_6F390C33
+    canonical_candidate_id: MUNI_IR_00CC3018211F
+    deprecated_provider: MUNI_ONLINE_HNYOUTH_KR_A03457AE
+    provider_decision: retain_incumbent_owner_and_disable_deprecated_guide_alias
+  crawler_notes:
+  - 공개 AJAX 목록 8건과 2페이지 빈 sentinel, 공개 상세 8건을 전수 검증했다.
+  - 신청·로그인 endpoint는 호출하지 않으며 기존 guide.php provider는 같은 원장의 폐기된 안내 별칭이다.
+- provider: MUNI_PORTAL_ICBP_GO_KR_3A04F811
+  name: 부평구청소년수련관
+  branch: 인천광역시 부평구
+  collection_category: 청소년
+  domain_category: 청소년
+  operator_type: 청소년재단
+  source_group: youth
+  collection_type: static_html
+  crawler_status: partial
+  priority: 2
+  url: https://portal.icbp.go.kr/bpy/education/program.asp
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 10
+    score: 64.0
+    grade: C
+    parser: card+detail+table
+    error_kind: ''
+- provider: MUNI_WWW_JPYOUTH_CO_KR_5E838FBF
+  name: 증평군청소년수련관
+  branch: 충청북도 증평군
+  collection_category: 청소년
+  domain_category: 청소년
+  operator_type: 청소년재단
+  source_group: youth
+  collection_type: static_html
+  crawler_status: blocked
+  blocked_reason: tls_certificate_hostname_mismatch
+  priority: 2
+  url: http://www.jpyouth.co.kr/sub.php?menukey=54
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청북도
+  last_quality:
+    collected: 202
+    score: 91.0
+    grade: A
+    parser: jpyouth_table+detail
+    error_kind: ''
+    report: logs/municipal_crawler_reports/municipal_yaml_crawler_20260605_134128.yaml
+  notes: 2026-07-10 HTTPS certificate does not match the official hostname; plaintext HTTP execution is disabled.
+- provider: MUNI_WWW_UI4U_GO_KR_F1E0CC26
+  name: 의정부시청
+  branch: 경기도 의정부시
+  collection_category: 청소년
+  domain_category: 청소년
+  operator_type: 청소년재단
+  source_group: youth
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_SUGANG_ULL_OR_KR_8EC76DA5
+  duplicate_of: MUNI_SUGANG_ULL_OR_KR_8EC76DA5
+  superseded_by: MUNI_SUGANG_ULL_OR_KR_8EC76DA5
+  disabled_reason: superseded_by:MUNI_SUGANG_ULL_OR_KR_8EC76DA5
+  blocked_reason: duplicate_of:MUNI_SUGANG_ULL_OR_KR_8EC76DA5
+  priority: 2
+  url: https://www.ui4u.go.kr/reservation/youthProgram/list.do?mId=0104000000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 10
+    score: 71.0
+    grade: B
+    parser: card+detail
+    error_kind: ''

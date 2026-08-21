@@ -1,0 +1,882 @@
+/* Final mobile interaction layer. Keep this import last so component state wins over legacy responsive overrides. */
+
+body .class-thumb {
+  position: relative;
+}
+
+body .class-thumb-open {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+body .class-thumb-open:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: -4px;
+}
+
+body .class-thumb .status-badge {
+  z-index: 2;
+}
+
+body .class-thumb .favorite-button {
+  z-index: 3;
+}
+
+body .class-card.is-mobile-essential .meta-schedule em {
+  color: #475569;
+}
+
+body .class-card.is-mobile-essential .class-price-block strong {
+  color: #0f766e;
+}
+
+body .class-card.is-mobile-essential .class-center-line .provider-icon,
+body .class-card.is-mobile-essential .class-center-line .class-provider-icon,
+body .class-card.is-mobile-essential .class-center-line strong {
+  display: none;
+}
+
+body .class-card.is-mobile-essential .class-actions .apply-action {
+  color: #ffffff;
+  background: #0f766e;
+}
+
+@media (max-width: 900px) {
+  body .mobile-filter-bar {
+    position: relative;
+    top: auto;
+    z-index: 35;
+    order: -1 !important;
+    display: flex !important;
+    min-height: 52px;
+    margin: 0 0 10px;
+    padding: 6px 8px 6px 12px;
+    border: 1px solid #cfe8e4;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(10px);
+  }
+
+  body .mobile-filter-bar button {
+    min-width: 88px;
+    min-height: 44px;
+    padding: 0 14px;
+  }
+
+  body .layout > .sidebar-shell,
+  body .layout > .sidebar-shell:not(.open) {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 0 0 auto !important;
+    z-index: 8600 !important;
+    width: min(420px, 94vw) !important;
+    max-width: 94vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding: 60px 12px 24px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateX(100%) !important;
+    background: #ffffff !important;
+    box-shadow: -20px 0 48px rgba(15, 23, 42, 0.2) !important;
+  }
+
+  body .layout > .sidebar-shell.open {
+    display: block !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(0) !important;
+  }
+
+  body .layout > .sidebar-shell.open .mobile-filter-close {
+    position: absolute !important;
+    top: 8px !important;
+    right: 10px !important;
+    z-index: 3 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid #99d8ce;
+    border-radius: 999px;
+    color: #0f766e;
+    font-size: 14px;
+    font-weight: 900;
+    background: #f0fdfa;
+  }
+
+  body .filter-scrim {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 8590 !important;
+    background: rgba(15, 23, 42, 0.48) !important;
+  }
+
+  body .layout > .sidebar-shell.open .filter-panel,
+  body .layout > .sidebar-shell.open .mooncen-filter-bar {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body .main-quick-filter-chip,
+  body .branch-quick-filter-chip,
+  body .nearby-mobile-map-toggle,
+  body .nearby-current-location-button,
+  body .nearby-radius-control [role='radio'] {
+    min-height: 44px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body .site-header {
+    min-height: 104px;
+  }
+
+  body .site-header .topbar.header-inner,
+  body .header-inner {
+    height: 104px;
+    min-height: 104px;
+    max-height: 104px;
+    grid-template-rows: 48px 44px;
+    row-gap: 4px;
+  }
+
+  body .header-inner .utility-nav,
+  body .header-inner .utility-nav button,
+  body .header-inner .user-session-badge {
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
+  }
+
+  body .header-inner .utility-nav button {
+    width: 36px;
+    min-width: 36px;
+    padding-inline: 2px;
+  }
+
+  body .mobile-home-page {
+    width: min(calc(100vw - 16px), 560px);
+    margin: 8px auto 24px;
+    gap: 10px;
+  }
+
+  body .mobile-home-hero,
+  body .mobile-nearby-cta,
+  body .mobile-results-section {
+    border: 1px solid #dcebe8;
+    border-radius: 16px;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  body .mobile-home-hero {
+    padding: 12px;
+  }
+
+  body .mobile-home-hero h1 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  body .mobile-scope-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px;
+  }
+
+  body .mobile-scope-tabs button {
+    min-height: 44px;
+    grid-template-columns: 20px minmax(0, 1fr) !important;
+    justify-items: start !important;
+    gap: 4px;
+    padding: 4px 6px;
+    border-radius: 11px;
+    text-align: left !important;
+  }
+
+  body .mobile-scope-tabs .scope-icon {
+    display: block !important;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+  }
+
+  body .mobile-scope-tabs strong {
+    font-size: 12px;
+  }
+
+  body .mobile-category-quick {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e8f0ef;
+  }
+
+  body .mobile-category-scroll {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    overflow: visible !important;
+  }
+
+  body .mobile-category-scroll button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    padding: 0 4px !important;
+    border-radius: 11px;
+  }
+
+  body .mobile-nearby-cta {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 11px 12px;
+  }
+
+  body .mobile-nearby-cta p {
+    margin-bottom: 2px;
+  }
+
+  body .mobile-nearby-cta strong {
+    font-size: 14px;
+  }
+
+  body .mobile-nearby-cta small {
+    display: none;
+  }
+
+  body .mobile-nearby-actions {
+    display: block;
+  }
+
+  body .mobile-nearby-actions button {
+    min-width: 82px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid #14b8a6;
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 900;
+    background: #0f766e;
+  }
+
+  body .mobile-results-section {
+    padding: 12px 0 0;
+    overflow: hidden;
+  }
+
+  body .mobile-section-heading {
+    margin: 0 12px 10px;
+  }
+
+  body .mobile-section-heading > div {
+    min-width: 0;
+  }
+
+  body .mobile-section-heading p,
+  body .mobile-section-heading small {
+    margin: 0;
+    color: #64748b;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  body .mobile-section-heading h2 {
+    margin: 1px 0;
+    font-size: 17px;
+  }
+
+  body .mobile-results-reset {
+    min-width: 64px;
+    min-height: 44px;
+    padding: 0 10px;
+    border: 1px solid #dbe5ea;
+    border-radius: 10px;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 800;
+    background: #ffffff;
+  }
+
+  body .mobile-course-list {
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  body .mobile-empty-results {
+    margin: 0 8px;
+    padding: 16px;
+    display: grid;
+    gap: 5px;
+    color: #475569;
+    text-align: center;
+    border-radius: 12px;
+    background: #f8fafc;
+  }
+
+  body .mobile-empty-results strong {
+    color: #0f172a;
+    font-size: 15px;
+  }
+
+  body .mobile-empty-results span {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  body .mobile-empty-results button {
+    min-height: 44px;
+    margin-top: 7px;
+    border: 1px solid #14b8a6;
+    border-radius: 10px;
+    color: #0f766e;
+    font-weight: 900;
+    background: #f0fdfa;
+  }
+
+  body .class-card.is-mobile-essential {
+    position: relative;
+    grid-template-columns: 116px minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    border: 1px solid #e2ebe9;
+    border-radius: 14px;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  body .class-card.is-mobile-essential.no-course-image {
+    grid-template-columns: 88px minmax(0, 1fr) !important;
+  }
+
+  body .class-card.is-mobile-essential .class-thumb {
+    align-self: start;
+    width: 104px !important;
+    height: 128px !important;
+    min-height: 128px !important;
+    margin: 10px 0 0 10px;
+    overflow: hidden;
+    border-radius: 11px;
+  }
+
+  body .class-card.is-mobile-essential.no-course-image .class-thumb {
+    width: 76px !important;
+    height: 92px !important;
+    min-height: 92px !important;
+  }
+
+  body .class-card.is-mobile-essential .class-thumb-open {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  body .class-card.is-mobile-essential .class-thumb-open:focus-visible {
+    outline: 3px solid #0f766e;
+    outline-offset: -4px;
+  }
+
+  body .class-card.is-mobile-essential .status-badge {
+    z-index: 2;
+    top: auto;
+    bottom: 6px;
+    left: 6px;
+    max-width: calc(100% - 12px);
+  }
+
+  body .class-card.is-mobile-essential .favorite-button {
+    z-index: 3;
+    top: 4px;
+    right: 4px;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+
+  body .class-card.is-mobile-essential .class-body {
+    min-height: 0;
+    padding: 11px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
+  }
+
+  body .class-card.is-mobile-essential .class-title-row {
+    order: 1;
+  }
+
+  body .class-card.is-mobile-essential .class-title-row h3 {
+    min-height: 0;
+    max-height: 40px;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.3;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  body .class-card.is-mobile-essential .class-title-button {
+    min-height: 44px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  body .class-card.is-mobile-essential .class-center-line {
+    order: 4;
+    min-height: 20px;
+    margin: 2px 0 5px;
+    font-size: 11px;
+  }
+
+  body .class-card.is-mobile-essential .class-center-line .provider-icon,
+  body .class-card.is-mobile-essential .class-center-line .class-provider-icon,
+  body .class-card.is-mobile-essential .class-center-line strong {
+    display: none;
+  }
+
+  body .class-card.is-mobile-essential .class-center-line > span:last-child em {
+    font-weight: 850;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta {
+    order: 2;
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    gap: 3px;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta li {
+    min-height: 20px;
+    gap: 5px;
+    font-size: 11px;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta li > span {
+    min-width: 28px;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta .meta-age {
+    min-height: 22px;
+    padding: 0 7px;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta .meta-age > span {
+    color: #0f766e;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta .meta-schedule,
+  body .class-card.is-mobile-essential .class-compact-meta .meta-apply-date {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 5px;
+    align-items: start;
+  }
+
+  body .class-card.is-mobile-essential .class-compact-meta .meta-schedule em {
+    grid-column: 2;
+    color: #64748b;
+  }
+
+  body .class-card.is-mobile-essential .meta-apply-date.is-missing strong {
+    color: #b45309;
+  }
+
+  body .class-card.is-mobile-essential .class-price-block {
+    order: 3;
+    min-height: 22px;
+    margin: 6px 0;
+  }
+
+  body .class-card.is-mobile-essential .class-price-block strong {
+    color: #0f766e;
+    font-size: 16px;
+  }
+
+  body .class-card.is-mobile-essential .class-price-block span {
+    display: none;
+  }
+
+  body .class-card.is-mobile-essential .class-actions {
+    order: 5;
+    grid-template-columns: 1fr;
+    margin-top: 8px;
+  }
+
+  body .class-card.is-mobile-essential .class-actions button {
+    height: 44px;
+    min-height: 44px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+
+  body .class-card.is-mobile-essential .class-actions .apply-action {
+    color: #ffffff;
+    background: #0f766e;
+  }
+
+  body .mobile-more-results {
+    width: calc(100% - 16px);
+    min-height: 44px;
+    margin: 10px 8px 12px;
+  }
+
+  body .selected-branch-summary-card:has(.summary-branch-empty) {
+    display: none !important;
+  }
+
+  body .course-detail-close-button,
+  body .course-detail-summary-sessions,
+  body .course-detail-summary-price,
+  body .course-detail-extra-row,
+  body .course-detail-compact-list > div:not(.course-detail-info-target):not(.course-detail-info-instructor):not(.course-detail-info-capacity),
+  body .course-detail-footer .detail-favorite-action {
+    display: none !important;
+  }
+
+  body .course-detail-header-button {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+
+  body .course-detail-header-actions {
+    gap: 4px;
+  }
+
+  body .course-detail-body {
+    padding: 10px 10px calc(72px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  body .course-detail-hero {
+    height: 156px;
+    min-height: 156px;
+    max-height: 156px;
+    aspect-ratio: auto;
+    border-radius: 14px;
+  }
+
+  body .course-detail-title-block {
+    padding: 11px;
+    border-radius: 14px;
+  }
+
+  body .course-detail-title-block h2 {
+    margin-top: 7px;
+    font-size: 19px;
+  }
+
+  body .course-detail-brand-chip,
+  body .course-detail-provider-line .provider-icon,
+  body .course-detail-tags span:nth-child(n + 3) {
+    display: none;
+  }
+
+  body .course-detail-tags {
+    margin-top: 7px;
+  }
+
+  body .course-detail-summary-card {
+    grid-template-columns: 1fr;
+    border-radius: 14px;
+  }
+
+  body .course-detail-summary-card > div,
+  body .course-detail-summary-card > div:nth-child(2) {
+    grid-column: auto;
+    grid-template-columns: 28px 66px minmax(0, 1fr);
+    align-items: center;
+    min-height: 48px;
+    padding: 7px 9px;
+    border-right: 0;
+    border-bottom: 1px solid #d7f0ec;
+  }
+
+  body .course-detail-summary-card > div:last-child {
+    border-bottom: 0;
+  }
+
+  body .course-detail-summary-card .course-detail-summary-icon {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  body .course-detail-summary-card > div > span:not(.course-detail-summary-icon) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  body .course-detail-summary-card strong {
+    grid-column: 3;
+    grid-row: 1;
+    width: auto;
+    overflow-wrap: anywhere;
+  }
+
+  body .course-detail-compact-list {
+    grid-template-columns: 1fr;
+    border-radius: 14px;
+  }
+
+  body .course-detail-compact-list > div,
+  body .course-detail-compact-list > div:nth-last-child(-n + 2) {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 8px;
+    padding: 10px;
+    border-right: 0;
+    border-bottom: 1px solid #edf2f2;
+  }
+
+  body .course-detail-compact-list > div:last-of-type {
+    border-bottom: 0;
+  }
+
+  body .course-detail-compact-list dt {
+    margin: 0;
+  }
+
+  body .course-detail-fee-summary {
+    padding: 11px;
+    border-radius: 14px;
+  }
+
+  body .course-detail-fee-summary strong {
+    font-size: 22px;
+  }
+
+  body .course-detail-description-card {
+    padding: 11px;
+  }
+
+  body .course-detail-footer {
+    grid-template-columns: 0.9fr 1.4fr;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  body .course-detail-footer button {
+    min-height: 48px;
+  }
+
+  body .course-detail-footer .detail-source-action {
+    color: #ffffff;
+    background: #0f766e;
+  }
+}
+
+@media (max-width: 350px) {
+  body .header-inner .brand-logo {
+    max-width: 108px;
+  }
+
+  body .mobile-scope-tabs button {
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+
+  body .mobile-scope-tabs .scope-icon {
+    display: none !important;
+  }
+
+  body .class-card.is-mobile-essential {
+    grid-template-columns: 98px minmax(0, 1fr) !important;
+  }
+
+  body .class-card.is-mobile-essential.no-course-image {
+    grid-template-columns: 78px minmax(0, 1fr) !important;
+  }
+
+  body .class-card.is-mobile-essential .class-thumb {
+    width: 88px !important;
+    height: 112px !important;
+  }
+
+  body .class-card.is-mobile-essential.no-course-image .class-thumb {
+    width: 66px !important;
+    height: 82px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body .layout.mobile-home-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  body .layout.mobile-home-layout > .mobile-filter-bar,
+  body .layout.mobile-home-layout > .filter-scrim,
+  body .layout.mobile-home-layout > .sidebar-shell .mobile-filter-close {
+    display: none !important;
+  }
+
+  body .layout.mobile-home-layout > .sidebar-shell,
+  body .layout.mobile-home-layout > .sidebar-shell:not(.open) {
+    position: relative !important;
+    inset: auto !important;
+    z-index: auto !important;
+    order: 1 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body .layout.mobile-home-layout > .sidebar-shell .filter-panel,
+  body .layout.mobile-home-layout > .sidebar-shell .mooncen-filter-bar {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-scope .filter-mode-selector {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-scope .filter-mode-selector button {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: 28px auto !important;
+    justify-items: center !important;
+    align-content: center !important;
+    gap: 4px !important;
+    min-height: 68px !important;
+    padding: 5px 3px !important;
+    text-align: center !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-scope .filter-mode-selector .scope-icon {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-scope .scope-card-copy {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-scope .filter-mode-selector strong {
+    font-size: 11.5px !important;
+    line-height: 14px !important;
+    text-align: center !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-scope .filter-mode-selector small {
+    display: none !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-detail {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-detail > .mooncen-filter-controls {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+  }
+
+  body .layout.mobile-home-layout .mooncen-filter-detail > .mooncen-filter-actions {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+  }
+
+  body .layout.mobile-home-layout > .main-content {
+    order: 2 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body .layout.mobile-home-layout > .main-content > .popular-section {
+    display: block !important;
+  }
+
+  body .layout.mobile-home-layout
+    .branch-course-group.aggregate-course-group
+    > .branch-course-group-header {
+    display: none !important;
+  }
+
+  body .class-card.is-mobile-essential {
+    grid-template-columns: 108px minmax(0, 1fr) !important;
+  }
+
+  body .class-card.is-mobile-essential.no-course-image {
+    grid-template-columns: 88px minmax(0, 1fr) !important;
+  }
+
+  body .class-card.is-mobile-essential .class-thumb,
+  body .class-card.is-mobile-essential.no-course-image .class-thumb {
+    align-self: stretch !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  body .class-card.is-mobile-essential .class-body {
+    padding: 12px 10px 10px !important;
+    align-items: flex-start !important;
+  }
+
+  body .class-card.is-mobile-essential .class-title-row,
+  body .class-card.is-mobile-essential .class-title-button,
+  body .class-card.is-mobile-essential .class-title-row h3 {
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  body .class-card.is-mobile-essential .class-title-button {
+    justify-content: flex-start !important;
+  }
+}

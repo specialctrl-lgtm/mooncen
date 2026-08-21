@@ -1,0 +1,10 @@
+[Unit]
+Description=Run MoonCen Cloudflared role guard every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=1min
+Unit=mooncen-cloudflared-role-guard.service
+
+[Install]
+WantedBy=timers.target

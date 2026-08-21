@@ -1,0 +1,2065 @@
+version: 1
+generated_at: '2026-07-23T07:21:38+09:00'
+domain_category: 제외
+source_group: deprecated
+summary:
+  targets: 90
+  by_status:
+    deprecated: 90
+  by_service_group: {}
+  by_collection_type:
+    static_html: 65
+    unknown: 21
+    browser_or_retry: 2
+    deprecated_semantic_duplicate_query_order: 1
+    static_html+detail_html: 1
+targets:
+- provider: MUNI_WWW_ASIATODAY_CO_KR_1A4ED894
+  name: 아시아투데이
+  branch: 전라북도 김제시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.asiatoday.co.kr/kn/view.php?key=20250711010006565
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 1
+    score: 30.0
+    grade: D
+    parser: detail
+    error_kind: ''
+- provider: MUNI_WWW_BOEUNI_COM_CAE0A144
+  name: 보은신문
+  branch: 충청북도 보은군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.boeuni.com/news/articleView.html?idxno=80044
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_BRCITY_KR_ABC5C99C
+  name: 보령시장신문
+  branch: 충청남도 보령시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.brcity.kr/news/articleView.html?idxno=323845
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_CCTIMES_KR_9E4165AC
+  name: 충청타임즈
+  branch: 충청남도 서천군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.cctimes.kr/news/articleView.html?idxno=760967
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 1
+    score: 35.0
+    grade: D
+    parser: card
+    error_kind: ''
+- provider: MUNI_WWW_DOMIN_CO_KR_4F5B92F6
+  name: 전북도민일보
+  branch: 전라북도 완주군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.domin.co.kr/news/articleView.html?idxno=1317923
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_GGILBO_COM_1E36269D
+  name: 금강일보
+  branch: 충청북도 증평군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.ggilbo.com/news/articleView.html?idxno=1099836
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청북도
+  last_quality:
+    collected: 2
+    score: 32.5
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_GGILBO_COM_25CD8B9B
+  name: 금강일보
+  branch: 충청남도 태안군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.ggilbo.com/news/articleView.html?idxno=1141220
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 2
+    score: 32.5
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_GNDOMIN_COM_8D9C1462
+  name: 경남도민신문
+  branch: 경상남도 함안군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.gndomin.com/news/articleView.html?idxno=330193
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_HYUNDAIILBO_COM_9D401DB5
+  name: 현대일보
+  branch: 경기도 고양시 덕양구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.hyundaiilbo.com/news/articleView.html?idxno=549478
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_IDAEGU_CO_KR_C36C8D10
+  name: 대구신문
+  branch: 대구광역시 중구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.idaegu.co.kr/news/articleView.html?idxno=345545
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대구광역시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_IGANGBUK_COM_6CE2C0DB
+  name: 서울강북신문
+  branch: 서울특별시 강북구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.igangbuk.com/news/hangjeng/1
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_IGIMPO_COM_1ADCF24D
+  name: 김포신문
+  branch: 경기도 김포시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.igimpo.com/news/articleView.html?idxno=86425
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 9
+    score: 30.0
+    grade: D
+    parser: card
+    error_kind: ''
+- provider: MUNI_WWW_IMEDIALIFE_CO_KR_062C0816
+  name: 미디어생활
+  branch: 인천광역시 옹진군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.imedialife.co.kr/news/articleView.html?idxno=55812
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_JEOLLAILBO_COM_E2C4A23D
+  name: 전라일보
+  branch: 전라북도 장수군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.jeollailbo.com/news/articleView.html?idxno=647630
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_JJN_CO_KR_BE451114
+  name: 전북중앙
+  branch: 전라북도 완주군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.jjn.co.kr/news/articleView.html?idxno=1029036
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 4
+    score: 30.0
+    grade: D
+    parser: card
+    error_kind: ''
+- provider: MUNI_WWW_JNILBO_COM_AA34BFC6
+  name: 전남일보
+  branch: 전라남도 강진군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.jnilbo.com/news/articleView.html?idxno=77768828662
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_JNTODAY_CO_KR_A852D440
+  name: 전남투데이
+  branch: 광주광역시 남구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.jntoday.co.kr/news/article.html?no=114520
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 4
+    score: 30.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_JOONGDO_CO_KR_4641FD18
+  name: 중도일보
+  branch: 충청남도 태안군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.joongdo.co.kr/web/view.php?key=20260414010004179
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 1
+    score: 35.0
+    grade: D
+    parser: detail
+    error_kind: ''
+- provider: MUNI_WWW_JOONGDO_CO_KR_70EB1F70
+  name: 중도일보
+  branch: 충청남도 홍성군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.joongdo.co.kr/web/view.php?key=20260212010004505
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 1
+    score: 35.0
+    grade: D
+    parser: detail
+    error_kind: ''
+- provider: MUNI_WWW_KBSM_NET_7A3293DA
+  name: 경북신문
+  branch: 경상북도 의성군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.kbsm.net/news/view.php?idx=260725
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_KHAN_CO_KR_80D7D960
+  name: 경향신문
+  branch: 광주광역시 서구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.khan.co.kr/article/202409191451011
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 6
+    score: 30.8
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_KJILBO_CO_KR_959FB374
+  name: 광주전남일보
+  branch: 광주광역시 남구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.kjilbo.co.kr/news/articleView.html?idxno=88917
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 1
+    score: 30.0
+    grade: D
+    parser: detail
+    error_kind: ''
+- provider: MUNI_WWW_KMAEIL_COM_0F8D34A4
+  name: 경인매일
+  branch: 경기도 남양주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.kmaeil.com/news/articleView.html?idxno=442365
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_KMAEIL_COM_6EBAD70A
+  name: 경인매일
+  branch: 경기도 남양주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.kmaeil.com/news/articleView.html?idxno=332745
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_KMAEIL_COM_9CC7DF66
+  name: 경인매일
+  branch: 경기도 포천시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.kmaeil.com/news/articleView.html?idxno=624487
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_KYONGBUK_CO_KR_BFEB5440
+  name: 경북일보
+  branch: 경상북도 의성군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.kyongbuk.co.kr/news/articleView.html?idxno=4064352
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_MYGOYANG_COM_1C604FC3
+  name: 고양신문
+  branch: 경기도 고양시 일산동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.mygoyang.com/news/articleView.html?idxno=68464
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: NOT_FOUND
+- provider: MUNI_WWW_POINTE_CO_KR_BD2C3897
+  name: 포인트경제
+  branch: 전라북도 무주군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.pointe.co.kr/news/articleView.html?idxno=33593
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: MUNI_WWW_SEOULILBO_COM_5760C3B9
+  name: 서울일보
+  branch: 경기도 가평군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.seoulilbo.com/news/articleView.html?idxno=821123
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 10
+    score: 27.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_TODAYAN_COM_AB89C00D
+  name: 투데이안
+  branch: 전라북도 정읍시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.todayan.com/news/articleView.html?idxno=562984
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 1
+    score: 30.0
+    grade: D
+    parser: detail
+    error_kind: ''
+- provider: MUNI_WWW_YANGSANILBO_COM_1B9AB18C
+  name: 양산신문
+  branch: 경상남도 양산시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.yangsanilbo.com/news/articleView.html?idxno=106249
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  last_quality:
+    collected: 10
+    score: 44.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_YG21_CO_KR_0BEC433F
+  name: 영광21
+  branch: 전라남도 영광군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.yg21.co.kr/news/articleView.html?idxno=54246
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 1
+    score: 30.0
+    grade: D
+    parser: card
+    error_kind: ''
+- provider: MUNI_WWW_YONGIN21_CO_KR_9368AEBC
+  name: 용인시민신문
+  branch: 경기도 용인시 기흥구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.yongin21.co.kr/news/articleView.html?idxno=67012
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+- provider: NATIONAL_ECOLOGY_CENTER
+  name: 국립생태원
+  branch: 국립생태원
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 국립/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 1
+  url: https://www.nie.re.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 충청남도 서천군
+  last_quality:
+    collected: 60
+    saved: 23
+    score: 82.8
+    grade: B
+    parser: national_ecology_cards
+    error_kind: ''
+  deprecated_at: '2026-06-05T16:36:44'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-05T16:36:44'
+- provider: NATIONAL_PARK_SERVICE
+  name: 국립공원공단
+  branch: 국립공원공단
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 1
+  url: https://www.knps.or.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 전국
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+  deprecated_at: '2026-06-05T16:37:18'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-05T16:37:18'
+- provider: SEJONG_NATIONAL_ARBORETUM
+  name: 국립세종수목원
+  branch: 국립세종수목원
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 국립/공공기관
+  source_group: deprecated
+  collection_type: browser_or_retry
+  crawler_status: deprecated
+  priority: 1
+  url: https://www.sjna.or.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 세종특별자치시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: CONNECTION
+  deprecated_at: '2026-06-05T16:37:52'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-05T16:37:52'
+- provider: MARINE_BIODIVERSITY_INSTITUTE
+  name: 국립해양생물자원관
+  branch: 국립해양생물자원관
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 국립/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 1
+  url: https://www.mabik.re.kr/prog/eduPrgrm/kor/sub02_03_01/01/list.do
+  source: ops_console_url_update
+  origin: manual
+  region: 충청남도 서천군
+  last_quality:
+    collected: 2
+    score: 40.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  target_id: 5daa428f41cf5755
+  updated_at: '2026-06-05T16:34:17'
+  manual_action: delete
+  manual_updated_at: '2026-06-05T16:40:43'
+  deprecated_at: '2026-06-05T16:40:43'
+  deprecated_reason: deleted from ops console
+- provider: NATIONAL_PARK_RESERVATION
+  name: 국립공원공단 예약시스템
+  branch: 국립공원공단 예약시스템
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 1
+  url: https://res.knps.or.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 전국
+  last_quality:
+    collected: 3
+    score: 40.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-05T17:40:36'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-05T17:40:36'
+- provider: NATIONAL_GARDEN_INSTITUTE
+  name: 한국수목원정원관리원
+  branch: 한국수목원정원관리원
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.koagi.or.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: ?꾧뎅
+  last_quality:
+    collected: 10
+    score: 87.5
+    grade: A
+    parser: honam_bio_cards
+    error_kind: ''
+  deprecated_at: '2026-06-05T17:42:07'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-05T17:42:07'
+- provider: ASIA_CULTURE_CENTER
+  name: 국립아시아문화전당
+  branch: 국립아시아문화전당
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.acc.go.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+  deprecated_at: '2026-06-05T17:42:54'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-05T17:42:54'
+- provider: MUNI_LIFELONG_MOKPO_GO_KR_0D4168F9
+  name: 목포시 평생학습포털
+  branch: 전라남도 목포시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: unknown
+  crawler_status: deprecated
+  priority: 2
+  url: https://lifelong.mokpo.go.kr/bbs/board.php?bo_table=sub510
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: ''
+  deprecated_at: '2026-06-06T09:21:24'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-06T09:21:24'
+- provider: MUNI_HYEDU_GNE_GO_KR_DA4FC571
+  name: 경상남도함양교육지원청
+  branch: 경상남도 함양군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://hyedu.gne.go.kr/hyedu/cm/cntnts/cntntsView.do?mi=1923&cntntsId=978
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  notes: 현재 URL은 민원/신고센터 안내 콘텐츠로 강좌 신청 목록이 아니므로 자동수집 대상에서 제외한다.
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: NO_DATA
+    parser: no_structured_courses
+    error_kind: no_course_application_url
+  deprecated_at: '2026-06-06T15:45:46'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-06T15:45:46'
+- provider: MUNI_HCEDU_GNE_GO_KR_5A363840
+  name: 경상남도합천교육지원청
+  branch: 경상남도 합천군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://hcedu.gne.go.kr/hcedu/na/ntt/selectNttList.do?mi=2714&bbsId=501
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  notes: 현재 URL은 공지사항 게시판으로 강좌 신청 목록이 아니므로 자동수집 대상에서 제외한다.
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: NO_DATA
+    parser: no_structured_courses
+    error_kind: no_course_application_url
+  deprecated_at: '2026-06-06T15:46:48'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-06T15:46:48'
+- provider: MUNI_WWW_SEJONG_GO_KR_138D2F2D
+  name: 세종특별자치시청
+  branch: 세종특별자치시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.sejong.go.kr/prog/petition/510/lastList.do?searchDateType=P&listCnt=20&returnParam=ProcessJub
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 세종특별자치시
+  last_quality:
+    collected: 1
+    score: 35.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T22:38:59'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T22:38:59'
+- provider: MUNI_WWW_SEJONG_GO_KR_F4366507
+  name: 세종특별자치시청
+  branch: 세종특별자치시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.sejong.go.kr/prog/petition/510/list.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 세종특별자치시
+  last_quality:
+    collected: 1
+    score: 35.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T22:39:14'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T22:39:14'
+- provider: MUNI_WWW_ICJG_GO_KR_7F2FD512
+  name: 인천광역시 중구청
+  branch: 인천광역시 중구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.icjg.go.kr/dong/jmns01b02/251196
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 1
+    score: 35.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T22:52:48'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T22:52:48'
+- provider: MUNI_WWW_SJ_GO_KR_5AF393CB
+  name: 성주군청
+  branch: 경상북도 성주군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.sj.go.kr/page.do?mnu_uid=1154&
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 1
+    score: 20.0
+    grade: D
+    parser: table
+    error_kind: ''
+  deprecated_at: '2026-06-07T22:55:13'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T22:55:13'
+- provider: MUNI_WWW_MICHUHOL_GO_KR_41F1B977
+  name: 인천광역시 미추홀구
+  branch: 인천광역시 미추홀구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.michuhol.go.kr/lll/content.do?sq=914
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 5
+    score: 30.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:05:52'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:05:52'
+- provider: MUNI_WWW_YEONGJULLL_GO_KR_4A3830E4
+  name: 영주시 평생학습센터
+  branch: 경상북도 영주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.yeongjulll.go.kr/lecture/
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 2
+    score: 45.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:06:49'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:06:49'
+- provider: SPORTS_VOUCHER
+  name: 스포츠강좌이용권 시설/강좌 후보
+  branch: 스포츠강좌이용권 시설/강좌 후보
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 4
+  url: https://svoucher.kspo.or.kr
+  source: public_course_targets
+  origin: collected
+  region: 전국
+  last_quality:
+    collected: 10
+    score: 33.5
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:07:34'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:07:34'
+- provider: MUNI_EDU_YANGYANG_GO_KR_8EB7CE85
+  name: 양양군평생학습관
+  branch: 강원특별자치도 양양군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://edu.yangyang.go.kr/
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 1
+    score: 60.0
+    grade: C
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:15:47'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:15:47'
+- provider: MUNI_MAED_JNE_GO_KR_E4C4CA80
+  name: 전라남도무안교육지원청
+  branch: 전라남도 무안군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://maed.jne.go.kr/maed/na/ntt/selectNttList.do?mi=15624&bbsId=15624
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 10
+    score: 40.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:18:52'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:18:52'
+- provider: MUNI_WWW_LLLCARD_KR_84A59337
+  name: 평생교육이용권
+  branch: 강원특별자치도 강릉시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.lllcard.kr/reg/gangwon/main/mainView.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 5
+    score: 37.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:20:52'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:20:52'
+- provider: MUNI_WWW_LLLCARD_KR_EFEB2557
+  name: 평생교육이용권
+  branch: 제주특별자치도 제주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.lllcard.kr/reg/jeju/main/mainView.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 제주특별자치도
+  last_quality:
+    collected: 5
+    score: 37.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:21:21'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:21:21'
+- provider: MUNI_ONLINE_HNYOUTH_KR_A03457AE
+  name: 하남시청소년수련관
+  branch: 경기도 하남시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 청소년재단
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  superseded_by: MUNI_ONLINE_HNYOUTH_KR_6F390C33
+  blocked_reason: guide_alias_not_independent_course_identity_ledger
+  priority: 2
+  url: https://online.hnyouth.kr/HnYouth/s_center/guide.php
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 10
+    score: 37.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:22:08'
+  deprecated_reason: guide.php is an alias of the canonical HNYOUTH lecture ledger and must not run as a second owner
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:22:08'
+- provider: MUNI_WWW_CHUNCHEON_GO_KR_9105DFC4
+  name: 춘천시청
+  branch: 강원특별자치도 춘천시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: browser_or_retry
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.chuncheon.go.kr/village/gangnam-dong/news/village/?nttId=13338&flag=view
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: F
+    parser: none
+    error_kind: TIMEOUT
+  deprecated_at: '2026-06-07T23:28:39'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:28:39'
+- provider: MUNI_WWW_GURO_GO_KR_32B20A62
+  name: 구로구청
+  branch: 서울특별시 구로구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.guro.go.kr/bbs/selectBbsNttView.do?bbsNo=662&nttNo=220616&key=3477
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 1
+    score: 45.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:29:02'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:29:02'
+- provider: MUNI_WWW_IGANGDONG_OR_KR_187F2901
+  name: 강동구도시관리공단
+  branch: 서울특별시 강동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.igangdong.or.kr/page/pr/press_view.asp?Num=2347&TB_Name=TBL_BOARD_CM_REPORT
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 1
+    score: 30.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:29:35'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:29:35'
+- provider: MUNI_WWW_SAHA_GO_KR_ED7CDFC9
+  name: 사하구청
+  branch: 부산광역시 사하구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://www.saha.go.kr/edu/main.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 부산광역시
+  last_quality:
+    collected: 10
+    score: 39.0
+    grade: D
+    parser: detail+table
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:40:08'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:40:08'
+- provider: MUNI_LMS_SCHC_GO_KR_70B486BE
+  name: 순천시평생교육포털
+  branch: 전라남도 순천시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://lms.schc.go.kr/lms/class_01.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 10
+    score: 55.5
+    grade: C
+    parser: card+detail+table
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:40:50'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:40:50'
+- provider: MUNI_YEDU_YONGSAN_GO_KR_8A5DFB0F
+  name: 용산구 교육종합포털
+  branch: 서울특별시 용산구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: http://yedu.yongsan.go.kr/site/edtotal/index.jsp
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 10
+    score: 35.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:48:58'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:48:58'
+- provider: MUNI_WWW_YEONGJULLL_GO_KR_5EF37EB8
+  name: 영주시 평생학습센터
+  branch: 경상북도 영주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.yeongjulll.go.kr/lecture/lecture_list_oneday.php
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 7
+    score: 40.7
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:50:23'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:50:23'
+- provider: MUNI_NAMU_SDM_GO_KR_287BCBFA
+  name: 서대문 자연사박물관
+  branch: 서울특별시 서대문구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 국립/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://namu.sdm.go.kr/web/main/contents/education_req_sdmgroup
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 3
+    score: 33.3
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-07T23:52:09'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-07T23:52:09'
+- provider: MUNI_CLC_CHUNCHEON_GO_KR_A560168D
+  name: 춘천시 평생학습관
+  branch: 강원특별자치도 춘천시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://clc.chuncheon.go.kr/site/edu/edu_apply_info.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 4
+    score: 48.8
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:02:03'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:02:03'
+- provider: MUNI_WWW_JUNGGU_ULSAN_KR_0B40CE0E
+  name: 울산광역시 중구청
+  branch: 울산광역시 중구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.junggu.ulsan.kr/edu/dlvr/dlvr01.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 울산광역시
+  last_quality:
+    collected: 9
+    score: 37.2
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:03:02'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:03:02'
+- provider: MUNI_WWW_YEONGJULLL_GO_KR_00A58ED8
+  name: 영주시 평생학습센터
+  branch: 경상북도 영주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.yeongjulll.go.kr/
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 10
+    score: 41.0
+    grade: D
+    parser: card+detail+table
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:03:45'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:03:45'
+- provider: MUNI_GJLIB_CNE_GO_KR_3B7C93B9
+  name: 충청남도공주교육지원청공주도서관
+  branch: 충청남도 공주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 교육청/도서관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://gjlib.cne.go.kr/msi/cntntsService.do?menuId=MNU_0000000000001613
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 4
+    score: 36.2
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:09:50'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:09:50'
+- provider: MUNI_WWW_DONGGU_GO_KR_DA5CB57B
+  name: 대전광역시 동구청
+  branch: 대전광역시 동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.donggu.go.kr/lll/www/selectUserEduList.do?schId=&key=733&page=177&schDeptUserId=&schDeptType=&schType=lctr&schStr=&searchCondition1=&pageUnit=20
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대전광역시
+  last_quality:
+    collected: 3
+    score: 60.0
+    grade: C
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:13:44'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:13:44'
+- provider: MUNI_WWW_DONGGU_GO_KR_DFEE278F
+  name: 대전광역시 동구청
+  branch: 대전광역시 동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.donggu.go.kr/lll/www/selectUserEduList.do?schId=&key=733&page=96&schDeptUserId=&schDeptType=&schType=lctr&schStr=&searchCondition1=&pageUnit=20
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대전광역시
+  last_quality:
+    collected: 3
+    score: 60.0
+    grade: C
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:13:47'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:13:47'
+- provider: MUNI_WWW_GANGHWA_GO_KR_731A77C8
+  name: 인천광역시 강화군청
+  branch: 인천광역시 강화군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.ganghwa.go.kr/open_content/main/part/job/recruit_info.jsp
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 10
+    score: 50.0
+    grade: C
+    parser: card+detail+table
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:17:21'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:17:21'
+- provider: MUNI_WWW_DONGGU_GO_KR_5ED157FD
+  name: 대전광역시 동구청
+  branch: 대전광역시 동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.donggu.go.kr/lll/www/index.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대전광역시
+  last_quality:
+    collected: 8
+    score: 54.4
+    grade: C
+    parser: detail+table
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:17:53'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:17:53'
+- provider: MUNI_WWW_PC_GO_KR_B11A1ACA
+  name: 평창군청
+  branch: 강원특별자치도 평창군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://reserve.pc.go.kr/pcreserve/reserve/sport
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 46
+    score: 93.1
+    grade: A
+    parser: pc_reservation_facility
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:24:24'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:24:24'
+- provider: MUNI_WWW_DJJUNGGU_GO_KR_A4680B62
+  name: 대전광역시 중구청
+  branch: 대전광역시 중구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.djjunggu.go.kr/bbs/BBSMSTR_000000000137/view.do?nttId=B000000197130Dg8tL5
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대전광역시
+  last_quality:
+    collected: 2
+    score: 35.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:27:06'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:27:06'
+- provider: MUNI_WWW_GWANGSAN_GO_KR_D16CCB12
+  name: 광산구청
+  branch: 광주광역시 광산구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.gwangsan.go.kr/notList.do?pageId=www13&searchNotSe=05
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 2
+    score: 32.5
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:29:53'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:29:53'
+- provider: MUNI_WWW_DONGGU_GO_KR_FCA930F3
+  name: 대전광역시 동구청
+  branch: 대전광역시 동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.donggu.go.kr/lll/www/selectUserEduView.do?key=733&schStr=&searchCondition1=&pageUnit=20&schId=1822
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 대전광역시
+  last_quality:
+    collected: 5
+    score: 46.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:30:22'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:30:22'
+- provider: MUNI_WWW_GBELIB_KR_3D1448E2
+  name: 경상북도교육청 영양도서관 이전 query-order alias
+  branch: 경상북도교육청 영양도서관
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 교육청/도서관
+  source_group: deprecated
+  collection_type: deprecated_semantic_duplicate_query_order
+  crawler_status: deprecated
+  superseded_by: MUNI_WWW_GBELIB_KR_D515FD5D
+  blocked_reason: semantic_duplicate_query_order_of_normalized_canonical_owner
+  priority: 2
+  url: https://www.gbelib.kr/yy/module/teach/index.do?menu_idx=48&searchCate1=18&searchAge=13
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: audited_semantic_duplicate
+  region: 경상북도 영양군
+  municipality_code: '4776000000'
+  municipality_full_name: 경상북도 영양군
+  last_quality:
+    collected: 2
+    score: 40.0
+    grade: DEPRECATED
+    parser: deprecated_semantic_duplicate_query_order
+    error_kind: semantic_duplicate_query_order_of_normalized_canonical_owner
+  deprecated_at: '2026-06-08T00:31:07'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:31:07'
+  crawler_notes:
+  - canonical URL과 query 순서만 다르고 응답 길이·SHA-256·강좌 identity가 모두 동일하므로 재활성화하지 않는다.
+  - 운영은 신규 normalized provider 하나만 실행하며 기존 수동 삭제 기록은 보존한다.
+- provider: MUNI_WWW_IJONGNO_CO_KR_F5FBB3A7
+  name: 종로구시설관리공단
+  branch: 서울특별시 종로구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.ijongno.co.kr/fmcs/1
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 2
+    score: 40.0
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:31:46'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:31:46'
+- provider: MUNI_EDU_DOBONG_GO_KR_AD2DB976
+  name: 도봉구 교육포털 도봉배움e
+  branch: 서울특별시 도봉구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://edu.dobong.go.kr/Course_Lifelong/lecture_D_Lst.asp?code=10007875
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 10
+    score: 33.5
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:32:32'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:32:32'
+- provider: MUNI_WWW_DONGGU_KR_F3EB5A73
+  name: 광주광역시 동구 평생학습도시
+  branch: 광주광역시 동구
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.donggu.kr/index.es?sid=a1
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 5
+    score: 32.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:36:35'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:36:35'
+- provider: MUNI_CLC_CHUNCHEON_GO_KR_65451210
+  name: 춘천시 평생학습관
+  branch: 강원특별자치도 춘천시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://clc.chuncheon.go.kr/
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 4
+    score: 48.8
+    grade: D
+    parser: detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:44:21'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:44:21'
+- provider: MUNI_LLL_ANSAN_GO_KR_AE8DC75D
+  name: 안산시평생학습관
+  branch: 경기도 안산시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://lll.ansan.go.kr/web/cop/regEduList.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경기도
+  last_quality:
+    collected: 10
+    score: 33.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:53:58'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:53:58'
+- provider: MUNI_WWW_GBGS_GO_KR_8A452B43
+  name: 경산시청
+  branch: 경상북도 경산시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.gbgs.go.kr/lll/board/detail.tc?mn=2422&mngNo=1&boardNo=213807
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 7
+    score: 37.1
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:54:29'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:54:29'
+- provider: MUNI_WWW_HAENAMEDU_OR_KR_94D9F5B5
+  name: 해남군교육재단 > 메인
+  branch: 전라남도 해남군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.haenamedu.or.kr/planweb/board/list.9is?contentUid=8ae590de8abc1022018bad9e388c56f9&boardUid=8ae590de8bb378c9018bb7a9f4304f84&contentUid=8ae590de8abc1022018bad9e388c56f9
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 10
+    score: 42.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T00:58:17'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T00:58:17'
+- provider: MUNI_WWW_TONGYEONG_GO_KR_87BD9D06
+  name: 통영시청
+  branch: 경상남도 통영시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.tongyeong.go.kr/00852/00853/00859.web?idx=650469&amode=view
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  last_quality:
+    collected: 10
+    score: 35.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T01:01:41'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T01:01:41'
+- provider: MUNI_WWW_JINJU_GO_KR_33F25517
+  name: 진주시청
+  branch: 경상남도 진주시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 지자체/공공기관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.jinju.go.kr/yeyak/08870/10080/10081.web
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  last_quality:
+    collected: 10
+    score: 31.0
+    grade: D
+    parser: card+detail
+    error_kind: ''
+  deprecated_at: '2026-06-08T01:02:00'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-08T01:02:00'
+- provider: MUNI_WWW_CHUNGNAM_GO_KR_892A6537
+  name: 충청남도청
+  branch: 충청남도 천안시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html+detail_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.chungnam.go.kr/civileducation.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 1
+    score: 100.0
+    grade: A
+    parser: chungnam_civil_detail
+    error_kind: ''
+  crawler_notes:
+  - '2026-06-20: Added dedicated chungnam_civil_detail parser. Filters notice/download rows and keeps structured education detail rows only.'
+  deprecated_at: '2026-06-29T21:51:24'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-29T21:51:24'
+- provider: MUNI_TOUR_GEOJE_GO_KR_9B3B416D
+  name: 거제관광문화
+  branch: 경상남도 거제시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 기타
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  blocked_reason: excluded_url_shape
+  excluded_at: '2026-06-20T23:43:00'
+  priority: 2
+  url: https://tour.geoje.go.kr/board/view.geoje?boardId=BBS_0000028&menuCd=DOM_000008902003004000&dataSid=306152835
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: NO_DATA
+    parser: none
+    error_kind: excluded_url_shape
+  crawler_notes:
+  - '2026-06-20: URL is a past press-release detail page under /board/view.geoje and is disabled by registry excluded_url_shape. No structured current course list
+    was found from this target.'
+  deprecated_at: '2026-06-29T21:55:32'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-29T21:55:32'
+- provider: MUNI_CNLIB_GNE_GO_KR_A3514402
+  name: 경상남도교육청 창녕도서관
+  branch: 경상남도 창녕군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 교육청/도서관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://cnlib.gne.go.kr/menu.es?mid=c30401000000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상남도
+  last_quality:
+    collected: 4
+    score: 91.0
+    grade: A
+    parser: gne_library_lec_list
+    error_kind: ''
+  deprecated_at: '2026-06-29T22:09:55'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-29T22:09:55'
+- provider: MUNI_LIB_GWE_GO_KR_BF2CA306
+  name: 강원도통합교육문화관
+  branch: 강원특별자치도 태백시
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 교육청/도서관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://lib.gwe.go.kr/tblib/main
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 10
+    score: 95.0
+    grade: A
+    parser: gwe_library_lecture_event+detail
+    error_kind: ''
+  deprecated_at: '2026-06-29T22:20:31'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-29T22:20:31'
+- provider: MUNI_LIB_GWE_GO_KR_C91A93DD
+  name: 강원도통합교육문화관
+  branch: 강원특별자치도 홍천군
+  collection_category: 제외
+  domain_category: 제외
+  operator_type: 교육청/도서관
+  source_group: deprecated
+  collection_type: static_html
+  crawler_status: deprecated
+  priority: 2
+  url: https://lib.gwe.go.kr/hclib/main
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 강원특별자치도
+  last_quality:
+    collected: 4
+    score: 90.0
+    grade: A
+    parser: gwe_library_lecture_event+detail
+    error_kind: ''
+  deprecated_at: '2026-06-29T22:23:51'
+  deprecated_reason: deleted from ops console
+  manual_action: delete
+  manual_updated_at: '2026-06-29T22:23:51'

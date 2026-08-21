@@ -1,0 +1,67 @@
+{
+  "expo": {
+    "name": "문센",
+    "slug": "mooncen-app",
+    "description": "우리 동네 문화센터와 체험·평생교육 프로그램 및 센터를 찾고 찜하는 앱",
+    "version": "0.3.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "scheme": "mooncen",
+    "orientation": "portrait",
+    "icon": "./assets/app-icon-v2.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F6F8F7",
+    "primaryColor": "#14B8A6",
+    "ios": {
+      "bundleIdentifier": "kr.mooncen.mobile",
+      "buildNumber": "2",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "내 주변의 문화센터, 체험, 교육 프로그램을 찾기 위해 현재 위치를 사용합니다."
+      }
+    },
+    "android": {
+      "package": "kr.mooncen.mobile",
+      "versionCode": 2,
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.VIBRATE"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#EFFDFA",
+        "foregroundImage": "./assets/app-icon-v2.png"
+      },
+      "predictiveBackGestureEnabled": true,
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "web": {
+      "favicon": "./assets/app-icon-v2.png",
+      "name": "문센",
+      "shortName": "문센",
+      "lang": "ko"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#EFFDFA",
+          "image": "./assets/app-icon-v2.png",
+          "imageWidth": 180,
+          "resizeMode": "contain"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "내 주변의 문화센터, 체험, 교육 프로그램을 찾기 위해 현재 위치를 사용합니다."
+        }
+      ]
+    ]
+  }
+}

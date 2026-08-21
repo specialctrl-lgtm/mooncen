@@ -1,0 +1,307 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: mooncen-host-health
+    folder: MoonCen
+    interval: 1m
+    rules:
+      - uid: mooncen_target_down
+        title: MoonCen target down
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: up{alerting="enabled"} == bool 0
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ instance }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: OK
+        execErrState: Error
+        for: 2m
+        annotations:
+          summary: "{{ $labels.instance }} target is down"
+          description: "{{ $labels.job }} target has been unreachable for at least 2 minutes."
+        labels:
+          severity: critical
+          service: mooncen-monitoring
+        isPaused: false
+
+      - uid: mooncen_cpu_high
+        title: MoonCen CPU high
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: (100 - (avg by (instance) (rate(node_cpu_seconds_total{alerting="enabled",mode="idle"}[5m])) * 100)) > 90
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ instance }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: OK
+        execErrState: Error
+        for: 10m
+        annotations:
+          summary: "{{ $labels.instance }} CPU usage is high"
+          description: "CPU usage has stayed above 90% for at least 10 minutes."
+        labels:
+          severity: warning
+          service: mooncen-monitoring
+        isPaused: false
+
+      - uid: mooncen_memory_high
+        title: MoonCen memory high
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: ((1 - (node_memory_MemAvailable_bytes{alerting="enabled"} / node_memory_MemTotal_bytes{alerting="enabled"})) * 100) > 90
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ instance }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: OK
+        execErrState: Error
+        for: 10m
+        annotations:
+          summary: "{{ $labels.instance }} memory usage is high"
+          description: "Memory usage has stayed above 90% for at least 10 minutes."
+        labels:
+          severity: warning
+          service: mooncen-monitoring
+        isPaused: false
+
+      - uid: mooncen_disk_high
+        title: MoonCen disk usage high
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: ((1 - (node_filesystem_avail_bytes{alerting="enabled",fstype!~"tmpfs|devtmpfs|overlay|squashfs|fuse.*"} / node_filesystem_size_bytes{alerting="enabled",fstype!~"tmpfs|devtmpfs|overlay|squashfs|fuse.*"})) * 100) > 90
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ instance }} {{ mountpoint }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: OK
+        execErrState: Error
+        for: 10m
+        annotations:
+          summary: "{{ $labels.instance }} disk usage is high on {{ $labels.mountpoint }}"
+          description: "Disk usage has stayed above 90% for at least 10 minutes."
+        labels:
+          severity: warning
+          service: mooncen-monitoring
+        isPaused: false

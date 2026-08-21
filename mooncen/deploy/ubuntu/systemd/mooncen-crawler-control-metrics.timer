@@ -1,0 +1,12 @@
+[Unit]
+Description=Collect MoonCen crawler control-plane metrics every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=10s
+RandomizedDelaySec=5s
+Persistent=true
+Unit=mooncen-crawler-control-metrics.service
+
+[Install]
+WantedBy=timers.target

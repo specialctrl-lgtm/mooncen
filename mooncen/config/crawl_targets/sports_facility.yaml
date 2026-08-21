@@ -1,0 +1,571 @@
+version: 1
+generated_at: '2026-07-23T09:46:15+09:00'
+domain_category: 체육/스포츠
+source_group: sports_facility
+summary:
+  targets: 19
+  by_status:
+    candidate: 1
+    ready: 16
+    duplicate_url:MUNI_WWW_JONGNO_GO_KR_20A7CFB0: 2
+  by_service_group:
+    공공강좌: 5
+  by_collection_type:
+    unknown: 1
+    company_lecture_api+detail_html: 1
+    four_center_program_item_json_api: 1
+    duplicate: 2
+    static_html: 5
+    paju_pcy_fmcs_aggregate_api+all_details: 1
+    api: 2
+    json_api: 2
+    static_html+detail_html: 1
+    api_json: 1
+    ? yangpyeong_four_disjoint_official_owners+complete_ledgers+post_boundary_empty_sentinels+stable_first_last_sentinel_rechecks+all_current_public_details+official_branch_normalization+parent_result_service_test_exclusions+no_application_login_attachment_pii_routes
+    : 1
+    ? siheung_urban_corporation_fmcs_current_new_registration_all_companies+declared_pages+empty_sentinels+stable_edges+all_details+pii_minimized
+    : 1
+targets:
+- provider: ESONGPA_SPORTS_CULTURE
+  name: 송파구 체육문화회관
+  branch: 송파구 체육문화회관
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: unknown
+  crawler_status: candidate
+  priority: 1
+  url: https://www.esongpa.or.kr/lecture/list/20000001
+  source: static_provider
+  origin: static
+  crawler_module: Crawler.Crawler_EsongpaSportsCulture
+  crawler_script: Crawler/Crawler_EsongpaSportsCulture.py
+  access:
+    login_required: false
+    selenium_required: false
+    api_available: false
+- provider: MUNI_BOOKING_GWANGJIN_OR_KR_5B158A7E
+  name: 광진구통합예약시스템 수강신청
+  branch: 광진구통합예약시스템
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  collection_type: company_lecture_api+detail_html
+  crawler_status: ready
+  priority: 1
+  url: https://booking.gwangjin.or.kr/fmcs/2
+  source: municipal_integrated_reservation_manual_verification
+  origin: collected
+  region: 서울특별시 광진구
+  municipality_code: '1121500000'
+  municipality_full_name: 서울특별시 광진구
+  service_group: 공공강좌
+  service_group_policy: locked
+  full_snapshot_required: true
+  last_quality:
+    collected: 1055
+    score: 100.0
+    grade: A
+    parser: gwangjin_fmcs_company_lecture_api+detail
+    error_kind: ''
+- provider: MUNI_WWW_JUNGNANGIMC_OR_KR_D39C4013
+  name: 중랑구시설관리공단 4개 센터 수강신청
+  branch: 중랑구시설관리공단
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  collection_type: four_center_program_item_json_api
+  crawler_status: ready
+  priority: 1
+  url: https://www.jungnangimc.or.kr/lecture/list/JUNGNANG02
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  region: 서울특별시 중랑구
+  municipality_code: '1126000000'
+  municipality_full_name: 서울특별시 중랑구
+  service_group: 공공강좌
+  service_group_policy: locked
+  full_snapshot_required: true
+  last_quality:
+    collected: 1252
+    score: 100.0
+    grade: A
+    parser: jungnang_imc_four_center_program_item_api
+    error_kind: ''
+  crawler_notes:
+  - 2026-07-18 공식 화면이 노출하는 4개 센터의 952개 강습반과 실제 선택 가능한 1,252개 요금항목을 전수 검증했다.
+  - 센터·강습반·요금항목 코드를 결합한 공식 ID를 사용하고, 신규접수기간·상시접수·휴강·웹접수마감 조건으로 신청 가능 여부를 판정한다.
+- provider: MUNI_JACHI_JONGNO_GO_KR_2BCA35FB
+  name: 종로구 자치회관
+  branch: 서울특별시 종로구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  duplicate_of: MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  superseded_by: MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  blocked_reason: duplicate_of:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  disabled_reason: superseded_by:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  priority: 2
+  url: https://jachi.jongno.go.kr/Program/Default.aspx
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: DUPLICATE
+    parser: duplicate_of:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+    error_kind: duplicate_of:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  crawler_notes:
+  - 종로구 통합예약 canonical 수집기가 자치회관 전체 강좌와 실제 신청 URL을 포괄한다.
+- provider: MUNI_LLE_JONGNO_GO_KR_CF61BBD0
+  name: 종로교육포털
+  branch: 서울특별시 종로구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://lle.jongno.go.kr/site/main/program/all/list
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 10
+    score: 75.0
+    grade: B
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_PAJU_PCY_OR_KR_412053A6
+  name: 파주시청소년재단 온라인예약
+  branch: 경기도 파주시
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: paju_pcy_fmcs_aggregate_api+all_details
+  crawler_status: ready
+  priority: 2
+  url: https://paju.pcy.or.kr/fmcs/2?center=PJYF01&event=1050000000&class=1050020000
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  municipality_code: '4148000000'
+  municipality_full_name: 경기도 파주시
+  covered_municipalities:
+  - code: '4148000000'
+    sido: 경기도
+    sigungu: 파주시
+    full_name: 경기도 파주시
+  full_snapshot_required: true
+  ownership_scope: paju_youth_foundation_fmcs_all_companies_all_courses
+  excluded_scope: lifelong_portal_library_application_login_attachment_instructor_contact_description_and_pii
+  region: 경기도
+  last_quality:
+    collected: 183
+    score: 100.0
+    grade: A
+    parser: paju_pcy_fmcs_aggregate_api+all_details
+    error_kind: ''
+    no_current_data: false
+    source_total: 183
+    company_count: 4
+    returned_count: 183
+    snapshot_complete: true
+    checked_at: '2026-07-23T06:35:00+09:00'
+  crawler_notes:
+  - FMCS API에서 센터 목록을 조회한 뒤 센터별 상위/하위 카테고리를 순환한다.
+  - 파주 FMCS는 URL의 event/class가 아니라 company_code/category_cd/category_level 필터가 실제로 동작한다.
+  - 상세 페이지의 수강기간 선택 표에서 월 단위 수강기간을 period로 보강한다.
+- provider: MUNI_SPORTS_CAUC_OR_KR_05B3AD85
+  name: 천안도시공사 인터넷 통합예약시스템
+  branch: 충청남도 천안시 동남구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://sports.cauc.or.kr/lecture/llist/index/CHEONAN03/2001/A/100/1/2/3/4/5/6/7/1/-/-/1/3
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 10
+    score: 74.5
+    grade: B
+    parser: detail+table
+    error_kind: ''
+- provider: MUNI_SPORTS_CAUC_OR_KR_BA3A849E
+  name: 천안도시공사 인터넷 통합예약시스템
+  branch: 충청남도 천안시 동남구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://sports.cauc.or.kr/lecture/llist/index/CHEONAN03/2001/L/1000010001/1/2/3/4/5/6/7/1/-/-/1/2
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 10
+    score: 85.0
+    grade: A
+    parser: detail+table
+    error_kind: ''
+- provider: MUNI_SPORTS_IDONGJAK_OR_KR_41E7189B
+  name: 동작구시설관리공단
+  branch: 서울특별시 동작구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: api
+  crawler_status: ready
+  priority: 2
+  url: https://sports.idongjak.or.kr/home/171?center=DONGJAK01&action=list
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 10
+    score: 65.0
+    grade: C
+    parser: detail+table
+    error_kind: ''
+- provider: MUNI_WWW_ESONGPA_OR_KR_43BE2341
+  name: 송파구체육문화회관
+  branch: 서울특별시 송파구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: json_api
+  crawler_status: ready
+  priority: 2
+  url: https://www.esongpa.or.kr/lecture/list/20000001
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 20
+    score: 100.0
+    grade: A
+    parser: esongpa_lecture_api
+    error_kind: ''
+- provider: MUNI_WWW_IDGSPORTS_OR_KR_8157C7B5
+  name: 인천광역시 동구체육회 프로그램예약
+  branch: 송림골꿈드림센터
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: static_html+detail_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.idgsports.or.kr/program/programInfoList.do?prgmdiv=pingpong
+  source: ops_console_url_update
+  origin: manual
+  region: 인천광역시 동구
+  last_quality:
+    collected: 3
+    score: 100.0
+    grade: A
+    parser: idgsports_program_list_detail
+    error_kind: ''
+    saved: 3
+  target_id: 4f9c4ddac0a77a4a
+  updated_at: '2026-06-09T00:00:00+09:00'
+  manual_action: update
+  manual_updated_at: '2026-06-09T00:00:00+09:00'
+- provider: MUNI_WWW_IJONGNO_CO_KR_4B285EA8
+  name: 종로구시설관리공단
+  branch: 서울특별시 종로구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: api_json
+  crawler_status: ready
+  priority: 2
+  url: https://www.ijongno.co.kr/www/128?document_category_srl=5
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 8
+    score: 44.4
+    grade: D
+    parser: card+detail
+    error_kind: ''
+- provider: MUNI_WWW_IJONGNO_CO_KR_D4C024C6
+  name: 종로구시설관리공단
+  branch: 서울특별시 종로구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.ijongno.co.kr/fmcs/3?center=JONGNO02&action=list&page=1&event=1000000000&class=1000010000
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 114
+    score: 83.8
+    grade: A
+    parser: fmcs_lecture_api
+    error_kind: ''
+- provider: MUNI_WWW_IJONGNO_CO_KR_F9ED1CA5
+  name: 종로구시설관리공단
+  branch: 서울특별시 종로구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: json_api
+  crawler_status: ready
+  priority: 2
+  url: https://www.ijongno.co.kr/fmcs/3
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 20
+    score: 100.0
+    grade: A
+    parser: fmcs_lecture_api
+    error_kind: ''
+- provider: MUNI_WWW_JONGNO_GO_KR_728A2F6A
+  name: 종로구청
+  branch: 서울특별시 종로구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: duplicate
+  crawler_status: duplicate_url:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  duplicate_of: MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  superseded_by: MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  blocked_reason: duplicate_of:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  disabled_reason: superseded_by:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  priority: 2
+  url: https://www.jongno.go.kr/edu/eduIntro.do
+  source: municipal_course_candidate_results_sugang_sports
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: DUPLICATE
+    parser: duplicate_of:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+    error_kind: duplicate_of:MUNI_WWW_JONGNO_GO_KR_20A7CFB0
+  crawler_notes:
+  - 교육 소개 페이지의 실제 신청 목록은 종로구 통합예약 canonical 수집기가 포괄한다.
+- provider: MUNI_WWW_YP21_GO_KR_EA0D7B81
+  name: 양평군평생학습센터 수영 교육강좌
+  branch: 양평군평생학습센터수영장
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: yangpyeong_four_disjoint_official_owners+complete_ledgers+post_boundary_empty_sentinels+stable_first_last_sentinel_rechecks+all_current_public_details+official_branch_normalization+parent_result_service_test_exclusions+no_application_login_attachment_pii_routes
+  crawler_module: Crawler.municipal_yangpyeong
+  crawler_callable: collect
+  parser_assigned: yangpyeong_four_disjoint_official_owners+complete_ledgers+post_boundary_empty_sentinels+stable_first_last_sentinel_rechecks+all_current_public_details+official_branch_normalization+parent_result_service_test_exclusions+no_application_login_attachment_pii_routes
+  crawler_status: ready
+  priority: 1
+  url: https://www.yp21.go.kr/pool/fmcs/9
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경기도 양평군
+  municipality_code: '4183000000'
+  municipality_full_name: 경기도 양평군
+  max_pages: 100
+  detail_limit: 100
+  full_snapshot_required: true
+  classification_locked: true
+  ownership_scope: yangpyeong_lifelong_learning_pool_complete_R_and_E_ledgers
+  covered_municipalities:
+  - code: '4183000000'
+    sido: 경기도
+    sigungu: 양평군
+    full_name: 경기도 양평군
+  last_quality:
+    collected: 0
+    score: 100.0
+    grade: A
+    parser: yangpyeong_four_disjoint_official_owners+complete_ledgers+post_boundary_empty_sentinels+stable_first_last_sentinel_rechecks+all_current_public_details+official_branch_normalization+parent_result_service_test_exclusions+no_application_login_attachment_pii_routes
+    error_kind: ''
+    checked_at: '2026-07-28T21:24:45+09:00'
+    no_current_data: true
+    source_total: 58
+    current_source_count: 0
+    detail_verified: 0
+    returned_count: 0
+    partition_count: 2
+    partition_totals:
+      R: 0
+      E: 58
+    required_list_requests: 8
+    branch_count: 1
+    pagination_complete: true
+    details_complete: true
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_candidate_id: MUNI_IR_A72076267363
+    provider_decision: upgrade_existing_pool_owner_to_complete_current_detail_contract
+  crawler_notes:
+  - R·E 두 분기 전체 원장과 빈 sentinel·현재 상세를 검증하고 교육·강좌로 고정한다. 2026-07-28 현재 R은 0건, E는 58건이다.
+  - 빈 R 분기는 첫 페이지와 다음 빈 페이지를 각각 재검증해 현재 모집 0건인 완전 스냅샷으로 처리한다.
+  - 신청·회원·결제 endpoint는 호출하지 않는다.
+- provider: MUNI_WWW_YUMCORP_OR_KR_FD06010A
+  name: 여수시도시관리공단
+  branch: 전라남도 여수시
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.yumcorp.or.kr/sports/lecture/list.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: yumcorp_sports_lecture_list
+    error_kind: ''
+- provider: MUNI_YSSPORTS_YONG_SAN_OR_KR_67C8F87B
+  name: 용산구문화체육센터
+  branch: 서울특별시 용산구
+  collection_category: 체육/스포츠
+  domain_category: 체육/스포츠
+  operator_type: 지자체/공공기관
+  source_group: sports_facility
+  collection_type: api
+  crawler_status: ready
+  priority: 2
+  url: https://yssports.yong-san.or.kr/fmcs/8?center=YGSN01
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 서울특별시
+  last_quality:
+    collected: 10
+    score: 91.7
+    grade: A
+    parser: yssports_fmcs_category_api
+    error_kind: ''
+- provider: MUNI_SPORTSAPP_SHSI_OR_KR_6239E7D6
+  name: 시흥도시공사 전체 신규접수 교육강좌
+  branch: 시흥도시공사
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: siheung_urban_corporation_fmcs_current_new_registration_all_companies+declared_pages+empty_sentinels+stable_edges+all_details+pii_minimized
+  crawler_module: Crawler.municipal_siheung_sports
+  crawler_callable: collect
+  parser_assigned: siheung_urban_corporation_fmcs_current_new_registration_all_companies+declared_pages+empty_sentinels+stable_edges+all_details+pii_minimized
+  crawler_status: ready
+  priority: 1
+  url: https://sportsapp.shsi.or.kr/fmcs/3
+  list_urls:
+  - https://sportsapp.shsi.or.kr/fmcs/3
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경기도 시흥시
+  municipality_code: '4139000000'
+  municipality_full_name: 경기도 시흥시
+  max_pages: 32
+  detail_limit: 300
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 시흥도시공사 FMCS 신규접수 원장은 8개 공식센터의 강좌 identity·일정·정원·접수 상태를 직접 소유하는 별도 공공 교육강좌 원장이다.
+  classification_evidence_url: https://sportsapp.shsi.or.kr/fmcs/3
+  ownership_scope: siheung_urban_corporation_all_company_current_new_registration_ledger
+  separate_owner_urls:
+  - https://siheung.gseek.kr/user/course/offline/list
+  covered_municipalities:
+  - code: '4139000000'
+    sido: 경기도
+    sigungu: 시흥시
+    full_name: 경기도 시흥시
+  last_quality:
+    collected: 241
+    score: 100.0
+    grade: A
+    parser: siheung_urban_corporation_fmcs_current_new_registration_all_companies+declared_pages+empty_sentinels+stable_edges+all_details+pii_minimized
+    error_kind: ''
+    checked_at: '2026-07-23T08:12:54+09:00'
+    source_total: 241
+    source_pages: 16
+    sentinel_requests: 8
+    stability_rechecks: 9
+    list_requests: 25
+    detail_pages: 241
+    source_requests: 268
+    official_company_count: 8
+    active_company_count: 7
+    empty_company_count: 1
+    branch_count: 7
+    venue_count: 9
+    returned_count: 241
+    pii_omission_count: 190
+    application_control_count: 114
+    application_endpoint_requests: 0
+    login_endpoint_requests: 0
+    attachment_endpoint_requests: 0
+    pii_endpoint_requests: 0
+    source_status_counts:
+      E: 127
+      R: 114
+    status_counts:
+      CLOSED: 127
+      OPEN: 114
+    company_counts:
+      '[하중]시흥국민체육센터': 75
+      정왕평생학습관: 0
+      시흥능곡어울림센터: 42
+      '[정왕]시흥어울림국민체육센터': 44
+      장곡동생활체육시설: 13
+      다니생활체육관: 2
+      장곡문화체육센터: 30
+      목감2어울림센터: 35
+    source_identity_sha256: 79b8ddc79173712c0751c9636d754949c63e6e331d5aedd1a5996b596a0a05af
+    pagination_complete: true
+    details_complete: true
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_provider: MUNI_SPORTSAPP_SHSI_OR_KR_6239E7D6
+    canonical_candidate_id: MUNI_IR_4BF5D8878B42
+    provider_decision: add_separate_urban_corporation_fmcs_owner_without_ssoc_overlap
+  crawler_notes:
+  - 공식 8개 company의 신규접수 R 원장을 모두 순회하고 각 company의 즉시 빈 sentinel과 첫·끝 edge를 재검사해야 저장한다.
+  - 현재 241건의 공개 상세 identity·기관·일정·정원과 공식 센터명을 검증하며 종료/template E 탭 67건은 별도 과거 범위로 병합하지 않는다.
+  - 공개 연락처 190건은 검증 후 저장하지 않고 신청·로그인·회원·첨부·주민인증 endpoint를 호출하지 않는다.
+  - 시흥교육캠퍼스 쏙 현재 310건과 정규화 제목 중복이 없는 별도 owner다.

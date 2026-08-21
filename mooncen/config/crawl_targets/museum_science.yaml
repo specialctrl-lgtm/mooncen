@@ -1,0 +1,699 @@
+version: 1
+generated_at: '2026-07-10T15:12:00'
+domain_category: 박물관/과학관
+source_group: museum_science
+service_group: 체험
+summary:
+  targets: 32
+  by_status:
+    ready: 32
+  by_service_group:
+    체험: 18
+  by_collection_type:
+    ajax_api: 15
+    static_html: 5
+    json_api: 1
+    static_html+detail_html: 4
+    ajax_api+detail_html: 1
+    course_list: 4
+    api_json: 1
+    reservation_form_get+public_schedule_contract+no_occupancy_or_submit: 1
+targets:
+- provider: BUSAN_NATIONAL_SCIENCE_MUSEUM
+  name: 국립부산과학관
+  branch: 국립부산과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 1
+  url: https://www.sciport.or.kr/kor/CMS/IndivCurriMgr/curriList.do?mCode=MN038
+  source: ops_console_url_update
+  origin: manual
+  region: 부산광역시
+  municipality_code: '2671000000'
+  last_quality:
+    collected: 5
+    score: 90.0
+    grade: A
+    parser: busan_indivcurri_api
+    error_kind: ''
+  target_id: 12e456903fe9af78
+  updated_at: '2026-06-05T16:39:14'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:39:14'
+- provider: DAEGU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립대구과학관
+  branch: 국립대구과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html
+  crawler_status: ready
+  priority: 1
+  url: https://www.dnsm.or.kr/scienceClassroom/personalScienceEdu.do
+  list_urls:
+  - https://www.dnsm.or.kr/scienceClassroom/personalScienceEdu.do
+  - https://www.dnsm.or.kr/scienceClassroom/muhanSangSangIndividual.do
+  - https://www.dnsm.or.kr/scienceClassroom/convergenceEdu.do
+  - https://www.dnsm.or.kr/scienceClassroom/labEducation.do
+  source: ops_console_url_update
+  origin: manual
+  region: 대구광역시
+  municipality_code: '2771000000'
+  last_quality:
+    collected: 14
+    score: 100.0
+    grade: A
+    parser: daegu_national_science
+    error_kind: ''
+  target_id: da6a6a15ffdad42e
+  updated_at: '2026-06-05T16:41:06'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:41:06'
+- provider: GWACHEON_NATIONAL_SCIENCE_MUSEUM
+  name: 국립과천과학관
+  branch: 국립과천과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: json_api
+  crawler_status: ready
+  priority: 1
+  url: https://www.sciencecenter.go.kr/edu/user/edu/eduList.do
+  source: ops_console_url_update
+  origin: manual
+  region: 경기도 과천시
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: gwacheon_edu_list_json
+    error_kind: ''
+  target_id: b0b63becde86002f
+  updated_at: '2026-06-05T16:40:26'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:40:26'
+- provider: GWANGJU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립광주과학관
+  branch: 국립광주과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html+detail_html
+  crawler_status: ready
+  priority: 1
+  url: https://www.sciencecenter.or.kr/kor/board/index.do?bid=eduNotice&mode=list&menuId=285_335
+  source: ops_console_url_update
+  origin: manual
+  region: 광주광역시
+  municipality_code: '1230000000'
+  last_quality:
+    collected: 10
+    score: 90.0
+    grade: A
+    parser: gwangju_sciencecenter_notice_detail
+    error_kind: ''
+  target_id: 75aedf894b188c14
+  updated_at: '2026-06-05T16:41:41'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:41:41'
+- provider: NATIONAL_OCEAN_SCIENCE_MUSEUM
+  name: 국립해양과학관
+  branch: 국립해양과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api+detail_html
+  crawler_status: ready
+  priority: 1
+  url: https://www.kosm.or.kr/kosm/bbs/board.do?bbsId=BSD0008&type=r
+  source: ops_console_url_update
+  origin: manual
+  region: 경상북도 울진군
+  last_quality:
+    collected: 5
+    score: 88.0
+    grade: B
+    parser: national_ocean_board_ajax
+    error_kind: ''
+  crawler_notes:
+  - 일부 상설/단체 프로그램은 원문에 별도 회차 시간이 없어 schedule_raw가 비어 있을 수 있다.
+  target_id: ca1d18804357d333
+  updated_at: '2026-06-05T16:42:01'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:42:01'
+- provider: NATIONAL_SCIENCE_MUSEUM
+  name: 국립중앙과학관
+  branch: 국립중앙과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html+detail_html
+  crawler_status: ready
+  priority: 1
+  url: https://www.science.go.kr/mps/1092/allEduPrograms.do
+  source: ops_console_url_update
+  origin: manual
+  region: 대전광역시
+  municipality_code: '3020000000'
+  last_quality:
+    collected: 12
+    score: 91.7
+    grade: A
+    parser: national_science_table
+    error_kind: ''
+  target_id: b805d3022aff3554
+  updated_at: '2026-06-05T16:42:15'
+  manual_action: update
+  manual_updated_at: '2026-06-05T16:42:15'
+- provider: KOREA_NATIONAL_MARITIME_MUSEUM
+  name: 국립해양박물관
+  branch: 국립해양박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html+detail_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.mmk.or.kr/?folder=education&page=list&type=E&status=present
+  source: ops_console_url_update
+  origin: manual
+  region: 부산광역시
+  municipality_code: '2620000000'
+  last_quality:
+    collected: 5
+    score: 100.0
+    grade: A
+    parser: mmk_education_card_detail
+    error_kind: ''
+  service_group: 체험
+  target_id: 0a035681b6f94abf
+  updated_at: '2026-06-29T22:13:58'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:13:58'
+- provider: NATIONAL_AGRICULTURAL_MUSEUM
+  name: 국립농업박물관
+  branch: 국립농업박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: course_list
+  crawler_status: ready
+  priority: 2
+  url: https://www.namuk.or.kr/kr/204/subview.do
+  main_url: https://www.namuk.or.kr/
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 경기도 수원시
+  last_quality:
+    collected: 10
+    score: 90.0
+    grade: A
+    parser: namuk_reservation_list
+    error_kind: ''
+- provider: NATIONAL_AVIATION_MUSEUM
+  name: 국립항공박물관
+  branch: 국립항공박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: course_list
+  crawler_status: ready
+  priority: 2
+  url: https://aviation.moonhwain.net:451/rsvc/rsv_pm.html?lang=kr&b_id=aviation&stk_idx=2
+  main_url: https://www.aviation.or.kr/
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 서울특별시
+  municipality_code: '1150000000'
+  last_quality:
+    collected: 4
+    score: 85.0
+    grade: A
+    parser: aviation_group_edu
+    error_kind: ''
+- provider: NATIONAL_FOLK_MUSEUM
+  name: 국립민속박물관
+  branch: 국립민속박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: course_list
+  crawler_status: ready
+  priority: 2
+  url: https://www.nfm.go.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 서울특별시
+  municipality_code: '1111000000'
+  last_quality:
+    collected: 10
+    score: 90.0
+    grade: A
+    parser: nfm_edu_plan_list
+    error_kind: ''
+- provider: NATIONAL_HANGEUL_MUSEUM
+  name: 국립한글박물관
+  branch: 국립한글박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.hangeul.go.kr/education?curr_menu_cd=0103010000
+  source: ops_console_url_update
+  origin: manual
+  region: 서울특별시
+  municipality_code: '1117000000'
+  last_quality:
+    collected: 75
+    score: 99.3
+    grade: A
+    parser: national_hangeul_education_event
+    error_kind: ''
+  service_group: 체험
+  target_id: d4dfc49738be06fc
+  updated_at: '2026-06-29T22:16:21'
+  manual_action: update
+  manual_updated_at: '2026-06-29T22:16:21'
+- provider: NATIONAL_LIGHTHOUSE_MUSEUM
+  name: 국립등대박물관
+  branch: 국립등대박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.lighthouse-museum.or.kr/prog/evntPrgrm/kor/sub01_02/list.do
+  source: ops_console_url_update
+  origin: manual
+  region: 경상북도 포항시
+  last_quality:
+    collected: 30
+    score: 88.0
+    grade: A
+    parser: national_lighthouse_event_programs
+    error_kind: ''
+  service_group: 체험
+  target_id: 580f5f0718b08068
+  updated_at: '2026-06-29T21:57:30'
+  manual_action: update
+  manual_updated_at: '2026-06-29T21:57:30'
+- provider: NATIONAL_METEOROLOGICAL_MUSEUM
+  name: 국립기상박물관
+  branch: 국립기상박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html+detail_html
+  crawler_status: ready
+  priority: 2
+  url: https://science.kma.go.kr/museum/education/education
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 서울특별시
+  municipality_code: '1111000000'
+  last_quality:
+    collected: 4
+    score: 85.0
+    grade: A
+    parser: meteorological_museum_education_event
+    error_kind: ''
+- provider: NATIONAL_MAP_MUSEUM
+  name: 국립지도박물관
+  branch: 국립지도박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.ngii.go.kr/map/content.do?sq=329
+  source: user_requested
+  origin: manual
+  region: 경기도 수원시
+  service_group: 체험
+  crawler_notes:
+  - 국립지도박물관 교육 안내 페이지. 교육명, 교육일정, 신청방법, 대상, 인원, 내용, 문의 정보를 정적 HTML에서 수집한다.
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립중앙박물관
+  branch: 국립중앙박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=1
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 서울특별시
+  municipality_code: '1117000000'
+  municipality_full_name: 서울특별시 용산구
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: modu_learn_list+detail
+    error_kind: ''
+  crawler_notes:
+  - MODU 교육 플랫폼에서 14개 박물관 museum 필터를 순환하며 검색한다.
+  - 무한 스크롤은 /learn/append?page=N 호출로 대체해 수집한다.
+  - 상세 페이지 표에서 접수기간, 교육기간, 교육대상, 장소, 참가비, 담당자, 회차 일정을 보강한다.
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립경주박물관
+  branch: 국립경주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=2
+  source: user_requested
+  origin: manual
+  region: 경상북도 경주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립광주박물관
+  branch: 국립광주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=3
+  source: user_requested
+  origin: manual
+  region: 광주광역시
+  municipality_code: '1230000000'
+  municipality_full_name: 전남광주통합특별시 북구
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립전주박물관
+  branch: 국립전주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=4
+  source: user_requested
+  origin: manual
+  region: 전북특별자치도 전주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립대구박물관
+  branch: 국립대구박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=5
+  source: user_requested
+  origin: manual
+  region: 대구광역시
+  municipality_code: '2726000000'
+  municipality_full_name: 대구광역시 수성구
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립부여박물관
+  branch: 국립부여박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=6
+  source: user_requested
+  origin: manual
+  region: 충청남도 부여군
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립공주박물관
+  branch: 국립공주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=7
+  source: user_requested
+  origin: manual
+  region: 충청남도 공주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립진주박물관
+  branch: 국립진주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=8
+  source: user_requested
+  origin: manual
+  region: 경상남도 진주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립청주박물관
+  branch: 국립청주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=9
+  source: user_requested
+  origin: manual
+  region: 충청북도 청주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립김해박물관
+  branch: 국립김해박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=10
+  source: user_requested
+  origin: manual
+  region: 경상남도 김해시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립제주박물관
+  branch: 국립제주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=11
+  source: user_requested
+  origin: manual
+  region: 제주특별자치도 제주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립춘천박물관
+  branch: 국립춘천박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=12
+  source: user_requested
+  origin: manual
+  region: 강원특별자치도 춘천시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립나주박물관
+  branch: 국립나주박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=13
+  source: user_requested
+  origin: manual
+  region: 전라남도 나주시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립익산박물관
+  branch: 국립익산박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 2
+  url: https://modu.museum.go.kr/learn?museum=14
+  source: user_requested
+  origin: manual
+  region: 전북특별자치도 익산시
+  service_group: 체험
+- provider: NATIONAL_MUSEUM_OF_MODERN_ART
+  name: 국립현대미술관
+  branch: 국립현대미술관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: api_json
+  crawler_status: ready
+  priority: 2
+  url: https://www.mmca.go.kr/educations/eduChildList.do
+  main_url: https://www.mmca.go.kr/
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 전국
+  row_municipality_codes:
+  - '1111000000'
+  - '1114000000'
+  - '4129000000'
+  - '4311400000'
+  last_quality:
+    collected: 124
+    score: 100.0
+    grade: A
+    parser: mmca_exhibition_education_event_api
+    error_kind: ''
+    checked_at: '2026-07-27T00:36:58+09:00'
+    source_pages: 449
+    detail_pages: 13
+    snapshot_complete: true
+- provider: NATIONAL_PALACE_MUSEUM
+  name: 국립고궁박물관
+  branch: 국립고궁박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.gogung.go.kr/gogung/pgm/cultureEventReg/edu/list.do?menuNo=800212
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 서울특별시
+  municipality_code: '1111000000'
+  last_quality:
+    collected: 171
+    score: 100.0
+    grade: A
+    parser: palace_museum_edu_cards+detail
+    error_kind: ''
+    checked_at: '2026-07-27T00:39:44+09:00'
+    source_pages: 3
+    detail_pages: 25
+    snapshot_complete: true
+- provider: RURAL_DEVELOPMENT_ADMINISTRATION
+  name: 농촌진흥청 농업과학관
+  branch: 농촌진흥청 농업과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  service_group: 체험
+  service_group_policy: locked
+  collection_type: reservation_form_get+public_schedule_contract+no_occupancy_or_submit
+  crawler_status: ready
+  priority: 1
+  url: https://www.rda.go.kr/aehBoard/aehBoardCenterIns.do
+  source: official_rda_agricultural_science_museum_reservation_center
+  origin: live_validated
+  region: 전북특별자치도 전주시 덕진구
+  municipality_code: '5211300000'
+  municipality_full_name: 전북특별자치도 전주시 덕진구
+  municipality_region_verified: true
+  covered_municipalities:
+  - code: '5211300000'
+    sido: 전북특별자치도
+    sigungu: 전주시 덕진구
+    full_name: 전북특별자치도 전주시 덕진구
+  discover_from_main_url: false
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 공지 게시판을 배제하고 공식 예약센터 GET 화면의 자유관람·전시해설 일자와 회차만 수집한다.
+  last_quality:
+    collected: 459
+    score: 100.0
+    grade: A
+    parser: rda_reservation_center_get_catalogue+public_schedule_contract+no_calendar_occupancy_or_application_calls
+    error_kind: ''
+    checked_at: '2026-08-05T08:52:40+09:00'
+    source_pages: 2
+    asset_pages: 1
+    snapshot_complete: true
+  crawler_notes:
+  - aoz_notice 과학관 공지는 운영·휴관·결과 공지가 섞인 게시판이므로 프로그램 원장에서 격리한다.
+  - 공식 페이지 주소인 전북특별자치도 전주시 덕진구 농생명로 300을 기준으로 시군구를 고정한다.
+  - 공개 GET 예약폼의 자유관람·전시해설, 선택 가능 기간, 요일별 회차와 주말 정원 계약만 원자적으로 검증한다.
+  - 승인 예약 달력, 점유·신청자 확인, 개인정보 입력 및 신청 제출 POST endpoint는 호출하지 않는다.
+  - 잔여 정원을 조회하지 않으므로 회차를 OPEN으로 만들지 않고 SCHEDULED로만 저장한다.
+- provider: NATIONAL_RAILROAD_MUSEUM
+  name: 철도박물관
+  branch: 철도박물관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: course_list
+  crawler_status: ready
+  priority: 3
+  url: https://www.railroadmuseum.co.kr
+  source: national_institution_course_search_targets
+  origin: collected
+  region: 경기도 의왕시
+  last_quality:
+    collected: 7
+    score: 85.0
+    grade: A
+    parser: railroadmuseum_programs
+    error_kind: ''

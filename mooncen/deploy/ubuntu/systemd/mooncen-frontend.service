@@ -1,0 +1,46 @@
+[Unit]
+Description=MoonCen frontend service
+After=network.target
+
+[Service]
+Type=simple
+User=mooncen-web
+Group=mooncen-web
+ExecCondition=+/usr/local/libexec/mooncen-native-runtime-condition
+WorkingDirectory=/opt/mooncen/frontend2
+EnvironmentFile=/etc/mooncen/frontend.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=HOME=/tmp
+Environment=NPM_CONFIG_CACHE=/tmp/npm-cache
+ExecStart=/bin/bash -lc 'npm run start -- --listen "tcp://${FRONTEND_HOST:-127.0.0.1}:${FRONTEND_PORT:-5173}"'
+Restart=always
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/mooncen-container-release
+ReadWritePaths=/run/mooncen-container-release
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+ProtectProc=invisible
+ProcSubset=pid
+IPAddressDeny=any
+IPAddressAllow=localhost
+
+[Install]
+WantedBy=multi-user.target

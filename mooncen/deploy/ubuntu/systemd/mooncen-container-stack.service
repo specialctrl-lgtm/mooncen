@@ -1,0 +1,38 @@
+[Unit]
+Description=MoonCen manifest-bound production container stack
+Documentation=file:/opt/mooncen/docs/docker-production.md
+Wants=network-online.target
+After=local-fs.target network-online.target docker.service postgresql.service
+Before=nginx.service cloudflared.service
+ConditionFileIsExecutable=/usr/local/libexec/mooncen-container-release
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+RuntimeDirectory=mooncen-container-release
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+ExecStart=/usr/local/libexec/mooncen-container-release ensure-active
+ExecStop=/usr/local/libexec/mooncen-container-release stop-active
+RemainAfterExit=yes
+TimeoutStartSec=2400s
+TimeoutStopSec=150s
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=-/var/lib/mooncen-container-release
+ReadWritePaths=-/run/mooncen-container-release
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

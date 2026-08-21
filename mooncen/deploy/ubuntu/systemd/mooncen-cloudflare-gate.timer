@@ -1,0 +1,11 @@
+[Unit]
+Description=Run MoonCen Cloudflare health gate every minute
+
+[Timer]
+OnBootSec=90s
+OnUnitActiveSec=60s
+AccuracySec=10s
+Unit=mooncen-cloudflare-gate.service
+
+[Install]
+WantedBy=timers.target

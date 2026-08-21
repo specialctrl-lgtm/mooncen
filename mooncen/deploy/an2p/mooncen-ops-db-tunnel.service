@@ -1,0 +1,37 @@
+[Unit]
+Description=MoonCen isolated production Ops PostgreSQL SSH tunnel
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mooncen_ops_db_tunnel
+Group=mooncen_ops_db_tunnel
+ExecStart=/usr/bin/ssh -F /etc/mooncen-an2p/db-tunnel/ssh_config -i /etc/mooncen-an2p/db-tunnel/id_ed25519 -N -T -o BatchMode=yes -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=yes -o UpdateHostKeys=no -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no -o NumberOfPasswordPrompts=0 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 -L 127.0.0.1:15432:127.0.0.1:5432 cloud-ops-db
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadOnlyPaths=/etc/mooncen-an2p/db-tunnel
+InaccessiblePaths=-/run/docker.sock
+InaccessiblePaths=-/var/run/docker.sock
+InaccessiblePaths=-/etc/mooncen-an2p/deploy-transport
+InaccessiblePaths=-/etc/mooncen-an2p/status-transport
+InaccessiblePaths=-/etc/mooncen-an2p/ops-api.env
+InaccessiblePaths=-/etc/mooncen-an2p/deployment-worker.env
+
+[Install]
+WantedBy=multi-user.target

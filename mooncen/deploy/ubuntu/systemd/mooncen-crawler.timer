@@ -1,0 +1,12 @@
+[Unit]
+Description=Run MoonCen crawler every night
+
+[Timer]
+OnCalendar=*-*-* 22:00:00 Asia/Seoul
+# Activation clears the pre-activation state stamp after applying its reviewed
+# batch, so the first start waits. Later downtime still catches up safely.
+Persistent=true
+Unit=mooncen-crawler-once.service
+
+[Install]
+WantedBy=timers.target

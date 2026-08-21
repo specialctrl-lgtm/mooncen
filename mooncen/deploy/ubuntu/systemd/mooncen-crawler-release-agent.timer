@@ -1,0 +1,14 @@
+[Unit]
+Description=Periodically reconcile the MoonCen crawler release desired state
+
+[Timer]
+OnBootSec=5m
+OnUnitActiveSec=2m
+RandomizedDelaySec=30s
+AccuracySec=10s
+Persistent=false
+Unit=mooncen-crawler-release-agent.service
+
+[Install]
+WantedBy=timers.target
+

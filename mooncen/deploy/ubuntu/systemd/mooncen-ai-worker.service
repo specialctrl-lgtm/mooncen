@@ -1,0 +1,47 @@
+[Unit]
+Description=MoonCen AI worker
+After=network.target postgresql.service mooncen-api.service
+
+[Service]
+Type=simple
+User=mooncen-ai
+Group=mooncen-ai
+ExecCondition=+/usr/local/libexec/mooncen-native-runtime-condition
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/ai.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=TZ=Asia/Seoul
+Environment=HOME=/tmp
+StateDirectory=mooncen-ai
+StateDirectoryMode=0700
+BindPaths=/var/lib/mooncen-ai:/opt/mooncen/logs
+ExecStart=/bin/bash -lc '/opt/mooncen/.venv/bin/python -X utf8 run_ai_pipeline.py --batch-size "${AI_BATCH_SIZE:-20}" --workers "${AI_WORKERS:-2}" --delay "${AI_DELAY:-0}" --poll-interval "${AI_POLL_INTERVAL:-60}" --active-start "${AI_ACTIVE_START:-22:00}" --active-end "${AI_ACTIVE_END:-07:00}" ${AI_WEEKEND_24H:+--weekend-24h}'
+Restart=always
+RestartSec=10
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/mooncen-container-release
+ReadWritePaths=/run/mooncen-container-release
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ProtectProc=invisible
+ProcSubset=pid
+
+[Install]
+WantedBy=multi-user.target

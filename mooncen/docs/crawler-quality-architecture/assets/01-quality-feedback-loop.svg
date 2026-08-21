@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930" role="img" aria-labelledby="title desc">
+  <title id="title">MoonCen crawler quality feedback loop</title>
+  <desc id="desc">A closed loop from quality signals and immutable evidence through labels, safe rule editing, replay, approval, staging canary, promotion, monitoring and rollback.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#476782"/></marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#b34b45"/></marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#17324d" flood-opacity="0.12"/></filter>
+    <style>
+      .title{font:700 35px Arial,sans-serif;fill:#132238}.sub{font:17px Arial,sans-serif;fill:#5a687a}.h{font:700 21px Arial,sans-serif;fill:#17324d}.t{font:15px Arial,sans-serif;fill:#273444}.small{font:14px Arial,sans-serif;fill:#5e6d7c}.lane{font:700 15px Arial,sans-serif;letter-spacing:1px;fill:#476782}.arrow{stroke:#476782;stroke-width:4;fill:none;marker-end:url(#arrow)}.rollback{stroke:#b34b45;stroke-width:4;stroke-dasharray:11 8;fill:none;marker-end:url(#arrowRed)}
+    </style>
+  </defs>
+  <rect width="1600" height="930" fill="#f6f8fb"/>
+  <text x="65" y="62" class="title">Crawler Quality Feedback Loop</text>
+  <text x="65" y="102" class="sub">Routine false-positive / false-negative fixes become evidence-backed, replayable and reversible rule releases</text>
+
+  <rect x="48" y="142" width="1504" height="292" rx="24" fill="#ffffff" stroke="#d7e0e8" stroke-width="2"/>
+  <text x="75" y="177" class="lane">DIAGNOSE &amp; DESIGN</text>
+  <g filter="url(#shadow)">
+    <rect x="78" y="215" width="238" height="154" rx="18" fill="#e8f1ff" stroke="#5f8ecb" stroke-width="3"/>
+    <rect x="378" y="215" width="238" height="154" rx="18" fill="#fff4df" stroke="#d29b3d" stroke-width="3"/>
+    <rect x="678" y="215" width="238" height="154" rx="18" fill="#eaf7f2" stroke="#4f9b7a" stroke-width="3"/>
+    <rect x="978" y="215" width="238" height="154" rx="18" fill="#ede9ff" stroke="#7868b4" stroke-width="3"/>
+    <rect x="1278" y="215" width="238" height="154" rx="18" fill="#edf7fb" stroke="#5791aa" stroke-width="3"/>
+  </g>
+  <text x="197" y="256" text-anchor="middle" class="h">1. Quality Signal</text><text x="197" y="290" text-anchor="middle" class="t">user report / issue</text><text x="197" y="315" text-anchor="middle" class="t">drift / stale / run error</text><text x="197" y="343" text-anchor="middle" class="small">triage, not ground truth</text>
+  <text x="497" y="256" text-anchor="middle" class="h">2. Frozen Evidence</text><text x="497" y="290" text-anchor="middle" class="t">raw HTML / JSON</text><text x="497" y="315" text-anchor="middle" class="t">request manifest + trace</text><text x="497" y="343" text-anchor="middle" class="small">redacted + content-addressed</text>
+  <text x="797" y="256" text-anchor="middle" class="h">3. Reviewed Labels</text><text x="797" y="290" text-anchor="middle" class="t">record / field verdict</text><text x="797" y="315" text-anchor="middle" class="t">reason + source evidence</text><text x="797" y="343" text-anchor="middle" class="small">append-only gold set</text>
+  <text x="1097" y="256" text-anchor="middle" class="h">4. Safe Rule Draft</text><text x="1097" y="290" text-anchor="middle" class="t">extract / include / exclude</text><text x="1097" y="315" text-anchor="middle" class="t">normalize / dedupe / coverage</text><text x="1097" y="343" text-anchor="middle" class="small">typed DSL; no arbitrary code</text>
+  <text x="1397" y="256" text-anchor="middle" class="h">5. Offline Replay</text><text x="1397" y="290" text-anchor="middle" class="t">baseline vs candidate</text><text x="1397" y="315" text-anchor="middle" class="t">record + field diff</text><text x="1397" y="343" text-anchor="middle" class="small">networkless and deterministic</text>
+  <path d="M316 292 H378" class="arrow"/><path d="M616 292 H678" class="arrow"/><path d="M916 292 H978" class="arrow"/><path d="M1216 292 H1278" class="arrow"/>
+
+  <rect x="48" y="480" width="1504" height="314" rx="24" fill="#ffffff" stroke="#d7e0e8" stroke-width="2"/>
+  <text x="75" y="516" class="lane">RELEASE &amp; LEARN</text>
+  <g filter="url(#shadow)">
+    <rect x="95" y="560" width="260" height="166" rx="18" fill="#fff4df" stroke="#d29b3d" stroke-width="3"/>
+    <rect x="440" y="560" width="260" height="166" rx="18" fill="#ede9ff" stroke="#7868b4" stroke-width="3"/>
+    <rect x="785" y="560" width="260" height="166" rx="18" fill="#eaf7f2" stroke="#4f9b7a" stroke-width="3"/>
+    <rect x="1130" y="560" width="260" height="166" rx="18" fill="#e8f1ff" stroke="#5f8ecb" stroke-width="3"/>
+  </g>
+  <text x="225" y="601" text-anchor="middle" class="h">6. Review &amp; Artifact</text><text x="225" y="635" text-anchor="middle" class="t">independent approval</text><text x="225" y="660" text-anchor="middle" class="t">canonical compile + SHA</text><text x="225" y="688" text-anchor="middle" class="small">immutable release evidence</text>
+  <text x="570" y="601" text-anchor="middle" class="h">7. Staging Canary</text><text x="570" y="635" text-anchor="middle" class="t">signed rule + adapter</text><text x="570" y="660" text-anchor="middle" class="t">shadow diff and gates</text><text x="570" y="688" text-anchor="middle" class="small">no primary write</text>
+  <text x="915" y="601" text-anchor="middle" class="h">8. Controlled Promote</text><text x="915" y="635" text-anchor="middle" class="t">existing fingerprint gate</text><text x="915" y="660" text-anchor="middle" class="t">safe close-missing policy</text><text x="915" y="688" text-anchor="middle" class="small">transactional apply</text>
+  <text x="1260" y="601" text-anchor="middle" class="h">9. Monitor &amp; Learn</text><text x="1260" y="635" text-anchor="middle" class="t">labeled precision / recall</text><text x="1260" y="660" text-anchor="middle" class="t">coverage proxies + drift</text><text x="1260" y="688" text-anchor="middle" class="small">new cases feed the loop</text>
+  <path d="M355 643 H440" class="arrow"/><path d="M700 643 H785" class="arrow"/><path d="M1045 643 H1130" class="arrow"/>
+  <path d="M1397 369 V440 H225 V560" class="arrow"/>
+  <path d="M1260 726 V842 H197 V369" class="arrow"/>
+  <path d="M1260 726 C1260 825 570 835 570 726" class="rollback"/>
+  <text x="922" y="818" class="small" fill="#b34b45">Gate breach → stop, pin previous rule revision, preserve evidence</text>
+  <rect x="390" y="862" width="820" height="44" rx="12" fill="#17324d"/>
+  <text x="800" y="890" text-anchor="middle" style="font:700 17px Arial,sans-serif;fill:#ffffff">No label → no metric claim · No replay → no approval · No complete snapshot → no close-missing</text>
+</svg>

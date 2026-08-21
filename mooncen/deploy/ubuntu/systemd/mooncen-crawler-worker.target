@@ -1,0 +1,9 @@
+[Unit]
+Description=MoonCen reviewed distributed crawler worker activation
+Wants=mooncen-crawler-pull-worker.service
+Wants=mooncen-crawler-release-agent.timer
+Wants=mooncen-crawler-release-reporter.timer
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target

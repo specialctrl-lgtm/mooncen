@@ -1,0 +1,583 @@
+apiVersion: 1
+
+deleteRules:
+  - orgId: 1
+    uid: mooncen_cloud_crawler_unhealthy
+  - orgId: 1
+    uid: mooncen_cloud_crawler_down
+
+groups:
+  - orgId: 1
+    name: mooncen-app-health
+    folder: MoonCen
+    interval: 1m
+    rules:
+      - uid: mooncen_metrics_stale
+        title: MoonCen app metrics stale
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: time() - mooncen_monitoring_collector_timestamp_seconds{node=~"cloud|gen1crawler|gen1db",alerting="enabled"} > bool 180
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ node }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: Alerting
+        execErrState: Error
+        for: 3m
+        annotations:
+          summary: "{{ $labels.node }} MoonCen app metrics are stale"
+          description: "node-exporter is reachable, but mooncen.prom has not been refreshed for more than 3 minutes."
+        labels:
+          severity: warning
+          service: mooncen-monitoring
+        isPaused: false
+
+      - uid: mooncen_cloud_deploy_missing
+        title: MoonCen cloud deployment provenance missing
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: absent(mooncen_deploy_timestamp_seconds{node="cloud"})
+              instant: true
+              intervalMs: 1000
+              legendFormat: cloud deploy provenance
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: Alerting
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "cloud deployment provenance is missing"
+          description: "The cloud node exporter is not reporting the reviewed MoonCen deploy timestamp."
+        labels:
+          severity: warning
+          service: mooncen-deploy
+          instance: cloud
+          node: cloud
+        isPaused: false
+
+      - uid: mooncen_cloud_not_primary
+        title: MoonCen cloud is not the writable primary
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: mooncen_node_role{node="cloud",exported_role="primary"} != bool 1 or mooncen_postgres_in_recovery{node="cloud"} != bool 0
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ node }} {{ exported_role }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: Alerting
+        execErrState: Error
+        for: 3m
+        annotations:
+          summary: "cloud primary state is broken"
+          description: "cloud must remain the active Web/API/database node with writable PostgreSQL in the split production topology."
+        labels:
+          severity: critical
+          service: mooncen-ha
+        isPaused: false
+
+      - uid: mooncen_gen1crawler_crawler_unhealthy
+        title: MoonCen gen1crawler crawler unhealthy
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: >-
+                scalar(max((mooncen_crawler_cycle_state_valid{node="gen1crawler"} != bool 1)
+                or absent(mooncen_crawler_cycle_state_valid{node="gen1crawler"})
+                or vector(0)))
+                + scalar(max(mooncen_crawler_cycle_outcome{node="gen1crawler",outcome=~"failed|partial_success|zero_provider"} != bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_cycle_partial_success{node="gen1crawler"} != bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_cycle_zero_provider{node="gen1crawler"} != bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_cycle_providers_requested{node="gen1crawler"} <= bool 0) or vector(1))
+                + scalar(max(mooncen_crawler_cycle_providers_failed{node="gen1crawler"} > bool 0) or vector(0))
+                + scalar(max((mooncen_crawler_cycle_last_completion_timestamp_seconds{node="gen1crawler"} <= bool 0)
+                or (time() - mooncen_crawler_cycle_last_completion_timestamp_seconds{node="gen1crawler"} > bool 129600))
+                or vector(1))
+                + scalar(max(mooncen_systemd_unit_result_failed{node="gen1crawler",unit="mooncen-crawler-once.service"} != bool 0) or vector(1))
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ unit }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: Alerting
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "gen1crawler crawler evidence is invalid, failed, partial, empty, or stale"
+          description: "The gen1crawler isolated-staging crawler evidence is invalid, its one-shot failed, it completed only partially, no provider succeeded, providers failed, or no terminal cycle completed in the last 36 hours."
+        labels:
+          severity: warning
+          service: mooncen-crawler
+          instance: gen1crawler
+          node: gen1crawler
+        isPaused: false
+
+      - uid: mooncen_gen1crawler_crawler_down
+        title: MoonCen gen1crawler crawler scheduler down
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: >-
+                scalar(max((mooncen_systemd_unit_active{node="gen1crawler",unit="mooncen-crawler.timer"} != bool 1)
+                or absent(mooncen_systemd_unit_active{node="gen1crawler",unit="mooncen-crawler.timer"})))
+                + scalar(max((mooncen_systemd_unit_enabled{node="gen1crawler",unit="mooncen-crawler.timer"} != bool 1)
+                or absent(mooncen_systemd_unit_enabled{node="gen1crawler",unit="mooncen-crawler.timer"})))
+                + scalar(max((mooncen_systemd_unit_active{node="gen1crawler",unit="mooncen-staging-apply.timer"} != bool 1)
+                or absent(mooncen_systemd_unit_active{node="gen1crawler",unit="mooncen-staging-apply.timer"})))
+                + scalar(max((mooncen_systemd_unit_enabled{node="gen1crawler",unit="mooncen-staging-apply.timer"} != bool 1)
+                or absent(mooncen_systemd_unit_enabled{node="gen1crawler",unit="mooncen-staging-apply.timer"})))
+                + scalar(max(mooncen_systemd_unit_result_failed{node="gen1crawler",unit="mooncen-staging-apply.service"} != bool 0) or vector(1))
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ unit }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: Alerting
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "gen1crawler crawler staging pipeline scheduler is unhealthy"
+          description: "gen1crawler must keep both the isolated-staging crawler timer and the pinned staging-to-primary promotion timer active and enabled; the latest promotion service must also be successful."
+        labels:
+          severity: warning
+          service: mooncen-crawler
+          instance: gen1crawler
+          node: gen1crawler
+        isPaused: false
+
+      - uid: mooncen_gen1db_control_unhealthy
+        title: MoonCen gen1db crawler control unhealthy
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: >-
+                (up{node="gen1db",alerting="enabled"} == bool 1)
+                *
+                (scalar(max((mooncen_postgres_in_recovery{node="gen1db"} != bool 0)
+                or absent(mooncen_postgres_in_recovery{node="gen1db"})))
+                + scalar(max((mooncen_crawler_control_collector_success{node="gen1db"} != bool 1)
+                or absent(mooncen_crawler_control_collector_success{node="gen1db"})))
+                + scalar(max(((time() - mooncen_crawler_control_generated_timestamp_seconds{node="gen1db"}) > bool 180)
+                or absent(mooncen_crawler_control_generated_timestamp_seconds{node="gen1db"})))
+                + scalar(max(mooncen_crawler_control_expired_leases{node="gen1db"} > bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_control_queue_jobs{node="gen1db",state="dead_lettered"} > bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_control_workers{node="gen1db",heartbeat="stale"} > bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_control_latest_batch_outcome{node="gen1db",status=~"partial_success|failed|cancelled|dead_lettered"} > bool 0) or vector(0))
+                + scalar(max(mooncen_crawler_control_release_reports{node="gen1db",status=~"failed|drifted"} > bool 0) or vector(0))
+                + scalar((count(mooncen_systemd_unit_active{node="gen1db",unit=~"mooncen-crawler-control-scheduler.service|mooncen-crawler-control-finalizer.service|mooncen-crawler-release-publisher.timer|mooncen-crawler-control-metrics.timer|mooncen-staging-apply.timer"} == 1) != bool 5) or vector(1))
+                + scalar((count(mooncen_systemd_unit_enabled{node="gen1db",unit=~"mooncen-crawler-control-scheduler.service|mooncen-crawler-control-finalizer.service|mooncen-crawler-release-publisher.timer|mooncen-crawler-control-metrics.timer|mooncen-staging-apply.timer"} == 1) != bool 5) or vector(1))
+                + scalar((count(mooncen_systemd_unit_result_failed{node="gen1db",unit=~"mooncen-crawler-release-publisher.service|mooncen-crawler-control-metrics.service|mooncen-staging-apply.service"} == 0) != bool 3) or vector(1)))
+              instant: true
+              intervalMs: 1000
+              legendFormat: gen1db crawler control
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "gen1db staging/control health evidence is unhealthy"
+          description: "After the reviewed distributed cutover promotes the gen1db target from alerting=pending to enabled, PostgreSQL and control metrics must be healthy; scheduler/finalizer services and publisher/observer/applier timers must be active and enabled, and their one-shot services must not report failure."
+        labels:
+          severity: warning
+          service: mooncen-crawler-control
+          instance: gen1db
+          node: gen1db
+        isPaused: false
+
+      - uid: mooncen_cloud_app_unit_down
+        title: MoonCen cloud app unit down
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              datasource:
+                type: prometheus
+                uid: prometheus
+              editorMode: code
+              expr: mooncen_systemd_unit_active{node="cloud",unit=~"mooncen-api.service|mooncen-frontend.service"} != bool 1
+              instant: true
+              intervalMs: 1000
+              legendFormat: "{{ unit }}"
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange:
+              from: 0
+              to: 0
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: Alerting
+        execErrState: Error
+        for: 3m
+        annotations:
+          summary: "cloud app unit is not active"
+          description: "mooncen-api or mooncen-frontend is not active on the cloud primary."
+        labels:
+          severity: critical
+          service: mooncen-api
+        isPaused: false

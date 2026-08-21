@@ -1,0 +1,612 @@
+version: 1
+updated_at: '2026-05-24'
+collection_policy:
+  purpose: 사회복지관 계열 강좌/프로그램 신청 목록 수집 후보 관리
+  include:
+  - 수강신청, 강좌신청, 프로그램 신청 목록이 공개된 복지관
+  - 노인복지관 평생교육/사회교육/취미여가 프로그램
+  - 종합사회복지관 교육문화/지역주민 프로그램
+  - 장애인복지관 문화여가/평생교육 프로그램
+  - 노동자복지관 평생학습 프로그램
+  exclude:
+  - 봉사자 모집만 있는 페이지
+  - 행사 공지 기사만 있고 실제 신청 목록 URL이 없는 페이지
+  - 로그인 후 개인 신청내역만 볼 수 있는 페이지
+  crawl_notes:
+  - 복지관은 방문접수/전화접수도 많으므로 online_apply_available 필드를 둔다.
+  - 회원가입 필요 여부와 목록 공개 여부를 분리한다.
+  - PDF 모집 안내만 있는 경우 candidate_pdf_notice로 분리하고 정규 크롤러 대상에서는 낮은 우선순위로 둔다.
+required_fields:
+- provider
+- name
+- welfare_type
+- region
+- base_url
+- list_url
+- status
+- priority
+- access
+desired_course_fields:
+- title
+- provider_course_id
+- branch
+- status
+- fee
+- target
+- recruitment_period
+- period
+- schedule_raw
+- capacity
+- applied_count
+- wait_count
+- location
+- raw_url
+- description
+- online_apply_available
+search_batches:
+- query: 사회복지관 강좌신청
+  source: google_search
+  collected_at: '2026-05-24'
+  note: 사용자가 제공한 Google 검색 URL의 검색어를 기준으로 1차 결과를 정리.
+  accepted_targets:
+  - SASANG_SENIOR_CLASS_DIRECTORY
+  - SAHA_SOCIAL_WELFARE_DIRECTORY
+  - HAMYANG_WELFARE_PROGRAM_NEWS_SEED
+  - SIMIN_WELFARE_FACILITY_SEED
+  already_registered_or_related:
+  - BABSANG_WELFARE_PROGRAM
+  - SAHASILVER_COURSE
+  - ICHEON_WORKER_WELFARE
+  rejected_results:
+  - name: 직업훈련 - 현장에서 바로 쓰는 일상생활지원 실천 가이드
+    url: https://www.invione.com/course/job-training/000000005948
+    reason: 민간 직업훈련 과정이며 지역 복지관 강좌신청 대상이 아님.
+  - name: 중앙사회서비스원 사회복지시설 평가지표 설명회
+    url: https://www.kcpass.or.kr
+    reason: 기관 종사자 대상 설명회 수강신청으로 주민 대상 복지관 강좌가 아님.
+  - name: 대교해밀평생교육원 사회복지학 강좌
+    url: https://hmstudy.com
+    reason: 민간 온라인 학점/자격 과정.
+  - name: 대학 사회봉사/실습 수강신청 문서
+    reason: 대학교 교과목/실습 안내이며 지역 강좌 수집 대상이 아님.
+  - name: 언론 기사/보도자료 only
+    reason: 실제 신청 목록 URL이 없으면 news_seed 또는 rejected로만 보관.
+- query: 사회복지관 강좌신청 start=10 이후
+  source: google_search
+  collected_at: '2026-05-24'
+  note: 사용자가 제공한 Google 2페이지 URL 및 추가 변형 검색어 기준으로 보강.
+  accepted_targets:
+  - YEONGTONG_WELFARE_ONLINE_COURSE
+  - HAMYANG_WELFARE_OFFICIAL_COURSE
+  - SEOSAN_WELFARE_TOTAL_RESERVATION
+  - GWACHEON_WELFARE_LIFELONG_COURSE
+  - HAMAN_WELFARE_LIFELONG_COURSE
+  - HADONG_WELFARE_ACADEMY_COURSE
+  - NONSAN_WELFARE_LIFELONG_COURSE
+  - GWANGJIN_WELFARE_VENUE_COURSE
+  duplicate_or_covered_results:
+  - name: 함양군 관련 언론 기사
+    covered_by: HAMYANG_WELFARE_OFFICIAL_COURSE
+  - name: 서산시 통합예약 개별 강좌 상세 다수
+    covered_by: SEOSAN_WELFARE_TOTAL_RESERVATION
+  - name: 과천시 평생학습 개별 강좌 상세 다수
+    covered_by: GWACHEON_WELFARE_LIFELONG_COURSE
+  rejected_results:
+  - name: 서산시 종합사회복지관 자유게시판 무료 자격교육 홍보
+    url: https://www.seosan.go.kr/swcenter/
+    reason: 복지관 공식 강좌가 아니라 외부 민간 자격교육 홍보 게시글.
+  - name: 대학교 사회봉사 수강신청 문서
+    reason: 대학 교과목 수강신청이며 주민 대상 복지관 강좌가 아님.
+  - name: 사회복지사 온라인 자격 과정
+    reason: 민간/학점은행 교육 과정으로 지역 복지관 강좌 수집 대상이 아님.
+targets:
+- provider: BABSANG_WELFARE_PROGRAM
+  name: 밥상공동체종합사회복지관 프로그램 신청
+  welfare_type: community_welfare_center
+  region: 강원특별자치도 원주시
+  priority: 1
+  status: discovery
+  base_url: https://www.bsbokji.or.kr
+  list_url: https://www.bsbokji.or.kr/participation/program/
+  sample_detail_url: https://www.bsbokji.or.kr/participation/program/apply/63/
+  platform: welfare_board_program
+  access:
+    list_public: true
+    login_required: unknown
+    selenium_required: false
+    api_available: unknown
+  observed:
+    result_count_sample: 21
+    list_fields:
+    - 제목
+    - 운영기간
+    - 접수기간
+    - 장소
+    - 인원
+    - 수강료
+    - 현황
+    statuses:
+    - 접수중
+    - 마감
+  notes:
+  - 목록 HTML에 프로그램별 운영기간/접수기간/장소/인원/수강료/현황이 노출됨.
+- provider: SAHASILVER_COURSE
+  name: 사하사랑채노인복지관 수강신청
+  welfare_type: senior_welfare_center
+  region: 부산광역시 사하구
+  priority: 1
+  status: discovery
+  base_url: https://www.sahasilver.org
+  list_url: https://www.sahasilver.org/05/02.php
+  sample_detail_url: https://www.sahasilver.org/05/02.php?mode=view&uid=121
+  platform: welfare_board_program
+  access:
+    list_public: true
+    login_required: unknown
+    selenium_required: false
+    api_available: unknown
+  observed:
+    detail_fields:
+    - 수업일시
+    - 모집인원
+    - 장소
+    - 신청기간
+    - 이용료
+    apply_rule: 진행중일 때 신청하기 버튼 노출
+  notes:
+  - 상세 페이지에서 수업일시/모집인원/신청기간/이용료를 직접 추출 가능.
+- provider: GIMHAE_DONGBU_SENIOR_NOTICE
+  name: 김해시동부노인종합복지관 수강신청 안내
+  welfare_type: senior_welfare_center
+  region: 경상남도 김해시
+  priority: 3
+  status: ready
+  base_url: https://gimhaedongbu.e-ncom.co.kr
+  list_url: https://gimhaedongbu.e-ncom.co.kr
+  platform: public_json_api
+  access:
+    list_public: true
+    apply_login_required: true
+    selenium_required: false
+    api_available: true
+  notes:
+  - 공식 공개 API의 활성 학기·강좌·추첨 원장과 공식 모집표를 대조해 수집한다.
+  - 접수 종료 후 강좌 목록 API가 비어도 공개 추첨 identity 64개를 검증하며 테스트 강좌 3개는 제외한다.
+- provider: SUNCHEON_SENIOR_WELFARE_NOTICE
+  name: 순천시 노인복지관 평생교육 사업
+  welfare_type: senior_welfare_center
+  region: 전라남도 순천시
+  priority: 4
+  status: candidate_notice
+  base_url: https://sc.go.kr
+  list_url: https://sc.go.kr/silver/service
+  platform: static_notice
+  access:
+    list_public: true
+    apply_login_required: false
+    selenium_required: false
+    api_available: false
+  observed:
+    apply_method: 방문접수
+    branches:
+    - 용당노인복지관
+    - 동부노인복지관
+    - 남부노인복지관
+  notes:
+  - 강좌 목록보다는 사업/접수 안내 페이지. 정규 수집보다는 기관 정보 후보.
+- provider: ICHEON_WORKER_WELFARE
+  name: 이천시 노동자 복지관 평생학습 프로그램
+  welfare_type: worker_welfare_center
+  region: 경기도 이천시
+  priority: 2
+  status: candidate
+  base_url: https://www.icheon-hrd.or.kr
+  list_url: https://www.icheon-hrd.or.kr/main/program/rule.jsp
+  platform: welfare_board_program
+  access:
+    list_public: unknown
+    apply_login_required: true
+    selenium_required: unknown
+    api_available: unknown
+  observed:
+    apply_method: 홈페이지 회원가입 후 신청
+    fee_policy: 수강료 무료, 재료비 본인부담
+  notes:
+  - 노동자 복지관이지만 평생학습 수강신청 구조라 후보에 포함.
+- provider: YEONGTONG_WELFARE_ONLINE_COURSE
+  name: 영통종합사회복지관 온라인수강신청
+  welfare_type: community_welfare_center
+  region: 경기도 수원시 영통구
+  priority: 1
+  status: discovery
+  base_url: https://edu.ytsw.or.kr
+  list_url: https://edu.ytsw.or.kr/prog/spt/guide.do
+  home_url: https://www.ytsw.or.kr
+  platform: custom_online_course
+  access:
+    list_public: true
+    apply_login_required: true
+    selenium_required: unknown
+    api_available: unknown
+  observed:
+    address: 경기도 수원시 영통구 반달로 45
+    phone: 031-201-8300
+    apply_method: 회원가입 후 수강신청 > 강좌선택 > 신청완료 > 마이페이지 결제
+    payment_rule: 온라인 신청 후 15분 내 결제하지 않으면 신청 취소
+    course_categories:
+    - 수영
+    - 아쿠아로빅
+    - 헬스
+    - 평생교육
+    list_signals:
+    - 수강신청
+    - 강좌선택
+    - 마이페이지
+    - 수강신청현황
+  notes:
+  - 온라인 수강신청 안내 페이지와 별도 신청 도메인 확인.
+  - 어린이 강좌는 보호자 아이디가 아니라 수강자 본인 이름 가입이 필요하다는 제약이 있음.
+  - 목록 endpoint와 실제 강좌 리스트 URL은 discovery 단계에서 추가 확인 필요.
+- provider: SASANG_SENIOR_CLASS_DIRECTORY
+  name: 부산 사상구 노인교실/사회복지관 부설 프로그램 현황
+  welfare_type: senior_class_directory
+  region: 부산광역시 사상구
+  priority: 3
+  status: candidate_directory
+  base_url: https://www.sasang.go.kr
+  list_url: https://www.sasang.go.kr/index.sasang?menuCd=DOM_000000103005002006
+  platform: static_directory
+  access:
+    list_public: true
+    apply_login_required: false
+    selenium_required: false
+    api_available: false
+  observed:
+    apply_method: 회원가입 후 지정된 신청 기간에 접수
+    fields:
+    - 시설명
+    - 소재지
+    - 연락처
+    - 개설 프로그램
+    facilities:
+    - name: 모라종합사회복지관 부설노인복지대학
+      address: 부산 사상구 모라로110번길 129
+      phone: 051-304-9876
+      programs: 노래교실, 웃음치료, 레크레이션
+    - name: 백양종합사회복지관 부설노인교실
+      address: 부산 사상구 모라로192번길 20-33
+      phone: 051-305-4286
+      programs: 노인대학, 라인댄스교실, 합창단, 서예교실
+    - name: 사상구종합사회복지관 다솜노인대학
+      address: 부산 사상구 백양대로 527
+      phone: 051-314-8948
+      programs: 원예교실, 치매예방프로그램, 노래교실, 생활체조, 노래 및 레크레이션
+    - name: 학장종합사회복지관 천수어르신교실
+      address: 부산 사상구 학감대로49번길28-70
+      phone: 051-311-4015
+      programs: 신바람노래교실, 학마을체조교실
+  notes:
+  - 개별 강좌 접수 목록은 아니지만 사회복지관 부설 노인교실과 프로그램명이 표로 제공됨.
+  - 지도/기관 seed로 활용하고 실제 온라인 신청 URL은 별도 발견 필요.
+- provider: SAHA_SOCIAL_WELFARE_DIRECTORY
+  name: 부산 사하구 사회복지관 목록
+  welfare_type: community_welfare_center_directory
+  region: 부산광역시 사하구
+  priority: 4
+  status: candidate_directory
+  base_url: https://health.saha.go.kr
+  list_url: https://health.saha.go.kr/portal/contents.do?mId=0503020203
+  platform: static_directory
+  access:
+    list_public: true
+    apply_login_required: false
+    selenium_required: false
+    api_available: false
+  observed:
+    fields:
+    - 기관단체명
+    - 주소
+    - 연락처
+  notes:
+  - 사회복지관 기관 목록 페이지. 강좌신청 목록은 없으므로 기관 seed로만 사용.
+- provider: HAMYANG_WELFARE_PROGRAM_NEWS_SEED
+  name: 함양군 종합사회복지관 프로그램 수강신청 보도 seed
+  welfare_type: community_welfare_center
+  region: 경상남도 함양군
+  priority: 4
+  status: candidate_news_seed
+  base_url: https://www.hygn.go.kr
+  list_url: https://kpinews.kr/newsView/179568528751407
+  platform: news_seed
+  access:
+    list_public: true
+    apply_login_required: unknown
+    selenium_required: unknown
+    api_available: unknown
+  observed:
+    program_count_text: 건강, 취미, 교양, 자격증반 등 하반기 프로그램
+    applicant_text: 모집인원 845명, 신청 961명
+    selection_method: 초과 과목 추첨
+  notes:
+  - 언론 기사에서 수강신청 운영 사실은 확인되나 실제 신청 목록 URL은 미확인.
+  - 함양군청/종합사회복지관 공식 신청 페이지를 추가 탐색해야 함.
+- provider: SIMIN_WELFARE_FACILITY_SEED
+  name: 시민종합사회복지관 시설/강당 신청 seed
+  welfare_type: community_welfare_center
+  region: 광주광역시 북구
+  priority: 5
+  status: candidate_facility_seed
+  base_url: https://si-min.or.kr
+  list_url: https://si-min.or.kr/board_intro/intro_E1.asp
+  platform: static_notice
+  access:
+    list_public: true
+    apply_login_required: false
+    selenium_required: false
+    api_available: false
+  observed:
+    address: 광주광역시 북구 양일로 76-1
+    apply_document: 복지관 시설 사용허가 신청서
+  notes:
+  - 강좌신청이 아니라 시설/강당 신청 성격. 추후 대관 데이터까지 확장할 때 참고.
+- provider: HAMYANG_WELFARE_OFFICIAL_COURSE
+  name: 함양군 종합사회복지관 교육신청/수강신청
+  welfare_type: community_welfare_center
+  region: 경상남도 함양군
+  priority: 1
+  status: discovery
+  base_url: https://www.hygn.go.kr
+  list_url: https://www.hygn.go.kr/welfare.web
+  sample_notice_url: https://www.hygn.go.kr/02138/02139.web?amode=view&cpage=1&gcode=7038&idx=917508
+  platform: municipal_welfare_course
+  access:
+    list_public: true
+    apply_login_required: false
+    selenium_required: unknown
+    api_available: unknown
+  observed:
+    address: 경상남도 함양군 함양읍 필봉산길 55
+    phone: 055-960-6732
+    apply_method: 종합사회복지관 누리집 > 교육신청 > 수강신청 또는 방문신청
+    selection_method: 접수 인원 초과 시 추첨
+    fee_policy: 수강료 무료, 재료비/교재비 본인부담
+    official_path_hint: https://www.hygn.go.kr/welfare.web
+  notes:
+  - 언론 기사 seed보다 공식 경로가 확인되어 priority 1 discovery로 승격.
+  - 실제 교육신청 목록 endpoint는 welfare.web 하위에서 추가 확인 필요.
+- provider: SEOSAN_WELFARE_TOTAL_RESERVATION
+  name: 서산시 통합예약 종합사회복지관 본관교육
+  welfare_type: community_welfare_center
+  region: 충청남도 서산시
+  priority: 1
+  status: discovery
+  base_url: https://total.seosan.go.kr
+  list_url: https://total.seosan.go.kr/total/selectEdcAtrCourseListU.do?key=326
+  sample_detail_url: https://total.seosan.go.kr/total/selectEdcAtrCourseViewU.do?edcCourseNo=10916&key=326
+  platform: municipal_integrated_reservation
+  access:
+    list_public: true
+    apply_login_required: unknown
+    selenium_required: false
+    api_available: unknown
+  observed:
+    branch: 종합사회복지관
+    category: 본관교육
+    list_signals:
+    - 홈 교육 / 강좌 종합사회복지관 본관교육
+    - 기관명 종합사회복지관
+    - 접수방식 온라인
+    detail_fields:
+    - 강좌명
+    - 기수
+    - 접수기간
+    - 접수방식
+    - 모집인원
+    - 선발방식
+    - 강사명
+    - 교육기간
+    - 교육시간
+    - 교육대상
+    - 수강료
+    - 교육장소
+  notes:
+  - Google에 개별 상세 페이지가 다수 노출됨. provider 단위로 묶어 중복 등록 방지.
+  - searchInsttCode 또는 key=326 기준 목록 필터 확인 필요.
+- provider: GWACHEON_WELFARE_LIFELONG_COURSE
+  name: 과천시 평생학습 종합사회복지관 강좌
+  welfare_type: community_welfare_center
+  region: 경기도 과천시
+  priority: 1
+  status: discovery
+  base_url: https://www.gccity.go.kr
+  list_url: https://www.gccity.go.kr/reservation/gcedu/edu/app/list.do?mId=0103010000
+  sample_detail_url: https://www.gccity.go.kr/reservation/gcedu/edu/app/view.do?extraYn=N&mId=0103010000&programIdx=1842&stageIdx=337
+  platform: municipal_lifelong_learning
+  access:
+    list_public: true
+    apply_login_required: unknown
+    selenium_required: false
+    api_available: unknown
+  observed:
+    branch: 과천종합사회복지관
+    venue_patterns:
+    - 종합사회복지관 / 복지관 강당
+    - 종합사회복지관 / 복지관 양재교실
+    - 종합사회복지관 / 복지관 과수원
+    detail_fields:
+    - 접수기간
+    - 학습장/강의실
+    - 교육기간
+    - 교육시간/요일
+    - 수강료
+    - 교육대상
+    - 모집인원/방법
+    - 강사명
+    - 문의전화
+    apply_method: 평생학습 온라인 신청, 전화/방문 동시 접수 가능
+  notes:
+  - 과천시 평생학습 포털에 과천종합사회복지관 강좌가 다수 노출됨.
+- provider: HAMAN_WELFARE_LIFELONG_COURSE
+  name: 함안군 평생학습관 함안군종합사회복지관 강좌
+  welfare_type: community_welfare_center
+  region: 경상남도 함안군
+  priority: 1
+  status: ready
+  base_url: https://www.haman.go.kr
+  list_url: https://www.haman.go.kr/02697/02708.web
+  sample_notice_url: https://www.welfarehello.com/community/hometownNews/a14b571c-d791-4e6f-952a-1710bfe78499
+  platform: municipal_lifelong_learning
+  access:
+    list_public: true
+    apply_login_required: unknown
+    selenium_required: unknown
+    api_available: unknown
+  observed:
+    branch: 함안군종합사회복지관
+    apply_path_hint: 함안군 평생학습센터 > 수강신청 > 교육기관 [함안군종합사회복지관] 선택
+    sample_courses:
+    - 장애인 난타
+    - 디딤돌 학당(한글교실)
+    - 숟가락 난타
+    detail_fields:
+    - 강좌명
+    - 기관명
+    - 교육장소
+    - 문의전화
+    - 교육기간
+    - 강의시간
+    - 수강료
+    - 요일
+    - 상태
+    phone: 055-580-2457
+  notes:
+  - 통합예약 교육/강좌 왼쪽 기관 메뉴를 agency별로 순환한다.
+  - AGENCY001, AGENCY024, AGENCY003, AGENCY005, AGENCY006 및 복합문학관 메뉴를 확인한다.
+- provider: HADONG_WELFARE_ACADEMY_COURSE
+  name: 하동아카데미 종합사회복지관 강좌
+  welfare_type: community_welfare_center
+  region: 경상남도 하동군
+  priority: 1
+  status: discovery
+  base_url: https://www.hadong.go.kr
+  list_url: https://www.hadong.go.kr/03826/03830/03831.web
+  sample_detail_url: https://www.hadong.go.kr/03826/03830/03831.web?amode=view&facCode=info-service&idx=1255
+  platform: municipal_lifelong_learning
+  access:
+    list_public: true
+    apply_login_required: unknown
+    selenium_required: false
+    api_available: unknown
+  observed:
+    branch: 종합사회복지관
+    venue_patterns:
+    - 종합사회복지관 2층 강의실1
+    - 종합사회복지관 2층 강의실2
+    detail_fields:
+    - 운영기관
+    - 교육기간
+    - 접수기간
+    - 문의전화
+    - 교육대상
+    - 교육장소
+    - 요일/시간
+    - 수강료
+    - 접수정원
+    - 대기정원
+    - 신청방법
+    - 강사명
+    apply_method: 온라인신청, 전화접수
+  notes:
+  - 하동아카데미 평생학습 강좌 중 교육장소가 종합사회복지관인 강좌.
+- provider: NONSAN_WELFARE_LIFELONG_COURSE
+  name: 논산시 평생학습관 종합사회복지관 강좌
+  welfare_type: community_welfare_center
+  region: 충청남도 논산시
+  priority: 2
+  status: discovery
+  base_url: https://lllcity.nonsan.go.kr
+  list_url: https://lllcity.nonsan.go.kr/prog/educate/kor/sub01_01_01/list.do
+  sample_detail_url: https://lllcity.nonsan.go.kr/prog/educate/kor/sub01_01_01/view.do?eduNo=598&organ=&pageIndex=15
+  platform: municipal_lifelong_learning
+  access:
+    list_public: true
+    apply_login_required: false
+    selenium_required: false
+    api_available: unknown
+  observed:
+    branch: 논산시종합사회복지관
+    apply_method: 방문접수 중심
+    detail_fields:
+    - 강좌명
+    - 교육기간
+    - 교육시간
+    - 접수기간
+    - 교육장소
+    - 정원
+    - 교육대상
+    - 수강료
+    - 강사명
+    - 문의전화
+    - 교육기관
+    phone: 041-746-8422
+  notes:
+  - 과거 강좌가 많이 노출됨. 현재 운영 목록 여부와 최신성 검증 필요.
+- provider: GWANGJIN_WELFARE_VENUE_COURSE
+  name: 광진교육포털 종합사회복지관 장소 강좌
+  welfare_type: community_welfare_center
+  region: 서울특별시 광진구
+  priority: 3
+  status: candidate_venue
+  base_url: https://www.gwangjin.go.kr
+  list_url: https://www.gwangjin.go.kr/edu/pgm/edu/list.do
+  sample_detail_url: https://www.gwangjin.go.kr/edu/pgm/edu/view.do?ctgryCd=0211&ctgryDetailCd=021101&menuNo=400098&progrmSn=3371
+  platform: municipal_education_portal
+  access:
+    list_public: true
+    apply_login_required: unknown
+    selenium_required: false
+    api_available: unknown
+  observed:
+    venue_signal: 종합사회복지관 치유에세이 및 자서전 강의
+    category: 진로/진학 프로그램
+  notes:
+  - 복지관 자체 강좌라기보다 교육포털 강좌의 장소/협력기관으로 종합사회복지관이 등장.
+  - 장소 기반 확장 후보로 보관.
+implementation_groups:
+- name: E-NCOM welfare course crawler
+  priority: 1
+  crawler_strategy:
+  - 메인에서 수강신청 및 결제 메뉴 URL 확인
+  - 목록이 로그인 없이 보이면 requests로 수집
+  - 로그인 화면으로 막히면 목록 공개 여부만 상태 리포트
+  - 동일 도메인 패턴으로 provider/branch/address 자동 등록
+- name: Welfare board program crawler
+  priority: 1
+  target_providers:
+  - BABSANG_WELFARE_PROGRAM
+  - SAHASILVER_COURSE
+  crawler_strategy:
+  - 목록 페이지 pagination 수집
+  - 상세 페이지에서 운영기간/접수기간/장소/인원/수강료 추출
+  - 접수중/마감 상태 보정
+- name: Municipal welfare/lifelong course crawler
+  priority: 1
+  target_providers:
+  - YEONGTONG_WELFARE_ONLINE_COURSE
+  - HAMYANG_WELFARE_OFFICIAL_COURSE
+  - SEOSAN_WELFARE_TOTAL_RESERVATION
+  - GWACHEON_WELFARE_LIFELONG_COURSE
+  - HAMAN_WELFARE_LIFELONG_COURSE
+  - HADONG_WELFARE_ACADEMY_COURSE
+  - NONSAN_WELFARE_LIFELONG_COURSE
+  - GWANGJIN_WELFARE_VENUE_COURSE
+  crawler_strategy:
+  - 지자체 통합예약/평생학습 목록에서 기관명 또는 장소명에 종합사회복지관이 포함된 강좌 필터링
+  - 상세 페이지에서 접수기간, 교육기간, 요일/시간, 수강료, 정원, 신청현황 추출
+  - 장소 기반 후보는 branch/venue를 분리 저장
+  - 과거 강좌가 많은 포털은 최신 접수기간 기준으로 필터링
+next_steps:
+- E-NCOM 계열 3개 샘플로 목록 endpoint 확인
+- 밥상공동체/사하사랑채는 HTML 목록 크롤러부터 구현
+- candidate_notice/PDF 대상은 실제 신청 목록 URL 추가 발견 후 ready로 승격
+- 사회복지관 검색 discovery tool을 만들어 새 후보를 YAML에 append

@@ -1,0 +1,72 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.13.0@sha256:c6b27ea434f8389bfe233fbc7be381cf50587c286e871bc842008f5a1b1908a7
+    container_name: mooncen-prometheus
+    restart: unless-stopped
+    init: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    network_mode: host
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-30d}
+      - --web.listen-address=${MONITOR_BIND_ADDR:?Set MONITOR_BIND_ADDR to the private monitoring IPv4}:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:13.1.0@sha256:121a7a9ece6dc10b969f1f96eed64b4f07dfac0d0b8abc070f7cb83bbde86f63
+    container_name: mooncen-grafana
+    restart: unless-stopped
+    init: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    network_mode: host
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      MONITOR_BIND_ADDR: ${MONITOR_BIND_ADDR:?Set MONITOR_BIND_ADDR to the private monitoring IPv4}
+      GF_SERVER_HTTP_ADDR: ${MONITOR_BIND_ADDR:?Set MONITOR_BIND_ADDR to the private monitoring IPv4}
+      GRAFANA_TELEGRAM_BOT_TOKEN: ${GRAFANA_TELEGRAM_BOT_TOKEN:-}
+      GRAFANA_TELEGRAM_CHAT_ID: ${GRAFANA_TELEGRAM_CHAT_ID:-}
+      GRAFANA_TELEGRAM_BOT_TOKEN_JSON: '"${GRAFANA_TELEGRAM_BOT_TOKEN:-}"'
+      GRAFANA_TELEGRAM_CHAT_ID_JSON: '"${GRAFANA_TELEGRAM_CHAT_ID:-}"'
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+
+  uptime-kuma:
+    profiles:
+      - uptime
+    image: louislam/uptime-kuma:2.4.0-rootless@sha256:a23b9d0029e6f1bc4a0fea0f3ee306d51f43216cd9f8115f8d84d146e9411e4c
+    container_name: mooncen-uptime-kuma
+    restart: unless-stopped
+    init: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    network_mode: host
+    environment:
+      UPTIME_KUMA_HOST: ${MONITOR_BIND_ADDR:?Set MONITOR_BIND_ADDR to the private monitoring IPv4}
+      UPTIME_KUMA_PORT: "3001"
+      UPTIME_KUMA_WS_ORIGIN_CHECK: cors-like
+      UPTIME_KUMA_SQLITE_SINGLE_CONNECTION: "true"
+    volumes:
+      - uptime-kuma-data:/app/data
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  uptime-kuma-data:

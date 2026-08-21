@@ -1,0 +1,8 @@
+/* Ordered cascade entry point. Feature files intentionally preserve this order. */
+@import './styles/core.css';
+@import './styles/dashboard.css';
+@import './styles/dashboard-current.css';
+@import './styles/responsive.css';
+@import './styles/course-cards.css';
+@import './styles/mobile-simplified.css';
+@import './styles/top-layout.css';

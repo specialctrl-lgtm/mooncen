@@ -1,0 +1,41 @@
+{
+  "defaultTarget": "cloud",
+  "servers": {
+    "cloud": {
+      "server": "cloud",
+      "user": "ubuntu",
+      "domain": "mooncen.kr",
+      "remoteDir": "/opt/mooncen",
+      "identityFile": "C:\\project\\mooncen\\oracle_cloud_mooncen.key",
+      "role": "primary",
+      "deployProfile": "full-stack",
+      "environment": "production",
+      "opsConsole": false,
+      "active": true
+    },
+    "gen1crawler": {
+      "server": "gen1crawler",
+      "user": "sgm",
+      "domain": "gen1crawler",
+      "remoteDir": "/opt/mooncen",
+      "identityFile": "ssh-agent",
+      "role": "crawler",
+      "deployProfile": "crawler-only",
+      "environment": "production",
+      "opsConsole": false,
+      "active": false
+    },
+    "gen1db": {
+      "server": "gen1db",
+      "user": "sgm",
+      "domain": "gen1db",
+      "remoteDir": "/opt/mooncen",
+      "identityFile": "ssh-agent",
+      "role": "crawler-control",
+      "deployProfile": "control-only",
+      "environment": "production",
+      "opsConsole": false,
+      "active": false
+    }
+  }
+}

@@ -1,0 +1,45 @@
+[Unit]
+Description=MoonCen isolated an2p production service-status publisher
+After=network-online.target mooncen-an2p-runtime-recovery.service mooncen-ops-db-tunnel.service mooncen-ops-api.service
+Wants=network-online.target
+Requires=mooncen-an2p-runtime-recovery.service mooncen-ops-db-tunnel.service
+
+[Service]
+Type=simple
+User=mooncen_ops_api
+Group=mooncen_ops_api
+WorkingDirectory=/opt/mooncen-an2p-control/current
+EnvironmentFile=/etc/mooncen-an2p/ops-api.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=+/usr/local/libexec/mooncen-an2p-runtime-manager gate-service-start mooncen-ops-status-agent.service
+ExecStart=/opt/mooncen-an2p-control/current/.venv/bin/python -m ops_agent.status_agent --interval 30
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadOnlyPaths=/opt/mooncen-an2p-control/current
+ReadWritePaths=/var/lib/mooncen-an2p-runtime
+ReadWritePaths=/run/mooncen-an2p-runtime
+InaccessiblePaths=-/run/docker.sock
+InaccessiblePaths=-/var/run/docker.sock
+InaccessiblePaths=-/etc/mooncen-an2p/deploy-transport
+InaccessiblePaths=-/etc/mooncen-an2p/db-tunnel
+InaccessiblePaths=-/etc/mooncen-an2p/deployment-worker.env
+InaccessiblePaths=-/var/lib/mooncen-deployment-worker
+
+[Install]
+WantedBy=multi-user.target

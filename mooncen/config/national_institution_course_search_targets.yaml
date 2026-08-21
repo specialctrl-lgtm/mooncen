@@ -1,0 +1,3907 @@
+version: 1
+generated_at: '2026-05-27'
+scope: 국가 또는 중앙 공공기관이 운영하는 과학관, 생태원, 생물자원관, 수목원, 국립공원, 해양/농업/항공/박물관의 교육·해설·체험 검색 큐
+collection_policy:
+  include:
+  - 공식 홈페이지 또는 공식 예약/교육 플랫폼의 교육, 해설, 체험, 단체, 가족 프로그램
+  - 국립/중앙정부/공공기관이 운영하거나 위탁 운영하는 전시·체험 기관
+  - 무료/유료 교육 프로그램, 전시해설, 생태해설, 숲해설, 청소년·가족 체험
+  exclude:
+  - 언론 기사, 블로그 후기, 여행 후기, 단순 시설 소개
+  - 채용, 입찰, 공지사항만 있고 실제 신청 가능한 프로그램 목록이 없는 페이지
+  - 민간 학원, 사설 체험 업체, 학교 내부 공지
+  preferred_domains:
+  - .go.kr
+  - .or.kr
+  - .re.kr
+  - official institution domains
+query_intents:
+- id: education
+  label: 교육
+  keywords:
+  - 교육 프로그램
+  - 교육 신청
+  - 교육 예약
+- id: guided_tour
+  label: 해설
+  keywords:
+  - 해설 프로그램
+  - 전시 해설
+  - 생태 해설
+  - 숲 해설
+- id: experience
+  label: 체험
+  keywords:
+  - 체험 프로그램
+  - 체험 신청
+  - 체험 예약
+- id: school_group
+  label: 단체/학교
+  keywords:
+  - 단체 교육
+  - 학교 교육
+  - 청소년 체험
+- id: family
+  label: 가족
+  keywords:
+  - 가족 체험
+  - 어린이 교육
+  - 주말 체험
+targets:
+- provider: NATIONAL_SCIENCE_MUSEUM
+  name: 국립중앙과학관
+  category: national_science_museum
+  owner_type: national_government_or_public_institution
+  ministry: 과학기술정보통신부
+  region: 대전광역시
+  priority: 1
+  status: search_seed
+  base_url: https://www.science.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립중앙과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립중앙과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립중앙과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립중앙과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립중앙과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립중앙과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립중앙과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립중앙과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립중앙과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립중앙과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립중앙과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립중앙과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립중앙과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립중앙과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립중앙과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립중앙과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.science.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.science.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.science.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.science.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.science.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.science.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.science.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.science.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.science.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.science.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.science.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.science.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: GWACHEON_NATIONAL_SCIENCE_MUSEUM
+  name: 국립과천과학관
+  category: national_science_museum
+  owner_type: national_government_or_public_institution
+  ministry: 과학기술정보통신부
+  region: 경기도 과천시
+  priority: 1
+  status: search_seed
+  base_url: https://www.sciencecenter.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립과천과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립과천과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립과천과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립과천과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립과천과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립과천과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립과천과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립과천과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립과천과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립과천과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립과천과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립과천과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립과천과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립과천과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립과천과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립과천과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%BC%EC%B2%9C%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.sciencecenter.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.sciencecenter.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.sciencecenter.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.sciencecenter.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.sciencecenter.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.sciencecenter.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: GWANGJU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립광주과학관
+  category: national_science_museum
+  owner_type: national_government_or_public_institution
+  ministry: 과학기술정보통신부
+  region: 광주광역시
+  priority: 1
+  status: search_seed
+  base_url: https://www.sciencecenter.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립광주과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립광주과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립광주과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립광주과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립광주과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립광주과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립광주과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립광주과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립광주과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립광주과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립광주과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립광주과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립광주과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립광주과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립광주과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립광주과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B4%91%EC%A3%BC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.sciencecenter.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.sciencecenter.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.sciencecenter.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.sciencecenter.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.sciencecenter.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.sciencecenter.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciencecenter.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: DAEGU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립대구과학관
+  category: national_science_museum
+  owner_type: national_government_or_public_institution
+  ministry: 과학기술정보통신부
+  region: 대구광역시
+  priority: 1
+  status: search_seed
+  base_url: https://www.dnsm.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립대구과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립대구과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립대구과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립대구과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립대구과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립대구과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립대구과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립대구과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립대구과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립대구과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립대구과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립대구과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립대구과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립대구과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립대구과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립대구과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%8C%80%EA%B5%AC%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.dnsm.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.dnsm.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.dnsm.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.dnsm.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.dnsm.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.dnsm.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.dnsm.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.dnsm.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.dnsm.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.dnsm.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.dnsm.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.dnsm.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: BUSAN_NATIONAL_SCIENCE_MUSEUM
+  name: 국립부산과학관
+  category: national_science_museum
+  owner_type: national_government_or_public_institution
+  ministry: 과학기술정보통신부
+  region: 부산광역시
+  priority: 1
+  status: search_seed
+  base_url: https://www.sciport.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립부산과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립부산과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립부산과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립부산과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립부산과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립부산과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립부산과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립부산과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립부산과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립부산과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립부산과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립부산과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립부산과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립부산과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립부산과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립부산과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%B6%80%EC%82%B0%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.sciport.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciport.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.sciport.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciport.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.sciport.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciport.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.sciport.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciport.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.sciport.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciport.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.sciport.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.sciport.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_ECOLOGY_CENTER
+  name: 국립생태원
+  category: national_ecology
+  owner_type: national_government_or_public_institution
+  ministry: 환경부
+  region: 충청남도 서천군
+  priority: 1
+  status: search_seed
+  base_url: https://www.nie.re.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립생태원 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립생태원 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립생태원 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립생태원 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립생태원 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립생태원 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립생태원 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립생태원 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립생태원 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립생태원 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립생태원 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립생태원 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립생태원 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립생태원 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립생태원 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립생태원 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%83%9D%ED%83%9C%EC%9B%90+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.nie.re.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.nie.re.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.nie.re.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.nie.re.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.nie.re.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.nie.re.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.nie.re.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.nie.re.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.nie.re.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.nie.re.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.nie.re.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.nie.re.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: HONAM_BIOLOGICAL_RESOURCES
+  name: 국립호남권생물자원관
+  category: national_biodiversity
+  owner_type: national_government_or_public_institution
+  ministry: 환경부
+  region: 전라남도 목포시
+  priority: 1
+  status: search_seed
+  base_url: https://www.hnibr.re.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립호남권생물자원관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립호남권생물자원관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립호남권생물자원관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립호남권생물자원관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립호남권생물자원관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립호남권생물자원관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립호남권생물자원관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립호남권생물자원관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립호남권생물자원관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립호남권생물자원관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립호남권생물자원관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립호남권생물자원관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립호남권생물자원관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립호남권생물자원관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립호남권생물자원관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립호남권생물자원관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%B8%EB%82%A8%EA%B6%8C%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.hnibr.re.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.hnibr.re.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.hnibr.re.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.hnibr.re.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.hnibr.re.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.hnibr.re.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.hnibr.re.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.hnibr.re.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.hnibr.re.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.hnibr.re.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.hnibr.re.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.hnibr.re.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: MARINE_BIODIVERSITY_INSTITUTE
+  name: 국립해양생물자원관
+  category: national_biodiversity
+  owner_type: national_government_or_public_institution
+  ministry: 해양수산부
+  region: 충청남도 서천군
+  priority: 1
+  status: search_seed
+  base_url: https://www.mabik.re.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립해양생물자원관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립해양생물자원관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립해양생물자원관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립해양생물자원관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립해양생물자원관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립해양생물자원관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립해양생물자원관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립해양생물자원관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립해양생물자원관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립해양생물자원관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립해양생물자원관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립해양생물자원관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립해양생물자원관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립해양생물자원관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립해양생물자원관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립해양생물자원관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EC%83%9D%EB%AC%BC%EC%9E%90%EC%9B%90%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.mabik.re.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.mabik.re.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.mabik.re.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.mabik.re.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.mabik.re.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.mabik.re.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.mabik.re.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.mabik.re.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.mabik.re.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.mabik.re.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.mabik.re.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.mabik.re.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: SEJONG_NATIONAL_ARBORETUM
+  name: 국립세종수목원
+  category: national_arboretum_garden
+  owner_type: national_government_or_public_institution
+  ministry: 산림청
+  region: 세종특별자치시
+  priority: 1
+  status: search_seed
+  base_url: https://www.sjna.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립세종수목원 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립세종수목원 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립세종수목원 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립세종수목원 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립세종수목원 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립세종수목원 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립세종수목원 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립세종수목원 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립세종수목원 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립세종수목원 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립세종수목원 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립세종수목원 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립세종수목원 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립세종수목원 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립세종수목원 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립세종수목원 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%90+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.sjna.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.sjna.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.sjna.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.sjna.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.sjna.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.sjna.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.sjna.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.sjna.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.sjna.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.sjna.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.sjna.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.sjna.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_GARDEN_INSTITUTE
+  name: 한국수목원정원관리원
+  category: national_arboretum_garden
+  owner_type: national_government_or_public_institution
+  ministry: 산림청
+  region: 전국
+  priority: 2
+  status: search_seed
+  base_url: https://www.koagi.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 한국수목원정원관리원 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 한국수목원정원관리원 교육 신청
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 한국수목원정원관리원 교육 예약
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 한국수목원정원관리원 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 한국수목원정원관리원 전시 해설
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 한국수목원정원관리원 생태 해설
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 한국수목원정원관리원 숲 해설
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 한국수목원정원관리원 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 한국수목원정원관리원 체험 신청
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 한국수목원정원관리원 체험 예약
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 한국수목원정원관리원 단체 교육
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 한국수목원정원관리원 학교 교육
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 한국수목원정원관리원 청소년 체험
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 한국수목원정원관리원 가족 체험
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 한국수목원정원관리원 어린이 교육
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 한국수목원정원관리원 주말 체험
+    google_search_url: https://www.google.com/search?q=%ED%95%9C%EA%B5%AD%EC%88%98%EB%AA%A9%EC%9B%90%EC%A0%95%EC%9B%90%EA%B4%80%EB%A6%AC%EC%9B%90+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.koagi.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.koagi.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.koagi.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.koagi.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.koagi.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.koagi.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.koagi.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.koagi.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.koagi.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.koagi.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.koagi.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.koagi.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_PARK_RESERVATION
+  name: 국립공원공단 예약시스템
+  category: national_park_ecology
+  owner_type: national_government_or_public_institution
+  ministry: 환경부
+  region: 전국
+  priority: 1
+  status: search_seed
+  base_url: https://res.knps.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립공원공단 예약시스템 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립공원공단 예약시스템 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립공원공단 예약시스템 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립공원공단 예약시스템 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립공원공단 예약시스템 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립공원공단 예약시스템 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립공원공단 예약시스템 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립공원공단 예약시스템 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립공원공단 예약시스템 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립공원공단 예약시스템 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립공원공단 예약시스템 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립공원공단 예약시스템 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립공원공단 예약시스템 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립공원공단 예약시스템 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립공원공단 예약시스템 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립공원공단 예약시스템 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%98%88%EC%95%BD%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:res.knps.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Ares.knps.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:res.knps.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Ares.knps.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:res.knps.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Ares.knps.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:res.knps.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Ares.knps.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:res.knps.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Ares.knps.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:res.knps.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Ares.knps.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_PARK_SERVICE
+  name: 국립공원공단
+  category: national_park_ecology
+  owner_type: national_government_or_public_institution
+  ministry: 환경부
+  region: 전국
+  priority: 1
+  status: search_seed
+  base_url: https://www.knps.or.kr
+  search_query_count: 25
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립공원공단 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립공원공단 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립공원공단 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립공원공단 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립공원공단 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립공원공단 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립공원공단 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립공원공단 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립공원공단 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립공원공단 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립공원공단 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립공원공단 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립공원공단 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립공원공단 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립공원공단 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립공원공단 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 생태탐방원
+    query: 국립공원공단 생태탐방원
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%83%9D%ED%83%9C%ED%83%90%EB%B0%A9%EC%9B%90
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 자연해설
+    query: 국립공원공단 자연해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%EC%9E%90%EC%97%B0%ED%95%B4%EC%84%A4
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 탐방 프로그램
+    query: 국립공원공단 탐방 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90%EA%B3%B5%EB%8B%A8+%ED%83%90%EB%B0%A9+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.knps.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.knps.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.knps.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.knps.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.knps.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.knps.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.knps.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.knps.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.knps.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.knps.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.knps.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.knps.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_FOREST_RECREATION
+  name: 숲나들e
+  category: national_forest_experience
+  owner_type: national_government_or_public_institution
+  ministry: 산림청
+  region: 전국
+  priority: 2
+  status: search_seed
+  base_url: https://www.foresttrip.go.kr
+  search_query_count: 25
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 숲나들e 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 숲나들e 교육 신청
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 숲나들e 교육 예약
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 숲나들e 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 숲나들e 전시 해설
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 숲나들e 생태 해설
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 숲나들e 숲 해설
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 숲나들e 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 숲나들e 체험 신청
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 숲나들e 체험 예약
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 숲나들e 단체 교육
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 숲나들e 학교 교육
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 숲나들e 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 숲나들e 가족 체험
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 숲나들e 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 숲나들e 주말 체험
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 숲체험
+    query: 숲나들e 숲체험
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%88%B2%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 산림교육
+    query: 숲나들e 산림교육
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%82%B0%EB%A6%BC%EA%B5%90%EC%9C%A1
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 자연휴양림 체험
+    query: 숲나들e 자연휴양림 체험
+    google_search_url: https://www.google.com/search?q=%EC%88%B2%EB%82%98%EB%93%A4e+%EC%9E%90%EC%97%B0%ED%9C%B4%EC%96%91%EB%A6%BC+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.foresttrip.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.foresttrip.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.foresttrip.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.foresttrip.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.foresttrip.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.foresttrip.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.foresttrip.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.foresttrip.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.foresttrip.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.foresttrip.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.foresttrip.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.foresttrip.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_FOREST_EDUCATION_CENTER
+  name: 국립산림치유원
+  category: national_forest_experience
+  owner_type: national_government_or_public_institution
+  ministry: 산림청
+  region: 경상북도 영주시
+  priority: 2
+  status: search_seed
+  base_url: https://daslim.fowi.or.kr
+  search_query_count: 25
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립산림치유원 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립산림치유원 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립산림치유원 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립산림치유원 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립산림치유원 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립산림치유원 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립산림치유원 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립산림치유원 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립산림치유원 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립산림치유원 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립산림치유원 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립산림치유원 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립산림치유원 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립산림치유원 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립산림치유원 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립산림치유원 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 산림치유
+    query: 국립산림치유원 산림치유
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 숲치유
+    query: 국립산림치유원 숲치유
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%88%B2%EC%B9%98%EC%9C%A0
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 치유 프로그램
+    query: 국립산림치유원 치유 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%82%B0%EB%A6%BC%EC%B9%98%EC%9C%A0%EC%9B%90+%EC%B9%98%EC%9C%A0+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:daslim.fowi.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Adaslim.fowi.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:daslim.fowi.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Adaslim.fowi.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:daslim.fowi.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Adaslim.fowi.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:daslim.fowi.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Adaslim.fowi.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:daslim.fowi.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Adaslim.fowi.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:daslim.fowi.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Adaslim.fowi.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_OCEAN_SCIENCE_MUSEUM
+  name: 국립해양과학관
+  category: national_marine_science
+  owner_type: national_government_or_public_institution
+  ministry: 해양수산부
+  region: 경상북도 울진군
+  priority: 1
+  status: search_seed
+  base_url: https://www.kosm.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립해양과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립해양과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립해양과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립해양과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립해양과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립해양과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립해양과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립해양과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립해양과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립해양과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립해양과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립해양과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립해양과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립해양과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립해양과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립해양과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.kosm.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.kosm.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.kosm.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.kosm.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.kosm.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.kosm.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.kosm.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.kosm.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.kosm.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.kosm.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.kosm.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.kosm.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: KOREA_NATIONAL_MARITIME_MUSEUM
+  name: 국립해양박물관
+  category: national_marine_science
+  owner_type: national_government_or_public_institution
+  ministry: 해양수산부
+  region: 부산광역시
+  priority: 2
+  status: search_seed
+  base_url: https://www.mmk.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립해양박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립해양박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립해양박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립해양박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립해양박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립해양박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립해양박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립해양박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립해양박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립해양박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립해양박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립해양박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립해양박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립해양박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립해양박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립해양박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%B4%EC%96%91%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.mmk.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmk.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.mmk.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmk.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.mmk.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmk.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.mmk.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmk.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.mmk.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmk.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.mmk.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmk.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_LIGHTHOUSE_MUSEUM
+  name: 국립등대박물관
+  category: national_marine_science
+  owner_type: national_government_or_public_institution
+  ministry: 해양수산부
+  region: 경상북도 포항시
+  priority: 2
+  status: search_seed
+  base_url: https://www.lighthouse-museum.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립등대박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립등대박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립등대박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립등대박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립등대박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립등대박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립등대박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립등대박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립등대박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립등대박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립등대박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립등대박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립등대박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립등대박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립등대박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립등대박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%93%B1%EB%8C%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.lighthouse-museum.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.lighthouse-museum.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.lighthouse-museum.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.lighthouse-museum.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.lighthouse-museum.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.lighthouse-museum.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.lighthouse-museum.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.lighthouse-museum.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.lighthouse-museum.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.lighthouse-museum.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.lighthouse-museum.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.lighthouse-museum.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_AGRICULTURAL_MUSEUM
+  name: 국립농업박물관
+  category: national_agriculture_science
+  owner_type: national_government_or_public_institution
+  ministry: 농림축산식품부
+  region: 경기도 수원시
+  priority: 2
+  status: search_seed
+  base_url: https://www.namuk.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립농업박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립농업박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립농업박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립농업박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립농업박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립농업박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립농업박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립농업박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립농업박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립농업박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립농업박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립농업박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립농업박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립농업박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립농업박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립농업박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%86%8D%EC%97%85%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.namuk.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.namuk.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.namuk.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.namuk.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.namuk.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.namuk.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.namuk.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.namuk.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.namuk.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.namuk.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.namuk.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.namuk.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: RURAL_DEVELOPMENT_ADMINISTRATION
+  name: 농촌진흥청 농업과학관
+  category: national_agriculture_science
+  owner_type: national_government_or_public_institution
+  ministry: 농촌진흥청
+  region: 전라북도 전주시
+  priority: 2
+  status: search_seed
+  base_url: https://www.rda.go.kr
+  search_query_count: 25
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 농촌진흥청 농업과학관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 농촌진흥청 농업과학관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 농촌진흥청 농업과학관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 농촌진흥청 농업과학관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 농촌진흥청 농업과학관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 농촌진흥청 농업과학관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 농촌진흥청 농업과학관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 농촌진흥청 농업과학관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 농촌진흥청 농업과학관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 농촌진흥청 농업과학관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 농촌진흥청 농업과학관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 농촌진흥청 농업과학관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 농촌진흥청 농업과학관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 농촌진흥청 농업과학관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 농촌진흥청 농업과학관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 농촌진흥청 농업과학관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 농업과학관
+    query: 농촌진흥청 농업과학관 농업과학관
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 농업 체험
+    query: 농촌진흥청 농업과학관 농업 체험
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EB%86%8D%EC%97%85+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 어린이 농업교육
+    query: 농촌진흥청 농업과학관 어린이 농업교육
+    google_search_url: https://www.google.com/search?q=%EB%86%8D%EC%B4%8C%EC%A7%84%ED%9D%A5%EC%B2%AD+%EB%86%8D%EC%97%85%EA%B3%BC%ED%95%99%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EB%86%8D%EC%97%85%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.rda.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.rda.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.rda.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.rda.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.rda.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.rda.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.rda.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.rda.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.rda.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.rda.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.rda.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.rda.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_AVIATION_MUSEUM
+  name: 국립항공박물관
+  category: national_transport_science
+  owner_type: national_government_or_public_institution
+  ministry: 국토교통부
+  region: 서울특별시
+  priority: 2
+  status: search_seed
+  base_url: https://www.aviation.or.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립항공박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립항공박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립항공박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립항공박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립항공박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립항공박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립항공박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립항공박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립항공박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립항공박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립항공박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립항공박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립항공박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립항공박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립항공박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립항공박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%AD%EA%B3%B5%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.aviation.or.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.aviation.or.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.aviation.or.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.aviation.or.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.aviation.or.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.aviation.or.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.aviation.or.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.aviation.or.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.aviation.or.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.aviation.or.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.aviation.or.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.aviation.or.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_RAILROAD_MUSEUM
+  name: 철도박물관
+  category: national_transport_science
+  owner_type: national_government_or_public_institution
+  ministry: 국토교통부
+  region: 경기도 의왕시
+  priority: 3
+  status: search_seed
+  base_url: https://www.railroadmuseum.co.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 철도박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 철도박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 철도박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 철도박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 철도박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 철도박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 철도박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 철도박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 철도박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 철도박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 철도박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 철도박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 철도박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 철도박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 철도박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 철도박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EC%B2%A0%EB%8F%84%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.railroadmuseum.co.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.railroadmuseum.co.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.railroadmuseum.co.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.railroadmuseum.co.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.railroadmuseum.co.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.railroadmuseum.co.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.railroadmuseum.co.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.railroadmuseum.co.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.railroadmuseum.co.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.railroadmuseum.co.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.railroadmuseum.co.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.railroadmuseum.co.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_METEOROLOGICAL_MUSEUM
+  name: 국립기상박물관
+  category: national_science_museum
+  owner_type: national_government_or_public_institution
+  ministry: 기상청
+  region: 서울특별시
+  priority: 2
+  status: search_seed
+  base_url: https://science.kma.go.kr
+  search_query_count: 25
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립기상박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립기상박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립기상박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립기상박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립기상박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립기상박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립기상박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립기상박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립기상박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립기상박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립기상박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립기상박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립기상박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립기상박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립기상박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립기상박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 기상 교육
+    query: 국립기상박물관 기상 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B8%B0%EC%83%81+%EA%B5%90%EC%9C%A1
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 기상 체험
+    query: 국립기상박물관 기상 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B8%B0%EC%83%81+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 날씨 체험
+    query: 국립기상박물관 날씨 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B8%B0%EC%83%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%82%A0%EC%94%A8+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:science.kma.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Ascience.kma.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:science.kma.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Ascience.kma.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:science.kma.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Ascience.kma.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:science.kma.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Ascience.kma.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:science.kma.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Ascience.kma.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:science.kma.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Ascience.kma.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_FOLK_MUSEUM
+  name: 국립민속박물관
+  category: national_museum_history
+  owner_type: national_government_or_public_institution
+  ministry: 문화체육관광부
+  region: 서울특별시
+  priority: 2
+  status: search_seed
+  base_url: https://www.nfm.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립민속박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립민속박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립민속박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립민속박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립민속박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립민속박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립민속박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립민속박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립민속박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립민속박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립민속박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립민속박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립민속박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립민속박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립민속박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립민속박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AF%BC%EC%86%8D%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.nfm.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.nfm.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.nfm.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.nfm.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.nfm.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.nfm.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.nfm.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.nfm.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.nfm.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.nfm.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.nfm.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.nfm.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_MUSEUM_OF_KOREA
+  name: 국립중앙박물관
+  category: national_museum_history
+  owner_type: national_government_or_public_institution
+  ministry: 문화체육관광부
+  region: 서울특별시
+  priority: 2
+  status: search_seed
+  base_url: https://www.museum.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립중앙박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립중앙박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립중앙박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립중앙박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립중앙박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립중앙박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립중앙박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립중앙박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립중앙박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립중앙박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립중앙박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립중앙박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립중앙박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립중앙박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립중앙박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립중앙박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%A4%91%EC%95%99%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.museum.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.museum.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.museum.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.museum.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.museum.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.museum.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.museum.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.museum.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.museum.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.museum.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.museum.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.museum.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_HANGEUL_MUSEUM
+  name: 국립한글박물관
+  category: national_museum_history
+  owner_type: national_government_or_public_institution
+  ministry: 문화체육관광부
+  region: 서울특별시
+  priority: 2
+  status: search_seed
+  base_url: https://www.hangeul.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립한글박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립한글박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립한글박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립한글박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립한글박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립한글박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립한글박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립한글박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립한글박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립한글박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립한글박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립한글박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립한글박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립한글박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립한글박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립한글박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%95%9C%EA%B8%80%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.hangeul.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.hangeul.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.hangeul.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.hangeul.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.hangeul.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.hangeul.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.hangeul.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.hangeul.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.hangeul.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.hangeul.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.hangeul.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.hangeul.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_PALACE_MUSEUM
+  name: 국립고궁박물관
+  category: national_museum_history
+  owner_type: national_government_or_public_institution
+  ministry: 국가유산청
+  region: 서울특별시
+  priority: 2
+  status: search_seed
+  base_url: https://www.gogung.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립고궁박물관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립고궁박물관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립고궁박물관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립고궁박물관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립고궁박물관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립고궁박물관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립고궁박물관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립고궁박물관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립고궁박물관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립고궁박물관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립고궁박물관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립고궁박물관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립고궁박물관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립고궁박물관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립고궁박물관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립고궁박물관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B3%A0%EA%B6%81%EB%B0%95%EB%AC%BC%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.gogung.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.gogung.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.gogung.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.gogung.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.gogung.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.gogung.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.gogung.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.gogung.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.gogung.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.gogung.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.gogung.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.gogung.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_INTANGIBLE_HERITAGE_CENTER
+  name: 국립무형유산원
+  category: national_cultural_heritage
+  owner_type: national_government_or_public_institution
+  ministry: 국가유산청
+  region: 전라북도 전주시
+  priority: 2
+  status: search_seed
+  base_url: https://www.nihc.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립무형유산원 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립무형유산원 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립무형유산원 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립무형유산원 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립무형유산원 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립무형유산원 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립무형유산원 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립무형유산원 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립무형유산원 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립무형유산원 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립무형유산원 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립무형유산원 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립무형유산원 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립무형유산원 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립무형유산원 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립무형유산원 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EB%AC%B4%ED%98%95%EC%9C%A0%EC%82%B0%EC%9B%90+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.nihc.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.nihc.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.nihc.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.nihc.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.nihc.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.nihc.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.nihc.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.nihc.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.nihc.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.nihc.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.nihc.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.nihc.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_MUSEUM_OF_MODERN_ART
+  name: 국립현대미술관
+  category: national_art_museum
+  owner_type: national_government_or_public_institution
+  ministry: 문화체육관광부
+  region: 전국
+  priority: 2
+  status: search_seed
+  base_url: https://www.mmca.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립현대미술관 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립현대미술관 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립현대미술관 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립현대미술관 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립현대미술관 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립현대미술관 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립현대미술관 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립현대미술관 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립현대미술관 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립현대미술관 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립현대미술관 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립현대미술관 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립현대미술관 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립현대미술관 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립현대미술관 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립현대미술관 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.mmca.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmca.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.mmca.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmca.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.mmca.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmca.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.mmca.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmca.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.mmca.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmca.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.mmca.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.mmca.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: ASIA_CULTURE_CENTER
+  name: 국립아시아문화전당
+  category: national_art_culture
+  owner_type: national_government_or_public_institution
+  ministry: 문화체육관광부
+  region: 광주광역시
+  priority: 2
+  status: search_seed
+  base_url: https://www.acc.go.kr
+  search_query_count: 22
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립아시아문화전당 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립아시아문화전당 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립아시아문화전당 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립아시아문화전당 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립아시아문화전당 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립아시아문화전당 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립아시아문화전당 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립아시아문화전당 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립아시아문화전당 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립아시아문화전당 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립아시아문화전당 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립아시아문화전당 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립아시아문화전당 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립아시아문화전당 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립아시아문화전당 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립아시아문화전당 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EC%95%84%EC%8B%9C%EC%95%84%EB%AC%B8%ED%99%94%EC%A0%84%EB%8B%B9+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.acc.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.acc.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.acc.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.acc.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.acc.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.acc.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.acc.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.acc.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.acc.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.acc.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.acc.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.acc.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+- provider: NATIONAL_GUGAK_CENTER
+  name: 국립국악원
+  category: national_art_culture
+  owner_type: national_government_or_public_institution
+  ministry: 문화체육관광부
+  region: 서울특별시
+  priority: 3
+  status: search_seed
+  base_url: https://www.gugak.go.kr
+  search_query_count: 25
+  queries:
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 프로그램
+    query: 국립국악원 교육 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EA%B5%90%EC%9C%A1+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 신청
+    query: 국립국악원 교육 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%8B%A0%EC%B2%AD
+  - intent: education
+    intent_label: 교육
+    keyword: 교육 예약
+    query: 국립국악원 교육 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EA%B5%90%EC%9C%A1+%EC%98%88%EC%95%BD
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 해설 프로그램
+    query: 국립국악원 해설 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%ED%95%B4%EC%84%A4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 전시 해설
+    query: 국립국악원 전시 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%A0%84%EC%8B%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 생태 해설
+    query: 국립국악원 생태 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%83%9D%ED%83%9C+%ED%95%B4%EC%84%A4
+  - intent: guided_tour
+    intent_label: 해설
+    keyword: 숲 해설
+    query: 국립국악원 숲 해설
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%88%B2+%ED%95%B4%EC%84%A4
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 프로그램
+    query: 국립국악원 체험 프로그램
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%B2%B4%ED%97%98+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 신청
+    query: 국립국악원 체험 신청
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%8B%A0%EC%B2%AD
+  - intent: experience
+    intent_label: 체험
+    keyword: 체험 예약
+    query: 국립국악원 체험 예약
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%B2%B4%ED%97%98+%EC%98%88%EC%95%BD
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 단체 교육
+    query: 국립국악원 단체 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EB%8B%A8%EC%B2%B4+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 학교 교육
+    query: 국립국악원 학교 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%ED%95%99%EA%B5%90+%EA%B5%90%EC%9C%A1
+  - intent: school_group
+    intent_label: 단체/학교
+    keyword: 청소년 체험
+    query: 국립국악원 청소년 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%B2%AD%EC%86%8C%EB%85%84+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 가족 체험
+    query: 국립국악원 가족 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EA%B0%80%EC%A1%B1+%EC%B2%B4%ED%97%98
+  - intent: family
+    intent_label: 가족
+    keyword: 어린이 교육
+    query: 국립국악원 어린이 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%90%EC%9C%A1
+  - intent: family
+    intent_label: 가족
+    keyword: 주말 체험
+    query: 국립국악원 주말 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%A3%BC%EB%A7%90+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 국악 교육
+    query: 국립국악원 국악 교육
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EA%B5%AD%EC%95%85+%EA%B5%90%EC%9C%A1
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 국악 체험
+    query: 국립국악원 국악 체험
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EA%B5%AD%EC%95%85+%EC%B2%B4%ED%97%98
+  - intent: extra
+    intent_label: 기관특화
+    keyword: 어린이 국악
+    query: 국립국악원 어린이 국악
+    google_search_url: https://www.google.com/search?q=%EA%B5%AD%EB%A6%BD%EA%B5%AD%EC%95%85%EC%9B%90+%EC%96%B4%EB%A6%B0%EC%9D%B4+%EA%B5%AD%EC%95%85
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 교육
+    query: site:www.gugak.go.kr 교육
+    google_search_url: https://www.google.com/search?q=site%3Awww.gugak.go.kr+%EA%B5%90%EC%9C%A1
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 해설
+    query: site:www.gugak.go.kr 해설
+    google_search_url: https://www.google.com/search?q=site%3Awww.gugak.go.kr+%ED%95%B4%EC%84%A4
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 체험
+    query: site:www.gugak.go.kr 체험
+    google_search_url: https://www.google.com/search?q=site%3Awww.gugak.go.kr+%EC%B2%B4%ED%97%98
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 예약
+    query: site:www.gugak.go.kr 예약
+    google_search_url: https://www.google.com/search?q=site%3Awww.gugak.go.kr+%EC%98%88%EC%95%BD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 신청
+    query: site:www.gugak.go.kr 신청
+    google_search_url: https://www.google.com/search?q=site%3Awww.gugak.go.kr+%EC%8B%A0%EC%B2%AD
+  - intent: site_scoped
+    intent_label: 사이트검색
+    keyword: 프로그램
+    query: site:www.gugak.go.kr 프로그램
+    google_search_url: https://www.google.com/search?q=site%3Awww.gugak.go.kr+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
+  crawler_notes:
+  - 검색 결과에서 실제 교육/해설/체험 목록 URL을 후보로 승격한다.
+  - 통합예약/별도 교육예약 도메인이 발견되면 list_url 후보로 분리한다.
+  - 상세 페이지에서 title, period, schedule_raw, target, fee, status, description 필드를 우선 확인한다.
+summary:
+  target_count: 30
+  query_count: 678
+  categories:
+  - national_agriculture_science
+  - national_arboretum_garden
+  - national_art_culture
+  - national_art_museum
+  - national_biodiversity
+  - national_cultural_heritage
+  - national_ecology
+  - national_forest_experience
+  - national_marine_science
+  - national_museum_history
+  - national_park_ecology
+  - national_science_museum
+  - national_transport_science

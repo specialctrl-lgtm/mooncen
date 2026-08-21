@@ -1,0 +1,11 @@
+[Unit]
+Description=Watch MoonCen standby crawler and recover failed service
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+AccuracySec=30s
+Unit=mooncen-crawler-watchdog.service
+
+[Install]
+WantedBy=timers.target

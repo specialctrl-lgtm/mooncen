@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "environment": "production",
+  "activeNode": "cloud",
+  "crawlerMode": "legacy",
+  "nodes": {
+    "cloud": {
+      "dnsHost": "cloud"
+    },
+    "gen1crawler": {
+      "dnsHost": "gen1crawler"
+    },
+    "gen1db": {
+      "dnsHost": "gen1db"
+    },
+    "wtr-linux": {
+      "dnsHost": "wtr-linux"
+    }
+  },
+  "crawlerWorkers": [
+    {
+      "workerKey": "wtr-linux",
+      "topologyNode": "wtr-linux",
+      "dnsHost": "wtr-linux",
+      "kernelHostname": "sgm-standard-pc-i440fx-piix-1996",
+      "canary": true,
+      "rolloutOrder": 1,
+      "enabled": false,
+      "resourceLimits": {
+        "concurrency": 1,
+        "memoryHigh": "4G",
+        "memoryMax": "6G",
+        "cpuQuota": "300%"
+      }
+    },
+    {
+      "workerKey": "gen1crawler",
+      "topologyNode": "gen1crawler",
+      "dnsHost": "gen1crawler",
+      "kernelHostname": "gen1crawler",
+      "canary": false,
+      "rolloutOrder": 2,
+      "enabled": false,
+      "resourceLimits": {
+        "concurrency": 1,
+        "memoryHigh": "2G",
+        "memoryMax": "4G",
+        "cpuQuota": "200%"
+      }
+    }
+  ],
+  "services": {
+    "frontend": [
+      {
+        "node": "cloud",
+        "role": "primary"
+      }
+    ],
+    "backend": [
+      {
+        "node": "cloud",
+        "role": "primary"
+      }
+    ],
+    "database": [
+      {
+        "node": "cloud",
+        "role": "primary"
+      }
+    ],
+    "staging_database": [
+      {
+        "node": "gen1db",
+        "role": "primary"
+      }
+    ],
+    "crawler_control": [
+      {
+        "node": "gen1db",
+        "role": "primary"
+      }
+    ],
+    "crawler": [
+      {
+        "node": "gen1crawler",
+        "role": "primary"
+      }
+    ]
+  }
+}

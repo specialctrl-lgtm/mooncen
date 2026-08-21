@@ -1,0 +1,2784 @@
+version: 1
+source: config/municipal_course_search_results_sugang_sports.yaml
+summary:
+  municipalities: 261
+  municipalities_with_candidate: 1
+  municipalities_no_candidate: 260
+  candidate_results: 7
+  review_results: 3
+  top_domains:
+  - domain: www.ijongno.co.kr
+    count: 4
+  - domain: www.jongno.go.kr
+    count: 1
+  - domain: tbs.seoul.kr
+    count: 1
+  - domain: nid.naver.com
+    count: 1
+  - domain: lle.jongno.go.kr
+    count: 1
+  - domain: jachi.jongno.go.kr
+    count: 1
+  - domain: www.mfac.or.kr
+    count: 1
+results:
+- code: '1111000000'
+  sido: 서울특별시
+  sigungu: 종로구
+  full_name: 서울특별시 종로구
+  primary_query: 서울특별시 종로구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%A2%85%EB%A1%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 7
+  review_count: 3
+  candidates:
+  - status: candidate
+    score: 19
+    title: 종로구청
+    url: https://www.jongno.go.kr/edu/eduIntro.do
+    snippet: 서울 종로구가 '2024년 종로구 평생학습관 하반기 평생교육 프로그램' 수강생을 선착순으로 모집한다고 밝혔습니다.이번 프로그램은 내일(6일) 오전 10시부터 종로교육포털에서 수강 신청 가능하며,
+      다음달(9월) 2일부터 12월 4일까지 약 3개월간 종로구 평생학습관에서
+    query: 종로구 교육 수강신청
+    query_category_id: course_application
+    query_category_name: 수강신청
+    query_keyword: 교육 수강신청
+    reasons:
+    - include:수강
+    - include:평생학습
+    - include:학습관
+    - include:평생학습관
+    - include:교육
+    - match:sigungu
+    - domain:go.kr
+    - allow:public_org
+  - status: candidate
+    score: 10
+    title: 종로구시설관리공단
+    url: https://www.ijongno.co.kr/fmcs/3?center=JONGNO02&action=list&page=1&event=1000000000&class=1000010000
+    snippet: ''
+    query: 종로구 수강신청
+    query_category_id: course_application
+    query_category_name: 수강신청
+    query_keyword: 수강신청
+    reasons:
+    - include:시설관리공단
+    - include:공단
+    - match:sigungu
+    - allow:public_org
+  - status: review
+    score: 5
+    title: TBS
+    url: http://tbs.seoul.kr/news/newsView.do?seq_800=20519659
+    snippet: 종로구 교육정보제공 홈페이지입니다.
+    query: 종로구 수강신청
+    query_category_id: course_application
+    query_category_name: 수강신청
+    query_keyword: 수강신청
+    reasons:
+    - include:교육
+    - match:sigungu
+  - status: review
+    score: 5
+    title: 종로교육포털
+    url: https://nid.naver.com/user2/campaign/introNaverIdLogin.nhn
+    snippet: 종로구 교육정보제공 홈페이지입니다.
+    query: 종로구 강좌 수강신청
+    query_category_id: course_application
+    query_category_name: 수강신청
+    query_keyword: 강좌 수강신청
+    reasons:
+    - include:교육
+    - match:sigungu
+  - status: candidate
+    score: 17
+    title: 종로교육포털
+    url: https://lle.jongno.go.kr/site/main/program/all/list
+    snippet: 센터 · 올림픽기념국민생활관 · 종로구민회관 · 종로문화체육센터 · 동부여성문화센터 ; 종목 ; 강좌
+    query: 종로구 강좌 수강신청
+    query_category_id: course_application
+    query_category_name: 수강신청
+    query_keyword: 강좌 수강신청
+    reasons:
+    - include:강좌
+    - include:체육센터
+    - include:교육
+    - include:체육
+    - match:sigungu
+    - domain:go.kr
+    - allow:public_org
+  - status: candidate
+    score: 14
+    title: 종로구시설관리공단
+    url: https://www.ijongno.co.kr/fmcs/3
+    snippet: '온라인 신청 : 종로Pick 앱, 종로구 홈페이지 ; 정보화교육 콜센터 : ☎02-2148-3947 ※ 월별 1인 최대 2개 과목까지 신청 가능[단, 미달된 강좌에 한하여 추가신청 가능(전화)]'
+    query: 종로구 강좌 수강신청
+    query_category_id: course_application
+    query_category_name: 수강신청
+    query_keyword: 강좌 수강신청
+    reasons:
+    - include:강좌
+    - include:교육
+    - include:시설관리공단
+    - include:공단
+    - match:sigungu
+    - allow:public_org
+  - status: candidate
+    score: 21
+    title: 종로구 자치회관
+    url: https://jachi.jongno.go.kr/Program/Default.aspx
+    snippet: 생활체육 | 수강신청안내 | 체육/문화예술 아카데미 | 마포문화재단
+    query: 종로구 생활체육 수강신청 동
+    query_category_id: sports_dong
+    query_category_name: 동 체육 수강신청
+    query_keyword: 생활체육 수강신청 동
+    reasons:
+    - include:수강
+    - include:수강신청
+    - include:재단
+    - include:문화재단
+    - include:체육
+    - include:생활체육
+    - match:sigungu
+    - domain:go.kr
+    - allow:public_org
+  - status: review
+    score: 7
+    title: 마포문화재단
+    url: https://www.mfac.or.kr/academy/registerCourse_2.jsp
+    snippet: ''
+    query: 종로구 생활체육 수강신청 동
+    query_category_id: sports_dong
+    query_category_name: 동 체육 수강신청
+    query_keyword: 생활체육 수강신청 동
+    reasons:
+    - include:재단
+    - include:문화재단
+    - allow:public_org
+  - status: candidate
+    score: 10
+    title: 종로구시설관리공단
+    url: https://www.ijongno.co.kr/fmcs/1
+    snippet: 대관 사용절차에 대해서 궁금합니다.
+    query: 종로구 체육시설 수강신청 동
+    query_category_id: sports_dong
+    query_category_name: 동 체육 수강신청
+    query_keyword: 체육시설 수강신청 동
+    reasons:
+    - include:시설관리공단
+    - include:공단
+    - match:sigungu
+    - allow:public_org
+  - status: candidate
+    score: 10
+    title: 종로구시설관리공단
+    url: https://www.ijongno.co.kr/www/128?document_category_srl=5
+    snippet: ''
+    query: 종로구 체육시설 수강신청 동
+    query_category_id: sports_dong
+    query_category_name: 동 체육 수강신청
+    query_keyword: 체육시설 수강신청 동
+    reasons:
+    - include:시설관리공단
+    - include:공단
+    - match:sigungu
+    - allow:public_org
+- code: '1114000000'
+  sido: 서울특별시
+  sigungu: 중구
+  full_name: 서울특별시 중구
+  primary_query: 서울특별시 중구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%A4%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1117000000'
+  sido: 서울특별시
+  sigungu: 용산구
+  full_name: 서울특별시 용산구
+  primary_query: 서울특별시 용산구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%9A%A9%EC%82%B0%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1120000000'
+  sido: 서울특별시
+  sigungu: 성동구
+  full_name: 서울특별시 성동구
+  primary_query: 서울특별시 성동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%84%B1%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1121500000'
+  sido: 서울특별시
+  sigungu: 광진구
+  full_name: 서울특별시 광진구
+  primary_query: 서울특별시 광진구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B4%91%EC%A7%84%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1123000000'
+  sido: 서울특별시
+  sigungu: 동대문구
+  full_name: 서울특별시 동대문구
+  primary_query: 서울특별시 동대문구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1126000000'
+  sido: 서울특별시
+  sigungu: 중랑구
+  full_name: 서울특별시 중랑구
+  primary_query: 서울특별시 중랑구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%A4%91%EB%9E%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1129000000'
+  sido: 서울특별시
+  sigungu: 성북구
+  full_name: 서울특별시 성북구
+  primary_query: 서울특별시 성북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%84%B1%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1130500000'
+  sido: 서울특별시
+  sigungu: 강북구
+  full_name: 서울특별시 강북구
+  primary_query: 서울특별시 강북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1132000000'
+  sido: 서울특별시
+  sigungu: 도봉구
+  full_name: 서울특별시 도봉구
+  primary_query: 서울특별시 도봉구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EB%8F%84%EB%B4%89%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1135000000'
+  sido: 서울특별시
+  sigungu: 노원구
+  full_name: 서울특별시 노원구
+  primary_query: 서울특별시 노원구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EB%85%B8%EC%9B%90%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1138000000'
+  sido: 서울특별시
+  sigungu: 은평구
+  full_name: 서울특별시 은평구
+  primary_query: 서울특별시 은평구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%9D%80%ED%8F%89%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1141000000'
+  sido: 서울특별시
+  sigungu: 서대문구
+  full_name: 서울특별시 서대문구
+  primary_query: 서울특별시 서대문구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%84%9C%EB%8C%80%EB%AC%B8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1144000000'
+  sido: 서울특별시
+  sigungu: 마포구
+  full_name: 서울특별시 마포구
+  primary_query: 서울특별시 마포구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EB%A7%88%ED%8F%AC%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1147000000'
+  sido: 서울특별시
+  sigungu: 양천구
+  full_name: 서울특별시 양천구
+  primary_query: 서울특별시 양천구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%96%91%EC%B2%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1150000000'
+  sido: 서울특별시
+  sigungu: 강서구
+  full_name: 서울특별시 강서구
+  primary_query: 서울특별시 강서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1153000000'
+  sido: 서울특별시
+  sigungu: 구로구
+  full_name: 서울특별시 구로구
+  primary_query: 서울특별시 구로구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B5%AC%EB%A1%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1154500000'
+  sido: 서울특별시
+  sigungu: 금천구
+  full_name: 서울특별시 금천구
+  primary_query: 서울특별시 금천구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B8%88%EC%B2%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1156000000'
+  sido: 서울특별시
+  sigungu: 영등포구
+  full_name: 서울특별시 영등포구
+  primary_query: 서울특별시 영등포구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1159000000'
+  sido: 서울특별시
+  sigungu: 동작구
+  full_name: 서울특별시 동작구
+  primary_query: 서울특별시 동작구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EB%8F%99%EC%9E%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1162000000'
+  sido: 서울특별시
+  sigungu: 관악구
+  full_name: 서울특별시 관악구
+  primary_query: 서울특별시 관악구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B4%80%EC%95%85%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1165000000'
+  sido: 서울특별시
+  sigungu: 서초구
+  full_name: 서울특별시 서초구
+  primary_query: 서울특별시 서초구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%84%9C%EC%B4%88%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1168000000'
+  sido: 서울특별시
+  sigungu: 강남구
+  full_name: 서울특별시 강남구
+  primary_query: 서울특별시 강남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1171000000'
+  sido: 서울특별시
+  sigungu: 송파구
+  full_name: 서울특별시 송파구
+  primary_query: 서울특별시 송파구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%86%A1%ED%8C%8C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '1174000000'
+  sido: 서울특별시
+  sigungu: 강동구
+  full_name: 서울특별시 강동구
+  primary_query: 서울특별시 강동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2611000000'
+  sido: 부산광역시
+  sigungu: 중구
+  full_name: 부산광역시 중구
+  primary_query: 부산광역시 중구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%A4%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2614000000'
+  sido: 부산광역시
+  sigungu: 서구
+  full_name: 부산광역시 서구
+  primary_query: 부산광역시 서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2617000000'
+  sido: 부산광역시
+  sigungu: 동구
+  full_name: 부산광역시 동구
+  primary_query: 부산광역시 동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2620000000'
+  sido: 부산광역시
+  sigungu: 영도구
+  full_name: 부산광역시 영도구
+  primary_query: 부산광역시 영도구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%98%81%EB%8F%84%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2623000000'
+  sido: 부산광역시
+  sigungu: 부산진구
+  full_name: 부산광역시 부산진구
+  primary_query: 부산광역시 부산진구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2626000000'
+  sido: 부산광역시
+  sigungu: 동래구
+  full_name: 부산광역시 동래구
+  primary_query: 부산광역시 동래구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EB%9E%98%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2629000000'
+  sido: 부산광역시
+  sigungu: 남구
+  full_name: 부산광역시 남구
+  primary_query: 부산광역시 남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2632000000'
+  sido: 부산광역시
+  sigungu: 북구
+  full_name: 부산광역시 북구
+  primary_query: 부산광역시 북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2635000000'
+  sido: 부산광역시
+  sigungu: 해운대구
+  full_name: 부산광역시 해운대구
+  primary_query: 부산광역시 해운대구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2638000000'
+  sido: 부산광역시
+  sigungu: 사하구
+  full_name: 부산광역시 사하구
+  primary_query: 부산광역시 사하구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%82%AC%ED%95%98%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2641000000'
+  sido: 부산광역시
+  sigungu: 금정구
+  full_name: 부산광역시 금정구
+  primary_query: 부산광역시 금정구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B8%88%EC%A0%95%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2644000000'
+  sido: 부산광역시
+  sigungu: 강서구
+  full_name: 부산광역시 강서구
+  primary_query: 부산광역시 강서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B0%95%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2647000000'
+  sido: 부산광역시
+  sigungu: 연제구
+  full_name: 부산광역시 연제구
+  primary_query: 부산광역시 연제구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%97%B0%EC%A0%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2650000000'
+  sido: 부산광역시
+  sigungu: 수영구
+  full_name: 부산광역시 수영구
+  primary_query: 부산광역시 수영구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%88%98%EC%98%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2653000000'
+  sido: 부산광역시
+  sigungu: 사상구
+  full_name: 부산광역시 사상구
+  primary_query: 부산광역시 사상구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%82%AC%EC%83%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2671000000'
+  sido: 부산광역시
+  sigungu: 기장군
+  full_name: 부산광역시 기장군
+  primary_query: 부산광역시 기장군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2711000000'
+  sido: 대구광역시
+  sigungu: 중구
+  full_name: 대구광역시 중구
+  primary_query: 대구광역시 중구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%A4%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2714000000'
+  sido: 대구광역시
+  sigungu: 동구
+  full_name: 대구광역시 동구
+  primary_query: 대구광역시 동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2717000000'
+  sido: 대구광역시
+  sigungu: 서구
+  full_name: 대구광역시 서구
+  primary_query: 대구광역시 서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2720000000'
+  sido: 대구광역시
+  sigungu: 남구
+  full_name: 대구광역시 남구
+  primary_query: 대구광역시 남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2723000000'
+  sido: 대구광역시
+  sigungu: 북구
+  full_name: 대구광역시 북구
+  primary_query: 대구광역시 북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2726000000'
+  sido: 대구광역시
+  sigungu: 수성구
+  full_name: 대구광역시 수성구
+  primary_query: 대구광역시 수성구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%88%98%EC%84%B1%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2729000000'
+  sido: 대구광역시
+  sigungu: 달서구
+  full_name: 대구광역시 달서구
+  primary_query: 대구광역시 달서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8B%AC%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2771000000'
+  sido: 대구광역시
+  sigungu: 달성군
+  full_name: 대구광역시 달성군
+  primary_query: 대구광역시 달성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8B%AC%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2772000000'
+  sido: 대구광역시
+  sigungu: 군위군
+  full_name: 대구광역시 군위군
+  primary_query: 대구광역시 군위군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B5%B0%EC%9C%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2811000000'
+  sido: 인천광역시
+  sigungu: 중구
+  full_name: 인천광역시 중구
+  primary_query: 인천광역시 중구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%A4%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2814000000'
+  sido: 인천광역시
+  sigungu: 동구
+  full_name: 인천광역시 동구
+  primary_query: 인천광역시 동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2817700000'
+  sido: 인천광역시
+  sigungu: 미추홀구
+  full_name: 인천광역시 미추홀구
+  primary_query: 인천광역시 미추홀구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%AF%B8%EC%B6%94%ED%99%80%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2818500000'
+  sido: 인천광역시
+  sigungu: 연수구
+  full_name: 인천광역시 연수구
+  primary_query: 인천광역시 연수구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%97%B0%EC%88%98%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2820000000'
+  sido: 인천광역시
+  sigungu: 남동구
+  full_name: 인천광역시 남동구
+  primary_query: 인천광역시 남동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%82%A8%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2823700000'
+  sido: 인천광역시
+  sigungu: 부평구
+  full_name: 인천광역시 부평구
+  primary_query: 인천광역시 부평구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%B6%80%ED%8F%89%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2824500000'
+  sido: 인천광역시
+  sigungu: 계양구
+  full_name: 인천광역시 계양구
+  primary_query: 인천광역시 계양구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B3%84%EC%96%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2826000000'
+  sido: 인천광역시
+  sigungu: 서구
+  full_name: 인천광역시 서구
+  primary_query: 인천광역시 서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2871000000'
+  sido: 인천광역시
+  sigungu: 강화군
+  full_name: 인천광역시 강화군
+  primary_query: 인천광역시 강화군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B0%95%ED%99%94%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2872000000'
+  sido: 인천광역시
+  sigungu: 옹진군
+  full_name: 인천광역시 옹진군
+  primary_query: 인천광역시 옹진군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%98%B9%EC%A7%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2911000000'
+  sido: 광주광역시
+  sigungu: 동구
+  full_name: 광주광역시 동구
+  primary_query: 광주광역시 동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B4%91%EC%A3%BC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2914000000'
+  sido: 광주광역시
+  sigungu: 서구
+  full_name: 광주광역시 서구
+  primary_query: 광주광역시 서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B4%91%EC%A3%BC%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2915500000'
+  sido: 광주광역시
+  sigungu: 남구
+  full_name: 광주광역시 남구
+  primary_query: 광주광역시 남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B4%91%EC%A3%BC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2917000000'
+  sido: 광주광역시
+  sigungu: 북구
+  full_name: 광주광역시 북구
+  primary_query: 광주광역시 북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B4%91%EC%A3%BC%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '2920000000'
+  sido: 광주광역시
+  sigungu: 광산구
+  full_name: 광주광역시 광산구
+  primary_query: 광주광역시 광산구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B4%91%EC%A3%BC%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B4%91%EC%82%B0%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3011000000'
+  sido: 대전광역시
+  sigungu: 동구
+  full_name: 대전광역시 동구
+  primary_query: 대전광역시 동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EC%A0%84%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3014000000'
+  sido: 대전광역시
+  sigungu: 중구
+  full_name: 대전광역시 중구
+  primary_query: 대전광역시 중구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EC%A0%84%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%A4%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3017000000'
+  sido: 대전광역시
+  sigungu: 서구
+  full_name: 대전광역시 서구
+  primary_query: 대전광역시 서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EC%A0%84%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3020000000'
+  sido: 대전광역시
+  sigungu: 유성구
+  full_name: 대전광역시 유성구
+  primary_query: 대전광역시 유성구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EC%A0%84%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%9C%A0%EC%84%B1%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3023000000'
+  sido: 대전광역시
+  sigungu: 대덕구
+  full_name: 대전광역시 대덕구
+  primary_query: 대전광역시 대덕구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EB%8C%80%EC%A0%84%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8C%80%EB%8D%95%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3111000000'
+  sido: 울산광역시
+  sigungu: 중구
+  full_name: 울산광역시 중구
+  primary_query: 울산광역시 중구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9A%B8%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%A4%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3114000000'
+  sido: 울산광역시
+  sigungu: 남구
+  full_name: 울산광역시 남구
+  primary_query: 울산광역시 남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9A%B8%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3117000000'
+  sido: 울산광역시
+  sigungu: 동구
+  full_name: 울산광역시 동구
+  primary_query: 울산광역시 동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9A%B8%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3120000000'
+  sido: 울산광역시
+  sigungu: 북구
+  full_name: 울산광역시 북구
+  primary_query: 울산광역시 북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9A%B8%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3171000000'
+  sido: 울산광역시
+  sigungu: 울주군
+  full_name: 울산광역시 울주군
+  primary_query: 울산광역시 울주군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%9A%B8%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C+%EC%9A%B8%EC%A3%BC%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4111000000'
+  sido: 경기도
+  sigungu: 수원시
+  full_name: 경기도 수원시
+  primary_query: 경기도 수원시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%88%98%EC%9B%90%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4111100000'
+  sido: 경기도
+  sigungu: 수원시 장안구
+  full_name: 경기도 수원시 장안구
+  primary_query: 경기도 수원시 장안구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%88%98%EC%9B%90%EC%8B%9C+%EC%9E%A5%EC%95%88%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4111300000'
+  sido: 경기도
+  sigungu: 수원시 권선구
+  full_name: 경기도 수원시 권선구
+  primary_query: 경기도 수원시 권선구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%88%98%EC%9B%90%EC%8B%9C+%EA%B6%8C%EC%84%A0%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4111500000'
+  sido: 경기도
+  sigungu: 수원시 팔달구
+  full_name: 경기도 수원시 팔달구
+  primary_query: 경기도 수원시 팔달구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%88%98%EC%9B%90%EC%8B%9C+%ED%8C%94%EB%8B%AC%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4111700000'
+  sido: 경기도
+  sigungu: 수원시 영통구
+  full_name: 경기도 수원시 영통구
+  primary_query: 경기도 수원시 영통구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%88%98%EC%9B%90%EC%8B%9C+%EC%98%81%ED%86%B5%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4113000000'
+  sido: 경기도
+  sigungu: 성남시
+  full_name: 경기도 성남시
+  primary_query: 경기도 성남시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%84%B1%EB%82%A8%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4113100000'
+  sido: 경기도
+  sigungu: 성남시 수정구
+  full_name: 경기도 성남시 수정구
+  primary_query: 경기도 성남시 수정구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%84%B1%EB%82%A8%EC%8B%9C+%EC%88%98%EC%A0%95%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4113300000'
+  sido: 경기도
+  sigungu: 성남시 중원구
+  full_name: 경기도 성남시 중원구
+  primary_query: 경기도 성남시 중원구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%84%B1%EB%82%A8%EC%8B%9C+%EC%A4%91%EC%9B%90%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4113500000'
+  sido: 경기도
+  sigungu: 성남시 분당구
+  full_name: 경기도 성남시 분당구
+  primary_query: 경기도 성남시 분당구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%84%B1%EB%82%A8%EC%8B%9C+%EB%B6%84%EB%8B%B9%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4115000000'
+  sido: 경기도
+  sigungu: 의정부시
+  full_name: 경기도 의정부시
+  primary_query: 경기도 의정부시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9D%98%EC%A0%95%EB%B6%80%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4117000000'
+  sido: 경기도
+  sigungu: 안양시
+  full_name: 경기도 안양시
+  primary_query: 경기도 안양시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%96%91%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4117100000'
+  sido: 경기도
+  sigungu: 안양시 만안구
+  full_name: 경기도 안양시 만안구
+  primary_query: 경기도 안양시 만안구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%96%91%EC%8B%9C+%EB%A7%8C%EC%95%88%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4117300000'
+  sido: 경기도
+  sigungu: 안양시 동안구
+  full_name: 경기도 안양시 동안구
+  primary_query: 경기도 안양시 동안구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%96%91%EC%8B%9C+%EB%8F%99%EC%95%88%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4119000000'
+  sido: 경기도
+  sigungu: 부천시
+  full_name: 경기도 부천시
+  primary_query: 경기도 부천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EB%B6%80%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4121000000'
+  sido: 경기도
+  sigungu: 광명시
+  full_name: 경기도 광명시
+  primary_query: 경기도 광명시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B4%91%EB%AA%85%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4122000000'
+  sido: 경기도
+  sigungu: 평택시
+  full_name: 경기도 평택시
+  primary_query: 경기도 평택시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%ED%8F%89%ED%83%9D%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4125000000'
+  sido: 경기도
+  sigungu: 동두천시
+  full_name: 경기도 동두천시
+  primary_query: 경기도 동두천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EB%8F%99%EB%91%90%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4127000000'
+  sido: 경기도
+  sigungu: 안산시
+  full_name: 경기도 안산시
+  primary_query: 경기도 안산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4127100000'
+  sido: 경기도
+  sigungu: 안산시 상록구
+  full_name: 경기도 안산시 상록구
+  primary_query: 경기도 안산시 상록구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%82%B0%EC%8B%9C+%EC%83%81%EB%A1%9D%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4127300000'
+  sido: 경기도
+  sigungu: 안산시 단원구
+  full_name: 경기도 안산시 단원구
+  primary_query: 경기도 안산시 단원구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%82%B0%EC%8B%9C+%EB%8B%A8%EC%9B%90%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4128000000'
+  sido: 경기도
+  sigungu: 고양시
+  full_name: 경기도 고양시
+  primary_query: 경기도 고양시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B3%A0%EC%96%91%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4128100000'
+  sido: 경기도
+  sigungu: 고양시 덕양구
+  full_name: 경기도 고양시 덕양구
+  primary_query: 경기도 고양시 덕양구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B3%A0%EC%96%91%EC%8B%9C+%EB%8D%95%EC%96%91%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4128500000'
+  sido: 경기도
+  sigungu: 고양시 일산동구
+  full_name: 경기도 고양시 일산동구
+  primary_query: 경기도 고양시 일산동구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B3%A0%EC%96%91%EC%8B%9C+%EC%9D%BC%EC%82%B0%EB%8F%99%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4128700000'
+  sido: 경기도
+  sigungu: 고양시 일산서구
+  full_name: 경기도 고양시 일산서구
+  primary_query: 경기도 고양시 일산서구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B3%A0%EC%96%91%EC%8B%9C+%EC%9D%BC%EC%82%B0%EC%84%9C%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4129000000'
+  sido: 경기도
+  sigungu: 과천시
+  full_name: 경기도 과천시
+  primary_query: 경기도 과천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B3%BC%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4131000000'
+  sido: 경기도
+  sigungu: 구리시
+  full_name: 경기도 구리시
+  primary_query: 경기도 구리시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B5%AC%EB%A6%AC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4136000000'
+  sido: 경기도
+  sigungu: 남양주시
+  full_name: 경기도 남양주시
+  primary_query: 경기도 남양주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EB%82%A8%EC%96%91%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4137000000'
+  sido: 경기도
+  sigungu: 오산시
+  full_name: 경기도 오산시
+  primary_query: 경기도 오산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%98%A4%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4139000000'
+  sido: 경기도
+  sigungu: 시흥시
+  full_name: 경기도 시흥시
+  primary_query: 경기도 시흥시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%8B%9C%ED%9D%A5%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4141000000'
+  sido: 경기도
+  sigungu: 군포시
+  full_name: 경기도 군포시
+  primary_query: 경기도 군포시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B5%B0%ED%8F%AC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4143000000'
+  sido: 경기도
+  sigungu: 의왕시
+  full_name: 경기도 의왕시
+  primary_query: 경기도 의왕시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9D%98%EC%99%95%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4145000000'
+  sido: 경기도
+  sigungu: 하남시
+  full_name: 경기도 하남시
+  primary_query: 경기도 하남시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%ED%95%98%EB%82%A8%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4146000000'
+  sido: 경기도
+  sigungu: 용인시
+  full_name: 경기도 용인시
+  primary_query: 경기도 용인시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9A%A9%EC%9D%B8%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4146100000'
+  sido: 경기도
+  sigungu: 용인시 처인구
+  full_name: 경기도 용인시 처인구
+  primary_query: 경기도 용인시 처인구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9A%A9%EC%9D%B8%EC%8B%9C+%EC%B2%98%EC%9D%B8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4146300000'
+  sido: 경기도
+  sigungu: 용인시 기흥구
+  full_name: 경기도 용인시 기흥구
+  primary_query: 경기도 용인시 기흥구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9A%A9%EC%9D%B8%EC%8B%9C+%EA%B8%B0%ED%9D%A5%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4146500000'
+  sido: 경기도
+  sigungu: 용인시 수지구
+  full_name: 경기도 용인시 수지구
+  primary_query: 경기도 용인시 수지구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9A%A9%EC%9D%B8%EC%8B%9C+%EC%88%98%EC%A7%80%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4148000000'
+  sido: 경기도
+  sigungu: 파주시
+  full_name: 경기도 파주시
+  primary_query: 경기도 파주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%ED%8C%8C%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4150000000'
+  sido: 경기도
+  sigungu: 이천시
+  full_name: 경기도 이천시
+  primary_query: 경기도 이천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%9D%B4%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4155000000'
+  sido: 경기도
+  sigungu: 안성시
+  full_name: 경기도 안성시
+  primary_query: 경기도 안성시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%95%88%EC%84%B1%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4157000000'
+  sido: 경기도
+  sigungu: 김포시
+  full_name: 경기도 김포시
+  primary_query: 경기도 김포시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B9%80%ED%8F%AC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4159000000'
+  sido: 경기도
+  sigungu: 화성시
+  full_name: 경기도 화성시
+  primary_query: 경기도 화성시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%ED%99%94%EC%84%B1%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4161000000'
+  sido: 경기도
+  sigungu: 광주시
+  full_name: 경기도 광주시
+  primary_query: 경기도 광주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B4%91%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4163000000'
+  sido: 경기도
+  sigungu: 양주시
+  full_name: 경기도 양주시
+  primary_query: 경기도 양주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%96%91%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4165000000'
+  sido: 경기도
+  sigungu: 포천시
+  full_name: 경기도 포천시
+  primary_query: 경기도 포천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%ED%8F%AC%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4167000000'
+  sido: 경기도
+  sigungu: 여주시
+  full_name: 경기도 여주시
+  primary_query: 경기도 여주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%97%AC%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4180000000'
+  sido: 경기도
+  sigungu: 연천군
+  full_name: 경기도 연천군
+  primary_query: 경기도 연천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%97%B0%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4182000000'
+  sido: 경기도
+  sigungu: 가평군
+  full_name: 경기도 가평군
+  primary_query: 경기도 가평군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EA%B0%80%ED%8F%89%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4183000000'
+  sido: 경기도
+  sigungu: 양평군
+  full_name: 경기도 양평군
+  primary_query: 경기도 양평군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EA%B8%B0%EB%8F%84+%EC%96%91%ED%8F%89%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4311000000'
+  sido: 충청북도
+  sigungu: 청주시
+  full_name: 충청북도 청주시
+  primary_query: 충청북도 청주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%B2%AD%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4311100000'
+  sido: 충청북도
+  sigungu: 청주시 상당구
+  full_name: 충청북도 청주시 상당구
+  primary_query: 충청북도 청주시 상당구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%B2%AD%EC%A3%BC%EC%8B%9C+%EC%83%81%EB%8B%B9%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4311200000'
+  sido: 충청북도
+  sigungu: 청주시 서원구
+  full_name: 충청북도 청주시 서원구
+  primary_query: 충청북도 청주시 서원구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%B2%AD%EC%A3%BC%EC%8B%9C+%EC%84%9C%EC%9B%90%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4311300000'
+  sido: 충청북도
+  sigungu: 청주시 흥덕구
+  full_name: 충청북도 청주시 흥덕구
+  primary_query: 충청북도 청주시 흥덕구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%B2%AD%EC%A3%BC%EC%8B%9C+%ED%9D%A5%EB%8D%95%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4311400000'
+  sido: 충청북도
+  sigungu: 청주시 청원구
+  full_name: 충청북도 청주시 청원구
+  primary_query: 충청북도 청주시 청원구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%B2%AD%EC%A3%BC%EC%8B%9C+%EC%B2%AD%EC%9B%90%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4313000000'
+  sido: 충청북도
+  sigungu: 충주시
+  full_name: 충청북도 충주시
+  primary_query: 충청북도 충주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%B6%A9%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4315000000'
+  sido: 충청북도
+  sigungu: 제천시
+  full_name: 충청북도 제천시
+  primary_query: 충청북도 제천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%A0%9C%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4372000000'
+  sido: 충청북도
+  sigungu: 보은군
+  full_name: 충청북도 보은군
+  primary_query: 충청북도 보은군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EB%B3%B4%EC%9D%80%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4373000000'
+  sido: 충청북도
+  sigungu: 옥천군
+  full_name: 충청북도 옥천군
+  primary_query: 충청북도 옥천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%98%A5%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4374000000'
+  sido: 충청북도
+  sigungu: 영동군
+  full_name: 충청북도 영동군
+  primary_query: 충청북도 영동군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%98%81%EB%8F%99%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4374500000'
+  sido: 충청북도
+  sigungu: 증평군
+  full_name: 충청북도 증평군
+  primary_query: 충청북도 증평군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%A6%9D%ED%8F%89%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4375000000'
+  sido: 충청북도
+  sigungu: 진천군
+  full_name: 충청북도 진천군
+  primary_query: 충청북도 진천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%A7%84%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4376000000'
+  sido: 충청북도
+  sigungu: 괴산군
+  full_name: 충청북도 괴산군
+  primary_query: 충청북도 괴산군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EA%B4%B4%EC%82%B0%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4377000000'
+  sido: 충청북도
+  sigungu: 음성군
+  full_name: 충청북도 음성군
+  primary_query: 충청북도 음성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EC%9D%8C%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4380000000'
+  sido: 충청북도
+  sigungu: 단양군
+  full_name: 충청북도 단양군
+  primary_query: 충청북도 단양군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%B6%81%EB%8F%84+%EB%8B%A8%EC%96%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4413000000'
+  sido: 충청남도
+  sigungu: 천안시
+  full_name: 충청남도 천안시
+  primary_query: 충청남도 천안시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%B2%9C%EC%95%88%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4413100000'
+  sido: 충청남도
+  sigungu: 천안시 동남구
+  full_name: 충청남도 천안시 동남구
+  primary_query: 충청남도 천안시 동남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%B2%9C%EC%95%88%EC%8B%9C+%EB%8F%99%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4413300000'
+  sido: 충청남도
+  sigungu: 천안시 서북구
+  full_name: 충청남도 천안시 서북구
+  primary_query: 충청남도 천안시 서북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%B2%9C%EC%95%88%EC%8B%9C+%EC%84%9C%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4415000000'
+  sido: 충청남도
+  sigungu: 공주시
+  full_name: 충청남도 공주시
+  primary_query: 충청남도 공주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EA%B3%B5%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4418000000'
+  sido: 충청남도
+  sigungu: 보령시
+  full_name: 충청남도 보령시
+  primary_query: 충청남도 보령시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EB%B3%B4%EB%A0%B9%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4420000000'
+  sido: 충청남도
+  sigungu: 아산시
+  full_name: 충청남도 아산시
+  primary_query: 충청남도 아산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%95%84%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4421000000'
+  sido: 충청남도
+  sigungu: 서산시
+  full_name: 충청남도 서산시
+  primary_query: 충청남도 서산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%84%9C%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4423000000'
+  sido: 충청남도
+  sigungu: 논산시
+  full_name: 충청남도 논산시
+  primary_query: 충청남도 논산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EB%85%BC%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4425000000'
+  sido: 충청남도
+  sigungu: 계룡시
+  full_name: 충청남도 계룡시
+  primary_query: 충청남도 계룡시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EA%B3%84%EB%A3%A1%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4427000000'
+  sido: 충청남도
+  sigungu: 당진시
+  full_name: 충청남도 당진시
+  primary_query: 충청남도 당진시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EB%8B%B9%EC%A7%84%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4471000000'
+  sido: 충청남도
+  sigungu: 금산군
+  full_name: 충청남도 금산군
+  primary_query: 충청남도 금산군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EA%B8%88%EC%82%B0%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4476000000'
+  sido: 충청남도
+  sigungu: 부여군
+  full_name: 충청남도 부여군
+  primary_query: 충청남도 부여군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EB%B6%80%EC%97%AC%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4477000000'
+  sido: 충청남도
+  sigungu: 서천군
+  full_name: 충청남도 서천군
+  primary_query: 충청남도 서천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%84%9C%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4479000000'
+  sido: 충청남도
+  sigungu: 청양군
+  full_name: 충청남도 청양군
+  primary_query: 충청남도 청양군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%B2%AD%EC%96%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4480000000'
+  sido: 충청남도
+  sigungu: 홍성군
+  full_name: 충청남도 홍성군
+  primary_query: 충청남도 홍성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%ED%99%8D%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4481000000'
+  sido: 충청남도
+  sigungu: 예산군
+  full_name: 충청남도 예산군
+  primary_query: 충청남도 예산군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%EC%98%88%EC%82%B0%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4482500000'
+  sido: 충청남도
+  sigungu: 태안군
+  full_name: 충청남도 태안군
+  primary_query: 충청남도 태안군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84+%ED%83%9C%EC%95%88%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4511000000'
+  sido: 전라북도
+  sigungu: 전주시
+  full_name: 전라북도 전주시
+  primary_query: 전라북도 전주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%A0%84%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4511100000'
+  sido: 전라북도
+  sigungu: 전주시 완산구
+  full_name: 전라북도 전주시 완산구
+  primary_query: 전라북도 전주시 완산구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%A0%84%EC%A3%BC%EC%8B%9C+%EC%99%84%EC%82%B0%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4511300000'
+  sido: 전라북도
+  sigungu: 전주시 덕진구
+  full_name: 전라북도 전주시 덕진구
+  primary_query: 전라북도 전주시 덕진구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%A0%84%EC%A3%BC%EC%8B%9C+%EB%8D%95%EC%A7%84%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4513000000'
+  sido: 전라북도
+  sigungu: 군산시
+  full_name: 전라북도 군산시
+  primary_query: 전라북도 군산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EA%B5%B0%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4514000000'
+  sido: 전라북도
+  sigungu: 익산시
+  full_name: 전라북도 익산시
+  primary_query: 전라북도 익산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%9D%B5%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4518000000'
+  sido: 전라북도
+  sigungu: 정읍시
+  full_name: 전라북도 정읍시
+  primary_query: 전라북도 정읍시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%A0%95%EC%9D%8D%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4519000000'
+  sido: 전라북도
+  sigungu: 남원시
+  full_name: 전라북도 남원시
+  primary_query: 전라북도 남원시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EB%82%A8%EC%9B%90%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4521000000'
+  sido: 전라북도
+  sigungu: 김제시
+  full_name: 전라북도 김제시
+  primary_query: 전라북도 김제시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EA%B9%80%EC%A0%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4571000000'
+  sido: 전라북도
+  sigungu: 완주군
+  full_name: 전라북도 완주군
+  primary_query: 전라북도 완주군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%99%84%EC%A3%BC%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4572000000'
+  sido: 전라북도
+  sigungu: 진안군
+  full_name: 전라북도 진안군
+  primary_query: 전라북도 진안군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%A7%84%EC%95%88%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4573000000'
+  sido: 전라북도
+  sigungu: 무주군
+  full_name: 전라북도 무주군
+  primary_query: 전라북도 무주군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EB%AC%B4%EC%A3%BC%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4574000000'
+  sido: 전라북도
+  sigungu: 장수군
+  full_name: 전라북도 장수군
+  primary_query: 전라북도 장수군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%9E%A5%EC%88%98%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4575000000'
+  sido: 전라북도
+  sigungu: 임실군
+  full_name: 전라북도 임실군
+  primary_query: 전라북도 임실군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%9E%84%EC%8B%A4%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4577000000'
+  sido: 전라북도
+  sigungu: 순창군
+  full_name: 전라북도 순창군
+  primary_query: 전라북도 순창군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EC%88%9C%EC%B0%BD%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4579000000'
+  sido: 전라북도
+  sigungu: 고창군
+  full_name: 전라북도 고창군
+  primary_query: 전라북도 고창군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EA%B3%A0%EC%B0%BD%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4580000000'
+  sido: 전라북도
+  sigungu: 부안군
+  full_name: 전라북도 부안군
+  primary_query: 전라북도 부안군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84+%EB%B6%80%EC%95%88%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4611000000'
+  sido: 전라남도
+  sigungu: 목포시
+  full_name: 전라남도 목포시
+  primary_query: 전라남도 목포시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EB%AA%A9%ED%8F%AC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4613000000'
+  sido: 전라남도
+  sigungu: 여수시
+  full_name: 전라남도 여수시
+  primary_query: 전라남도 여수시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%97%AC%EC%88%98%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4615000000'
+  sido: 전라남도
+  sigungu: 순천시
+  full_name: 전라남도 순천시
+  primary_query: 전라남도 순천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%88%9C%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4617000000'
+  sido: 전라남도
+  sigungu: 나주시
+  full_name: 전라남도 나주시
+  primary_query: 전라남도 나주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EB%82%98%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4623000000'
+  sido: 전라남도
+  sigungu: 광양시
+  full_name: 전라남도 광양시
+  primary_query: 전라남도 광양시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EA%B4%91%EC%96%91%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4671000000'
+  sido: 전라남도
+  sigungu: 담양군
+  full_name: 전라남도 담양군
+  primary_query: 전라남도 담양군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EB%8B%B4%EC%96%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4672000000'
+  sido: 전라남도
+  sigungu: 곡성군
+  full_name: 전라남도 곡성군
+  primary_query: 전라남도 곡성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EA%B3%A1%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4673000000'
+  sido: 전라남도
+  sigungu: 구례군
+  full_name: 전라남도 구례군
+  primary_query: 전라남도 구례군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EA%B5%AC%EB%A1%80%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4677000000'
+  sido: 전라남도
+  sigungu: 고흥군
+  full_name: 전라남도 고흥군
+  primary_query: 전라남도 고흥군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EA%B3%A0%ED%9D%A5%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4678000000'
+  sido: 전라남도
+  sigungu: 보성군
+  full_name: 전라남도 보성군
+  primary_query: 전라남도 보성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EB%B3%B4%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4679000000'
+  sido: 전라남도
+  sigungu: 화순군
+  full_name: 전라남도 화순군
+  primary_query: 전라남도 화순군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%ED%99%94%EC%88%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4680000000'
+  sido: 전라남도
+  sigungu: 장흥군
+  full_name: 전라남도 장흥군
+  primary_query: 전라남도 장흥군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%9E%A5%ED%9D%A5%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4681000000'
+  sido: 전라남도
+  sigungu: 강진군
+  full_name: 전라남도 강진군
+  primary_query: 전라남도 강진군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EA%B0%95%EC%A7%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4682000000'
+  sido: 전라남도
+  sigungu: 해남군
+  full_name: 전라남도 해남군
+  primary_query: 전라남도 해남군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%ED%95%B4%EB%82%A8%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4683000000'
+  sido: 전라남도
+  sigungu: 영암군
+  full_name: 전라남도 영암군
+  primary_query: 전라남도 영암군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%98%81%EC%95%94%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4684000000'
+  sido: 전라남도
+  sigungu: 무안군
+  full_name: 전라남도 무안군
+  primary_query: 전라남도 무안군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EB%AC%B4%EC%95%88%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4686000000'
+  sido: 전라남도
+  sigungu: 함평군
+  full_name: 전라남도 함평군
+  primary_query: 전라남도 함평군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%ED%95%A8%ED%8F%89%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4687000000'
+  sido: 전라남도
+  sigungu: 영광군
+  full_name: 전라남도 영광군
+  primary_query: 전라남도 영광군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%98%81%EA%B4%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4688000000'
+  sido: 전라남도
+  sigungu: 장성군
+  full_name: 전라남도 장성군
+  primary_query: 전라남도 장성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%9E%A5%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4689000000'
+  sido: 전라남도
+  sigungu: 완도군
+  full_name: 전라남도 완도군
+  primary_query: 전라남도 완도군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%99%84%EB%8F%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4690000000'
+  sido: 전라남도
+  sigungu: 진도군
+  full_name: 전라남도 진도군
+  primary_query: 전라남도 진도군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%A7%84%EB%8F%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4691000000'
+  sido: 전라남도
+  sigungu: 신안군
+  full_name: 전라남도 신안군
+  primary_query: 전라남도 신안군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%84%EB%9D%BC%EB%82%A8%EB%8F%84+%EC%8B%A0%EC%95%88%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4711000000'
+  sido: 경상북도
+  sigungu: 포항시
+  full_name: 경상북도 포항시
+  primary_query: 경상북도 포항시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%ED%8F%AC%ED%95%AD%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4711100000'
+  sido: 경상북도
+  sigungu: 포항시 남구
+  full_name: 경상북도 포항시 남구
+  primary_query: 경상북도 포항시 남구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%ED%8F%AC%ED%95%AD%EC%8B%9C+%EB%82%A8%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4711300000'
+  sido: 경상북도
+  sigungu: 포항시 북구
+  full_name: 경상북도 포항시 북구
+  primary_query: 경상북도 포항시 북구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%ED%8F%AC%ED%95%AD%EC%8B%9C+%EB%B6%81%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4713000000'
+  sido: 경상북도
+  sigungu: 경주시
+  full_name: 경상북도 경주시
+  primary_query: 경상북도 경주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EA%B2%BD%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4715000000'
+  sido: 경상북도
+  sigungu: 김천시
+  full_name: 경상북도 김천시
+  primary_query: 경상북도 김천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EA%B9%80%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4717000000'
+  sido: 경상북도
+  sigungu: 안동시
+  full_name: 경상북도 안동시
+  primary_query: 경상북도 안동시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%95%88%EB%8F%99%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4719000000'
+  sido: 경상북도
+  sigungu: 구미시
+  full_name: 경상북도 구미시
+  primary_query: 경상북도 구미시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EA%B5%AC%EB%AF%B8%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4721000000'
+  sido: 경상북도
+  sigungu: 영주시
+  full_name: 경상북도 영주시
+  primary_query: 경상북도 영주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%98%81%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4723000000'
+  sido: 경상북도
+  sigungu: 영천시
+  full_name: 경상북도 영천시
+  primary_query: 경상북도 영천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%98%81%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4725000000'
+  sido: 경상북도
+  sigungu: 상주시
+  full_name: 경상북도 상주시
+  primary_query: 경상북도 상주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%83%81%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4728000000'
+  sido: 경상북도
+  sigungu: 문경시
+  full_name: 경상북도 문경시
+  primary_query: 경상북도 문경시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EB%AC%B8%EA%B2%BD%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4729000000'
+  sido: 경상북도
+  sigungu: 경산시
+  full_name: 경상북도 경산시
+  primary_query: 경상북도 경산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EA%B2%BD%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4773000000'
+  sido: 경상북도
+  sigungu: 의성군
+  full_name: 경상북도 의성군
+  primary_query: 경상북도 의성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%9D%98%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4775000000'
+  sido: 경상북도
+  sigungu: 청송군
+  full_name: 경상북도 청송군
+  primary_query: 경상북도 청송군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%B2%AD%EC%86%A1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4776000000'
+  sido: 경상북도
+  sigungu: 영양군
+  full_name: 경상북도 영양군
+  primary_query: 경상북도 영양군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%98%81%EC%96%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4777000000'
+  sido: 경상북도
+  sigungu: 영덕군
+  full_name: 경상북도 영덕군
+  primary_query: 경상북도 영덕군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%98%81%EB%8D%95%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4782000000'
+  sido: 경상북도
+  sigungu: 청도군
+  full_name: 경상북도 청도군
+  primary_query: 경상북도 청도군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%B2%AD%EB%8F%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4783000000'
+  sido: 경상북도
+  sigungu: 고령군
+  full_name: 경상북도 고령군
+  primary_query: 경상북도 고령군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EA%B3%A0%EB%A0%B9%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4784000000'
+  sido: 경상북도
+  sigungu: 성주군
+  full_name: 경상북도 성주군
+  primary_query: 경상북도 성주군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%84%B1%EC%A3%BC%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4785000000'
+  sido: 경상북도
+  sigungu: 칠곡군
+  full_name: 경상북도 칠곡군
+  primary_query: 경상북도 칠곡군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%B9%A0%EA%B3%A1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4790000000'
+  sido: 경상북도
+  sigungu: 예천군
+  full_name: 경상북도 예천군
+  primary_query: 경상북도 예천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%98%88%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4792000000'
+  sido: 경상북도
+  sigungu: 봉화군
+  full_name: 경상북도 봉화군
+  primary_query: 경상북도 봉화군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EB%B4%89%ED%99%94%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4793000000'
+  sido: 경상북도
+  sigungu: 울진군
+  full_name: 경상북도 울진군
+  primary_query: 경상북도 울진군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%9A%B8%EC%A7%84%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4794000000'
+  sido: 경상북도
+  sigungu: 울릉군
+  full_name: 경상북도 울릉군
+  primary_query: 경상북도 울릉군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84+%EC%9A%B8%EB%A6%89%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4812000000'
+  sido: 경상남도
+  sigungu: 창원시
+  full_name: 경상남도 창원시
+  primary_query: 경상남도 창원시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EC%9B%90%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4812100000'
+  sido: 경상남도
+  sigungu: 창원시 의창구
+  full_name: 경상남도 창원시 의창구
+  primary_query: 경상남도 창원시 의창구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EC%9B%90%EC%8B%9C+%EC%9D%98%EC%B0%BD%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4812300000'
+  sido: 경상남도
+  sigungu: 창원시 성산구
+  full_name: 경상남도 창원시 성산구
+  primary_query: 경상남도 창원시 성산구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EC%9B%90%EC%8B%9C+%EC%84%B1%EC%82%B0%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4812500000'
+  sido: 경상남도
+  sigungu: 창원시 마산합포구
+  full_name: 경상남도 창원시 마산합포구
+  primary_query: 경상남도 창원시 마산합포구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EC%9B%90%EC%8B%9C+%EB%A7%88%EC%82%B0%ED%95%A9%ED%8F%AC%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4812700000'
+  sido: 경상남도
+  sigungu: 창원시 마산회원구
+  full_name: 경상남도 창원시 마산회원구
+  primary_query: 경상남도 창원시 마산회원구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EC%9B%90%EC%8B%9C+%EB%A7%88%EC%82%B0%ED%9A%8C%EC%9B%90%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4812900000'
+  sido: 경상남도
+  sigungu: 창원시 진해구
+  full_name: 경상남도 창원시 진해구
+  primary_query: 경상남도 창원시 진해구 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EC%9B%90%EC%8B%9C+%EC%A7%84%ED%95%B4%EA%B5%AC+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4817000000'
+  sido: 경상남도
+  sigungu: 진주시
+  full_name: 경상남도 진주시
+  primary_query: 경상남도 진주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%A7%84%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4822000000'
+  sido: 경상남도
+  sigungu: 통영시
+  full_name: 경상남도 통영시
+  primary_query: 경상남도 통영시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%ED%86%B5%EC%98%81%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4824000000'
+  sido: 경상남도
+  sigungu: 사천시
+  full_name: 경상남도 사천시
+  primary_query: 경상남도 사천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%82%AC%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4825000000'
+  sido: 경상남도
+  sigungu: 김해시
+  full_name: 경상남도 김해시
+  primary_query: 경상남도 김해시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EA%B9%80%ED%95%B4%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4827000000'
+  sido: 경상남도
+  sigungu: 밀양시
+  full_name: 경상남도 밀양시
+  primary_query: 경상남도 밀양시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EB%B0%80%EC%96%91%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4831000000'
+  sido: 경상남도
+  sigungu: 거제시
+  full_name: 경상남도 거제시
+  primary_query: 경상남도 거제시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EA%B1%B0%EC%A0%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4833000000'
+  sido: 경상남도
+  sigungu: 양산시
+  full_name: 경상남도 양산시
+  primary_query: 경상남도 양산시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%96%91%EC%82%B0%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4872000000'
+  sido: 경상남도
+  sigungu: 의령군
+  full_name: 경상남도 의령군
+  primary_query: 경상남도 의령군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%9D%98%EB%A0%B9%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4873000000'
+  sido: 경상남도
+  sigungu: 함안군
+  full_name: 경상남도 함안군
+  primary_query: 경상남도 함안군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%ED%95%A8%EC%95%88%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4874000000'
+  sido: 경상남도
+  sigungu: 창녕군
+  full_name: 경상남도 창녕군
+  primary_query: 경상남도 창녕군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%B0%BD%EB%85%95%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4882000000'
+  sido: 경상남도
+  sigungu: 고성군
+  full_name: 경상남도 고성군
+  primary_query: 경상남도 고성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EA%B3%A0%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4884000000'
+  sido: 경상남도
+  sigungu: 남해군
+  full_name: 경상남도 남해군
+  primary_query: 경상남도 남해군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EB%82%A8%ED%95%B4%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4885000000'
+  sido: 경상남도
+  sigungu: 하동군
+  full_name: 경상남도 하동군
+  primary_query: 경상남도 하동군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%ED%95%98%EB%8F%99%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4886000000'
+  sido: 경상남도
+  sigungu: 산청군
+  full_name: 경상남도 산청군
+  primary_query: 경상남도 산청군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EC%82%B0%EC%B2%AD%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4887000000'
+  sido: 경상남도
+  sigungu: 함양군
+  full_name: 경상남도 함양군
+  primary_query: 경상남도 함양군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%ED%95%A8%EC%96%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4888000000'
+  sido: 경상남도
+  sigungu: 거창군
+  full_name: 경상남도 거창군
+  primary_query: 경상남도 거창군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%EA%B1%B0%EC%B0%BD%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '4889000000'
+  sido: 경상남도
+  sigungu: 합천군
+  full_name: 경상남도 합천군
+  primary_query: 경상남도 합천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84+%ED%95%A9%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5011000000'
+  sido: 제주특별자치도
+  sigungu: 제주시
+  full_name: 제주특별자치도 제주시
+  primary_query: 제주특별자치도 제주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%9C%EC%A3%BC%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%A0%9C%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5013000000'
+  sido: 제주특별자치도
+  sigungu: 서귀포시
+  full_name: 제주특별자치도 서귀포시
+  primary_query: 제주특별자치도 서귀포시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%A0%9C%EC%A3%BC%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%84%9C%EA%B7%80%ED%8F%AC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5111000000'
+  sido: 강원특별자치도
+  sigungu: 춘천시
+  full_name: 강원특별자치도 춘천시
+  primary_query: 강원특별자치도 춘천시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%B6%98%EC%B2%9C%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5113000000'
+  sido: 강원특별자치도
+  sigungu: 원주시
+  full_name: 강원특별자치도 원주시
+  primary_query: 강원특별자치도 원주시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%9B%90%EC%A3%BC%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5115000000'
+  sido: 강원특별자치도
+  sigungu: 강릉시
+  full_name: 강원특별자치도 강릉시
+  primary_query: 강원특별자치도 강릉시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EA%B0%95%EB%A6%89%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5117000000'
+  sido: 강원특별자치도
+  sigungu: 동해시
+  full_name: 강원특별자치도 동해시
+  primary_query: 강원특별자치도 동해시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EB%8F%99%ED%95%B4%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5119000000'
+  sido: 강원특별자치도
+  sigungu: 태백시
+  full_name: 강원특별자치도 태백시
+  primary_query: 강원특별자치도 태백시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%ED%83%9C%EB%B0%B1%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5121000000'
+  sido: 강원특별자치도
+  sigungu: 속초시
+  full_name: 강원특별자치도 속초시
+  primary_query: 강원특별자치도 속초시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%86%8D%EC%B4%88%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5123000000'
+  sido: 강원특별자치도
+  sigungu: 삼척시
+  full_name: 강원특별자치도 삼척시
+  primary_query: 강원특별자치도 삼척시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%82%BC%EC%B2%99%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5172000000'
+  sido: 강원특별자치도
+  sigungu: 홍천군
+  full_name: 강원특별자치도 홍천군
+  primary_query: 강원특별자치도 홍천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%ED%99%8D%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5173000000'
+  sido: 강원특별자치도
+  sigungu: 횡성군
+  full_name: 강원특별자치도 횡성군
+  primary_query: 강원특별자치도 횡성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%ED%9A%A1%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5175000000'
+  sido: 강원특별자치도
+  sigungu: 영월군
+  full_name: 강원특별자치도 영월군
+  primary_query: 강원특별자치도 영월군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%98%81%EC%9B%94%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5176000000'
+  sido: 강원특별자치도
+  sigungu: 평창군
+  full_name: 강원특별자치도 평창군
+  primary_query: 강원특별자치도 평창군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%ED%8F%89%EC%B0%BD%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5177000000'
+  sido: 강원특별자치도
+  sigungu: 정선군
+  full_name: 강원특별자치도 정선군
+  primary_query: 강원특별자치도 정선군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%A0%95%EC%84%A0%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5178000000'
+  sido: 강원특별자치도
+  sigungu: 철원군
+  full_name: 강원특별자치도 철원군
+  primary_query: 강원특별자치도 철원군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%B2%A0%EC%9B%90%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5179000000'
+  sido: 강원특별자치도
+  sigungu: 화천군
+  full_name: 강원특별자치도 화천군
+  primary_query: 강원특별자치도 화천군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%ED%99%94%EC%B2%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5180000000'
+  sido: 강원특별자치도
+  sigungu: 양구군
+  full_name: 강원특별자치도 양구군
+  primary_query: 강원특별자치도 양구군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%96%91%EA%B5%AC%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5181000000'
+  sido: 강원특별자치도
+  sigungu: 인제군
+  full_name: 강원특별자치도 인제군
+  primary_query: 강원특별자치도 인제군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%9D%B8%EC%A0%9C%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5182000000'
+  sido: 강원특별자치도
+  sigungu: 고성군
+  full_name: 강원특별자치도 고성군
+  primary_query: 강원특별자치도 고성군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EA%B3%A0%EC%84%B1%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '5183000000'
+  sido: 강원특별자치도
+  sigungu: 양양군
+  full_name: 강원특별자치도 양양군
+  primary_query: 강원특별자치도 양양군 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84+%EC%96%91%EC%96%91%EA%B5%B0+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []
+- code: '3611000000'
+  sido: 세종특별자치시
+  sigungu: 세종특별자치시
+  full_name: 세종특별자치시
+  primary_query: 세종특별자치시 강좌신청
+  primary_category: municipality
+  google_search_url: https://www.google.com/search?q=%EC%84%B8%EC%A2%85%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EC%8B%9C+%EA%B0%95%EC%A2%8C%EC%8B%A0%EC%B2%AD
+  candidate_count: 0
+  review_count: 0
+  candidates: []

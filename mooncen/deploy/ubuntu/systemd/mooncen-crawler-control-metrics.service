@@ -1,0 +1,47 @@
+[Unit]
+Description=MoonCen distributed crawler control-plane metrics
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/mooncen/crawler-control-metrics.env
+
+[Service]
+Type=oneshot
+User=mooncen-crawler-observer
+Group=mooncen-crawler-observer
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/crawler-control-metrics.env
+ExecStartPre=/opt/mooncen/.venv/bin/python -X utf8 -m tools.preflight_distributed_crawler_control --component observer --env-file /etc/mooncen/crawler-control-metrics.env
+ExecStart=/opt/mooncen/.venv/bin/python -X utf8 -m ops_agent.crawler_control_metrics
+TimeoutStartSec=20s
+UMask=0022
+Nice=10
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+ProcSubset=pid
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictNamespaces=true
+LockPersonality=true
+RemoveIPC=true
+MemoryDenyWriteExecute=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StateDirectory=mooncen-crawler-observer
+StateDirectoryMode=0755
+ReadWritePaths=/var/lib/mooncen-crawler-observer
+LimitCORE=0
+
+[Install]
+WantedBy=multi-user.target

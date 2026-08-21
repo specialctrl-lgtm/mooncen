@@ -1,0 +1,4 @@
+# Generated wrappers removed from the reviewed registry.
+# Deployment must back up and remove only these exact project-relative paths.
+Crawler/generated_yaml/MUNI_WWW_SD_GO_KR_A00F71E2.py
+Crawler/generated_yaml/MUNI_WWW_YD21_GO_KR_86E8BB47.py

@@ -1,0 +1,423 @@
+version: 1
+generated_at: '2026-07-27T01:01:21+09:00'
+domain_category: 예술/공연
+source_group: arts_culture
+service_group: 체험
+summary:
+  targets: 13
+  by_status:
+    ready: 11
+    excluded_url_shape: 1
+    deprecated: 1
+  by_service_group:
+    공공강좌: 2
+  by_collection_type:
+    cnc_culture_list+detail: 1
+    gjcf_calendar+detail: 1
+    dmgj_event_list+detail: 1
+    gumigx_static_programs: 1
+    hfct_program_list+detail: 1
+    ? inje_official_lifelong_center+institutions_all_pages+reset_sentinels+stable_boundaries+all_current_details+course_bound_login_controls+institution_branches+current_semantic_duplicate_zero+pii_allowlist
+    : 1
+    notice_attachment: 1
+    static_html: 3
+    ydct_lecture2_table: 1
+    disabled_single_detail_alias: 1
+    icheon_artic_declared_pages+empty_sentinel+stable_edges+all_current_details: 1
+targets:
+- provider: MUNI_CNC_CACF_OR_KR_7A12B48E
+  name: 충남문화포털
+  branch: 충청남도 천안시 서북구
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: cnc_culture_list+detail
+  crawler_status: ready
+  priority: 2
+  url: https://cnc.cacf.or.kr/main/html/sub02/0201.html
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 충청남도
+  last_quality:
+    collected: 47
+    score: 100.0
+    grade: A
+    parser: cnc_culture_list_detail
+    error_kind: ''
+    checked_at: '2026-07-26T22:33:15+09:00'
+    source_pages: 5
+    detail_pages: 47
+    saved: 47
+    snapshot_complete: true
+  parser_assigned: cnc_culture_list_detail
+  discover_from_main_url: false
+  crawler_notes:
+  - '2026-07-26: The obsolete 2023 detail URL was replaced by the official event list. The crawler follows current/future rows through the first fully expired page
+    and enriches every row from its detail page.'
+- provider: MUNI_WWW_GJCF_OR_KR_F9585EF3
+  name: 광주문화재단
+  branch: 광주광역시 북구
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 문화재단
+  source_group: arts_culture
+  collection_type: gjcf_calendar+detail
+  crawler_status: ready
+  parser_assigned: gjcf_calendar
+  discover_from_main_url: false
+  priority: 2
+  url: https://www.gjcf.or.kr/cf/cultureart/list/calendar.do
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 광주광역시
+  last_quality:
+    collected: 3
+    score: 100.0
+    grade: A
+    parser: gjcf_calendar
+    error_kind: ''
+  crawler_notes:
+  - '2026-06-29: Switched from a single detail URL to the calendar list URL because events use different venues.'
+- provider: MUNI_WWW_GJCF_OR_KR_F9585EF3
+  name: 동명동 문화마실 행사
+  branch: 광주광역시 동구 동명동
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 문화재단
+  source_group: arts_culture
+  collection_type: dmgj_event_list+detail
+  crawler_status: ready
+  parser_assigned: dmgj_event_list_detail
+  discover_from_main_url: false
+  priority: 2
+  url: https://dmgj.kr/event.es?mid=a10301000000&p_cate=0301
+  source: user_requested
+  origin: manual
+  region: 광주광역시
+  last_quality:
+    collected: 3
+    score: 100.0
+    grade: A
+    parser: dmgj_event_list_detail
+    error_kind: ''
+  crawler_notes:
+  - '2026-06-29: Added as a separate target under the same provider; venues differ from gjcf.or.kr calendar events.'
+- provider: MUNI_WWW_GUMIGX_KR_2CBF84FC
+  name: 구미시근로자 문화센터
+  branch: 경상북도 구미시
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: gumigx_static_programs
+  crawler_status: ready
+  parser_assigned: gumigx_static_programs
+  discover_from_main_url: false
+  full_snapshot_required: true
+  priority: 2
+  url: https://www.gumigx.kr/course/info.asp
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 44
+    score: 100.0
+    grade: A
+    parser: gumigx_static_programs
+    error_kind: ''
+    checked_at: '2026-07-27T00:47:44+09:00'
+    source_pages: 3
+    detail_pages: 0
+    snapshot_complete: true
+  crawler_notes:
+  - '2026-06-20: Generic parser filtering removed menu-only rows. Tested course/info.asp, OnLineCulture/sukang_form.asp, adult/adult-course-recruit.asp; all returned
+    no structured course rows.'
+  - '2026-06-29: Added gumigx_static_programs collector for public swim, health/GX, and library program guide pages. Online application requires login, so rows are
+    INFO_ONLY static program guidance.'
+  - '2026-07-27: Replaced unsafe per-row fragments with stable ASCII item identities. All 44 programs now retain distinct source URLs through generated-runner normalization
+    and database upsert.'
+- provider: MUNI_WWW_HFCT_OR_KR_05C08858
+  name: 화순군문화관광재단
+  branch: 전라남도 화순군
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: hfct_program_list+detail
+  crawler_status: ready
+  priority: 2
+  url: https://www.hfct.or.kr/edu.do?S=S01&M=0502010000
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라남도
+  last_quality:
+    collected: 3
+    score: 100.0
+    grade: A
+    parser: hfct_program_list_detail
+    error_kind: ''
+    checked_at: '2026-07-26T22:03:38+09:00'
+    source_pages: 4
+    detail_pages: 3
+    snapshot_complete: true
+  parser_assigned: hfct_program_list_detail
+  discover_from_main_url: false
+  crawler_notes:
+  - '2026-07-26: Replaced broad recursive discovery with the official program list/detail parser. Expired rows are excluded and target, fee, date, venue, category,
+    and time are always populated.'
+- provider: MUNI_WWW_INJE_GO_KR_44A2D640
+  name: 인제군 평생학습센터
+  branch: 강원특별자치도 인제군
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: inje_official_lifelong_center+institutions_all_pages+reset_sentinels+stable_boundaries+all_current_details+course_bound_login_controls+institution_branches+current_semantic_duplicate_zero+pii_allowlist
+  crawler_status: ready
+  priority: 2
+  url: https://lifelong.inje.go.kr/lct/course/list
+  source: municipal_integrated_reservation_manual_verification
+  origin: live_validated
+  full_snapshot_required: true
+  ownership_scope: inje_official_lifelong_center_and_registered_institutions_two_disjoint_catalogues
+  region: 강원특별자치도
+  municipality_code: '5181000000'
+  municipality_full_name: 강원특별자치도 인제군
+  covered_municipalities:
+  - code: '5181000000'
+    sido: 강원특별자치도
+    sigungu: 인제군
+    full_name: 강원특별자치도 인제군
+  last_quality:
+    collected: 35
+    parser: inje_official_lifelong_center+institutions_all_pages+reset_sentinels+stable_boundaries+all_current_details+course_bound_login_controls+institution_branches+current_semantic_duplicate_zero+pii_allowlist
+    error_kind: ''
+    checked_at: '2026-07-21T13:18:14+09:00'
+    no_current_data: false
+    source_total: 901
+    source_pages: 91
+    center_source_total: 766
+    institution_source_total: 135
+    list_requests: 97
+    detail_pages: 35
+    pages: 132
+    current_scope_counts:
+      center: 33
+      institution: 2
+    status_counts:
+      OPEN: 5
+      CLOSED: 30
+    application_control_count: 5
+    semantic_duplicate_count: 0
+    pii_payload_persisted: false
+    snapshot_complete: true
+  crawler_notes:
+  - 센터·등록기관의 서로 분리된 두 목록을 한 owner로 전수 순회하며 기관 목록의 중복 provider는 비활성화한다.
+  - 강사·연락처·첨부·자유본문·신청자 정보는 저장하지 않는다.
+- provider: MUNI_WWW_JINAN_GO_KR_F429346A
+  name: 진안군청
+  branch: 전라북도 진안군
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: notice_attachment
+  crawler_status: excluded_url_shape
+  blocked_reason: attachment_guideline_only
+  priority: 2
+  url: https://www.jinan.go.kr/edu/board/download.jinan?boardId=BBS_0000074&menuCd=DOM_000000504001000000&paging=ok&startPage=1&dataSid=204556&command=update&fileSid=126565
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 전라북도
+  last_quality:
+    collected: 0
+    score: 0.0
+    grade: EXCLUDED
+    parser: none
+    error_kind: attachment_guideline_only
+- provider: MUNI_WWW_ULSANNAMGU_GO_KR_55028B5E
+  name: 울산광역시 남구청
+  branch: 울산광역시 남구
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.ulsannamgu.go.kr/inhParticipation/residentAutonomy.do?pageIndex=7
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 울산광역시
+  last_quality:
+    collected: 3
+    score: 80.0
+    grade: B
+    parser: ulsannamgu_resident_autonomy_table
+    error_kind: ''
+  crawler_notes:
+  - '2026-06-17: Routed pageIndex-only resident autonomy URL through the resident autonomy table parser.'
+  - '2026-06-17: Parser removes pageIndex while iterating dongName options to avoid empty late-page results.'
+- provider: MUNI_WWW_ULSANNAMGU_GO_KR_E36CF0FF
+  name: 울산광역시 남구청
+  branch: 울산광역시 남구
+  collection_category: 지자체
+  domain_category: 주민자치
+  operator_type: 지자체/공공기관
+  source_group: municipal_course_candidate_results
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.ulsannamgu.go.kr/inhParticipation/residentAutonomy.do?dongName=12
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 울산광역시
+  last_quality:
+    collected: 250
+    score: 83.3
+    grade: A
+    parser: ulsannamgu_resident_autonomy_table
+    error_kind: ''
+  crawler_notes:
+  - 주민자치프로그램 교육기관 select의 동별 지점을 순환한다.
+  - 사이트가 운영기간/접수기간을 별도 노출하지 않아 period는 비어 있을 수 있다.
+  - 수강료는 표 헤더 기준 3개월분이다.
+- provider: MUNI_WWW_YDCT_ORG_9BB7628B
+  name: 영덕문화관광재단
+  branch: 경상북도 영덕군
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: ydct_lecture2_table
+  crawler_status: ready
+  parser_assigned: ydct_lecture2_table
+  discover_from_main_url: false
+  full_snapshot_required: true
+  priority: 2
+  url: https://www.ydct.org/lecture2/list
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 경상북도
+  last_quality:
+    collected: 13
+    score: 100.0
+    grade: A
+    parser: ydct_lecture2_table
+    error_kind: ''
+    checked_at: '2026-07-27T00:44:41+09:00'
+    source_pages: 1
+    detail_pages: 0
+    snapshot_complete: true
+  crawler_notes:
+  - '2026-07-27: Verified the complete lecture2 table. All 13 rows include target, fee, date, venue, category, and schedule information.'
+- provider: MUNI_WWW_YEONGAM_GO_KR_ACFEFCF0
+  name: 영암군립도서관 단일 만료 상세
+  branch: 전남광주통합특별시 영암군
+  collection_category: 교육·강좌
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  collection_type: disabled_single_detail_alias
+  crawler_status: deprecated
+  priority: 2
+  url: https://www.yeongam.go.kr/home/newlib/culture/culture_02/show/194
+  source: municipal_integrated_reservation_manual_verification
+  origin: disabled
+  canonical_url: https://www.yeongam.go.kr/home/newlib/culture/culture_02
+  duplicate_of: MUNI_WWW_YEONGAM_GO_KR_ACFEFCF0
+  blocked_reason: single_expired_detail_superseded_by_complete_library_catalogue
+  last_quality:
+    collected: 0
+    checked_at: '2026-07-21T17:18:23+09:00'
+    parser: disabled_single_detail_alias
+    error_kind: single_expired_detail_superseded_by_complete_library_catalogue
+- provider: MUNI_WWW_YEONSU_GO_KR_B2B6DF58
+  name: 연수문화포털
+  branch: 인천광역시 연수구
+  collection_category: 예술/공연
+  domain_category: 예술/공연
+  operator_type: 기타
+  source_group: arts_culture
+  collection_type: static_html
+  crawler_status: ready
+  priority: 2
+  url: https://www.yeonsu.go.kr/culture/show/friday_art/reservation.asp
+  source: municipal_course_candidate_results
+  origin: collected
+  region: 인천광역시
+  last_quality:
+    collected: 0
+    score: 100.0
+    grade: A
+    parser: yeonsu_friday_art_cards+detail
+    error_kind: ''
+    checked_at: '2026-07-26T22:33:15+09:00'
+    no_current_data: true
+    source_pages: 1
+    snapshot_complete: true
+  crawler_notes:
+  - 전용 파서가 금요예술무대 카드와 상세 페이지를 수집한다.
+  - '2026-07-26: The first fully expired page is an explicit current-snapshot boundary; the live list currently has no future performance.'
+- provider: MUNI_WWW_ARTIC_OR_KR_9B6E3C8E
+  name: 이천문화재단 예술아카데미 전체 교육강좌
+  branch: 이천문화재단
+  collection_category: 공공예약
+  domain_category: 교육·강좌
+  operator_type: 지자체/공공기관
+  source_group: municipal_reservation
+  service_group: 공공강좌
+  service_group_policy: locked
+  collection_type: icheon_artic_declared_pages+empty_sentinel+stable_edges+all_current_details
+  crawler_module: Crawler.municipal_icheon
+  crawler_callable: collect
+  parser_assigned: icheon_artic_declared_pages+empty_sentinel+stable_edges+all_current_details
+  crawler_status: ready
+  priority: 1
+  url: https://www.artic.or.kr/base/nrr/academy/artic/list?menuLevel=2&menuNo=13
+  list_urls:
+  - https://www.artic.or.kr/base/nrr/academy/artic/list?menuLevel=2&menuNo=13
+  source: municipal_integrated_reservation_exhaustive_live_audit
+  origin: live_validated
+  region: 경기도 이천시
+  municipality_code: '4150000000'
+  municipality_full_name: 경기도 이천시
+  max_pages: 450
+  detail_limit: 500
+  full_snapshot_required: true
+  classification_locked: true
+  classification_reason: 이천문화재단 예술아카데미의 강좌 identity·교육기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_evidence_url: https://www.artic.or.kr/base/nrr/academy/artic/list?menuLevel=2&menuNo=13
+  ownership_scope: icheon_cultural_foundation_art_academy_current_course_ledger
+  covered_municipalities:
+  - code: '4150000000'
+    sido: 경기도
+    sigungu: 이천시
+    full_name: 경기도 이천시
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: icheon_artic_declared_pages+empty_sentinel+stable_edges+all_current_details
+    error_kind: ''
+    checked_at: '2026-07-23T08:49:20+09:00'
+    source_total: 10
+    source_pages: 1
+    sentinel_page: 2
+    current_count: 10
+    returned_count: 10
+    pagination_complete: true
+    details_complete: true
+    pii_payload_persisted: false
+    snapshot_complete: true
+    full_snapshot_validated: true
+  ownership:
+    canonical_provider: MUNI_WWW_ARTIC_OR_KR_9B6E3C8E
+    canonical_candidate_id: MUNI_IR_F711ABF92A5A
+    provider_decision: add_separate_cultural_foundation_academy_owner
+  crawler_notes:
+  - 공식 1개 데이터 페이지 10건과 2페이지 빈 sentinel·경계를 검증하고 공개 상세 10건을 저장한다.
+  - 문의·연락처는 검증 후 저장하지 않고 수강신청·결제 endpoint를 호출하지 않는다.

@@ -1,0 +1,12 @@
+[Unit]
+Description=MoonCen isolated Ops API and reviewed UI listener
+After=network.target
+
+[Socket]
+ListenStream=127.0.0.1:5175
+Accept=no
+NoDelay=true
+Service=mooncen-ops-api.service
+
+[Install]
+WantedBy=sockets.target

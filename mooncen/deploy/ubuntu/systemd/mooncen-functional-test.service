@@ -1,0 +1,38 @@
+[Unit]
+Description=MoonCen functional test
+After=network-online.target postgresql.service nginx.service mooncen-api.service mooncen-frontend.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=mooncen-check
+Group=mooncen-check
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/functional-test.env
+Environment=TZ=Asia/Seoul
+StateDirectory=mooncen-check
+StateDirectoryMode=0700
+ExecStart=/bin/bash -lc '/opt/mooncen/.venv/bin/python -X utf8 tools/ops/functional_test.py --report-dir /var/lib/mooncen-check'
+ExecStopPost=/bin/chgrp -R mooncen /var/lib/mooncen-check
+ExecStopPost=/bin/chmod -R u+rwX,g+rX,o-rwx /var/lib/mooncen-check
+TimeoutStartSec=180
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

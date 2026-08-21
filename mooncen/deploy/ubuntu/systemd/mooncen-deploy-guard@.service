@@ -1,0 +1,35 @@
+[Unit]
+Description=MoonCen deployment recovery guard (%i)
+After=local-fs.target
+Before=nginx.service cloudflared.service mooncen-api.service mooncen-frontend.service mooncen-ai-worker.service
+Before=mooncen-crawler.service mooncen-crawler.timer mooncen-crawler-once.service mooncen-crawler-browser-smoke.service mooncen-crawler-watchdog.service mooncen-crawler-watchdog.timer
+Before=mooncen-staging-apply.service mooncen-staging-apply.timer mooncen-staging-apply@.service mooncen-staging-apply-dry-run.service mooncen-staging-apply-dry-run@.service
+Before=mooncen-backup.service mooncen-backup.timer mooncen-backup-restore-test.service mooncen-backup-restore-test.timer
+Before=mooncen-functional-test.service mooncen-functional-test.timer mooncen-ops-bot.service mooncen-branch-coordinates.service
+Before=mooncen-cloudflared-role-guard.service mooncen-cloudflared-role-guard.timer mooncen-cloudflare-gate.service mooncen-cloudflare-gate.timer
+
+[Service]
+Type=simple
+User=root
+Group=root
+UMask=0077
+RuntimeDirectory=mooncen-native-deploy-start
+RuntimeDirectoryMode=0700
+ExecStartPre=/bin/bash -c 'if [ ! -e /opt/.mooncen-deploy.lock ] && [ ! -L /opt/.mooncen-deploy.lock ]; then exit 0; fi; exec /opt/.mooncen-deploy.lock/guard.sh boot-recover /opt/.mooncen-deploy.lock "%i"'
+ExecStart=/bin/bash -c 'if [ ! -e /opt/.mooncen-deploy.lock ] && [ ! -L /opt/.mooncen-deploy.lock ]; then exit 0; fi; exec /opt/.mooncen-deploy.lock/guard.sh watch /opt/.mooncen-deploy.lock "%i"'
+Restart=on-failure
+RestartSec=5s
+TimeoutStartSec=infinity
+TimeoutStopSec=30s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

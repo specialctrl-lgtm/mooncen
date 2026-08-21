@@ -1,0 +1,44 @@
+[Unit]
+Description=MoonCen Telegram ops bot
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mooncen-bot
+Group=mooncen-bot
+SupplementaryGroups=systemd-journal
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/bot.env
+Environment=PATH=/usr/local/libexec/mooncen-bot:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+StateDirectory=mooncen-bot
+StateDirectoryMode=0700
+ExecStart=/opt/mooncen/.venv/bin/python -X utf8 /opt/mooncen/tools/mooncen_ops_bot.py
+Restart=on-failure
+RestartSec=10
+RestartPreventExitStatus=78
+UMask=0077
+# The bot's only privilege transition is the root-owned, query-allowlisted
+# psql wrapper authorized in /etc/sudoers.d/mooncen-bot-db-status.
+NoNewPrivileges=false
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_AUDIT_WRITE
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

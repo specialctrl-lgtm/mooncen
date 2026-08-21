@@ -1,0 +1,105 @@
+version: 1
+generated_from: Crawler.Crawler_MunicipalYaml.load_targets(source=collected)
+summary:
+  targets: 9
+  by_source:
+    national_institution_course_search_targets: 6
+    public_course_targets: 3
+targets:
+- provider: BUSAN_NATIONAL_SCIENCE_MUSEUM
+  name: 국립부산과학관
+  branch: 국립부산과학관
+  url: https://www.sciport.or.kr
+  crawler_status: covered_by_specific_target
+  source: national_institution_course_search_targets
+  priority: 1
+- provider: BUSAN_RESERVATION
+  name: 부산광역시 통합예약
+  branch: 부산광역시 통합예약
+  url: https://reserve.busan.go.kr
+  crawler_status: covered_by_specific_target
+  source: public_course_targets
+  priority: 1
+- provider: DAEGU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립대구과학관
+  branch: 국립대구과학관
+  url: https://www.dnsm.or.kr
+  crawler_status: covered_by_specific_target
+  source: national_institution_course_search_targets
+  priority: 1
+- provider: DAEGU_RESERVATION
+  name: 동부여성문화회관 / 실내수영장
+  branch: 대구광역시 통합예약
+  collection_category: 공공예약
+  domain_category: 공공예약
+  operator_type: 지자체/공공기관
+  source_group: public_reservation
+  collection_type: api_json
+  crawler_status: covered_by_specific_target
+  url: https://www.daegu.go.kr
+  source: public_course_targets
+  priority: 1
+  last_quality:
+    collected: 92
+    score: 100.0
+    grade: A
+    parser: daegu_reservation_expr_api+detail
+    error_kind: ''
+- provider: DAEJEON_OK_RESERVATION
+  name: 대전광역시 OK예약서비스
+  branch: 여성가족원(본원)
+  url: https://www.daejeon.go.kr/okr2019
+  crawler_status: covered_by_specific_target
+  source: public_course_targets
+  priority: 1
+- provider: GWACHEON_NATIONAL_SCIENCE_MUSEUM
+  name: 국립과천과학관
+  branch: 국립과천과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: json_api
+  crawler_status: covered_by_specific_target
+  url: https://www.sciencecenter.go.kr/edu/user/edu/eduList.do
+  source: national_institution_course_search_targets
+  priority: 1
+  last_quality:
+    collected: 10
+    score: 100.0
+    grade: A
+    parser: gwacheon_edu_list_json
+    error_kind: ''
+- provider: GWANGJU_NATIONAL_SCIENCE_MUSEUM
+  name: 국립광주과학관
+  branch: 국립광주과학관
+  collection_category: 박물관/과학관
+  domain_category: 박물관/과학관
+  operator_type: 국립/공공기관
+  source_group: museum_science
+  collection_type: static_html+detail_html
+  crawler_status: covered_by_specific_target
+  url: https://www.sciencecenter.or.kr/kor/board/index.do?bid=eduNotice&mode=list&menuId=285_335
+  source: national_institution_course_search_targets
+  priority: 1
+  last_quality:
+    collected: 10
+    score: 90.0
+    grade: A
+    parser: gwangju_sciencecenter_notice_detail
+    error_kind: ''
+- provider: NATIONAL_OCEAN_SCIENCE_MUSEUM
+  name: 국립해양과학관
+  branch: 국립해양과학관
+  url: https://www.kosm.or.kr
+  crawler_status: covered_by_specific_target
+  source: national_institution_course_search_targets
+  priority: 1
+- provider: NATIONAL_SCIENCE_MUSEUM
+  name: 국립중앙과학관
+  branch: 국립중앙과학관
+  url: https://www.science.go.kr
+  crawler_status: covered_by_specific_target
+  source: national_institution_course_search_targets
+  priority: 1
+generated_at: '2026-07-10T15:00:25'

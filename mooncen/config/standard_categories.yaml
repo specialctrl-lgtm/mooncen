@@ -1,0 +1,477 @@
+version: 1
+name: mooncen_standard_course_categories
+description: >
+  Mooncen standard subject categories. Provider-specific labels such as ADULT,
+  CHILD, With Mom, 정규, 선착순, 평생학습, 문화센터 are treated as source or age
+  metadata and are not used as final subject categories unless the course title
+  or content also contains a subject keyword.
+
+unknown_category:
+  key: uncategorized
+  label: 미분류
+
+source_only_terms:
+  - 문화센터
+  - 평생학습
+  - 평생교육
+  - 공공예약
+  - 도서관
+  - 복지관
+  - 청소년
+  - 주민자치센터
+  - 정규
+  - 단기
+  - 전체
+  - 기타
+  - 선착순
+  - 추첨식
+  - ADULT
+  - CHILD
+  - TODDLER
+  - TEEN
+  - INFANT
+  - SENIOR
+  - ALL
+  - Kids & Children
+  - Kids & Children(event)
+  - With Mom
+  - With mom(event)
+  - Pre-Parent
+  - Parents education
+  - 성인
+  - 유아
+  - 아동
+  - 초등
+  - 성인강좌
+  - 유아강좌
+  - 아동강좌
+  - 초등강좌
+  - 영아강좌
+  - 키즈강좌
+  - 성인단기
+  - 아동단기
+  - 성인일일
+  - 아동일일
+  - 키즈 원데이
+  - 방학특강
+  - 중도수강
+  - A*CLASS
+  - 시즌스페셜
+
+categories:
+  - key: infant_play
+    label: 영유아·놀이
+    description: 영유아 발달, 오감, 감각, 부모 동반 놀이 수업
+    priority: 100
+    keywords:
+      - 영아
+      - 유아
+      - 베이비
+      - 오감
+      - 감각
+      - 놀이
+      - 트니트니
+      - 짐짐펀
+      - 도레미
+      - 베베
+      - 뮤직
+      - With Mom
+      - With mom
+      - Music & Play
+      - 엄마랑
+      - 아이랑
+      - 아가랑
+      - 브레인팝
+      - 글렌도만
+      - 키즈
+
+  - key: art_craft
+    label: 미술·공예
+    description: 미술, 그림, 공예, 만들기, 도예, 서예, 캘리그라피
+    priority: 95
+    keywords:
+      - 미술
+      - 그림
+      - 드로잉
+      - Drawing
+      - 스케치
+      - 아트
+      - Art
+      - 공예
+      - Crafts
+      - 만들기
+      - 클레이
+      - 도예
+      - 도자
+      - 서예
+      - 문인화
+      - 사군자
+      - 수묵
+      - 연필화
+      - 인물화
+      - 양재
+      - 패션
+      - 의류수선
+      - 리폼
+      - 의상
+      - 소품
+      - 한복
+      - 사진촬영
+      - 캘리
+      - 캘리그라피
+      - 수채화
+      - 유화
+      - 민화
+      - 자수
+      - 라탄
+      - 모빌
+      - 가면
+      - 보자기
+      - 매듭
+      - 손뜨개
+      - 뜨개
+      - 플라워
+      - 꽃
+      - 원예
+      - 디자인
+      - Beauty & Design
+
+  - key: music_performance
+    label: 음악·공연
+    description: 악기, 노래, 음악, 공연, 연극, 뮤지컬
+    priority: 90
+    keywords:
+      - 음악
+      - 악기
+      - Music
+      - 노래
+      - 동요
+      - 성악
+      - 가요
+      - 보컬
+      - 합창
+      - 피아노
+      - 바이올린
+      - 첼로
+      - 플릇
+      - 플룻
+      - 플루트
+      - 기타
+      - 통기타
+      - 우쿨렐레
+      - 드럼
+      - 장구
+      - 난타
+      - 판소리
+      - 민요
+      - 모듬북
+      - 하프
+      - 아코디언
+      - 오카리나
+      - 팬플릇
+      - 하모니카
+      - 클라리넷
+      - 색소폰
+      - 국악
+      - 장고
+      - 공연
+      - 연극
+      - 뮤지컬
+      - 성인드럼
+
+  - key: sports_fitness
+    label: 운동·스포츠
+    description: 체육, 스포츠, 수영, 댄스, 발레, 요가, 필라테스, 생활체육
+    priority: 88
+    keywords:
+      - 체육
+      - 스포츠
+      - 생활체육
+      - 운동
+      - 체조
+      - 수영
+      - 테니스
+      - 배드민턴
+      - 농구
+      - 축구
+      - 당구
+      - 탁구
+      - 골프
+      - 검도
+      - 인라인
+      - 역도
+      - 태극권
+      - 무용
+      - 한국무용
+      - 에어로빅
+      - 스피닝
+      - 점핑피트니스
+      - 댄스
+      - K-POP
+      - 방송댄스
+      - 라인댄스
+      - 줌바
+      - 발레
+      - 요가
+      - 필라테스
+      - PT
+      - Dance & Exercise
+      - 점핑
+      - 점핑피트니스
+      - 피트니스
+      - 바레
+      - 트레이닝
+      - 근력
+      - 밸런스
+      - Balance Training
+      - PilaFit
+
+  - key: cooking_food
+    label: 요리·베이킹
+    description: 요리, 베이킹, 쿠키, 케이크, 디저트, 음료, 음식 만들기
+    priority: 86
+    keywords:
+      - 요리
+      - 쿠킹
+      - Cook
+      - Home Cook
+      - 베이킹
+      - 쿠키
+      - 케이크
+      - 빵
+      - 디저트
+      - Dessert
+      - Beverages
+      - 음료
+      - 파스타
+      - 피자
+      - 버거
+      - 샌드위치
+      - 샐러드
+      - 반찬
+      - 커피
+      - 제과
+      - 제빵
+      - 꽃게
+      - 타르트
+      - 보양식
+      - 와인
+      - 식문화
+      - 푸드
+      - 셰프
+
+  - key: digital_it
+    label: 디지털·IT
+    description: 컴퓨터, 스마트폰, 코딩, 로봇, AI, 정보화교육, 디지털 리터러시
+    priority: 84
+    keywords:
+      - 정보화
+      - 정보화교육
+      - 컴퓨터
+      - 스마트폰
+      - 인터넷
+      - 블로그
+      - SNS
+      - 디지털
+      - IT
+      - 코딩
+      - 코딩교육
+      - 사진편집
+      - 동영상
+      - 영상제작
+      - 로봇
+      - AI
+      - 인공지능
+      - 리터러시
+      - 미디어
+      - 엑셀
+      - 파워포인트
+      - 한글문서
+
+  - key: language_humanities
+    label: 어학·인문
+    description: 외국어, 독서, 글쓰기, 인문교양, 역사, 철학, 스피치
+    priority: 82
+    keywords:
+      - 어학
+      - 외국어
+      - Language
+      - 영어
+      - English
+      - 잉글리쉬
+      - 일본어
+      - 중국어
+      - 프랑스어
+      - 스페인어
+      - 회화
+      - 독서
+      - 글쓰기
+      - 문해
+      - 한글
+      - 한자
+      - 한문
+      - 논어
+      - 인문
+      - 인문교양
+      - 철학
+      - 역사
+      - 스피치
+      - 프리토킹
+      - 스토리텔링
+      - 동화구연
+      - 북토크
+
+  - key: career_license
+    label: 직업·자격
+    description: 취업, 자격증, 창업, 직업능력, 강사 양성, 실무 과정
+    priority: 80
+    keywords:
+      - 직업
+      - 직업능력
+      - 취업
+      - 미용사
+      - 자격증
+      - 자격
+      - 창업
+      - 전문가
+      - 강사
+      - 양성
+      - 실무
+      - 국비
+      - Hive
+      - 서비스직
+      - 복지시설전문강사
+
+  - key: science_creative
+    label: 과학·창의
+    description: 과학, 실험, 수학, 창의사고, 마술과학, 메이커
+    priority: 78
+    keywords:
+      - 과학
+      - Science
+      - 실험
+      - 수학
+      - 주판
+      - 주산
+      - 수리셈
+      - 창의
+      - 사고력
+      - 두뇌
+      - 브레인
+      - 가베
+      - 오르다
+      - 마술
+      - 메이커
+      - 드론
+      - 항공
+      - 천문
+
+  - key: hobby_leisure
+    label: 취미·여가
+    description: 바둑, 보드게임, 취미형 여가 활동
+    priority: 73
+    keywords:
+      - 바둑
+      - 체스
+      - 보드게임
+      - 취미
+
+  - key: nature_ecology
+    label: 자연·생태
+    description: 숲, 생태, 환경, 식물, 농업, 수목원, 캠핑, 자연체험
+    priority: 76
+    keywords:
+      - 자연
+      - 생태
+      - 환경
+      - 숲
+      - 산림
+      - 식물
+      - 농업
+      - 수목원
+      - 백두대간
+      - 에코
+      - 야영장
+      - 캠핑
+      - 트리하우스
+
+  - key: culture_history
+    label: 역사·전통문화
+    description: 전통문화, 문화유산, 박물관, 미술관, 전시, 도슨트, 국악
+    priority: 74
+    keywords:
+      - 전통
+      - 문화유산
+      - 박물관
+      - 미술관
+      - 전시
+      - 도슨트
+      - 문화재
+      - 역사관
+      - 기념관
+      - 국악
+      - 민속
+      - 민화
+
+  - key: experience_trip
+    label: 체험·견학
+    description: 체험, 견학, 캠프, 현장학습, 기관 방문형 프로그램
+    priority: 72
+    keywords:
+      - 체험
+      - 견학
+      - 체험견학
+      - 견학체험
+      - 현장학습
+      - 캠프
+      - 진로직업체험
+      - 체험처
+
+  - key: health_life
+    label: 건강·생활
+    description: 건강, 치유, 생활관리, 정리수납, 타로, 심리, 재테크, 생활교양
+    priority: 70
+    keywords:
+      - 건강
+      - 힐링
+      - 치유
+      - 호흡
+      - 메이크업
+      - 뷰티
+      - 바디
+      - 네일
+      - 헤어
+      - 퍼스널
+      - 모델
+      - 명상
+      - 심리
+      - 명리
+      - 타로
+      - 정리수납
+      - 생활관리
+      - 라이프
+      - 재테크
+      - 경제
+      - 부동산
+      - Economy
+      - 재무
+      - 보건
+      - 보건교육
+      - 아로마
+
+  - key: civic_public
+    label: 시민·공공교육
+    description: 시민참여, 주민교육, 안전, 자원봉사, 공공기관 정책교육
+    priority: 60
+    keywords:
+      - 시민
+      - 시민참여
+      - 주민
+      - 주민자치
+      - 자원봉사
+      - 안전
+      - 소방
+      - 환경교육
+      - 농업기술
+      - 고양도시관리공사
+      - 학교에서 배우는 시민

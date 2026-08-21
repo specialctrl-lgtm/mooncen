@@ -1,0 +1,243 @@
+version: 1
+generated_at: '2026-07-28T07:09:00+09:00'
+domain_category: 문화센터
+source_group: retail_culture
+service_group: 문화센터
+summary:
+  targets: 9
+  by_status:
+    ready: 9
+  by_service_group: {}
+  by_collection_type:
+    unknown: 3
+    ajax_api: 4
+    selenium: 1
+    galleria_four_branch_complete_open_lecture+detail: 1
+targets:
+- provider: AK_PLAZA
+  name: AK PLAZA 문화아카데미
+  branch: AK PLAZA 문화아카데미
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: galleria_four_branch_complete_open_lecture+detail
+  crawler_status: ready
+  priority: 1
+  url: https://culture.akplaza.com/course/list01
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_YamlSources
+  crawler_script: Crawler/Crawler_YamlSources.py
+  base_url: https://culture.akplaza.com
+  list_url: https://culture.akplaza.com/course/list01
+  source_url: https://culture.akplaza.com/course/list01
+  access:
+    login_required: false
+    selenium_required: likely
+    api_available: unknown
+    public_list: unknown
+- provider: ELAND_RETAIL
+  name: 이랜드 리테일 문화센터
+  branch: 이랜드 리테일 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 1
+  url: https://www.elandretail.com/culture/culture07.do
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_YamlSources
+  crawler_script: Crawler/Crawler_YamlSources.py
+  base_url: https://www.elandretail.com
+  list_url: https://www.elandretail.com/culture/culture07.do
+  source_url: https://www.elandretail.com/culture/culture07.do
+  access:
+    login_required: false
+    selenium_required: false
+    api_available: true
+    public_list: true
+- provider: EMART
+  name: 이마트 문화센터
+  branch: 이마트 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 1
+  url: https://www.cultureclub.emart.com/enrolment
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_Emart
+  crawler_script: Crawler/Crawler_Emart.py
+  base_url: https://www.cultureclub.emart.com
+  list_url: https://www.cultureclub.emart.com/enrolment
+  access:
+    login_required: false
+    selenium_required: true
+    api_available: true
+  notes:
+  - 운영 중인 크롤러.
+  - 강좌 목록은 AppSync GraphQL getClassByFiltering from/size 페이징으로 수집한다.
+  - 사이트 점검 시 0건 수집될 수 있으므로 stale cleanup 금지 로직 유지.
+- provider: GALLERIA
+  name: 갤러리아 문화센터
+  branch: 갤러리아 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: unknown
+  crawler_status: ready
+  priority: 1
+  url: https://dept.galleria.co.kr/g-culture/culture-center/branch
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_YamlSources
+  crawler_script: Crawler/Crawler_YamlSources.py
+  base_url: https://dept.galleria.co.kr
+  list_url: https://dept.galleria.co.kr/g-culture/culture-center/branch
+  source_url: https://dept.galleria.co.kr/g-culture/culture-center/branch
+  access:
+    login_required: false
+    selenium_required: false
+    api_available: false
+    public_list: true
+  notes:
+  - 공개 HTML 목록 4개 지점을 p 기반 페이지 끝까지 순회하고 각 강좌 상세를 수집한다.
+  - 2026-07-28 전량 검증에서 127개 목록 페이지, 1,455개 상세 강좌를 확인했다.
+  - 원문 8건은 정확한 시각 대신 주당 횟수·수업 길이 또는 전시 연도만 제공한다.
+  last_quality:
+    collected: 1455
+    saved: 1455
+    score: 99.9
+    grade: A
+    parser: galleria_four_branch_complete_open_lecture+detail
+    error_kind: ''
+    checked_at: '2026-07-28T07:06:29+09:00'
+    source_pages: 127
+    detail_pages: 1455
+    snapshot_complete: true
+    source_time_unknown: 8
+- provider: HOMEPLUS
+  name: 홈플러스 문화센터
+  branch: 홈플러스 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 1
+  url: https://mschool.homeplus.co.kr/Lecture/SearchResult
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_Homeplus
+  crawler_script: Crawler/Crawler_Homeplus.py
+  base_url: https://mschool.homeplus.co.kr
+  list_url: https://mschool.homeplus.co.kr/Lecture/SearchResult
+  access:
+    login_required: false
+    selenium_required: false
+    api_available: true
+  notes:
+  - 운영 중인 크롤러.
+  - 가격은 상세 페이지 수강료 기준으로 보정 필요.
+- provider: HYUNDAI_DEPT
+  name: 현대백화점 문화센터
+  branch: 현대백화점 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: unknown
+  crawler_status: ready
+  priority: 1
+  url: https://www.ehyundai.com/newCulture/CT/CT010100_L.do
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_YamlSources
+  crawler_script: Crawler/Crawler_YamlSources.py
+  base_url: https://www.ehyundai.com
+  list_url: https://www.ehyundai.com/newCulture/CT/CT010100_L.do
+  source_url: https://www.ehyundai.com/newCulture/CT/CT010100_L.do
+  access:
+    login_required: false
+    selenium_required: unknown
+    api_available: unknown
+    public_list_visible: true
+- provider: LOTTE
+  name: 롯데 문화센터
+  branch: 롯데 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: selenium
+  crawler_status: ready
+  priority: 1
+  url: https://culture.lotteshopping.com/application/search/list.do
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_Lotte
+  crawler_script: Crawler/Crawler_Lotte.py
+  base_url: https://culture.lotteshopping.com
+  list_url: https://culture.lotteshopping.com/application/search/list.do
+  access:
+    login_required: false
+    selenium_required: true
+    api_available: unknown
+  notes:
+  - 운영 중인 크롤러.
+  - 다중 강좌 옵션이 있는 상세 페이지는 여러 강좌로 분리 저장해야 함.
+- provider: LOTTE_MART
+  name: 롯데마트 문화센터
+  branch: 롯데마트 문화센터
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: unknown
+  crawler_status: ready
+  priority: 1
+  url: https://culture.lottemart.com/cu/gus/course/courseinfo/courselist.do
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_YamlSources
+  crawler_script: Crawler/Crawler_YamlSources.py
+  base_url: https://culture.lottemart.com
+  list_url: https://culture.lottemart.com/cu/gus/course/courseinfo/courselist.do
+  source_url: https://culture.lottemart.com/cu/gus/course/courseinfo/courselist.do?
+  access:
+    login_required: false
+    selenium_required: likely
+    api_available: unknown
+    public_list: true
+- provider: SHINSEGAE_ACADEMY
+  name: 신세계 아카데미
+  branch: 신세계 아카데미
+  collection_category: 문화센터
+  domain_category: 문화센터
+  operator_type: 대형마트/백화점
+  source_group: retail_culture
+  collection_type: ajax_api
+  crawler_status: ready
+  priority: 1
+  url: https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/HP0010P0.do#none
+  source: operational
+  origin: operational
+  crawler_module: Crawler.Crawler_YamlSources
+  crawler_script: Crawler/Crawler_YamlSources.py
+  base_url: https://sacademy.shinsegae.com
+  list_url: https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/HP0010P0.do#none
+  source_url: https://sacademy.shinsegae.com/sdotcom/web/HP0010P0/HP0010P0.do#none
+  access:
+    login_required: false
+    selenium_required: likely
+    api_available: true
+    public_list_visible: true

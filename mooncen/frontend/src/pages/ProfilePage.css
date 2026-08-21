@@ -1,0 +1,244 @@
+.profile-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    padding-bottom: 2rem;
+}
+
+/* Header */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    margin-top: 1rem;
+}
+
+.avatar-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-primary), #FFB347);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.profile-name:hover {
+    color: var(--accent-primary);
+}
+
+.profile-sub {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.nickname-edit {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.nickname-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--accent-primary);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: var(--font-main);
+    outline: none;
+    background: var(--bg-dark);
+}
+
+.save-btn {
+    padding: 0.5rem 1rem;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.2s;
+}
+
+.save-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Stats */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 1rem 0.5rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.stat-icon {
+    color: var(--text-secondary);
+}
+
+.stat-icon.heart {
+    color: #FF6B6B;
+}
+
+.stat-icon.book {
+    color: #4ECDC4;
+}
+
+.stat-icon.pin {
+    color: #45B7D1;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Settings Section */
+.settings-section {
+    margin-top: 1.5rem;
+}
+
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 0.5rem 0.5rem;
+}
+
+.setting-group {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.setting-item:hover {
+    background: var(--bg-card-hover);
+}
+
+.setting-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.setting-divider {
+    height: 1px;
+    background: var(--border-glass);
+    margin: 0 1.25rem;
+}
+
+.setting-value {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.setting-arrow {
+    color: var(--text-secondary);
+}
+
+/* Region Select */
+.region-select {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: var(--font-main);
+    color: var(--text-primary);
+    background: var(--bg-dark);
+    cursor: pointer;
+    outline: none;
+}
+
+.region-select:focus {
+    border-color: var(--accent-primary);
+}
+
+/* Toggle */
+.toggle {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: #D1D5DB;
+    position: relative;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.toggle.active {
+    background: var(--accent-primary);
+}
+
+.toggle-knob {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle.active .toggle-knob {
+    transform: translateX(20px);
+}
+
+/* Footer */
+.footer-text {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #BBBBBB;
+    margin-top: 2rem;
+}

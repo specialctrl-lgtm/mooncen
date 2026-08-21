@@ -1,0 +1,24 @@
+[Unit]
+Description=MoonCen an2p development API
+After=network-online.target
+Wants=network-online.target
+Before=mooncen-development-runtime.target
+ConditionPathExists=!/etc/mooncen-an2p/docker-development-enabled
+
+[Service]
+Type=simple
+WorkingDirectory=%h/src/project/mooncen
+EnvironmentFile=%h/.config/mooncen-an2p/api.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=%h/src/project/mooncen/.venv/bin/python %h/.local/share/mooncen-an2p/wait_for_an2p_database.py --timeout 90
+ExecStart=%h/src/project/mooncen/.venv/bin/python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8001
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+
+[Install]
+WantedBy=mooncen-development-runtime.target

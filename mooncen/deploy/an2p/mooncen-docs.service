@@ -1,0 +1,16 @@
+[Unit]
+Description=MoonCen an2p crawler document downloads
+
+[Service]
+Type=simple
+WorkingDirectory=%h/src/project/mooncen/docs/crawler-quality-architecture
+ExecStart=/usr/bin/python3 -m http.server 8765 --bind 127.0.0.1 --directory %h/src/project/mooncen/docs/crawler-quality-architecture
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+
+[Install]
+WantedBy=default.target

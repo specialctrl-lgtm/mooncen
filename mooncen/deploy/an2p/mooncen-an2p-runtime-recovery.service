@@ -1,0 +1,23 @@
+[Unit]
+Description=Recover an interrupted MoonCen an2p runtime-pair switch
+After=local-fs.target
+Before=mooncen-ops-api.service mooncen-deployment-worker.service mooncen-docker-dev.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/libexec/mooncen-an2p-runtime-manager recover-boot
+TimeoutStartSec=1800
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET
+
+[Install]
+WantedBy=multi-user.target

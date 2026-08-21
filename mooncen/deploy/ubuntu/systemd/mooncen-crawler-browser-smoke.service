@@ -1,0 +1,43 @@
+[Unit]
+Description=MoonCen crawler browser sandbox smoke test
+After=network.target
+
+[Service]
+Type=oneshot
+User=mooncen-crawler
+Group=mooncen-crawler
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=/etc/mooncen/crawler.env
+Environment=TZ=Asia/Seoul
+Environment=HOME=/tmp
+Environment=XDG_CACHE_HOME=/tmp/.cache
+Environment=XDG_CONFIG_HOME=/tmp/.config
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/mooncen/.venv/bin/python -I /opt/mooncen/tools/chrome_sandbox_smoke.py
+TimeoutStartSec=120
+TimeoutStopSec=30
+KillMode=control-group
+MemoryHigh=1G
+MemoryMax=2G
+TasksMax=256
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+RemoveIPC=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ProtectProc=invisible
+ProcSubset=pid

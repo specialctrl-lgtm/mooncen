@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mooncen.kr/schemas/crawler-control-backup-receipt-v1.json",
+  "title": "MoonCen crawler-control release-bound backup receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "candidate",
+    "format",
+    "issued_at",
+    "issuer",
+    "nonce",
+    "recovery_evidence",
+    "release",
+    "valid_until"
+  ],
+  "properties": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archive_size_bytes", "metadata_sha256", "signature_sha256", "tree_size_bytes"],
+      "properties": {
+        "archive_size_bytes": {"type": "integer", "minimum": 1, "maximum": 536870912},
+        "metadata_sha256": {"$ref": "#/$defs/sha256"},
+        "signature_sha256": {"$ref": "#/$defs/sha256"},
+        "tree_size_bytes": {"type": "integer", "minimum": 1, "maximum": 33554432}
+      }
+    },
+    "format": {"const": "mooncen-crawler-control-backup-receipt-v1"},
+    "issued_at": {"$ref": "#/$defs/timestamp"},
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["helper_format", "hostname", "signature_namespace", "signature_principal"],
+      "properties": {
+        "helper_format": {"const": "mooncen-crawler-control-root-trust-v1"},
+        "hostname": {"const": "gen1db"},
+        "signature_namespace": {"const": "mooncen-crawler-control-backup-receipt-v1"},
+        "signature_principal": {"const": "mooncen-gen1db-backup-receipt"}
+      }
+    },
+    "nonce": {"$ref": "#/$defs/sha256"},
+    "recovery_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attestation_format",
+        "attestation_key_id",
+        "attestation_path_basename",
+        "attestation_sha256",
+        "database_host",
+        "database_name",
+        "database_port",
+        "database_sslmode",
+        "issued_at",
+        "valid_until"
+      ],
+      "properties": {
+        "attestation_format": {"const": "mooncen-crawler-control-backup-attestation-v1"},
+        "attestation_key_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "attestation_path_basename": {"const": "backup-attestation.json"},
+        "attestation_sha256": {"$ref": "#/$defs/sha256"},
+        "database_host": {"const": "gen1db"},
+        "database_name": {"const": "mooncen_staging"},
+        "database_port": {"const": 5432},
+        "database_sslmode": {"const": "verify-full"},
+        "issued_at": {"$ref": "#/$defs/timestamp"},
+        "valid_until": {"$ref": "#/$defs/timestamp"}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archive_sha256", "deploy_commit", "node_role", "release_id", "signer_principal", "target_host", "tree_sha256"],
+      "properties": {
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "deploy_commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+        "node_role": {"const": "crawler-control"},
+        "release_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+        "signer_principal": {"const": "mooncen-crawler-control-release"},
+        "target_host": {"const": "gen1db"},
+        "tree_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "valid_until": {"$ref": "#/$defs/timestamp"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"}
+  }
+}

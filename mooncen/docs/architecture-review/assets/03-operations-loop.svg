@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .title{font:700 34px Arial,sans-serif;fill:#132238}.sub{font:400 17px Arial,sans-serif;fill:#56657a}
+      .h{font:700 21px Arial,sans-serif;fill:#132238}.t{font:400 15px Arial,sans-serif;fill:#26364b}.small{font:400 13px Arial,sans-serif;fill:#56657a}
+      .box{rx:18;ry:18;stroke-width:2}.arrow{stroke:#476782;stroke-width:4;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#476782"/></marker>
+  </defs>
+  <rect width="1600" height="920" fill="#f6f8fb"/>
+  <text x="65" y="62" class="title">Recommended Production Operations Loop</text>
+  <text x="65" y="93" class="sub">Evidence-driven release, monitoring, recovery, and continuous improvement</text>
+
+  <rect x="110" y="205" width="280" height="160" class="box" fill="#e8f1ff" stroke="#5f8ecb"/>
+  <text x="250" y="246" text-anchor="middle" class="h">1. Plan &amp; Approve</text>
+  <text x="250" y="280" text-anchor="middle" class="t">owner · risk · rollback · window</text>
+  <text x="250" y="307" text-anchor="middle" class="t">topology and data-impact review</text>
+  <text x="250" y="336" text-anchor="middle" class="small">Change ticket / immutable decision record</text>
+
+  <rect x="520" y="125" width="280" height="160" class="box" fill="#ede9ff" stroke="#7868b4"/>
+  <text x="660" y="166" text-anchor="middle" class="h">2. Build &amp; Verify</text>
+  <text x="660" y="200" text-anchor="middle" class="t">clean commit · CI · dependency scan</text>
+  <text x="660" y="227" text-anchor="middle" class="t">signed hash / SBOM / migration proof</text>
+  <text x="660" y="256" text-anchor="middle" class="small">Never infer production from a dirty tree</text>
+
+  <rect x="955" y="125" width="280" height="160" class="box" fill="#fff4df" stroke="#d29b3d"/>
+  <text x="1095" y="166" text-anchor="middle" class="h">3. Release Safely</text>
+  <text x="1095" y="200" text-anchor="middle" class="t">backup evidence · preflight · migrate</text>
+  <text x="1095" y="227" text-anchor="middle" class="t">canary / health / functional smoke</text>
+  <text x="1095" y="256" text-anchor="middle" class="small">Explicit rollback threshold and owner</text>
+
+  <rect x="1230" y="365" width="280" height="160" class="box" fill="#eaf7f2" stroke="#4f9b7a"/>
+  <text x="1370" y="406" text-anchor="middle" class="h">4. Observe</text>
+  <text x="1370" y="440" text-anchor="middle" class="t">availability · latency · errors</text>
+  <text x="1370" y="467" text-anchor="middle" class="t">crawler freshness · DB · client health</text>
+  <text x="1370" y="496" text-anchor="middle" class="small">SLOs, alert ownership, synthetic journeys</text>
+
+  <rect x="955" y="630" width="280" height="160" class="box" fill="#fdeeed" stroke="#c55f55"/>
+  <text x="1095" y="671" text-anchor="middle" class="h">5. Respond &amp; Recover</text>
+  <text x="1095" y="705" text-anchor="middle" class="t">triage · contain · preserve evidence</text>
+  <text x="1095" y="732" text-anchor="middle" class="t">rollback / restore · stakeholder update</text>
+  <text x="1095" y="761" text-anchor="middle" class="small">Measured RTO/RPO, not assumed targets</text>
+
+  <rect x="520" y="630" width="280" height="160" class="box" fill="#edf7fb" stroke="#5791aa"/>
+  <text x="660" y="671" text-anchor="middle" class="h">6. Learn &amp; Improve</text>
+  <text x="660" y="705" text-anchor="middle" class="t">blameless review · action owner/date</text>
+  <text x="660" y="732" text-anchor="middle" class="t">runbook / test / alert tuning</text>
+  <text x="660" y="761" text-anchor="middle" class="small">Track recurrence and control effectiveness</text>
+
+  <rect x="110" y="550" width="280" height="160" class="box" fill="#f2f2f2" stroke="#7d8794"/>
+  <text x="250" y="591" text-anchor="middle" class="h">7. Reconcile Evidence</text>
+  <text x="250" y="625" text-anchor="middle" class="t">deployed hash · host inventory</text>
+  <text x="250" y="652" text-anchor="middle" class="t">backup receipt · drill result · access</text>
+  <text x="250" y="681" text-anchor="middle" class="small">Feed facts into the next change plan</text>
+
+  <path d="M390 245 C440 205 470 205 520 205" class="arrow"/>
+  <path d="M800 205 H955" class="arrow"/>
+  <path d="M1235 230 C1320 255 1370 300 1370 365" class="arrow"/>
+  <path d="M1370 525 C1370 600 1310 660 1235 690" class="arrow"/>
+  <path d="M955 710 H800" class="arrow"/>
+  <path d="M520 710 H390" class="arrow"/>
+  <path d="M250 550 V365" class="arrow"/>
+
+  <circle cx="800" cy="455" r="118" fill="#132238"/>
+  <text x="800" y="431" text-anchor="middle" style="font:700 25px Arial,sans-serif;fill:white">OPERATE FROM</text>
+  <text x="800" y="468" text-anchor="middle" style="font:700 25px Arial,sans-serif;fill:white">VERIFIABLE</text>
+  <text x="800" y="505" text-anchor="middle" style="font:700 25px Arial,sans-serif;fill:white">EVIDENCE</text>
+
+  <text x="65" y="875" class="small">Repository controls provide a strong base; live service status, access controls, backup success, and deployment identity must still be proven operationally.</text>
+</svg>

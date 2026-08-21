@@ -1,0 +1,11 @@
+[Unit]
+Description=Run MoonCen NAS backup daily
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+Persistent=true
+RandomizedDelaySec=15m
+Unit=mooncen-backup.service
+
+[Install]
+WantedBy=timers.target

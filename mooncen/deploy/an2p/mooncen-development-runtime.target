@@ -1,0 +1,6 @@
+[Unit]
+Description=MoonCen an2p selected development runtime
+Documentation=file:%h/src/project/mooncen/deploy/an2p/README.md
+
+[Install]
+WantedBy=default.target

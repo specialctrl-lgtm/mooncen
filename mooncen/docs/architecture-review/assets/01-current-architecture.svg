@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980">
+  <defs>
+    <style>
+      .title{font:700 34px Arial,sans-serif;fill:#132238}.sub{font:400 17px Arial,sans-serif;fill:#56657a}
+      .h{font:700 21px Arial,sans-serif;fill:#132238}.t{font:400 16px Arial,sans-serif;fill:#26364b}.small{font:400 14px Arial,sans-serif;fill:#56657a}
+      .box{rx:16;ry:16;stroke-width:2}.arrow{stroke:#476782;stroke-width:3;fill:none;marker-end:url(#arrow)}
+      .dash{stroke:#a04b40;stroke-width:3;stroke-dasharray:10 8;fill:none;marker-end:url(#redarrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#476782"/></marker>
+    <marker id="redarrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#a04b40"/></marker>
+  </defs>
+  <rect width="1600" height="980" fill="#f6f8fb"/>
+  <text x="70" y="62" class="title">MoonCen — Current Declared Architecture</text>
+  <text x="70" y="92" class="sub">Repository snapshot 2026-08-19 · crawlerMode=legacy · deployed state requires external verification</text>
+
+  <rect x="65" y="145" width="235" height="120" class="box" fill="#e8f1ff" stroke="#5f8ecb"/>
+  <text x="182" y="185" text-anchor="middle" class="h">Public Clients</text>
+  <text x="182" y="218" text-anchor="middle" class="t">Web / SEO / Mobile</text>
+  <text x="182" y="244" text-anchor="middle" class="small">Browser · Expo read-only</text>
+
+  <rect x="390" y="125" width="310" height="155" class="box" fill="#fff" stroke="#8ca3bd"/>
+  <text x="545" y="164" text-anchor="middle" class="h">Cloudflare + Nginx</text>
+  <text x="545" y="197" text-anchor="middle" class="t">TLS · edge controls · rate limits</text>
+  <text x="545" y="224" text-anchor="middle" class="small">Public host blocks /api/ops</text>
+  <text x="545" y="249" text-anchor="middle" class="small">SEO routes → API · SPA routes → frontend2</text>
+
+  <rect x="805" y="120" width="315" height="170" class="box" fill="#eaf7f2" stroke="#4f9b7a"/>
+  <text x="962" y="160" text-anchor="middle" class="h">cloud — Application Node</text>
+  <text x="962" y="194" text-anchor="middle" class="t">frontend2 · FastAPI backend</text>
+  <text x="962" y="221" text-anchor="middle" class="t">SEO · auth · public API</text>
+  <text x="962" y="248" text-anchor="middle" class="small">Ops API exists behind separate boundary</text>
+  <text x="962" y="272" text-anchor="middle" class="small">AI enrichment may update primary data</text>
+
+  <rect x="1245" y="125" width="280" height="155" class="box" fill="#fff4df" stroke="#d29b3d"/>
+  <text x="1385" y="165" text-anchor="middle" class="h">Primary PostgreSQL</text>
+  <text x="1385" y="198" text-anchor="middle" class="t">PostGIS · courses · branches</text>
+  <text x="1385" y="225" text-anchor="middle" class="t">users · ops metadata</text>
+  <text x="1385" y="251" text-anchor="middle" class="small">Declared on cloud; standby not declared</text>
+
+  <path d="M300 205 H390" class="arrow"/><path d="M700 205 H805" class="arrow"/><path d="M1120 205 H1245" class="arrow"/>
+
+  <rect x="70" y="390" width="300" height="165" class="box" fill="#ede9ff" stroke="#7868b4"/>
+  <text x="220" y="430" text-anchor="middle" class="h">gen1crawler</text>
+  <text x="220" y="463" text-anchor="middle" class="t">Legacy scheduler / orchestrator</text>
+  <text x="220" y="491" text-anchor="middle" class="t">Provider crawlers · maintenance</text>
+  <text x="220" y="521" text-anchor="middle" class="small">Declared primary crawler service</text>
+  <text x="220" y="545" text-anchor="middle" class="small">Nightly schedule in systemd assets</text>
+
+  <rect x="475" y="360" width="330" height="225" class="box" fill="#fff4df" stroke="#d29b3d"/>
+  <text x="640" y="400" text-anchor="middle" class="h">gen1db — Staging / Control</text>
+  <text x="640" y="434" text-anchor="middle" class="t">crawl batches · staged rows</text>
+  <text x="640" y="462" text-anchor="middle" class="t">validation evidence · snapshots</text>
+  <text x="640" y="490" text-anchor="middle" class="t">control-plane metadata</text>
+  <text x="640" y="522" text-anchor="middle" class="small">Exact provider/batch ownership checks</text>
+  <text x="640" y="548" text-anchor="middle" class="small">Distributed capability present, inactive</text>
+
+  <rect x="910" y="380" width="300" height="185" class="box" fill="#fdeeed" stroke="#c55f55"/>
+  <text x="1060" y="420" text-anchor="middle" class="h">Promotion Gate</text>
+  <text x="1060" y="453" text-anchor="middle" class="t">validate → dry-run fingerprint</text>
+  <text x="1060" y="481" text-anchor="middle" class="t">review → pinned transaction</text>
+  <text x="1060" y="509" text-anchor="middle" class="small">Advisory lock · rollback · safe close-missing</text>
+  <text x="1060" y="535" text-anchor="middle" class="small">Staging → primary only</text>
+
+  <path d="M370 472 H475" class="arrow"/><path d="M805 472 H910" class="arrow"/><path d="M1210 472 C1350 472 1385 350 1385 280" class="arrow"/>
+
+  <rect x="70" y="700" width="285" height="150" class="box" fill="#e8f1ff" stroke="#5f8ecb"/>
+  <text x="212" y="740" text-anchor="middle" class="h">Ops Browser</text>
+  <text x="212" y="774" text-anchor="middle" class="t">Separate ops origin</text>
+  <text x="212" y="802" text-anchor="middle" class="small">viewer · operator · admin</text>
+  <text x="212" y="828" text-anchor="middle" class="small">Polling + SSE</text>
+
+  <rect x="460" y="675" width="340" height="200" class="box" fill="#eaf7f2" stroke="#4f9b7a"/>
+  <text x="630" y="715" text-anchor="middle" class="h">Operations Control Surface</text>
+  <text x="630" y="749" text-anchor="middle" class="t">ops-console · FastAPI Ops routes</text>
+  <text x="630" y="777" text-anchor="middle" class="t">ops_agent · jobs · deployments</text>
+  <text x="630" y="805" text-anchor="middle" class="small">Audit · crawler control · quality</text>
+  <text x="630" y="832" text-anchor="middle" class="small">Actual access/MFA must be verified</text>
+
+  <rect x="925" y="680" width="285" height="190" class="box" fill="#edf7fb" stroke="#5791aa"/>
+  <text x="1067" y="720" text-anchor="middle" class="h">bot — Observability</text>
+  <text x="1067" y="753" text-anchor="middle" class="t">Prometheus · Grafana</text>
+  <text x="1067" y="781" text-anchor="middle" class="t">node/textfile metrics · alerts</text>
+  <text x="1067" y="812" text-anchor="middle" class="small">Some targets pending in config</text>
+  <text x="1067" y="839" text-anchor="middle" class="small">App metrics are process-local</text>
+
+  <rect x="1300" y="700" width="225" height="150" class="box" fill="#f2f2f2" stroke="#7d8794"/>
+  <text x="1412" y="740" text-anchor="middle" class="h">Backup Target</text>
+  <text x="1412" y="774" text-anchor="middle" class="t">Encrypted NAS copy</text>
+  <text x="1412" y="802" text-anchor="middle" class="small">Daily job · monthly drill assets</text>
+  <text x="1412" y="828" text-anchor="middle" class="small">Success evidence required</text>
+
+  <path d="M355 775 H460" class="arrow"/><path d="M800 775 H925" class="arrow"/>
+  <path d="M1067 680 C1067 625 1060 605 1060 565" class="arrow"/>
+  <path d="M1210 775 H1300" class="arrow"/>
+  <path d="M630 675 C630 625 640 620 640 585" class="arrow"/>
+
+  <rect x="1225" y="390" width="300" height="180" class="box" fill="#fff" stroke="#8ca3bd"/>
+  <text x="1375" y="430" text-anchor="middle" class="h">External Dependencies</text>
+  <text x="1375" y="462" text-anchor="middle" class="t">Source sites · Kakao Maps</text>
+  <text x="1375" y="490" text-anchor="middle" class="t">Google/Naver OAuth · SMTP</text>
+  <text x="1375" y="518" text-anchor="middle" class="t">Cloudflare · AI providers</text>
+  <text x="1375" y="546" text-anchor="middle" class="small">Availability and quota outside repository</text>
+  <path d="M1225 480 H1210" class="dash"/>
+
+  <text x="70" y="935" class="small">Solid arrows: declared data/control path. Red dashed arrow: external dependency boundary. This diagram is not proof of live deployment.</text>
+</svg>

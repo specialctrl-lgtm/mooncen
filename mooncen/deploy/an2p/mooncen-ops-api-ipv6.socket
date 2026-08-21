@@ -1,0 +1,12 @@
+[Unit]
+Description=Reserve the MoonCen Ops IPv6 loopback origin
+After=network.target
+
+[Socket]
+ListenStream=[::1]:5175
+Accept=no
+NoDelay=true
+Service=mooncen-ops-api-ipv6.service
+
+[Install]
+WantedBy=sockets.target
