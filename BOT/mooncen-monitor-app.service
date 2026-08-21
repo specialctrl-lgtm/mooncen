@@ -1,0 +1,41 @@
+[Unit]
+Description=MoonCen Monitor API for Android
+After=network-online.target docker.service mooncen-tailscale-snapshot.service
+Wants=network-online.target mooncen-tailscale-snapshot.service
+
+[Service]
+DynamicUser=yes
+SupplementaryGroups=mooncen-monitor-snapshot
+WorkingDirectory=/opt/mooncen-monitor-app
+ExecStart=/opt/mooncen-monitor-app/.venv/bin/gunicorn --bind 127.0.0.1:8088 --workers 2 --threads 4 --timeout 45 --no-control-socket --error-logfile - app:app
+Restart=always
+RestartSec=3
+# Root-owned mode-0600 file. Contains MONITOR_APP_TOKEN and the distinct
+# MOONCEN_SERVER_MONITOR_TOKEN used only for the narrow production-quality GET.
+EnvironmentFile=/etc/mooncen-monitor-app.env
+EnvironmentFile=-/etc/mooncen-monitor-snapshot.env
+Environment=PROMETHEUS_URL=http://localhost:9090
+Environment=MONITOR_APP_TAILSCALE_SNAPSHOT_FILE=/var/lib/mooncen-monitor/tailscale-status.json
+Environment=MONITOR_APP_TAILSCALE_SNAPSHOT_MAX_AGE_SECONDS=180
+Environment=TAILSCALE_STATUS_FILE=/var/lib/mooncen-monitor/tailscale-status.json
+Environment=TAILSCALE_STATUS_MAX_AGE_SECONDS=180
+Environment=MONITOR_APP_OPERATION_ENABLED=false
+Environment=MONITOR_APP_TRUSTED_HOSTS=localhost,127.0.0.1,mon.binary.kr
+UMask=0077
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=strict
+ReadOnlyPaths=-/var/lib/mooncen-monitor
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictSUIDSGID=true
+LockPersonality=true
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

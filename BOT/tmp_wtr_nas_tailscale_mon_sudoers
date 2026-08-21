@@ -1,0 +1,1 @@
+sgm ALL=(root) NOPASSWD: /sbin/shutdown, /usr/sbin/shutdown, /sbin/reboot, /usr/sbin/reboot, /usr/syno/sbin/synopoweroff, /usr/bin/systemctl, /sbin/poweroff, /usr/sbin/poweroff

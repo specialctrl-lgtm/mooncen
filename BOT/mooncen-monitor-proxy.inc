@@ -1,0 +1,18 @@
+proxy_pass http://127.0.0.1:8088;
+proxy_http_version 1.1;
+proxy_pass_request_headers off;
+proxy_set_header Connection "";
+proxy_set_header Accept $http_accept;
+proxy_set_header Host $host;
+proxy_set_header X-App-Token $http_x_app_token;
+proxy_set_header X-Forwarded-For $monitor_forwarded_for;
+proxy_set_header X-Forwarded-Proto https;
+proxy_set_header X-Monitor-Public 1;
+proxy_connect_timeout 3s;
+proxy_read_timeout 25s;
+proxy_send_timeout 10s;
+proxy_hide_header Server;
+proxy_hide_header Cache-Control;
+proxy_hide_header Pragma;
+proxy_hide_header Referrer-Policy;
+proxy_hide_header X-Content-Type-Options;

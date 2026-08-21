@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "name": "mooncen",
+      "path": "mooncen"
+    },
+    {
+      "name": "mooncen-hotfix",
+      "path": "mooncen-hotfix-20260804-1323"
+    },
+    {
+      "name": "Crawler-legacy",
+      "path": "Crawler-legacy"
+    },
+    {
+      "name": "BOT",
+      "path": "BOT"
+    }
+  ],
+  "settings": {}
+}

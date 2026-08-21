@@ -1,0 +1,20 @@
+# Local credentials
+*.key
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pass.dpapi
+keystore.properties
+monitor_app_token.txt
+mooncen-monitor-app.env
+
+# Generated Android/Python output
+android_monitor_app/.gradle/
+android_monitor_app/app/build/
+**/__pycache__/
+*.pyc
+
+# Local browser/test profiles
+chrome-profile-*/
+.pycache_tmp/

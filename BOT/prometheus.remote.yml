@@ -1,0 +1,92 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/prometheus.rules.yml
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - localhost:9090
+        labels:
+          node: bot
+          alerting: enabled
+
+  - job_name: node_exporter
+    static_configs:
+      - targets:
+          - 127.0.0.1:9100
+        labels:
+          node: bot
+          role: monitoring
+          alerting: enabled
+      - targets:
+          - cloud:9100
+        labels:
+          node: cloud
+          role: primary
+          alerting: enabled
+      - targets:
+          - gen1db:9100
+        labels:
+          node: gen1db
+          role: crawler-control
+          alerting: pending
+      - targets:
+          - gen1web:9100
+        labels:
+          node: gen1web
+          role: candidate-web
+          alerting: pending
+      - targets:
+          - gen1crawler:9100
+        labels:
+          node: gen1crawler
+          role: crawler-worker
+          alerting: pending
+      - targets:
+          - wtr-linux:9100
+        labels:
+          node: wtr-linux
+          role: ai
+          alerting: pending
+      - targets:
+          - wtr-nas:9100
+        labels:
+          node: wtr-nas
+          role: synology
+          alerting: pending
+      - targets:
+          - mac:9100
+        labels:
+          node: mac
+          role: macos
+          alerting: pending
+
+  - job_name: windows_exporter
+    static_configs:
+      - targets:
+          - victus:9182
+        labels:
+          node: victus
+          role: windows
+          alerting: pending
+      - targets:
+          - an2p:9182
+        labels:
+          node: an2p
+          role: windows
+          alerting: pending
+
+  - job_name: mooncen_ops
+    honor_labels: true
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - localhost:8088
+        labels:
+          node: bot
+          role: mooncen_ops
+          alerting: enabled
