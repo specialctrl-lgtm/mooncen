@@ -10,7 +10,7 @@ die() {
 
 trusted_entrypoint=/usr/local/sbin/mooncen-an2p-runtime-install
 trust_file=/etc/mooncen-an2p/runtime-installer.trust
-source_repository=/home/sgm/src/project/mooncen
+source_repository=/home/sgm/src/project
 bootstrap=/root/mooncen-an2p-bootstrap
 pair_root=/opt/mooncen-an2p-runtime
 pair_releases=$pair_root/releases
