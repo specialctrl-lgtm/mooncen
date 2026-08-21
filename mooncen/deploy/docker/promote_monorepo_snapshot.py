@@ -130,7 +130,7 @@ def promote(root: Path, *, reference: str | None = None) -> dict[str, str]:
 
     base_commit = _git(repository, "rev-parse", "--verify", "HEAD^{commit}").lower()
     source_tree = _git(
-        repository, "rev-parse", "--verify", f"HEAD:{APP_PREFIX}^{{tree}}"
+        repository, "rev-parse", "--verify", f"HEAD:{APP_PREFIX}"
     ).lower()
     if OBJECT_PATTERN.fullmatch(base_commit) is None or OBJECT_PATTERN.fullmatch(source_tree) is None:
         raise PromotionError("Reviewed Git identities are invalid")
