@@ -74,6 +74,34 @@ def test_hba_renderer_replaces_only_its_canonical_managed_block() -> None:
     assert replaced.count(hba.BEGIN_MARKER.encode("ascii")) == 1
 
 
+def test_scram_verifier_compares_matching_roles_without_boolean_text_format(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    contract = _contract()
+
+    def query(sql: str) -> str:
+        assert "AND rolpassword LIKE 'SCRAM-SHA-256$%'" in sql
+        assert "::text" not in sql
+        return "\n".join(sorted(contract.roles))
+
+    monkeypatch.setattr(hba, "_postgres_query", query)
+    hba._verify_scram_passwords(contract)
+
+
+def test_scram_verifier_rejects_a_missing_matching_role(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    contract = _contract()
+    monkeypatch.setattr(
+        hba,
+        "_postgres_query",
+        lambda _sql: "\n".join(sorted(contract.roles)[:-1]),
+    )
+
+    with pytest.raises(hba.HbaContractError, match="do not have SCRAM credentials"):
+        hba._verify_scram_passwords(contract)
+
+
 @pytest.mark.parametrize(
     "unsafe",
     (

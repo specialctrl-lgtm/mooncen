@@ -445,10 +445,11 @@ def _verify_effective_rules(contract: Contract) -> None:
 def _verify_scram_passwords(contract: Contract) -> None:
     role_literals = ",".join(f"'{role}'" for role in contract.roles)
     rows = _postgres_query(
-        "SELECT rolname || E'\\t' || (rolpassword LIKE 'SCRAM-SHA-256$%')::text "
-        f"FROM pg_authid WHERE rolname IN ({role_literals}) ORDER BY rolname;"
+        "SELECT rolname FROM pg_authid "
+        f"WHERE rolname IN ({role_literals}) "
+        "AND rolpassword LIKE 'SCRAM-SHA-256$%' ORDER BY rolname;"
     ).splitlines()
-    if rows != [f"{role}\tt" for role in sorted(contract.roles)]:
+    if rows != sorted(contract.roles):
         raise HbaContractError("PostgreSQL LOGIN roles do not have SCRAM credentials")
 
 
