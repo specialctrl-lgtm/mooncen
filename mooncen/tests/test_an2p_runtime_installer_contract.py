@@ -148,6 +148,22 @@ def test_installer_does_not_mutate_control_inventory_while_hashing_host_layer() 
     assert "spec.loader.exec_module(module)" in host_program
 
 
+def test_interrupted_first_rollout_reuses_only_the_exact_installed_host_abi() -> None:
+    source = _source()
+    publication = source.split("host_layer_preinstalled=true", 1)[1].split(
+        '\n/usr/bin/python3.12 -I - "$publish_journal"',
+        1,
+    )[0]
+
+    assert '[ -f "${host_targets[$index]}" ]' in publication
+    assert '[ ! -L "${host_targets[$index]}" ]' in publication
+    assert "stat -c '%U:%G:%a'" in publication
+    assert 'sha256sum "${host_targets[$index]}"' in publication
+    assert 'sha256sum "$control_stage/${host_sources[$index]}"' in publication
+    assert 'if [ "$host_layer_preinstalled" = false ]; then' in publication
+    assert "initial host runtime unit is already live" in publication
+
+
 def test_an2p_runbooks_do_not_execute_non_executable_snapshot_scripts() -> None:
     readme = (ROOT / "deploy/an2p/README.md").read_text(encoding="utf-8")
     development = (ROOT / "docs/docker-development.md").read_text(encoding="utf-8")

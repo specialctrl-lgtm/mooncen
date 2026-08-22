@@ -2986,22 +2986,37 @@ if [ -n "$previous_pair" ]; then
       die "installed host runtime ABI drifted"
   done
 else
-  # First rollout may install host glue only while no dependent system unit is
-  # active or enabled. A crash during these byte copies therefore stays
-  # fail-closed; the same reviewed installer can safely overwrite all bytes.
-  for target in "${host_targets[@]}"; do
-    [[ "$target" == /etc/systemd/system/* ]] || continue
-    unit=${target##*/}
-    ! systemctl is-active --quiet "$unit" && ! systemctl is-enabled --quiet "$unit" ||
-      die "initial host runtime unit is already live: $unit"
-  done
+  # An interrupted first activation can leave the exact reviewed host ABI
+  # installed while no pair pointer exists. Reuse it byte-for-byte; otherwise
+  # retain the fail-closed rule that every dependent unit must be inactive and
+  # disabled before initial host publication.
+  host_layer_preinstalled=true
   for index in "${!host_sources[@]}"; do
-    mode=0644
-    [[ "${host_targets[$index]}" == /usr/local/libexec/* ]] && mode=0755
-    install -o root -g root -m "$mode" "$control_stage/${host_sources[$index]}" \
-      "${host_targets[$index]}"
+    mode=644
+    [[ "${host_targets[$index]}" == /usr/local/libexec/* ]] && mode=755
+    if ! { [ -f "${host_targets[$index]}" ] && [ ! -L "${host_targets[$index]}" ] &&
+      [ "$(stat -c '%U:%G:%a' "${host_targets[$index]}")" = "root:root:${mode}" ] &&
+      [ "$(sha256sum "${host_targets[$index]}" | cut -d' ' -f1)" = \
+        "$(sha256sum "$control_stage/${host_sources[$index]}" | cut -d' ' -f1)" ]; }; then
+      host_layer_preinstalled=false
+      break
+    fi
   done
-  systemctl daemon-reload
+  if [ "$host_layer_preinstalled" = false ]; then
+    for target in "${host_targets[@]}"; do
+      [[ "$target" == /etc/systemd/system/* ]] || continue
+      unit=${target##*/}
+      ! systemctl is-active --quiet "$unit" && ! systemctl is-enabled --quiet "$unit" ||
+        die "initial host runtime unit is already live: $unit"
+    done
+    for index in "${!host_sources[@]}"; do
+      mode=0644
+      [[ "${host_targets[$index]}" == /usr/local/libexec/* ]] && mode=0755
+      install -o root -g root -m "$mode" "$control_stage/${host_sources[$index]}" \
+        "${host_targets[$index]}"
+    done
+    systemctl daemon-reload
+  fi
 fi
 /usr/bin/python3.12 -I - "$publish_journal" "$pair_name" "$commit" \
   "$source_tree" "$build_policy" <<'PY'
