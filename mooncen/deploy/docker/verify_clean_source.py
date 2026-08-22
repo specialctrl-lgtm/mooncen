@@ -254,7 +254,9 @@ BUILD_INPUT_PATHS = (
     "config/privacy_membership_notice.json",
     "deploy/docker/nginx.conf",
     "deploy/docker/provision_api_login.py",
+    "deploy/docker/release_manifest.py",
     "deploy/docker/render_runtime_config.py",
+    "deploy/docker/verify_release_bundle.py",
 )
 
 

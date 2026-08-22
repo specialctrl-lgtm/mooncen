@@ -22,7 +22,9 @@ COPY --chown=mooncen:mooncen Crawler ./Crawler
 COPY --chown=mooncen:mooncen config ./config
 COPY --chown=mooncen:mooncen \
     deploy/docker/provision_api_login.py \
-    ./deploy/docker/provision_api_login.py
+    deploy/docker/release_manifest.py \
+    deploy/docker/verify_release_bundle.py \
+    ./deploy/docker/
 COPY --chown=mooncen:mooncen ops_agent ./ops_agent
 COPY --chown=mooncen:mooncen tools ./tools
 COPY --chown=mooncen:mooncen utils ./utils

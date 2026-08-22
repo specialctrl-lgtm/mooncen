@@ -213,11 +213,15 @@ def test_clean_source_manifest_covers_every_repository_copy_source() -> None:
     )
 
 
-def test_api_image_copies_only_the_docker_provisioner_from_deploy_tree() -> None:
+def test_api_image_copies_only_the_runtime_imports_required_from_deploy_tree() -> None:
     sources = _repository_copy_sources(_read("deploy/docker/api.Dockerfile"))
 
     assert "deploy" not in sources
-    assert "deploy/docker/provision_api_login.py" in sources
+    assert {
+        "deploy/docker/provision_api_login.py",
+        "deploy/docker/release_manifest.py",
+        "deploy/docker/verify_release_bundle.py",
+    }.issubset(sources)
 
 
 def test_compose_orders_database_migration_api_and_frontend() -> None:
