@@ -136,6 +136,18 @@ def test_installer_builds_and_validates_once_before_pair_activation() -> None:
     assert "docker compose down --volumes" not in source
 
 
+def test_installer_does_not_mutate_control_inventory_while_hashing_host_layer() -> None:
+    source = _source()
+    inventory = source.index("control_inventory=$(")
+    host_layer = source.index("host_layer_sha=$(", inventory)
+    receipt = source.index('"$pair_stage/.pair-receipt.json"', host_layer)
+    host_program = source[host_layer:receipt]
+
+    assert inventory < host_layer < receipt
+    assert "/usr/bin/python3.12 -I -B -" in host_program
+    assert "spec.loader.exec_module(module)" in host_program
+
+
 def test_an2p_runbooks_do_not_execute_non_executable_snapshot_scripts() -> None:
     readme = (ROOT / "deploy/an2p/README.md").read_text(encoding="utf-8")
     development = (ROOT / "docs/docker-development.md").read_text(encoding="utf-8")

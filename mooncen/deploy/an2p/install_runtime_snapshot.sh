@@ -2904,7 +2904,7 @@ control_inventory=$(/usr/bin/python3.12 -I \
   "$control_stage/deploy/docker/native_baseline.py" --root "$control_stage")
 docker_inventory=$(/usr/bin/python3.12 -I \
   "$docker_stage/deploy/docker/native_baseline.py" --root "$docker_stage")
-host_layer_sha=$(/usr/bin/python3.12 -I - "$control_stage" <<'PY'
+host_layer_sha=$(/usr/bin/python3.12 -I -B - "$control_stage" <<'PY'
 import hashlib, importlib.util, json, pathlib, sys
 root = pathlib.Path(sys.argv[1])
 path = root / "deploy/an2p/runtime_pair_manager.py"
