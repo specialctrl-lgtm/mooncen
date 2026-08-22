@@ -2877,6 +2877,7 @@ if any(not values.get(key) for key in required):
     raise SystemExit(78)
 payload = "".join(f"{key}={values[key]}\n" for key in sorted(values)).encode("utf-8")
 descriptor = os.open(destination, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o640)
+os.fchmod(descriptor, 0o640)
 os.fchown(descriptor, 0, gid)
 with os.fdopen(descriptor, "wb") as stream:
     stream.write(payload); stream.flush(); os.fsync(stream.fileno())

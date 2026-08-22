@@ -221,6 +221,18 @@ def test_installer_preserves_the_protected_docker_stage_metadata() -> None:
     assert 'install -d -o root -g root -m 0755 "$(dirname "$destination")"' not in loop
 
 
+def test_installer_creates_the_system_docker_environment_with_exact_mode() -> None:
+    source = _source()
+    environment_writer = source.split('descriptor = os.open(destination,', 1)[1].split(
+        "\nPY\n",
+        1,
+    )[0]
+
+    assert "os.O_EXCL | os.O_NOFOLLOW, 0o640" in environment_writer
+    assert "os.fchmod(descriptor, 0o640)" in environment_writer
+    assert "os.fchown(descriptor, 0, gid)" in environment_writer
+
+
 def test_installer_accepts_reviewed_ubuntu_compose_version_suffix() -> None:
     source = _source()
     compose_check = source.split("compose_version=$(", 1)[1]
