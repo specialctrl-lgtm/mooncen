@@ -967,8 +967,8 @@ def test_root_runtime_gates_have_exact_sandbox_write_paths() -> None:
     ):
         unit = (root / "deploy/ubuntu/systemd" / name).read_text(encoding="utf-8")
         assert "ProtectSystem=strict" in unit
-        assert "ReadWritePaths=/var/lib/mooncen-container-release" in unit
-        assert "ReadWritePaths=/run/mooncen-container-release" in unit
+        assert "ReadWritePaths=-/var/lib/mooncen-container-release" in unit
+        assert "ReadWritePaths=-/run/mooncen-container-release" in unit
 
     for name in (
         "mooncen-ops-api.service",
