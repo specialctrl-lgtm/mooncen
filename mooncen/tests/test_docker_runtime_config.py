@@ -127,6 +127,24 @@ def test_cli_reads_public_values_from_private_file_without_inheriting_secrets(
         renderer.environment_file(environment_file)
 
 
+def test_renderer_accepts_the_protected_system_file_contract_for_its_group(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    environment_file = tmp_path / "development.env"
+    environment_file.write_text("MOONCEN_SITE_URL=https://system.example.test\n", encoding="utf-8")
+    environment_file.chmod(0o640)
+    monkeypatch.setattr(renderer, "ROOT_UID", os.getuid())
+    actual_gid = os.getgid()
+
+    values = renderer.environment_file(environment_file)
+    assert values["MOONCEN_SITE_URL"] == "https://system.example.test"
+
+    monkeypatch.setattr(renderer.os, "getgid", lambda: actual_gid + 1)
+    with pytest.raises(renderer.RuntimeConfigError, match="unsafe"):
+        renderer.environment_file(environment_file)
+
+
 @pytest.mark.parametrize(
     "value",
     ["line one\nline two", "tab\tvalue", "x" * (renderer.MAX_PUBLIC_VALUE_LENGTH + 1)],

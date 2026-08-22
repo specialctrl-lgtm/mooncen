@@ -448,6 +448,8 @@ def test_an2p_unit_checks_release_before_and_after_start() -> None:
     assert unit.count("--allow-expired-receipt") == 5
     assert unit.count("--runtime-compose-file") == 5
     assert unit.count("--activation-file") == 5
+    render_lines = [line for line in unit.splitlines() if "render_runtime_config.py" in line]
+    assert len(render_lines) == 2
     stop_lines = [line for line in unit.splitlines() if line.startswith("ExecStop=")]
     assert validator in stop_lines[0]
     assert stop_lines[0].startswith("ExecStop=-/usr/bin/python3 -I ")

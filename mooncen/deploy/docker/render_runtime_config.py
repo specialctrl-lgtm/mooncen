@@ -25,6 +25,7 @@ MAX_PUBLIC_VALUE_LENGTH = 4096
 MAX_ENVIRONMENT_BYTES = 64 * 1024
 OUTPUT_MODE = 0o644
 ENVIRONMENT_KEY_PATTERN = re.compile(r"\A[A-Z][A-Z0-9_]*\Z")
+ROOT_UID = 0
 
 
 class RuntimeConfigError(RuntimeError):
@@ -37,11 +38,19 @@ def environment_file(path: Path) -> dict[str, str]:
         payload = path.read_bytes()
     except OSError as exc:
         raise RuntimeConfigError("Runtime environment file cannot be read.") from exc
+    private_user_file = (
+        metadata.st_uid == os.getuid()
+        and stat.S_IMODE(metadata.st_mode) == 0o600
+    )
+    protected_system_file = (
+        metadata.st_uid == ROOT_UID
+        and metadata.st_gid == os.getgid()
+        and stat.S_IMODE(metadata.st_mode) == 0o640
+    )
     if (
         path.is_symlink()
         or not stat.S_ISREG(metadata.st_mode)
-        or metadata.st_uid != os.getuid()
-        or stat.S_IMODE(metadata.st_mode) != 0o600
+        or not (private_user_file or protected_system_file)
         or len(payload) > MAX_ENVIRONMENT_BYTES
     ):
         raise RuntimeConfigError("Runtime environment file is unsafe.")
@@ -171,7 +180,11 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     arguments = _parser().parse_args(argv)
     try:
-        environ = os.environ if arguments.environment_file is None else environment_file(arguments.environment_file)
+        environ = (
+            os.environ
+            if arguments.environment_file is None
+            else environment_file(arguments.environment_file)
+        )
         render_to_file(arguments.output, environ)
     except (OSError, RuntimeConfigError) as exc:
         print(f"runtime config render failed: {exc}", file=sys.stderr)
