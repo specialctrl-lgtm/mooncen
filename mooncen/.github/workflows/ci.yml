@@ -144,6 +144,7 @@ jobs:
           for required in \
             requirements.lock \
             deploy/ubuntu/setup_project.sh \
+            tests/test_an2p_docker_release_selection.py \
             tools/ops_service_action.py; do
             test -f "$release/$required" && test ! -L "$release/$required"
           done

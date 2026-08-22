@@ -80,6 +80,7 @@ def test_windows_deploy_activates_a_clean_immutable_release() -> None:
     assert "MoonCen deployment lock token mismatch" in deploy
     assert "tools/ops_dashboard.py export-ignore" not in attributes
     assert "tools/ops_dashboard.html export-ignore" not in attributes
+    assert "tests/ export-ignore" not in attributes
     assert "tools/ops_dashboard.py" not in deploy
     assert "tools/ops_dashboard.html" not in deploy
     assert (
@@ -771,6 +772,7 @@ def test_ci_smoke_tests_the_real_git_archive() -> None:
 
     assert "Smoke-test immutable production archive" in workflow
     assert "git archive --format=tar.gz" in workflow
+    assert "tests/test_an2p_docker_release_selection.py" in workflow
     assert "tools/ops_dashboard.py" not in workflow
     assert "tools/ops_dashboard.html" not in workflow
     assert "Production archive contains a symbolic link" in workflow

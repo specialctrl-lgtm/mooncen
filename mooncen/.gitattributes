@@ -1,7 +1,6 @@
 # Local development clients are not part of the production release artifact.
 frontend/ export-ignore
 mooncen-app/ export-ignore
-tests/ export-ignore
 tmp_*/ export-ignore
 chromedriver/ export-ignore
 .agents/ export-ignore
