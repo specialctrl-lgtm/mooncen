@@ -2789,11 +2789,14 @@ install -d -o root -g "$docker_user" -m 0750 "$docker_stage"
 docker_policy_paths=(
   .dockerignore .gitattributes compose.yaml deploy/__init__.py
   deploy/an2p/__init__.py deploy/an2p/check_docker_environment.py
+  deploy/an2p/install_user_services.sh deploy/an2p/mooncen-api.service
+  deploy/an2p/mooncen-development-runtime.target deploy/an2p/mooncen-docker-dev.service
+  deploy/an2p/mooncen-frontend.service deploy/an2p/mooncen-status-agent.service
   deploy/an2p/validate_docker_release.py deploy/docker/__init__.py
   deploy/docker/native_baseline.py deploy/docker/postgres.Dockerfile
   deploy/docker/production_runtime_integrity.py deploy/docker/release_manifest.py
   deploy/docker/render_runtime_config.py deploy/docker/smoke.py
-  deploy/docker/verify_release_bundle.py
+  deploy/docker/verify_release_bundle.py tools/wait_for_an2p_database.py
 )
 for relative in "${docker_policy_paths[@]}"; do
   source=$control_stage/$relative
