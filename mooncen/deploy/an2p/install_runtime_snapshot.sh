@@ -2797,6 +2797,7 @@ docker_policy_paths=(
   deploy/docker/production_runtime_integrity.py deploy/docker/release_manifest.py
   deploy/docker/render_runtime_config.py deploy/docker/smoke.py
   deploy/docker/verify_release_bundle.py tools/wait_for_an2p_database.py
+  tools/wait_for_an2p_http.py
 )
 for relative in "${docker_policy_paths[@]}"; do
   source=$control_stage/$relative

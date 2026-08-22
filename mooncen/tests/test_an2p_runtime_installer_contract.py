@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
@@ -211,15 +212,26 @@ def test_installer_docker_policy_package_markers_are_present_and_reviewed() -> N
 def test_installer_copies_every_development_validation_policy_input() -> None:
     installer = _source()
     smoke = (ROOT / "deploy/docker/smoke.py").read_text(encoding="utf-8")
-    policy = smoke.split("DEVELOPMENT_VALIDATION_POLICY_PATHS = (", 1)[1].split(
+    module = ast.parse(smoke)
+    assignment = next(
+        node
+        for node in module.body
+        if isinstance(node, ast.Assign)
+        and any(
+            isinstance(target, ast.Name)
+            and target.id == "DEVELOPMENT_VALIDATION_POLICY_PATHS"
+            for target in node.targets
+        )
+    )
+    paths = ast.literal_eval(assignment.value)
+    policy = installer.split("docker_policy_paths=(", 1)[1].split(
         "\n)",
         1,
     )[0]
-    paths = re.findall(r'^    "([^"]+)",$', policy, flags=re.MULTILINE)
+    copied = set(shlex.split(policy))
 
     assert paths
-    for relative in paths:
-        assert relative in installer
+    assert set(paths).issubset(copied)
 
 
 def test_installer_preserves_the_protected_docker_stage_metadata() -> None:
