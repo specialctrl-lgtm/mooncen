@@ -208,6 +208,19 @@ def test_installer_docker_policy_package_markers_are_present_and_reviewed() -> N
         assert relative in integrity
 
 
+def test_installer_preserves_the_protected_docker_stage_metadata() -> None:
+    source = _source()
+
+    loop = source.split('for relative in "${docker_policy_paths[@]}"; do', 1)[1].split(
+        "\ndone\n",
+        1,
+    )[0]
+    assert 'destination_parent=$(dirname "$destination")' in loop
+    assert '[ "$destination_parent" != "$docker_stage" ]' in loop
+    assert 'install -d -o root -g root -m 0755 "$destination_parent"' in loop
+    assert 'install -d -o root -g root -m 0755 "$(dirname "$destination")"' not in loop
+
+
 def test_installer_accepts_reviewed_ubuntu_compose_version_suffix() -> None:
     source = _source()
     compose_check = source.split("compose_version=$(", 1)[1]

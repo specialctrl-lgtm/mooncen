@@ -2799,7 +2799,13 @@ for relative in "${docker_policy_paths[@]}"; do
   source=$control_stage/$relative
   destination=$docker_stage/$relative
   [ -f "$source" ] && [ ! -L "$source" ] || die "Docker runtime input is unsafe: $relative"
-  install -d -o root -g root -m 0755 "$(dirname "$destination")"
+  destination_parent=$(dirname "$destination")
+  # Top-level inputs live directly in the protected Docker stage.  Do not use
+  # install -d on that existing directory: it would overwrite the required
+  # root:$docker_user 0750 ownership and make validation fail.
+  if [ "$destination_parent" != "$docker_stage" ]; then
+    install -d -o root -g root -m 0755 "$destination_parent"
+  fi
   install -o root -g root -m 0644 "$source" "$destination"
 done
 
