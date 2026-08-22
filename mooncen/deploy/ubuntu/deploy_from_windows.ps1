@@ -74,7 +74,11 @@ function Get-ReviewedCrawlerMode {
     if ($SnapshotCommit) {
         Push-Location $projectRoot
         try {
-            $topologyText = @(& git show "${SnapshotCommit}:config/production_topology.json" 2>$null) -join "`n"
+            $repositoryRoot = ([string](& git rev-parse --show-toplevel 2>$null)).Trim()
+            if ($LASTEXITCODE -ne 0 -or -not $repositoryRoot) {
+                throw "Unable to resolve the Git repository root for the reviewed deployment snapshot."
+            }
+            $topologyText = @(& git -C $repositoryRoot show "${SnapshotCommit}:config/production_topology.json" 2>$null) -join "`n"
             if ($LASTEXITCODE -ne 0 -or -not $topologyText) {
                 throw "Reviewed deployment snapshot is missing config/production_topology.json."
             }
@@ -571,6 +575,11 @@ function Get-ValidatedDeployCommit {
 
     Push-Location $projectRoot
     try {
+        $repositoryRootRaw = & git rev-parse --show-toplevel 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $repositoryRootRaw) {
+            throw "Unable to resolve the Git repository root for deployment."
+        }
+        $repositoryRoot = ([string]$repositoryRootRaw).Trim()
         $previousErrorActionPreference = $ErrorActionPreference
         $ErrorActionPreference = "Continue"
         try {
@@ -599,7 +608,7 @@ function Get-ValidatedDeployCommit {
 
         $commit = $headCommit
         if ($normalizedSourceCommit) {
-            $sourceCommitRaw = & git rev-parse --verify "${normalizedSourceCommit}^{commit}" 2>$null
+            $sourceCommitRaw = & git -C $repositoryRoot rev-parse --verify "${normalizedSourceCommit}^{commit}" 2>$null
             if ($LASTEXITCODE -ne 0 -or -not $sourceCommitRaw) {
                 throw "The reviewed development snapshot commit is unavailable."
             }
@@ -611,7 +620,7 @@ function Get-ValidatedDeployCommit {
             )) {
                 throw "The development snapshot commit identifier changed."
             }
-            $snapshotParent = (& git rev-parse --verify "${commit}^1" 2>$null)
+            $snapshotParent = (& git -C $repositoryRoot rev-parse --verify "${commit}^1" 2>$null)
             if (
                 $LASTEXITCODE -ne 0 -or
                 -not [string]::Equals(
@@ -622,7 +631,7 @@ function Get-ValidatedDeployCommit {
             ) {
                 throw "The development snapshot is not based on the reviewed Git HEAD."
             }
-            $snapshotTree = (& git rev-parse --verify "${commit}^{tree}" 2>$null)
+            $snapshotTree = (& git -C $repositoryRoot rev-parse --verify "${commit}^{tree}" 2>$null)
             if (
                 $LASTEXITCODE -ne 0 -or
                 -not [string]::Equals(
@@ -654,7 +663,7 @@ function Get-ValidatedDeployCommit {
             'chromedriver/*', 'ops-console/**', 'deploy/ops-console/**'
         )
         $forbiddenTracked = if ($normalizedSourceCommit) {
-            @(git ls-tree -r --name-only $commit -- @forbiddenPathspec)
+            @(& git -C $repositoryRoot ls-tree -r --name-only $commit -- @forbiddenPathspec)
         } else {
             @(git ls-files -- @forbiddenPathspec)
         }
@@ -666,7 +675,7 @@ function Get-ValidatedDeployCommit {
         if ($forbiddenTracked.Count -gt 0) {
             throw "Refusing to deploy tracked sensitive/local files: $($forbiddenTracked -join ', ')"
         }
-        $unsafeEntries = @(git ls-tree -r $commit) |
+        $unsafeEntries = @(& git -C $repositoryRoot ls-tree -r $commit) |
             Where-Object { $_ -match '^(120000|160000) ' }
         if ($LASTEXITCODE -ne 0) {
             throw "Unable to inspect deployment tree entry modes."
@@ -674,6 +683,7 @@ function Get-ValidatedDeployCommit {
         if ($unsafeEntries.Count -gt 0) {
             throw "Refusing to deploy a source tree containing symbolic links or submodules."
         }
+        $script:DeploymentGitRepositoryRoot = $repositoryRoot
         return $commit
     } finally {
         Pop-Location
@@ -1712,7 +1722,7 @@ try {
     }
     Assert-ExactExpectedDeployCommit $currentDeployCommit "archive creation"
 
-    git archive --format=tar.gz --output="$archivePath" "$deployCommit"
+    & git -C $script:DeploymentGitRepositoryRoot archive --format=tar.gz --output="$archivePath" "$deployCommit"
     if ($LASTEXITCODE -ne 0) {
         throw "git archive failed"
     }

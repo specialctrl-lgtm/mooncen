@@ -247,7 +247,7 @@ def test_deploy_target_must_be_explicit_and_multi_target_action_is_available() -
     assert '"activeNode": "cloud"' in production_topology
     assert '"crawlerMode": "legacy"' in production_topology
     assert "function Get-ProductionCrawlerContract" in orchestrator
-    assert 'git show "${SnapshotCommit}:config/production_topology.json"' in orchestrator
+    assert 'git -C $repositoryRoot show "${SnapshotCommit}:config/production_topology.json"' in orchestrator
     assert "Get-ProductionCrawlerContract $registryInfo.Servers $SourceCommit" in orchestrator
     assert "n100 configured" not in orchestrator
     assert "n100 role" not in orchestrator
@@ -309,7 +309,7 @@ def test_reviewed_commit_and_target_identity_are_verified_through_archive_creati
         'Get-RemoteEnvValue "DB_PASSWORD"'
     )
     assert deploy.index('Assert-ExactExpectedDeployCommit $currentDeployCommit "archive creation"') < deploy.index(
-        "git archive --format=tar.gz"
+        "git -C $script:DeploymentGitRepositoryRoot archive --format=tar.gz"
     )
 
 
@@ -328,6 +328,9 @@ def test_reviewed_development_snapshot_is_verified_through_archive_creation() ->
     assert "The development snapshot is not based on the reviewed Git HEAD" in deploy
     assert "does not match ExpectedSourceTree" in deploy
     assert "symbolic links or submodules" in deploy
+    assert "git -C $repositoryRoot ls-tree -r --name-only" in deploy
+    assert "git -C $repositoryRoot ls-tree -r $commit" in deploy
+    assert "git -C $script:DeploymentGitRepositoryRoot archive" in deploy
     assert deploy.index("$deployCommit = Get-ValidatedDeployCommit") < deploy.index('Get-RemoteEnvValue "DB_PASSWORD"')
 
 

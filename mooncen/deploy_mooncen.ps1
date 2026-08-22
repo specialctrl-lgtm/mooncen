@@ -127,7 +127,11 @@ function Get-ProductionCrawlerContract {
     if ($SnapshotCommit) {
         Push-Location $PSScriptRoot
         try {
-            $topologyText = @(& git show "${SnapshotCommit}:config/production_topology.json" 2>$null) -join "`n"
+            $repositoryRoot = ([string](& git rev-parse --show-toplevel 2>$null)).Trim()
+            if ($LASTEXITCODE -ne 0 -or -not $repositoryRoot) {
+                throw "Unable to resolve the Git repository root for the reviewed deployment snapshot"
+            }
+            $topologyText = @(& git -C $repositoryRoot show "${SnapshotCommit}:config/production_topology.json" 2>$null) -join "`n"
             if ($LASTEXITCODE -ne 0 -or -not $topologyText) {
                 throw "Reviewed deployment snapshot is missing config/production_topology.json"
             }
