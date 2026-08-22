@@ -41,7 +41,10 @@ def test_promote_uses_mooncen_subtree_as_release_root(tmp_path: Path) -> None:
     git(root, "commit", "-m", "reviewed monorepo state")
 
     base_commit = git(root, "rev-parse", "HEAD")
-    expected_tree = git(root, "rev-parse", "HEAD:mooncen^{tree}")
+    # A tree pathspec already resolves to its tree object. Appending ^{tree}
+    # makes Git parse it as part of the path (``mooncen^{tree}``) rather than
+    # applying a revision peel, which fails on current Git releases.
+    expected_tree = git(root, "rev-parse", "HEAD:mooncen")
     reference = "refs/mooncen/docker-release-snapshots/" + "a" * 32
 
     result = module.promote(root, reference=reference)

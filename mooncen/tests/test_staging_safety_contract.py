@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from contextlib import contextmanager
 import re
 from pathlib import Path
 from uuid import UUID
@@ -28,6 +29,29 @@ from tools.apply_staging_batch import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_schema_executor_forces_the_migrator_schema_before_unqualified_ddl(monkeypatch):
+    calls: list[str] = []
+
+    class FakeCursor:
+        def execute(self, sql):
+            calls.append(str(sql))
+
+    @contextmanager
+    def fake_cursor(*, dict_cursor=True):
+        assert dict_cursor is False
+        yield FakeCursor()
+
+    monkeypatch.setattr(setup_db, "get_db_cursor", fake_cursor)
+    monkeypatch.setattr(setup_db, "read_sql", lambda _filename: "CREATE TABLE users (id int);")
+
+    setup_db.execute_sql("auth_schema.sql")
+
+    assert calls == [
+        "SET SESSION search_path = public, pg_catalog",
+        "CREATE TABLE users (id int);",
+    ]
 
 
 def test_control_plane_promotion_gate_allows_review_but_blocks_primary_mutation():

@@ -63,6 +63,8 @@ KNOWN_CHECKSUM_TRANSITIONS = {
     ),
 }
 
+MIGRATOR_SEARCH_PATH_SQL = "SET SESSION search_path = public, pg_catalog"
+
 
 def migration_checksum_is_accepted(version: str, recorded: str | None, current: str) -> bool:
     if recorded == current:
@@ -77,6 +79,13 @@ def read_sql(filename: str) -> str:
 def execute_sql(filename: str) -> None:
     sql = read_sql(filename)
     with get_db_cursor(dict_cursor=False) as cursor:
+        # A role- or database-level search_path setting is applied after the
+        # libpq startup options on PostgreSQL.  Do not let such a setting turn
+        # an unqualified schema object (for example ``users``) into an attempt
+        # to write pg_catalog.  setup_db.py is the privileged DDL path, so it
+        # deliberately establishes the application schema on every pooled
+        # connection before executing a canonical schema file.
+        cursor.execute(MIGRATOR_SEARCH_PATH_SQL)
         cursor.execute(sql)
 
 
@@ -92,6 +101,10 @@ def execute_versioned_migrations() -> list[str]:
     connection = get_db_connection()
     try:
         cursor = connection.cursor()
+        # Keep versioned migrations on the same explicit schema contract as
+        # the canonical schema files above.  This cannot rely only on libpq
+        # options because ALTER ROLE/DATABASE SET can override them.
+        cursor.execute(MIGRATOR_SEARCH_PATH_SQL)
         cursor.execute("SET LOCAL statement_timeout = '30s'")
         cursor.execute("SELECT pg_advisory_lock(hashtext('mooncen.schema_migrations'))")
         cursor.execute(
