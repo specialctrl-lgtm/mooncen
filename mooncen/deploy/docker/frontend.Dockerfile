@@ -12,9 +12,11 @@ RUN npm run build
 
 FROM nginx:1.30.4-alpine@sha256:97d490c12ba55b4946b01546d1c3ed324e8d41ab1c9fcb2a616aa470620e5b46
 
-RUN rm -f /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/conf.d/default.conf \
+    && chmod 0755 /etc/nginx
 COPY deploy/docker/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build --chown=nginx:nginx /build/frontend2/dist /usr/share/nginx/html
+RUN chmod 0644 /etc/nginx/nginx.conf /etc/nginx/mime.types
 
 USER nginx
 

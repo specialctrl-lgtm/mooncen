@@ -457,6 +457,8 @@ def test_images_are_locked_and_run_application_processes_without_root() -> None:
     assert "node:24.18.0-bookworm-slim@sha256:" in frontend
     assert "nginx:1.30.4-alpine@sha256:" in frontend
     assert "npm ci --ignore-scripts --no-audit --fund=false" in frontend
+    assert "chmod 0755 /etc/nginx" in frontend
+    assert "chmod 0644 /etc/nginx/nginx.conf /etc/nginx/mime.types" in frontend
     assert "USER nginx" in frontend
     assert "postgres:16.14-bookworm@sha256:" in postgres
     assert "postgresql-16-postgis-3=3.6.4+dfsg-2.pgdg12+1" in postgres
