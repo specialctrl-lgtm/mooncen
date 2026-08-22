@@ -218,6 +218,8 @@ def test_api_image_copies_only_the_runtime_imports_required_from_deploy_tree() -
 
     assert "deploy" not in sources
     assert {
+        "deploy/__init__.py",
+        "deploy/docker/__init__.py",
         "deploy/docker/provision_api_login.py",
         "deploy/docker/release_manifest.py",
         "deploy/docker/verify_release_bundle.py",

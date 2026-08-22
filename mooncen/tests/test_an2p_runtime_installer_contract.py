@@ -188,6 +188,26 @@ def test_installer_requires_the_reviewed_external_docker_platform() -> None:
     assert source.count("run_operator /usr/bin/env -u DOCKER_HOST") == 2
 
 
+def test_installer_docker_policy_package_markers_are_present_and_reviewed() -> None:
+    installer = _source()
+    clean_source = (ROOT / "deploy/docker/verify_clean_source.py").read_text(
+        encoding="utf-8"
+    )
+    integrity = (ROOT / "deploy/docker/production_runtime_integrity.py").read_text(
+        encoding="utf-8"
+    )
+
+    for relative in (
+        "deploy/__init__.py",
+        "deploy/an2p/__init__.py",
+        "deploy/docker/__init__.py",
+    ):
+        assert (ROOT / relative).is_file()
+        assert relative in installer
+        assert relative in clean_source
+        assert relative in integrity
+
+
 def test_installer_accepts_reviewed_ubuntu_compose_version_suffix() -> None:
     source = _source()
     compose_check = source.split("compose_version=$(", 1)[1]

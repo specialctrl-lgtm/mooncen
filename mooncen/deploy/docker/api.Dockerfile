@@ -20,7 +20,9 @@ COPY --chown=mooncen:mooncen backend ./backend
 COPY --chown=mooncen:mooncen DB ./DB
 COPY --chown=mooncen:mooncen Crawler ./Crawler
 COPY --chown=mooncen:mooncen config ./config
+COPY --chown=mooncen:mooncen deploy/__init__.py ./deploy/__init__.py
 COPY --chown=mooncen:mooncen \
+    deploy/docker/__init__.py \
     deploy/docker/provision_api_login.py \
     deploy/docker/release_manifest.py \
     deploy/docker/verify_release_bundle.py \
