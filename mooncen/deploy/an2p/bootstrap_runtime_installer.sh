@@ -133,7 +133,7 @@ PY
     verify_native_public_health || die "native development health preflight failed"
   elif [ -f /etc/mooncen-an2p/docker-development-enabled ] &&
     [ ! -L /etc/mooncen-an2p/docker-development-enabled ] &&
-    [ "$(stat -c '%U:%G:%a:%s' /etc/mooncen-an2p/docker-development-enabled)" =
+    [ "$(stat -c '%U:%G:%a:%s' /etc/mooncen-an2p/docker-development-enabled)" = \
       root:root:644:0 ] &&
     systemctl is-active --quiet mooncen-docker-dev.service &&
     systemctl is-enabled --quiet mooncen-docker-dev.service; then

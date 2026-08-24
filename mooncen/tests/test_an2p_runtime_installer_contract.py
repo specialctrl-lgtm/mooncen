@@ -751,6 +751,10 @@ def test_phase_one_preserves_native_until_the_manager_journals_the_cutover() -> 
         assert f'"{credential}"' in bootstrap
     assert "http://127.0.0.1:8001/health" in bootstrap
     assert "http://127.0.0.1:5174" in bootstrap
+    assert (
+        'docker-development-enabled)" = \\\n      root:root:644:0 ] &&'
+        in bootstrap
+    )
     assert "/usr/bin/loginctl terminate-user" not in bootstrap
     recovery_boundary = bootstrap.split(
         "revoke_host_root_without_losing_public_development() {",
