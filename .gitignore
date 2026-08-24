@@ -1,46 +1,141 @@
-# Secrets
+# Environment Variables
 .env
 .env.*
 !.env.example
-*.pem
+deploy.local.ps1
+
+# Local server inventory (copy config/deploy_servers.example.json)
+/config/deploy_servers.json
+
+# Local secrets / private keys
 *.key
+*.pem
 *.p12
 *.pfx
 
 # Python
 __pycache__/
 *.py[cod]
-.venv/
-venv/
-env/
-.pytest_cache/
-.mypy_cache/
-
-# Node / React / Vite
-node_modules/
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
 dist/
-.vite/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Logs / runtime
-*.log
-logs/
-*.pid
-tmp/
-temp/
+# Virtual Environment
+venv/
+venv_*/
+.venv*/
+ENV/
+env/
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.pid
+*.tmp
+*.bak
+*.dump
+*.dump.*
+*.sql.gz
+
+# Local deployment and browser artifacts
+chromedriver/
+tmp_*/
+ops_console_*probe*.png
+*.tar.gz
+*.zip
+.deploy-info
+.agents/
+_organized/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Database backups / dumps
-*.dump
-*.backup
-*.sql.gz
+# Testing
+.pytest_cache/
+/.pytest_tmp*/
+/pytest_*/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+.pyre/
+.pytype/
+.cache/
+.coverage
+htmlcov/
+coverage.xml
+playwright-report/
+test-results/
+/tmp_*.py
+/tmp_*.html
+/.tmp_*
 
-# Misc sensitive files
-credentials.json
-service-account*.json
+# Docker
+docker-compose.override.yml
+
+# Android
+.android-tools/
+android/.gradle/
+android/local.properties
+android/app/build/
+
+# Frontend dependencies and build output
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend2/node_modules/
+frontend2/dist/
+mooncen-app/node_modules/
+.vite/
+.turbo/
+.next/
+coverage/
+*.tsbuildinfo
+.eslintcache
+
+# Mobile signing and build artifacts
+*.jks
+*.p8
+*.mobileprovision
+*.apk
+*.aab
+android/build/
+android/.kotlin/
+
+# Local design/probe captures
+/0bc71a98-bd5f-4cc7-8024-e1f96579b699.png
+/frontend2/filter-layout-*.png
+/frontend2/.artifacts/
