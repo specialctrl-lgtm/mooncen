@@ -471,7 +471,9 @@ def test_development_activation_commits_pending_only_after_docker_health(
     monkeypatch.setattr(
         manager,
         "_write_pending_control_finalization",
-        lambda pair: events.append(("pending", pair)),
+        lambda pair, *, replace_pair=None: events.append(
+            ("pending", pair, replace_pair)
+        ),
     )
     monkeypatch.setattr(
         manager,
@@ -485,8 +487,8 @@ def test_development_activation_commits_pending_only_after_docker_health(
     assert result["active_pair"] == PAIR_B
     assert (
         events.index("healthy")
-        < events.index(("pending", PAIR_B))
         < events.index("exclusive-docker")
+        < events.index(("pending", PAIR_B, PAIR_A))
         < events.index("clear")
     )
     assert ("snapshot", True) in events
@@ -537,7 +539,11 @@ def test_development_rollback_restores_finalized_previous_and_clears_target_pend
         "worker_enabled": False,
     }
     monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
-    monkeypatch.setattr(manager, "_switch_pointer", lambda pair: events.append(("switch", pair)))
+    monkeypatch.setattr(
+        manager,
+        "_switch_pointer",
+        lambda pair: events.append(("switch", pair)),
+    )
     monkeypatch.setattr(manager, "control_finalized", lambda pair: pair == PAIR_A)
     monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: applied.append(value))
     monkeypatch.setattr(manager, "_start_units", lambda _value: events.append("start"))
@@ -546,7 +552,11 @@ def test_development_rollback_restores_finalized_previous_and_clears_target_pend
         "_clear_pending_control_finalization",
         lambda pair: events.append(("clear-pending", pair)),
     )
-    monkeypatch.setattr(manager, "_clear_journal", lambda: events.append("clear-journal"))
+    monkeypatch.setattr(
+        manager,
+        "_clear_journal",
+        lambda: events.append("clear-journal"),
+    )
 
     manager._rollback_transaction(snapshot)
 
@@ -560,6 +570,49 @@ def test_development_rollback_restores_finalized_previous_and_clears_target_pend
         ("switch", PAIR_A),
         "start",
         ("clear-pending", PAIR_B),
+        "clear-journal",
+    ]
+
+
+def test_development_rollback_restores_unfinalized_previous_pending(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[object] = []
+    snapshot = {
+        **_snapshot(target=PAIR_B, previous=PAIR_A, phase="switched"),
+        "development_only": True,
+        "ops_api_enabled": False,
+        "status_enabled": False,
+        "tunnel_enabled": False,
+        "worker_enabled": False,
+    }
+    monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
+    monkeypatch.setattr(manager, "_switch_pointer", lambda pair: events.append(("switch", pair)))
+    monkeypatch.setattr(manager, "control_finalized", lambda _pair: False)
+    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda _value: None)
+    monkeypatch.setattr(manager, "_start_units", lambda _value: events.append("start"))
+    monkeypatch.setattr(
+        manager,
+        "_clear_pending_control_finalization",
+        lambda pair: events.append(("clear-pending", pair)),
+    )
+    monkeypatch.setattr(
+        manager,
+        "_write_pending_control_finalization",
+        lambda pair, *, replace_pair=None: events.append(
+            ("write-pending", pair, replace_pair)
+        ),
+    )
+    monkeypatch.setattr(manager, "_clear_journal", lambda: events.append("clear-journal"))
+
+    manager._rollback_transaction(snapshot)
+
+    assert events == [
+        "stop",
+        ("switch", PAIR_A),
+        "start",
+        ("clear-pending", PAIR_B),
+        ("write-pending", PAIR_A, None),
         "clear-journal",
     ]
 

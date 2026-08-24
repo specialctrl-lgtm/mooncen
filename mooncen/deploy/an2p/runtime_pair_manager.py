@@ -490,7 +490,9 @@ def _pending_control_value(name: str) -> dict[str, Any]:
     }
 
 
-def _write_pending_control_finalization(name: str) -> None:
+def _write_pending_control_finalization(
+    name: str, *, replace_pair: str | None = None
+) -> None:
     value = _pending_control_value(name)
     payload = _canonical_json(value)
     if PENDING_CONTROL_FINALIZATION.exists() or PENDING_CONTROL_FINALIZATION.is_symlink():
@@ -499,9 +501,15 @@ def _write_pending_control_finalization(name: str) -> None:
             mode=0o600,
             gid=0,
         )
-        if frozenset(existing) != PENDING_CONTROL_FINALIZATION_KEYS or existing != value:
+        if frozenset(existing) != PENDING_CONTROL_FINALIZATION_KEYS:
+            raise PairManagerError("pending control finalization receipt is invalid")
+        if existing == value:
+            return
+        # A fresh immutable PASS receipt may supersede the exact pending
+        # receipt of the pair being replaced.  No unrelated pending authority
+        # can be overwritten.
+        if replace_pair is None or existing != _pending_control_value(replace_pair):
             raise PairManagerError("a different control finalization is already pending")
-        return
     stage = STATE_ROOT / f".pending-control-finalization.{os.getpid()}.tmp"
     descriptor = os.open(
         stage,
@@ -1189,6 +1197,9 @@ def _rollback_transaction(snapshot: dict[str, Any]) -> None:
             _select_native()
     if snapshot["development_only"]:
         _clear_pending_control_finalization(snapshot["target"])
+        previous = snapshot["previous"]
+        if previous is not None and not control_finalized(previous):
+            _write_pending_control_finalization(previous)
     _clear_journal()
 
 
@@ -1232,6 +1243,9 @@ def recover_boot() -> None:
         if not restored["docker_selected"]:
             _select_native()
         _clear_pending_control_finalization(snapshot["target"])
+        previous = snapshot["previous"]
+        if previous is not None and not control_finalized(previous):
+            _write_pending_control_finalization(previous)
         _clear_journal()
         return
     if (
@@ -1294,9 +1308,13 @@ def activate_development(name: str) -> dict[str, Any]:
         _write_journal(snapshot)
         _apply_unit_enablement(snapshot)
         _start_units(snapshot)
-        _write_pending_control_finalization(name)
         if not bool(_selector_status()["docker_selected"]):
             raise PairManagerError("development activation lost Docker selection")
+        # Publish the new pending authority only after the replacement runtime
+        # and both health probes have succeeded.  Rollback reconstructs the
+        # previous immutable pending receipt if publication or journal commit
+        # is interrupted.
+        _write_pending_control_finalization(name, replace_pair=previous)
     except Exception:
         try:
             _rollback_transaction(snapshot)
