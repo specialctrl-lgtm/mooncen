@@ -173,6 +173,7 @@ clean_source_sha256='<reviewed-clean-source-sha256>'
 pair_manager_sha256='<reviewed-pair-manager-sha256>'
 handoff_sha256='<reviewed-evidence-handoff-sha256>'
 registrar_sha256='<reviewed-registrar-sha256>'
+host_transition_sha256='<reviewed-host-transition-sha256>'
 build_policy_sha256='<reviewed-build-policy-sha256>'
 bootstrap_stage=/root/mooncen-an2p-runtime-bootstrap.sh
 
@@ -191,6 +192,7 @@ sudo /usr/bin/systemd-run --wait --pipe --collect \
   --pair-manager-sha256 "$pair_manager_sha256" \
   --handoff-sha256 "$handoff_sha256" \
   --registrar-sha256 "$registrar_sha256" \
+  --host-transition-sha256 "$host_transition_sha256" \
   --build-policy-sha256 "$build_policy_sha256"
 ```
 
@@ -226,6 +228,29 @@ sudo /usr/bin/systemd-run --wait --pipe --collect \
   --base-commit "<reviewed-parent-commit-40hex>" \
   --source-tree "<reviewed-source-tree-40hex>" \
   --build-policy "<reviewed-build-policy-64hex>"
+```
+
+새 pair의 host-layer ABI가 기존 pair와 다르면 일반 `install`은 global helper/unit을 바꾸기 전에
+거부한다. 이때만 현재 pair와 그 receipt의 host-layer SHA-256을 기록하고 다음 별도 maintenance
+contract를 사용한다. 전환기는 새 pair와 publication journal을 먼저 durable하게 만들고,
+pointer 없음 + native health checkpoint를 지난 뒤 TARGET host bytes와 Docker pair로 전진한다.
+전환 도중에는 root-only recovery journal을 유지하며 서로 다른 ABI로 자동 rollback하지 않는다.
+
+```bash
+previous_pair='runtime-pair.<previous-commit40>.<previous-tree40>.<previous-policy64>'
+previous_host_layer='<previous-host-layer-sha256>'
+sudo /usr/bin/systemd-run --wait --pipe --collect \
+  --unit=mooncen-an2p-runtime-host-transition \
+  /usr/bin/env -i HOME=/root LANG=C LC_ALL=C \
+  PATH=/usr/sbin:/usr/bin:/sbin:/bin \
+  /usr/local/sbin/mooncen-an2p-runtime-install install-host-transition \
+  --reference "refs/mooncen/docker-release-snapshots/<32hex>" \
+  --commit "<reviewed-snapshot-commit-40hex>" \
+  --base-commit "<reviewed-parent-commit-40hex>" \
+  --source-tree "<reviewed-source-tree-40hex>" \
+  --build-policy "<reviewed-build-policy-64hex>" \
+  --from-pair "$previous_pair" \
+  --from-host-layer "$previous_host_layer"
 ```
 
 entrypoint와 `/etc/mooncen-an2p/runtime-installer.trust`는 root-owned이며 installer는 자신의

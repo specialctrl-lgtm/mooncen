@@ -320,6 +320,7 @@ def test_reservation_collector_proves_two_categories_sentinels_and_details() -> 
     fake = _reservation_fixture()
     rows, parser, meta = yongin.collect_yongin_reservation_courses(
         _target(yongin.YONGIN_RESERVATION_PROVIDER, yongin.YONGIN_RESERVATION_URL),
+        today="2026-08-05",
         max_pages=6,
         detail_limit=3,
         max_requests=20,
@@ -386,6 +387,7 @@ def test_reservation_collector_audits_but_excludes_undated_disabled_cards() -> N
     fake = _reservation_fixture(disabled_card=True)
     rows, _, meta = yongin.collect_yongin_reservation_courses(
         _target(yongin.YONGIN_RESERVATION_PROVIDER, yongin.YONGIN_RESERVATION_URL),
+        today="2026-08-05",
         max_pages=6,
         detail_limit=3,
         max_requests=20,

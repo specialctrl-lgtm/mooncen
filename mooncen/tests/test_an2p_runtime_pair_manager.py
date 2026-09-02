@@ -189,7 +189,14 @@ def test_failed_pair_activation_restores_one_previous_pair(
         lambda value: events.append(("journal", value["phase"])),
     )
     monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda _value: None)
+    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: value)
+    monkeypatch.setattr(manager, "_control_start_ready", lambda _pair: True)
+    monkeypatch.setattr(manager, "control_finalized", lambda _pair: True)
+    monkeypatch.setattr(
+        manager,
+        "_clear_pending_control_finalization",
+        lambda _pair: None,
+    )
 
     def switch(name: str | None) -> None:
         events.append(("switch", name))
@@ -236,7 +243,7 @@ def test_boot_recovery_converges_pointer_without_starting_dependents(
     monkeypatch: pytest.MonkeyPatch,
     phase: str,
     previous: str | None,
-    expected: str,
+    expected: str | None,
 ) -> None:
     events: list[object] = []
     monkeypatch.setattr(
@@ -251,7 +258,14 @@ def test_boot_recovery_converges_pointer_without_starting_dependents(
         lambda name: events.append(("switch", name)),
     )
     monkeypatch.setattr(manager, "_clear_journal", lambda: events.append("clear"))
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda _value: None)
+    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: value)
+    monkeypatch.setattr(manager, "_control_start_ready", lambda _pair: True)
+    monkeypatch.setattr(manager, "control_finalized", lambda _pair: True)
+    monkeypatch.setattr(
+        manager,
+        "_clear_pending_control_finalization",
+        lambda _pair: None,
+    )
     monkeypatch.setattr(
         manager,
         "_start_units",
@@ -263,10 +277,164 @@ def test_boot_recovery_converges_pointer_without_starting_dependents(
     assert events == ["stop", ("switch", expected), "clear"]
 
 
+def test_retained_rollback_reconstructs_finalized_previous_control_services(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    snapshot = {
+        **_snapshot(target=PAIR_B, previous=PAIR_A, phase="switched"),
+        "development_only": False,
+        "ops_api_enabled": False,
+        "status_enabled": False,
+        "tunnel_enabled": False,
+        "worker_enabled": False,
+    }
+    monkeypatch.setattr(
+        manager,
+        "_control_start_ready",
+        lambda pair: pair == PAIR_A,
+    )
+
+    restored = manager._rollback_snapshot(snapshot)
+
+    assert restored["docker_selected"] is True
+    for field in (
+        "ops_api_enabled",
+        "status_enabled",
+        "tunnel_enabled",
+        "worker_enabled",
+    ):
+        assert restored[field] is True
+
+
+def test_initial_retained_rollback_quiesces_failed_target_and_restores_native(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[object] = []
+    applied: list[dict[str, object]] = []
+    snapshot = _snapshot(target=PAIR_B, previous=None, phase="switched")
+
+    monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
+    monkeypatch.setattr(
+        manager,
+        "_switch_pointer",
+        lambda pair: events.append(("switch", pair)),
+    )
+    monkeypatch.setattr(
+        manager,
+        "_apply_unit_enablement",
+        lambda value: applied.append(value) or value,
+    )
+    monkeypatch.setattr(
+        manager,
+        "_start_units",
+        lambda value: events.append(("start", value["docker_selected"])),
+    )
+    monkeypatch.setattr(manager, "_select_native", lambda: events.append("native"))
+    monkeypatch.setattr(
+        manager,
+        "_clear_pending_control_finalization",
+        lambda pair: events.append(("clear-pending", pair)),
+    )
+    monkeypatch.setattr(manager, "_clear_journal", lambda: events.append("clear"))
+
+    manager._rollback_transaction(snapshot)
+
+    for field in (
+        "docker_selected",
+        "ops_api_enabled",
+        "status_enabled",
+        "tunnel_enabled",
+        "worker_enabled",
+    ):
+        assert applied[0][field] is False
+    assert events == [
+        "stop",
+        ("switch", None),
+        ("start", False),
+        "native",
+        ("clear-pending", PAIR_B),
+        "clear",
+    ]
+
+
+def test_boot_prepared_initial_retained_pair_quiesces_every_dependent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    applied: list[dict[str, object]] = []
+    snapshot = _snapshot(target=PAIR_B, previous=None, phase="prepared")
+    monkeypatch.setattr(manager, "_load_journal", lambda: snapshot)
+    monkeypatch.setattr(manager, "_stop_units", lambda: None)
+    monkeypatch.setattr(manager, "_switch_pointer", lambda pair: None)
+    monkeypatch.setattr(
+        manager,
+        "_apply_unit_enablement",
+        lambda value: applied.append(value) or value,
+    )
+    monkeypatch.setattr(manager, "_clear_pending_control_finalization", lambda _pair: None)
+    monkeypatch.setattr(manager, "_clear_journal", lambda: None)
+
+    manager.recover_boot()
+
+    assert all(
+        applied[0][field] is False
+        for field in (
+            "docker_selected",
+            "ops_api_enabled",
+            "status_enabled",
+            "tunnel_enabled",
+            "worker_enabled",
+        )
+    )
+
+
+def test_unfinalized_retained_activation_publishes_target_pending_before_commit(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[object] = []
+    snapshot = _snapshot(target=PAIR_B, previous=PAIR_A, phase="prepared")
+    monkeypatch.setattr(manager, "validate_pair", lambda pair: events.append(("validate", pair)))
+    monkeypatch.setattr(manager, "recover", lambda: events.append("recover"))
+    monkeypatch.setattr(manager, "current_pair", lambda: PAIR_A)
+    monkeypatch.setattr(manager, "_snapshot", lambda *_args, **_kwargs: dict(snapshot))
+    monkeypatch.setattr(manager, "_control_start_ready", lambda _pair: False)
+    monkeypatch.setattr(
+        manager,
+        "_write_journal",
+        lambda value: events.append(("journal", value["phase"])),
+    )
+    monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
+    monkeypatch.setattr(manager, "_switch_pointer", lambda pair: events.append(("switch", pair)))
+    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: value)
+    monkeypatch.setattr(manager, "_start_units", lambda _value: events.append("start"))
+    monkeypatch.setattr(
+        manager,
+        "_write_pending_control_finalization",
+        lambda pair, *, replace_pair=None: events.append(
+            ("write-pending", pair, replace_pair)
+        ),
+    )
+    monkeypatch.setattr(
+        manager,
+        "_clear_pending_control_finalization",
+        lambda pair: events.append(("clear-pending", pair)),
+    )
+    monkeypatch.setattr(manager, "_clear_journal", lambda: events.append("clear-journal"))
+
+    result = manager.activate_retained(PAIR_B)
+
+    assert result["control_finalized"] is False
+    assert events[-3:] == [
+        ("write-pending", PAIR_B, PAIR_A),
+        ("clear-pending", PAIR_A),
+        "clear-journal",
+    ]
+
+
 def test_clean_boot_still_performs_full_active_pair_validation(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     calls: list[bool] = []
+    boundaries: list[str] = []
     monkeypatch.setattr(manager, "_load_journal", lambda: None)
     monkeypatch.setattr(
         manager,
@@ -278,11 +446,259 @@ def test_clean_boot_still_performs_full_active_pair_validation(
         "_validate_pair_structure",
         lambda _name: (None, None, None, {"receipt_digest": "7" * 64}),
     )
+    monkeypatch.setattr(
+        manager,
+        "_converge_control_start_boundary",
+        lambda pair: boundaries.append(pair),
+    )
     monkeypatch.setattr(manager, "_write_boot_validation", lambda *_args: None)
 
     manager.recover_boot()
 
     assert calls == [True]
+    assert boundaries == [PAIR_A]
+
+
+def test_unfinalized_boot_masks_api_before_quiescing_control_units(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[tuple[str, ...], bool]] = []
+    monkeypatch.setattr(manager, "control_finalized", lambda _pair: False)
+    monkeypatch.setattr(manager, "_unit_loaded", lambda _unit: True)
+
+    def systemctl(*arguments: str, check: bool = True):
+        calls.append((arguments, check))
+        return subprocess.CompletedProcess(arguments, 0, stdout=b"", stderr=b"")
+
+    monkeypatch.setattr(manager, "_systemctl", systemctl)
+
+    manager._converge_control_start_boundary(PAIR_A)
+
+    api = manager.SYSTEM_UNITS["ops_api"]
+    assert calls[:4] == [
+        (("mask", "--runtime", "--now", api), True),
+        (("daemon-reload",), True),
+        (("stop", api), True),
+        (("reset-failed", api), False),
+    ]
+    assert (("disable", api), True) in calls
+    assert (("reset-failed", api), False) in calls
+    for key in ("status", "worker", "tunnel"):
+        unit = manager.SYSTEM_UNITS[key]
+        assert (("disable", "--now", unit), True) in calls
+        assert (("reset-failed", unit), False) in calls
+    assert not any(arguments[0] == "unmask" for arguments, _check in calls)
+
+
+def test_journaled_unit_stop_masks_socket_activated_api_first(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[tuple[str, ...], bool]] = []
+    monkeypatch.setattr(manager, "_unit_loaded", lambda _unit: True)
+    monkeypatch.setattr(manager, "_unit_active", lambda _unit: False)
+
+    def systemctl(*arguments: str, check: bool = True):
+        calls.append((arguments, check))
+        return subprocess.CompletedProcess(arguments, 0, stdout=b"", stderr=b"")
+
+    monkeypatch.setattr(manager, "_systemctl", systemctl)
+
+    manager._stop_units()
+
+    api = manager.SYSTEM_UNITS["ops_api"]
+    api_calls = [call for call in calls if api in call[0]]
+    assert api_calls == [
+        (("mask", "--runtime", "--now", api), True),
+        (("stop", api), True),
+        (("reset-failed", api), False),
+    ]
+    assert calls[:4] == [
+        (("mask", "--runtime", "--now", api), True),
+        (("daemon-reload",), True),
+        (("stop", api), True),
+        (("reset-failed", api), False),
+    ]
+
+
+def test_clean_boot_without_a_pair_keeps_reserved_socket_service_masked(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[str] = []
+    monkeypatch.setattr(manager, "_load_journal", lambda: None)
+    monkeypatch.setattr(manager, "current_pair", lambda: None)
+    monkeypatch.setattr(
+        manager,
+        "_quiesce_control_start_boundary",
+        lambda: events.append("quiesce"),
+    )
+    monkeypatch.setattr(
+        manager,
+        "_clear_boot_validation",
+        lambda: events.append("clear-validation"),
+    )
+
+    manager.recover_boot()
+
+    assert events == ["quiesce", "clear-validation"]
+
+
+def test_finalized_boot_removes_only_the_runtime_api_mask(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    calls: list[tuple[str, ...]] = []
+    monkeypatch.setattr(manager, "control_finalized", lambda _pair: True)
+    monkeypatch.setattr(
+        manager,
+        "CONTROL_FINALIZATION_TRANSACTION",
+        tmp_path / "control-finalization-transaction.json",
+    )
+    monkeypatch.setattr(
+        manager,
+        "_systemctl",
+        lambda *arguments, **_kwargs: calls.append(arguments),
+    )
+
+    manager._converge_control_start_boundary(PAIR_A)
+
+    assert calls == [
+        ("unmask", "--runtime", manager.SYSTEM_UNITS["ops_api"]),
+        ("daemon-reload",),
+    ]
+
+
+def test_authorized_but_incomplete_finalization_stays_runtime_masked(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    transaction = tmp_path / "control-finalization-transaction.json"
+    transaction.write_text("incomplete\n", encoding="ascii")
+    calls: list[tuple[str, ...]] = []
+    monkeypatch.setattr(manager, "control_finalized", lambda _pair: True)
+    monkeypatch.setattr(manager, "CONTROL_FINALIZATION_TRANSACTION", transaction)
+    monkeypatch.setattr(manager, "_unit_loaded", lambda _unit: True)
+    monkeypatch.setattr(
+        manager,
+        "_systemctl",
+        lambda *arguments, **_kwargs: calls.append(arguments),
+    )
+
+    manager._converge_control_start_boundary(PAIR_A)
+
+    assert calls[0] == (
+        "mask",
+        "--runtime",
+        "--now",
+        manager.SYSTEM_UNITS["ops_api"],
+    )
+    assert not any(arguments[0] == "unmask" for arguments in calls)
+
+
+@pytest.mark.parametrize(
+    ("enabled", "expected_api_calls"),
+    (
+        (
+            False,
+            (
+                (
+                    "mask",
+                    "--runtime",
+                    "--now",
+                    manager.SYSTEM_UNITS["ops_api"],
+                ),
+                ("stop", manager.SYSTEM_UNITS["ops_api"]),
+                ("reset-failed", manager.SYSTEM_UNITS["ops_api"]),
+                ("disable", manager.SYSTEM_UNITS["ops_api"]),
+            ),
+        ),
+        (
+            True,
+            (
+                ("unmask", "--runtime", manager.SYSTEM_UNITS["ops_api"]),
+                ("enable", manager.SYSTEM_UNITS["ops_api"]),
+            ),
+        ),
+    ),
+)
+def test_pair_enablement_converges_runtime_api_mask(
+    monkeypatch: pytest.MonkeyPatch,
+    enabled: bool,
+    expected_api_calls: tuple[tuple[str, ...], ...],
+) -> None:
+    calls: list[tuple[str, ...]] = []
+    monkeypatch.setattr(
+        manager,
+        "current_pair",
+        lambda *, full_validation=True: PAIR_A,
+    )
+    monkeypatch.setattr(manager, "_control_start_ready", lambda _pair: True)
+    monkeypatch.setattr(
+        manager,
+        "_systemctl",
+        lambda *arguments, **_kwargs: calls.append(arguments),
+    )
+    snapshot = {
+        "docker_selected": True,
+        "ops_api_enabled": enabled,
+        "status_enabled": False,
+        "tunnel_enabled": False,
+        "worker_enabled": False,
+    }
+
+    manager._apply_unit_enablement(snapshot)
+
+    api_calls = tuple(
+        arguments
+        for arguments in calls
+        if manager.SYSTEM_UNITS["ops_api"] in arguments
+    )
+    assert api_calls == expected_api_calls
+
+
+def test_pair_enablement_drops_control_restore_when_finalization_is_incomplete(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[str, ...]] = []
+    monkeypatch.setattr(
+        manager,
+        "current_pair",
+        lambda *, full_validation=True: PAIR_A,
+    )
+    monkeypatch.setattr(manager, "_control_start_ready", lambda _pair: False)
+    monkeypatch.setattr(
+        manager,
+        "_systemctl",
+        lambda *arguments, **_kwargs: calls.append(arguments),
+    )
+    snapshot = {
+        "docker_selected": True,
+        "ops_api_enabled": True,
+        "status_enabled": True,
+        "tunnel_enabled": True,
+        "worker_enabled": True,
+    }
+
+    effective = manager._apply_unit_enablement(snapshot)
+
+    assert all(
+        effective[field] is False
+        for field in (
+            "ops_api_enabled",
+            "status_enabled",
+            "tunnel_enabled",
+            "worker_enabled",
+        )
+    )
+    assert all(
+        snapshot[field] is True
+        for field in (
+            "ops_api_enabled",
+            "status_enabled",
+            "tunnel_enabled",
+            "worker_enabled",
+        )
+    )
+    assert not any(arguments[0] in {"enable", "unmask"} for arguments in calls)
 
 
 def test_service_start_gate_requires_live_exact_transaction_authorization(
@@ -466,7 +882,11 @@ def test_development_activation_commits_pending_only_after_docker_health(
         events.append(("switch", pair))
 
     monkeypatch.setattr(manager, "_switch_pointer", switch)
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda _value: events.append("enable"))
+    monkeypatch.setattr(
+        manager,
+        "_apply_unit_enablement",
+        lambda value: events.append("enable") or value,
+    )
     monkeypatch.setattr(manager, "_start_units", lambda _value: events.append("healthy"))
     monkeypatch.setattr(
         manager,
@@ -544,8 +964,13 @@ def test_development_rollback_restores_finalized_previous_and_clears_target_pend
         "_switch_pointer",
         lambda pair: events.append(("switch", pair)),
     )
+    monkeypatch.setattr(manager, "_control_start_ready", lambda pair: pair == PAIR_A)
     monkeypatch.setattr(manager, "control_finalized", lambda pair: pair == PAIR_A)
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: applied.append(value))
+    monkeypatch.setattr(
+        manager,
+        "_apply_unit_enablement",
+        lambda value: applied.append(value) or value,
+    )
     monkeypatch.setattr(manager, "_start_units", lambda _value: events.append("start"))
     monkeypatch.setattr(
         manager,
@@ -588,8 +1013,9 @@ def test_development_rollback_restores_unfinalized_previous_pending(
     }
     monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
     monkeypatch.setattr(manager, "_switch_pointer", lambda pair: events.append(("switch", pair)))
+    monkeypatch.setattr(manager, "_control_start_ready", lambda _pair: False)
     monkeypatch.setattr(manager, "control_finalized", lambda _pair: False)
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda _value: None)
+    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: value)
     monkeypatch.setattr(manager, "_start_units", lambda _value: events.append("start"))
     monkeypatch.setattr(
         manager,
@@ -636,7 +1062,11 @@ def test_boot_recovery_rolls_back_interrupted_initial_development_commit(
     monkeypatch.setattr(manager, "_load_journal", lambda: snapshot)
     monkeypatch.setattr(manager, "_stop_units", lambda: events.append("stop"))
     monkeypatch.setattr(manager, "_switch_pointer", lambda pair: events.append(("switch", pair)))
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: applied.append(value))
+    monkeypatch.setattr(
+        manager,
+        "_apply_unit_enablement",
+        lambda value: applied.append(value) or value,
+    )
     monkeypatch.setattr(
         manager,
         "_clear_pending_control_finalization",
@@ -702,7 +1132,7 @@ def test_initial_development_health_failure_restores_native_without_pointer(
             raise manager.PairManagerError("Docker health failed")
 
     monkeypatch.setattr(manager, "_switch_pointer", switch)
-    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda _value: None)
+    monkeypatch.setattr(manager, "_apply_unit_enablement", lambda value: value)
     monkeypatch.setattr(manager, "_start_units", start)
     monkeypatch.setattr(manager, "_select_native", lambda: events.append("native"))
     monkeypatch.setattr(

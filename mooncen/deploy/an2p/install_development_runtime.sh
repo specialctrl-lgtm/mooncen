@@ -1118,7 +1118,18 @@ install -o root -g root -m 0440 "$sudoers_stage" "$sudoers"
 rm -f -- "$sudoers_stage"
 
 # Claim 5175 before the unprivileged user manager exists.  These sockets do
-# not read a control credential or establish a production connection.
+# not read a control credential or establish a production connection.  Keep
+# their service runtime-masked on the first pair until an exact control
+# finalization publishes every private input.  An existing pair is left intact
+# here: its control cutover occurs only after the pair manager has durably
+# journaled the activation transaction.
+if [ ! -e "$pair_pointer" ] && [ ! -L "$pair_pointer" ]; then
+  /bin/systemctl mask --runtime --now mooncen-ops-api.service
+  /bin/systemctl stop mooncen-ops-db-tunnel.service \
+    >/dev/null 2>&1 || true
+  /bin/systemctl reset-failed mooncen-ops-api.service \
+    mooncen-ops-db-tunnel.service >/dev/null 2>&1 || true
+fi
 /bin/systemctl daemon-reload
 /bin/systemctl enable --now mooncen-an2p-runtime-recovery.service \
   mooncen-ops-api.socket mooncen-ops-api-ipv6.socket \

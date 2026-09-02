@@ -147,10 +147,12 @@ def test_an2p_units_keep_development_and_production_control_planes_separate() ->
     assert "ListenStream=127.0.0.1:5175" in socket_unit
     assert "Accept=no" in socket_unit
     assert "WantedBy=sockets.target" in socket_unit
+    assert "After=network.target" not in socket_unit
     ipv6_socket = _an2p_unit("mooncen-ops-api-ipv6.socket")
     ipv6_service = _an2p_unit("mooncen-ops-api-ipv6.service")
     assert "ListenStream=[::1]:5175" in ipv6_socket
     assert "Accept=no" in ipv6_socket
+    assert "After=network.target" not in ipv6_socket
     assert "User=mooncen_ops_api" in ipv6_service
     assert "/usr/local/libexec/mooncen-an2p-loopback-redirect" in ipv6_service
     assert "0.0.0.0" not in ipv6_socket

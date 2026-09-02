@@ -254,28 +254,33 @@ def _build_image(
 ) -> tuple[str, str]:
     tag = f"mooncen/{service}:release-{source_tree}"
     iidfile = release_dir / f".{service}.iid"
-    _run(
-        (
-            "docker",
-            "build",
-            "--pull",
-            "--no-cache",
-            "--platform",
-            platform,
-            "--label",
-            f"kr.mooncen.source_tree={source_tree}",
-            "--label",
-            f"org.opencontainers.image.revision={snapshot_commit}",
-            "--iidfile",
-            str(iidfile),
-            "--tag",
-            tag,
-            "--file",
-            DOCKERFILE_BY_SERVICE[service],
-            ".",
-        ),
-        root=root,
-    )
+    try:
+        _run(
+            (
+                "docker",
+                "build",
+                "--pull",
+                "--no-cache",
+                "--platform",
+                platform,
+                "--label",
+                f"kr.mooncen.source_tree={source_tree}",
+                "--label",
+                f"org.opencontainers.image.revision={snapshot_commit}",
+                "--iidfile",
+                str(iidfile),
+                "--tag",
+                tag,
+                "--file",
+                DOCKERFILE_BY_SERVICE[service],
+                ".",
+            ),
+            root=root,
+        )
+    except BuildError as exc:
+        raise BuildError(
+            f"release build failed during {service} Docker image build"
+        ) from exc
     try:
         image_id = iidfile.read_text(encoding="ascii").strip().lower()
         iidfile.unlink()

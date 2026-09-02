@@ -49,13 +49,17 @@ def test_installer_builds_only_from_the_exact_reviewed_snapshot() -> None:
     assert "--allow-dirty-source" not in source
 
 
-def test_installer_accepts_the_exact_eleven_argument_install_contract() -> None:
+def test_installer_accepts_only_the_reviewed_install_contracts() -> None:
     source = _source()
-    contract = source.split('\n[ "$#" -eq 11 ]', 1)[1].split(
-        ' || \\\n  die "usage:',
+    contract = source.split("\nhost_transition_requested=false", 1)[1].split(
+        "\nreference=$3",
         1,
     )[0]
-    contract = '[ "$#" -eq 11 ]' + contract
+    contract = (
+        "die() { exit 78; }\n"
+        "host_transition_requested=false"
+        + contract
+    )
     arguments = (
         "install",
         "--reference",
@@ -78,6 +82,22 @@ def test_installer_accepts_the_exact_eleven_argument_install_contract() -> None:
     )
     assert accepted.returncode == 0, accepted.stderr
 
+    transition_arguments = (
+        "install-host-transition",
+        *arguments[1:],
+        "--from-pair",
+        f"runtime-pair.{'6' * 40}.{'7' * 40}.{'8' * 64}",
+        "--from-host-layer",
+        "9" * 64,
+    )
+    transition_accepted = subprocess.run(
+        ["/bin/bash", "-c", contract, "installer-contract", *transition_arguments],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert transition_accepted.returncode == 0, transition_accepted.stderr
+
     rejected = subprocess.run(
         [
             "/bin/bash",
@@ -93,6 +113,22 @@ def test_installer_accepts_the_exact_eleven_argument_install_contract() -> None:
         text=True,
     )
     assert rejected.returncode != 0
+
+    transition_rejected = subprocess.run(
+        [
+            "/bin/bash",
+            "-c",
+            contract,
+            "installer-contract",
+            *transition_arguments[:-2],
+            "--unexpected-host-layer",
+            transition_arguments[-1],
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert transition_rejected.returncode != 0
 
 
 def test_installer_builds_and_validates_once_before_pair_activation() -> None:
@@ -327,22 +363,60 @@ def test_installer_restarts_the_db_tunnel_after_key_rotation() -> None:
         assert key_install < restart < active
 
 
+def test_ops_api_runtime_mask_is_reloaded_before_the_explicit_stop() -> None:
+    isolated = (
+        ROOT / "deploy/an2p/install_isolated_control_plane.sh"
+    ).read_text(encoding="utf-8")
+
+    for source in (_source(), isolated):
+        mask = source.split("mask_runtime_ops_api() {", 1)[1].split("\n}", 1)[0]
+        assert mask.index("systemctl mask --runtime --now") < mask.index(
+            "systemctl daemon-reload"
+        ) < mask.index("systemctl stop mooncen-ops-api.service")
+        unmask = source.split("unmask_runtime_ops_api() {", 1)[1].split(
+            "\n}", 1
+        )[0]
+        assert unmask.index("systemctl unmask --runtime") < unmask.index(
+            "systemctl daemon-reload"
+        )
+
+
 def test_isolated_installer_atomically_restarts_and_verifies_the_ops_api_env() -> None:
     isolated = (
         ROOT / "deploy/an2p/install_isolated_control_plane.sh"
     ).read_text(encoding="utf-8")
 
     stage = isolated.index("api_env_stage=$(mktemp")
-    mask = isolated.index("systemctl mask --runtime mooncen-ops-api.service")
-    stop = isolated.index("systemctl stop mooncen-ops-api.service", mask)
+    mask = isolated.index("mask_runtime_ops_api", stage)
     publish = isolated.index('mv -fT -- "$api_env_stage" "$api_env_destination"')
-    unmask = isolated.index("systemctl unmask --runtime mooncen-ops-api.service", publish)
-    restart = isolated.index("systemctl restart mooncen-ops-api.service", unmask)
+    unmask = isolated.index("unmask_runtime_ops_api", publish)
+    enable = isolated.index("systemctl enable mooncen-ops-api.service", unmask)
+    restart = isolated.index("systemctl restart mooncen-ops-api.service", enable)
     health = isolated.index("http://127.0.0.1:5175/health --timeout 90", restart)
     process_env = isolated.index('pathlib.Path(f"/proc/{pid}/environ")', health)
     commit = isolated.index("api_env_committed=true", process_env)
 
-    assert stage < mask < stop < publish < unmask < restart < health < process_env < commit
+    assert (
+        stage
+        < mask
+        < publish
+        < unmask
+        < enable
+        < restart
+        < health
+        < process_env
+        < commit
+    )
+    bulk_enable = isolated.split(
+        "systemctl enable mooncen-an2p-runtime-recovery.service",
+        1,
+    )[1].split("systemctl start mooncen-an2p-runtime-recovery.service", 1)[0]
+    assert "mooncen-ops-api.service" not in bulk_enable
+    cleanup = isolated.split("cleanup_api_environment() {", 1)[1].split(
+        "\n}\ntrap cleanup_api_environment EXIT",
+        1,
+    )[0]
+    assert "mask_runtime_ops_api" in cleanup
     assert (
         'install -o root -g "$api_user" -m 0640 \\\n'
         '          "$api_env_backup" "$api_env_destination"'
@@ -405,6 +479,9 @@ def test_ops_api_environment_failure_restores_the_previous_bytes_and_service(
     isolated = (
         ROOT / "deploy/an2p/install_isolated_control_plane.sh"
     ).read_text(encoding="utf-8")
+    helpers = "mask_runtime_ops_api() {" + isolated.split(
+        "mask_runtime_ops_api() {", 1
+    )[1].split('\n\n[ "$(id -u)"', 1)[0]
     cleanup = isolated.split("cleanup_api_environment() {", 1)[1].split(
         "trap cleanup_api_environment EXIT", 1
     )[0]
@@ -431,6 +508,7 @@ api_env_committed=false
 api_cutover_started=true
 api_service_masked=false
 api_was_active=true
+{helpers}
 {cleanup}
 trap cleanup_api_environment EXIT
 false
@@ -774,8 +852,45 @@ def test_phase_one_preserves_native_until_the_manager_journals_the_cutover() -> 
     assert "marker_stage=" not in preparation
     assert 'disable --now \\\n  mooncen-api.service mooncen-frontend.service' not in preparation
     assert "development preparation changed the active public runtime" in preparation
+    first_pair_mask = preparation.index(
+        'if [ ! -e "$pair_pointer" ] && [ ! -L "$pair_pointer" ]; then'
+    )
+    api_mask = preparation.index(
+        "/bin/systemctl mask --runtime --now mooncen-ops-api.service"
+    )
+    sockets = preparation.index(
+        "/bin/systemctl enable --now mooncen-an2p-runtime-recovery.service"
+    )
+    assert first_pair_mask < api_mask < sockets
     finish = installer.split("finish_pair_install() {", 1)[1].split("\n}", 1)[0]
     assert finish.index("--prepare --pair") < finish.index("activate-development")
+    assert finish.index("--prepare --pair") < finish.index("activation_attempted=true")
+    manager_source = (
+        ROOT / "deploy/an2p/runtime_pair_manager.py"
+    ).read_text(encoding="utf-8")
+    stop_boundary = manager_source.split("def _stop_units() -> None:", 1)[1].split(
+        "\n\ndef _wait_http",
+        1,
+    )[0]
+    assert "_mask_runtime_ops_api()" in stop_boundary
+
+
+def test_failed_control_finalization_keeps_reserved_socket_service_masked() -> None:
+    source = _source()
+    cleanup = source.split("cleanup_control_finalization() {", 1)[1].split(
+        "\n  }\n\n  if [ ! -e \"$pending_path\" ]",
+        1,
+    )[0]
+    recovery = (ROOT / "deploy/an2p/mooncen-an2p-runtime-recovery.service").read_text(
+        encoding="utf-8"
+    )
+
+    assert "mask_runtime_ops_api" in cleanup
+    assert "unmask_runtime_ops_api" not in cleanup
+    assert cleanup.index(
+        "mask_runtime_ops_api"
+    ) < cleanup.index("systemctl disable --now mooncen-ops-status-agent.service")
+    assert "mooncen-ops-db-tunnel.service" in recovery.split("Before=", 1)[1].splitlines()[0]
 
 
 def test_runtime_installer_preserves_clean_ssh_sessions_while_quiescing_exact_legacy_units() -> None:
@@ -1086,9 +1201,19 @@ def test_finalize_commit_and_rotation_actions_are_durable_exact_pair_contracts()
     isolated = finalize.rindex("install_isolated_control_plane.sh")
     resume = finalize.rindex("control_finalize_transaction resume-update")
     readiness = finalize.rindex("verify_completed_control_plane")
+    finalized = finalize.rindex("finalized=true")
     remove = finalize.rindex("control_finalize_transaction remove")
 
-    assert publish < authorized < commit < isolated < resume < readiness < remove
+    assert (
+        publish
+        < authorized
+        < commit
+        < isolated
+        < resume
+        < readiness
+        < finalized
+        < remove
+    )
     assert "control-finalization-receipt" in finalize
     assert "authorization_committed=true" in finalize
     assert "apply-ops-rotation --pair <runtime-pair>" in source
@@ -1569,6 +1694,21 @@ def test_all_embedded_python_contracts_compile() -> None:
             compile(block, f"{path.name}:heredoc:{index}", "exec")
 
 
+def test_bootstrap_outer_lock_forwards_the_exact_eight_digest_options() -> None:
+    bootstrap = (ROOT / "deploy/an2p/bootstrap_runtime_installer.sh").read_text(
+        encoding="utf-8"
+    )
+    outer = bootstrap.split("acquire_outer_launcher_lock_and_reexec() {", 1)[1].split(
+        "\n}\n\nverify_outer_launcher_lock()",
+        1,
+    )[0]
+
+    assert '"$0" "$@"' in outer
+    assert "len(sys.argv) != 18" in outer
+    assert '[ "$#" -eq 16 ]' in bootstrap
+    assert '[ "${13}" = --host-transition-sha256 ]' in bootstrap
+
+
 def test_operator_docs_use_only_the_root_installed_runtime_entrypoint() -> None:
     docs = {
         name: (ROOT / name).read_text(encoding="utf-8")
@@ -1616,6 +1756,7 @@ def test_operator_docs_bootstrap_the_root_of_trust_outside_the_checkout() -> Non
         "--pair-manager-sha256",
         "--handoff-sha256",
         "--registrar-sha256",
+        "--host-transition-sha256",
         "--build-policy-sha256",
     )
 

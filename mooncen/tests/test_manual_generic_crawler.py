@@ -606,6 +606,7 @@ def test_save_and_stale_sql_share_one_cursor_transaction(monkeypatch: pytest.Mon
     source_endpoint = "https://example.com/courses?category=education"
     assert crawler.save_db(
         [sample_row()],
+        skip_expired=False,
         stale_provider="TEST_PROVIDER",
         stale_cutoff=cutoff,
         stale_source_endpoint=source_endpoint,

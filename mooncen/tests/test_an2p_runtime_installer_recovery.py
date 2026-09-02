@@ -85,9 +85,12 @@ def _journal(path: Path) -> None:
     value = {
         "build_policy_sha256": "3" * 64,
         "commit": "1" * 40,
+        "host_transition": False,
         "pair_name": PAIR_NAME,
         "schema_version": 1,
         "source_tree": "2" * 40,
+        "transition_from_host_layer": None,
+        "transition_from_pair": None,
     }
     path.write_text(
         json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n",
@@ -96,7 +99,13 @@ def _journal(path: Path) -> None:
     path.chmod(0o600)
 
 
-def _script(tmp_path: Path, *, manager: Path) -> str:
+def _script(
+    tmp_path: Path,
+    *,
+    manager: Path,
+    host_transition: bool = False,
+    host_transition_helper: Path = Path("/nonexistent"),
+) -> str:
     user, group = _identity()
     pair_root = tmp_path / "pairs"
     pair_releases = pair_root / "releases"
@@ -105,6 +114,9 @@ def _script(tmp_path: Path, *, manager: Path) -> str:
     pair_releases.mkdir(parents=True)
     evidence_root.mkdir()
     state_root.mkdir()
+    install_lock = state_root / "install.lock"
+    install_lock.write_text("", encoding="ascii")
+    install_lock.chmod(0o600)
     pair_stage = pair_releases / ".stage.test"
     pair_stage.mkdir()
     operator_output = state_root / "build"
@@ -117,10 +129,21 @@ def _script(tmp_path: Path, *, manager: Path) -> str:
         .replace('"root:${docker_user}:640"', f'"{user}:{group}:640"')
     )
     manager_sha = hashlib.sha256(manager.read_bytes()).hexdigest()
+    transition_sha = (
+        hashlib.sha256(host_transition_helper.read_bytes()).hexdigest()
+        if host_transition_helper.is_file()
+        else "0" * 64
+    )
+    previous_pair = f"runtime-pair.{'4' * 40}.{'5' * 40}.{'6' * 64}"
+    finish_function = (
+        _finish_pair_fragment()
+        if host_transition
+        else f"finish_pair_install() {{ : >{str(tmp_path / 'resumed')!r}; }}"
+    )
     return f"""
 set -euo pipefail
 die() {{ printf '%s\n' "$*" >&2; exit 78; }}
-declare -A trust=([PAIR_MANAGER_SHA256]={manager_sha})
+declare -A trust=([PAIR_MANAGER_SHA256]={manager_sha} [HOST_TRANSITION_SHA256]={transition_sha})
 pair_name={PAIR_NAME!r}
 commit={'1' * 40!r}
 source_tree={'2' * 40!r}
@@ -145,7 +168,15 @@ activation_attempted=false
 activation_previous_kind=
 activation_previous_selection=
 previous_pair=
-finish_pair_install() {{ : >{str(tmp_path / 'resumed')!r}; }}
+host_transition_requested={'true' if host_transition else 'false'}
+transition_from_pair={previous_pair if host_transition else ''!r}
+transition_from_host_layer={'8' * 64 if host_transition else ''!r}
+host_layer_sha=
+host_transition_helper={str(host_transition_helper)!r}
+runtime_install_lock={str(install_lock)!r}
+acquire_runtime_install_lock() {{ exec 8<>"$runtime_install_lock"; /usr/bin/flock -x 8; }}
+acquire_runtime_install_lock
+{finish_function}
 {fragment}
 : >{str(tmp_path / 'continued')!r}
 """
@@ -193,6 +224,7 @@ def test_published_pair_crash_resumes_without_rebuilding_or_deleting(tmp_path: P
             {
                 "build_policy_sha256": "3" * 64,
                 "commit": "1" * 40,
+                "host_layer_sha256": "7" * 64,
                 "pair_name": PAIR_NAME,
                 "source_tree": "2" * 40,
             }
@@ -219,6 +251,79 @@ def test_published_pair_crash_resumes_without_rebuilding_or_deleting(tmp_path: P
     assert pair.is_dir() and evidence.is_dir()
     assert not journal.exists()
     assert (tmp_path / "resumed").is_file()
+    assert not (tmp_path / "continued").exists()
+
+
+@pytest.mark.skipif(shutil.which("bash") is None, reason="bash unavailable")
+def test_committed_host_transition_resumes_without_publication_journal(
+    tmp_path: Path,
+) -> None:
+    manager = tmp_path / "manager"
+    manager.write_text("#!/bin/sh\nexit 0\n", encoding="ascii")
+    manager.chmod(0o755)
+    helper = tmp_path / "host-transition"
+    helper.write_text(
+        f"""#!/bin/bash
+set -euo pipefail
+[ "$1" = prepare ]
+[ "$2" = --previous-pair ]
+[ "$4" = --target-pair ]
+[ "$5" = {PAIR_NAME!r} ]
+[ "$6" = --previous-host-layer ]
+[ "$8" = --target-host-layer ]
+[ "$9" = {'7' * 64!r} ]
+[ "${{10}}" = --publish-journal ]
+: >{str(tmp_path / 'committed-receipt-verified')!r}
+printf '%s\n' '{{"active_pair":"{PAIR_NAME}","host_transition":"committed","schema_version":1}}'
+""",
+        encoding="ascii",
+    )
+    helper.chmod(0o755)
+    script = _script(
+        tmp_path,
+        manager=manager,
+        host_transition=True,
+        host_transition_helper=helper,
+    )
+    pair = tmp_path / "pairs" / "releases" / PAIR_NAME
+    pair.mkdir(mode=0o755)
+    (pair / ".pair-receipt.json").write_text(
+        json.dumps(
+            {
+                "build_policy_sha256": "3" * 64,
+                "commit": "1" * 40,
+                "host_layer_sha256": "7" * 64,
+                "pair_name": PAIR_NAME,
+                "source_tree": "2" * 40,
+            }
+        ),
+        encoding="ascii",
+    )
+    evidence = tmp_path / "evidence" / ("2" * 40)
+    evidence.mkdir(mode=0o750)
+    for name in (
+        "compose.production.yaml",
+        "images.tar",
+        "release.json",
+        "validation.json",
+    ):
+        path = evidence / name
+        path.write_text(name, encoding="ascii")
+        path.chmod(0o640)
+
+    completed = subprocess.run(
+        [shutil.which("bash") or "bash", "-c", script],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=10,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert (tmp_path / "committed-receipt-verified").is_file()
+    assert pair.is_dir() and evidence.is_dir()
+    assert not (tmp_path / "state" / "install-transaction.json").exists()
     assert not (tmp_path / "continued").exists()
 
 
@@ -252,6 +357,7 @@ activation_previous_selection=
 manager=/nonexistent
 selector=/nonexistent
 previous_pair=
+host_transition_requested=false
 pair_final={str(pair)!r}
 pair_releases={str(pair_releases)!r}
 evidence_target={str(evidence)!r}
@@ -371,6 +477,11 @@ activation_attempted=false
 activation_previous_kind=
 activation_previous_selection=
 previous_pair={previous!r}
+host_transition_requested=false
+transition_from_pair=
+transition_from_host_layer=
+host_layer_sha=
+host_transition_helper=/nonexistent
 {_cleanup_fragment()}
 {_finish_pair_fragment()}
 trap cleanup EXIT INT TERM
@@ -407,6 +518,7 @@ def test_resume_rejects_any_extra_evidence_entry(tmp_path: Path) -> None:
             {
                 "build_policy_sha256": "3" * 64,
                 "commit": "1" * 40,
+                "host_layer_sha256": "7" * 64,
                 "pair_name": PAIR_NAME,
                 "source_tree": "2" * 40,
             }
@@ -539,6 +651,27 @@ def test_publication_and_bootstrap_are_reviewed_fail_closed_contracts() -> None:
     )
     assert 'bootstrap-launcher.lock' in bootstrap
     assert 'MOONCEN_AN2P_BOOTSTRAP_LAUNCHER_LOCK_FD' in bootstrap
+    transaction_guard = bootstrap.index(
+        "refuse_pending_runtime_transactions",
+    )
+    guarded_preflight = bootstrap.index(
+        "refuse_pending_runtime_transactions",
+        bootstrap.index("preflight_bootstrap_inputs_and_public_runtime()"),
+    )
+    assert transaction_guard < outer_preflight
+    assert guarded_preflight < bootstrap.index(
+        'if [ "${MOONCEN_AN2P_BOOTSTRAP_RECOVERY:-}" != 1 ]',
+        guarded_preflight,
+    )
+    for pending_name in (
+        "host-layer-transition.json",
+        "install-transaction.json",
+        "transaction.json",
+        "control-finalization-transaction.json",
+        "ops-rotation-transaction.json",
+        "ops-rotation-previous.env",
+    ):
+        assert pending_name in bootstrap[transaction_guard:outer_preflight]
     assert 'systemctl disable "$recovery_unit_name" >/dev/null 2>&1 || true' not in bootstrap
     recovery_unit = (
         ROOT / "deploy/an2p/mooncen-an2p-runtime-recovery.service"
@@ -608,12 +741,21 @@ def test_root_bootstrap_copies_only_the_exact_reviewed_installer_and_envelope(
     source.parent.mkdir(parents=True)
     source.write_bytes(INSTALLER.read_bytes())
     installer_digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    transition_source = repository / "deploy/an2p/host_layer_transition.py"
+    transition_source.write_bytes(
+        (ROOT / "deploy/an2p/host_layer_transition.py").read_bytes()
+    )
+    transition_digest = hashlib.sha256(transition_source.read_bytes()).hexdigest()
     target = tmp_path / "sbin/mooncen-an2p-runtime-install"
+    transition_target = tmp_path / "libexec/mooncen-an2p-host-transition"
     trust_directory = tmp_path / "etc"
     recovery_source = tmp_path / "state/reviewed-install-runtime-snapshot.sh"
     recovery_source.parent.mkdir()
     recovery_source.write_bytes(source.read_bytes())
     recovery_source.chmod(0o700)
+    recovery_transition = tmp_path / "state/reviewed-host-layer-transition.py"
+    recovery_transition.write_bytes(transition_source.read_bytes())
+    recovery_transition.chmod(0o700)
     bootstrap_source = BOOTSTRAP.read_text(encoding="utf-8")
     bootstrap_source = (
         bootstrap_source.replace(
@@ -632,17 +774,28 @@ def test_root_bootstrap_copies_only_the_exact_reviewed_installer_and_envelope(
             f"target_installer={target}",
         )
         .replace(
+            "target_host_transition=/usr/local/libexec/mooncen-an2p-host-transition",
+            f"target_host_transition={transition_target}",
+        )
+        .replace(
             "/var/lib/mooncen-an2p-runtime",
             str(tmp_path / "state"),
         )
         .replace("trust_directory=/etc/mooncen-an2p", f"trust_directory={trust_directory}")
         .replace(
-            "install -d -o root -g root -m 0755 /usr/local/sbin",
-            f"install -d -o {user} -g {group} -m 0755 {target.parent}",
+            "install -d -o root -g root -m 0755 /usr/local/sbin /usr/local/libexec",
+            (
+                f"install -d -o {user} -g {group} -m 0755 "
+                f"{target.parent} {transition_target.parent}"
+            ),
         )
         .replace(
             "mktemp /usr/local/sbin/.mooncen-an2p-runtime-install.XXXXXXXX",
             f"mktemp {target.parent}/.mooncen-an2p-runtime-install.XXXXXXXX",
+        )
+        .replace(
+            "mktemp /usr/local/libexec/.mooncen-an2p-host-transition.XXXXXXXX",
+            f"mktemp {transition_target.parent}/.mooncen-an2p-host-transition.XXXXXXXX",
         )
         .replace("-o root -g root", f"-o {user} -g {group}")
         .replace("chown root:root", f"chown {user}:{group}")
@@ -656,6 +809,10 @@ def test_root_bootstrap_copies_only_the_exact_reviewed_installer_and_envelope(
         .replace("root:root:755", f"{user}:{group}:755")
         .replace("root:root:600", f"{user}:{group}:600")
         .replace("sync -f -- /usr/local/sbin", f"sync -f -- {target.parent}")
+        .replace(
+            "sync -f -- /usr/local/libexec",
+            f"sync -f -- {transition_target.parent}",
+        )
         .replace(
             'systemctl disable "$recovery_unit_name" >/dev/null',
             ": fixture recovery unit commit",
@@ -680,6 +837,8 @@ def test_root_bootstrap_copies_only_the_exact_reviewed_installer_and_envelope(
         arbitrary_digests[3],
         "--registrar-sha256",
         arbitrary_digests[4],
+        "--host-transition-sha256",
+        transition_digest,
         "--build-policy-sha256",
         arbitrary_digests[5],
     ]
@@ -695,6 +854,8 @@ def test_root_bootstrap_copies_only_the_exact_reviewed_installer_and_envelope(
     assert completed.returncode == 0, completed.stderr
     assert target.read_bytes() == source.read_bytes()
     assert target.stat().st_mode & 0o777 == 0o755
+    assert transition_target.read_bytes() == transition_source.read_bytes()
+    assert transition_target.stat().st_mode & 0o777 == 0o755
     trust = trust_directory / "runtime-installer.trust"
     assert trust.stat().st_mode & 0o777 == 0o600
     assert trust.read_text(encoding="ascii").splitlines() == [
@@ -705,10 +866,12 @@ def test_root_bootstrap_copies_only_the_exact_reviewed_installer_and_envelope(
         f"PAIR_MANAGER_SHA256={arbitrary_digests[2]}",
         f"HANDOFF_SHA256={arbitrary_digests[3]}",
         f"REGISTRAR_SHA256={arbitrary_digests[4]}",
+        f"HOST_TRANSITION_SHA256={transition_digest}",
         f"EXPECTED_BUILD_POLICY_SHA256={arbitrary_digests[5]}",
     ]
 
     target.unlink()
+    transition_target.unlink()
     trust.unlink()
     rejected = subprocess.run(
         [*command[:2], "0" * 64, *command[3:]],
@@ -1326,7 +1489,7 @@ def test_bootstrap_lock_is_create_once_inode_bound_and_serializes_contenders(
     source = _bootstrap_source()
     marker = source.index("# Serialize a manually retried stage")
     start = source.index("install -d -o root -g root -m 0700", marker)
-    end = source.index("\ndrain_retained_privileged_processes() {", start)
+    end = source.index("# Share the installed ABI lock", start)
     lock_fragment = source[start:end]
 
     assert "install -o root -g root -m 0600 /dev/null" not in lock_fragment
@@ -1403,6 +1566,29 @@ printf 'exit:%s\n' "$1" >>"$event_log"
     inodes = inode_log.read_text(encoding="ascii").splitlines()
     assert len(inodes) == 2
     assert len(set(inodes)) == 1
+
+
+def test_bootstrap_holds_the_shared_install_lock_across_guard_and_abi_replacement() -> None:
+    source = _bootstrap_source()
+    shared = source.index("# Share the installed ABI lock")
+    flock = source.index("/usr/bin/flock -x 8", shared)
+    guard = source.index("refuse_pending_runtime_transactions", flock)
+    revoke = source.index("revoke_host_root_without_losing_public_development", guard)
+    installer = source.index('mv -fT -- "$installer_stage" "$target_installer"', revoke)
+    helper = source.index('mv -fT -- "$host_transition_stage" "$target_host_transition"', installer)
+    trust = source.index('mv -fT -- "$trust_stage" "$trust_target"', helper)
+
+    assert shared < flock < guard < revoke < installer < helper < trust
+    guard_body = source[
+        source.index("refuse_pending_runtime_transactions()") :
+        source.index("preflight_bootstrap_inputs_and_public_runtime()")
+    ]
+    for residue in (
+        "mooncen-an2p-host-transition-recovery.service",
+        "mooncen-an2p-host-transition-continue.service",
+        "mooncen-docker-dev.service.requires/mooncen-an2p-host-transition-recovery.service",
+    ):
+        assert residue in guard_body
 
 
 @pytest.mark.skipif(shutil.which("bash") is None, reason="bash unavailable")
@@ -1523,8 +1709,9 @@ activated=false
 activation_attempted=true
 activation_previous_kind=
 activation_previous_selection=
-previous_pair=
-pair_final=
+    previous_pair=
+    host_transition_requested=false
+    pair_final=
 pair_releases={str(tmp_path / 'pairs')!r}
 evidence_target=
 evidence_root={str(tmp_path / 'evidence')!r}

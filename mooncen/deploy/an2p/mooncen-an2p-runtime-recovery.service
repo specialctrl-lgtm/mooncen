@@ -1,7 +1,7 @@
 [Unit]
 Description=Recover an interrupted MoonCen an2p runtime-pair switch
 After=local-fs.target
-Before=mooncen-ops-api.service mooncen-deployment-worker.service mooncen-docker-dev.service
+Before=mooncen-ops-api.service mooncen-deployment-worker.service mooncen-docker-dev.service mooncen-ops-db-tunnel.service mooncen-ops-status-agent.service
 
 [Service]
 Type=oneshot

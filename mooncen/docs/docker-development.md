@@ -306,6 +306,7 @@ clean_source_sha256='<reviewed-clean-source-sha256>'
 pair_manager_sha256='<reviewed-pair-manager-sha256>'
 handoff_sha256='<reviewed-evidence-handoff-sha256>'
 registrar_sha256='<reviewed-registrar-sha256>'
+host_transition_sha256='<reviewed-host-transition-sha256>'
 build_policy_sha256='<reviewed-build-policy-sha256>'
 bootstrap_stage=/root/mooncen-an2p-runtime-bootstrap.sh
 
@@ -324,6 +325,7 @@ sudo /usr/bin/systemd-run --wait --pipe --collect \
   --pair-manager-sha256 "$pair_manager_sha256" \
   --handoff-sha256 "$handoff_sha256" \
   --registrar-sha256 "$registrar_sha256" \
+  --host-transition-sha256 "$host_transition_sha256" \
   --build-policy-sha256 "$build_policy_sha256"
 ```
 
@@ -336,8 +338,12 @@ manually. Never execute the checkout copy.
 
 ```bash
 installer_sha256='<reviewed-installer-sha256>'
+host_transition_sha256='<reviewed-host-transition-sha256>'
 printf '%s  %s\n' "$installer_sha256" \
   /usr/local/sbin/mooncen-an2p-runtime-install | \
+  sudo /usr/bin/sha256sum --check --strict -
+printf '%s  %s\n' "$host_transition_sha256" \
+  /usr/local/libexec/mooncen-an2p-host-transition | \
   sudo /usr/bin/sha256sum --check --strict -
 sudo /usr/bin/rm -f -- /root/mooncen-an2p-runtime-bootstrap.sh
 ```
@@ -403,6 +409,31 @@ sudo /usr/bin/systemd-run --wait --pipe --collect \
   --base-commit "$base_commit" \
   --source-tree "$source_tree" \
   --build-policy "$build_policy"
+```
+
+If the reviewed pair changes the host-layer ABI, the ordinary `install` action
+fails before changing any global helper or unit. Use the separate exact
+15-argument maintenance contract only after recording the currently active
+pair and its receipt-bound host-layer digest. The transition keeps the old pair
+live until the new pair and publication journal are durable, moves through a
+no-pair/native-health checkpoint, then rolls forward to the new Docker pair.
+Its root-only recovery journal never performs a cross-ABI rollback.
+
+```bash
+previous_pair='runtime-pair.<previous-commit40>.<previous-tree40>.<previous-policy64>'
+previous_host_layer='<previous-host-layer-sha256>'
+sudo /usr/bin/systemd-run --wait --pipe --collect \
+  --unit=mooncen-an2p-runtime-host-transition \
+  /usr/bin/env -i HOME=/root LANG=C LC_ALL=C \
+  PATH=/usr/sbin:/usr/bin:/sbin:/bin \
+  /usr/local/sbin/mooncen-an2p-runtime-install install-host-transition \
+  --reference "$release_ref" \
+  --commit "$snapshot_commit" \
+  --base-commit "$base_commit" \
+  --source-tree "$source_tree" \
+  --build-policy "$build_policy" \
+  --from-pair "$previous_pair" \
+  --from-host-layer "$previous_host_layer"
 ```
 
 Phase 1 uses only the reviewed development environment. It does not require or

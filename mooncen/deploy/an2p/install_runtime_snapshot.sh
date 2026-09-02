@@ -8,6 +8,23 @@ die() {
   exit 78
 }
 
+# systemctl mask creates the /run override before PID 1 necessarily forgets an
+# already loaded unit.  With the reserved Ops sockets still listening, a plain
+# mask --now can therefore lose a race to socket activation and restart both
+# the API and its required DB tunnel.  Reload the manager before the explicit
+# stop so the mask is authoritative at the instant the process is quiesced.
+mask_runtime_ops_api() {
+  systemctl mask --runtime --now mooncen-ops-api.service
+  systemctl daemon-reload
+  systemctl stop mooncen-ops-api.service
+  systemctl reset-failed mooncen-ops-api.service >/dev/null 2>&1 || true
+}
+
+unmask_runtime_ops_api() {
+  systemctl unmask --runtime mooncen-ops-api.service
+  systemctl daemon-reload
+}
+
 trusted_entrypoint=/usr/local/sbin/mooncen-an2p-runtime-install
 trust_file=/etc/mooncen-an2p/runtime-installer.trust
 source_repository=/home/sgm/src/project
@@ -29,6 +46,7 @@ worker_user=mooncen_deployment_worker
 tunnel_user=mooncen_ops_db_tunnel
 manager=/usr/local/libexec/mooncen-an2p-runtime-manager
 selector=/usr/local/libexec/mooncen-an2p-service-control
+host_transition_helper=/usr/local/libexec/mooncen-an2p-host-transition
 readonly -a legacy_user_control_units=(
   mooncen-ops-control-env.service
   mooncen-ops-db-tunnel.service
@@ -58,6 +76,7 @@ done <"$trust_file"
 trust_keys=(
   VERSION INSTALLER_SHA256 INTEGRITY_SHA256 CLEAN_SOURCE_SHA256
   PAIR_MANAGER_SHA256 HANDOFF_SHA256 REGISTRAR_SHA256
+  HOST_TRANSITION_SHA256
   EXPECTED_BUILD_POLICY_SHA256
 )
 [ "${#trust[@]}" -eq "${#trust_keys[@]}" ] || die "trust envelope key set is not exact"
@@ -559,12 +578,31 @@ fi
 
 install -d -o root -g root -m 0700 "$state_root"
 install -d -o root -g root -m 0700 "$build_root"
-install -o root -g root -m 0600 /dev/null "$state_root/install.lock" 2>/dev/null || true
-[ -f "$state_root/install.lock" ] && [ ! -L "$state_root/install.lock" ] && \
-  [ "$(stat -c '%U:%G:%a' "$state_root/install.lock")" = root:root:600 ] || \
+runtime_install_lock=$state_root/install.lock
+install -o root -g root -m 0600 /dev/null "$runtime_install_lock" 2>/dev/null || true
+[ -f "$runtime_install_lock" ] && [ ! -L "$runtime_install_lock" ] && \
+  [ "$(stat -c '%U:%G:%a' "$runtime_install_lock")" = root:root:600 ] || \
   die "runtime installer lock is unsafe"
-exec 8<>"$state_root/install.lock"
-/usr/bin/flock -x 8
+
+acquire_runtime_install_lock() {
+  exec 8<>"$runtime_install_lock"
+  /usr/bin/flock -x 8
+  /usr/bin/python3.12 -I - 8 "$runtime_install_lock" <<'PY' ||
+import os, pathlib, stat, sys
+descriptor = int(sys.argv[1])
+path = pathlib.Path(sys.argv[2])
+opened = os.fstat(descriptor)
+named = path.lstat()
+if (path.is_symlink() or not stat.S_ISREG(opened.st_mode)
+    or not stat.S_ISREG(named.st_mode) or opened.st_uid != 0
+    or opened.st_gid != 0 or stat.S_IMODE(opened.st_mode) != 0o600
+    or opened.st_nlink != 1
+    or (opened.st_dev, opened.st_ino) != (named.st_dev, named.st_ino)):
+    raise SystemExit(78)
+PY
+    die "runtime installer lock descriptor is unsafe"
+}
+acquire_runtime_install_lock
 
 begin_development_selection_fence() {
   local operation_lock=$state_root/operation.lock
@@ -1498,7 +1536,7 @@ quiesce_control_consumers() {
     mooncen-ops-db-tunnel.service
   )
   verify_legacy_user_unit_masks
-  systemctl mask --runtime mooncen-ops-api.service
+  mask_runtime_ops_api
   api_runtime_masked=true
   systemctl disable --now "${system_units[@]}" >/dev/null 2>&1 || true
   systemctl reset-failed "${system_units[@]}" >/dev/null 2>&1 || true
@@ -1761,6 +1799,10 @@ finalize_control() {
     status=$?
     trap - EXIT INT TERM
     if [ "$status" -ne 0 ] && [ "$finalized" = false ]; then
+      # Mask first: the listening 5175 sockets can otherwise reactivate the API
+      # while the remaining consumers are being disabled.
+      mask_runtime_ops_api >/dev/null 2>&1 || true
+      api_runtime_masked=true
       systemctl disable --now mooncen-ops-status-agent.service \
         mooncen-deployment-worker.service mooncen-ops-api.service \
         mooncen-ops-db-tunnel.service >/dev/null 2>&1 || true
@@ -1770,10 +1812,11 @@ finalize_control() {
       systemctl --user --machine=sgm@ disable --now \
         mooncen-status-agent.service >/dev/null 2>&1 || true
       systemctl --global mask mooncen-status-agent.service >/dev/null 2>&1 || true
-      if [ "$api_runtime_masked" = true ]; then
-        systemctl unmask --runtime mooncen-ops-api.service >/dev/null 2>&1 || true
-        systemctl daemon-reload >/dev/null 2>&1 || true
-      fi
+      # Reserved 5175 sockets remain active after a failed finalization.  Keep
+      # the API runtime mask in place so a queued request cannot reactivate an
+      # incomplete API and its DB tunnel.  A successful isolated install owns
+      # the only unmask immediately before the reviewed service restart.
+      mask_runtime_ops_api >/dev/null 2>&1 || true
       if [ "$finalization_published" = true ] && \
         [ "$authorization_committed" = false ]; then
         rm -f -- "$finalization_path"
@@ -1812,9 +1855,9 @@ finalize_control() {
       control_finalize_transaction resume-update "$pair" "$source_tree" isolated \
         "$registration_sha"
       verify_completed_control_plane "$pair"
+      finalized=true
       control_finalize_transaction remove "$pair" "$source_tree" isolated \
         "$registration_sha"
-      finalized=true
       trap - EXIT INT TERM
     else
       preflight_control_bootstrap "$pair"
@@ -1873,9 +1916,9 @@ finalize_control() {
   control_finalize_transaction resume-update "$pair" "$source_tree" isolated \
     "$registration_sha"
   verify_completed_control_plane "$pair"
+  finalized=true
   control_finalize_transaction remove "$pair" "$source_tree" isolated \
     "$registration_sha"
-  finalized=true
   trap - EXIT INT TERM
   emit_finalization_success "$pair"
 }
@@ -2290,21 +2333,19 @@ PY
     if [ "$rotation_status" -ne 0 ] && [ "$rotation_complete" = false ] && \
       [ -f "$ops_rotation_backup" ] && [ ! -L "$ops_rotation_backup" ]; then
       set +e
-      systemctl mask --runtime mooncen-ops-api.service >/dev/null 2>&1
-      systemctl stop mooncen-ops-api.service >/dev/null 2>&1
+      mask_runtime_ops_api >/dev/null 2>&1
       api_stage=$(mktemp /etc/mooncen-an2p/.ops-api.env.rotation-restore.XXXXXXXX)
       install -o root -g mooncen_ops_api -m 0640 "$ops_rotation_backup" "$api_stage"
       sync -f -- "$api_stage"
       mv -fT -- "$api_stage" /etc/mooncen-an2p/ops-api.env
       sync -f -- /etc/mooncen-an2p/ops-api.env
       sync -f -- /etc/mooncen-an2p
-      systemctl unmask --runtime mooncen-ops-api.service >/dev/null 2>&1
-      systemctl daemon-reload >/dev/null 2>&1
+      unmask_runtime_ops_api >/dev/null 2>&1
+      systemctl reset-failed mooncen-ops-api.service >/dev/null 2>&1
       systemctl restart mooncen-ops-api.service >/dev/null 2>&1
       set -e
     elif [ "$api_runtime_masked" = true ]; then
-      systemctl unmask --runtime mooncen-ops-api.service >/dev/null 2>&1 || true
-      systemctl daemon-reload >/dev/null 2>&1 || true
+      unmask_runtime_ops_api >/dev/null 2>&1 || true
     fi
     exit "$rotation_status"
   }
@@ -2313,9 +2354,8 @@ PY
   trap 'exit 143' TERM
   current_sha=$(sha256sum /etc/mooncen-an2p/ops-api.env | cut -d' ' -f1)
   if [ "$current_sha" = "$old_sha" ]; then
-    systemctl mask --runtime mooncen-ops-api.service
+    mask_runtime_ops_api
     api_runtime_masked=true
-    systemctl stop mooncen-ops-api.service
     api_stage=$(mktemp /etc/mooncen-an2p/.ops-api.env.rotation.XXXXXXXX)
     install -o root -g mooncen_ops_api -m 0640 "$bootstrap/ops-api.env" "$api_stage"
     sync -f -- "$api_stage"
@@ -2327,9 +2367,9 @@ PY
     die "installed Ops environment is neither rotation endpoint"
   fi
   ops_rotation_transaction published "$pair" "$old_sha" "$new_sha"
-  systemctl unmask --runtime mooncen-ops-api.service
+  unmask_runtime_ops_api
   api_runtime_masked=false
-  systemctl daemon-reload
+  systemctl reset-failed mooncen-ops-api.service >/dev/null 2>&1 || true
   systemctl restart mooncen-ops-api.service
   "$pair_releases/$pair/control/.venv/bin/python" \
     "$pair_releases/$pair/control/tools/wait_for_an2p_http.py" \
@@ -2369,10 +2409,24 @@ if [ "${1:-}" = apply-ops-rotation ]; then
   exit 0
 fi
 
-[ "$#" -eq 11 ] && [ "$1" = install ] && [ "$2" = --reference ] && \
-  [ "$4" = --commit ] && [ "$6" = --base-commit ] && \
-  [ "$8" = --source-tree ] && [ "${10}" = --build-policy ] || \
-  die "usage: $trusted_entrypoint install --reference <refs/.../32hex> --commit <40hex> --base-commit <40hex> --source-tree <40hex> --build-policy <64hex>"
+host_transition_requested=false
+transition_from_pair=
+transition_from_host_layer=
+if [ "${1:-}" = install-host-transition ]; then
+  [ "$#" -eq 15 ] && [ "$2" = --reference ] && [ "$4" = --commit ] &&
+    [ "$6" = --base-commit ] && [ "$8" = --source-tree ] &&
+    [ "${10}" = --build-policy ] && [ "${12}" = --from-pair ] &&
+    [ "${14}" = --from-host-layer ] ||
+    die "usage: $trusted_entrypoint install-host-transition --reference <refs/.../32hex> --commit <40hex> --base-commit <40hex> --source-tree <40hex> --build-policy <64hex> --from-pair <runtime-pair> --from-host-layer <64hex>"
+  host_transition_requested=true
+  transition_from_pair=${13}
+  transition_from_host_layer=${15}
+else
+  [ "$#" -eq 11 ] && [ "${1:-}" = install ] && [ "$2" = --reference ] &&
+    [ "$4" = --commit ] && [ "$6" = --base-commit ] &&
+    [ "$8" = --source-tree ] && [ "${10}" = --build-policy ] ||
+    die "usage: $trusted_entrypoint install --reference <refs/.../32hex> --commit <40hex> --base-commit <40hex> --source-tree <40hex> --build-policy <64hex>"
+fi
 reference=$3
 commit=$5
 base_commit=$7
@@ -2389,6 +2443,17 @@ done
 [[ "$build_policy" =~ ^[0-9a-f]{64}$ ]] && \
   [ "$build_policy" = "${trust[EXPECTED_BUILD_POLICY_SHA256]}" ] || \
   die "reviewed build policy does not match the root trust envelope"
+if [ "$host_transition_requested" = true ]; then
+  [[ "$transition_from_pair" =~ ^runtime-pair\.[0-9a-f]{40}\.[0-9a-f]{40}\.[0-9a-f]{64}$ ]] ||
+    die "host transition source pair is invalid"
+  [[ "$transition_from_host_layer" =~ ^[0-9a-f]{64}$ ]] ||
+    die "host transition source digest is invalid"
+  [ -x "$host_transition_helper" ] && [ ! -L "$host_transition_helper" ] &&
+    [ "$(stat -c '%U:%G:%a' "$host_transition_helper")" = root:root:755 ] &&
+    [ "$(sha256sum "$host_transition_helper" | cut -d' ' -f1)" = \
+      "${trust[HOST_TRANSITION_SHA256]}" ] ||
+    die "reviewed host transition helper is unavailable"
+fi
 # No root-only service credential or transport key may be read or installed
 # while an old sgm process still retains docker/lxd host-root capability.
 preserve_public_development_while_revoking_host_root
@@ -2463,11 +2528,37 @@ finish_pair_install() {
   # if local activation or health fails; phase 1 never reads a production
   # credential, starts a production tunnel, or mutates the production DB.
   resume_required=true
+  if [ "$host_transition_requested" = true ]; then
+    # TARGET preparation validates against TARGET host bytes, so it cannot run
+    # through the still-installed OLD manager.  The transition helper first
+    # journals and quiesces OLD, atomically installs TARGET, and only then runs
+    # this pair's preparation with the exact TARGET manager.
+    # The durable systemd fence/continuation pipeline must acquire the same
+    # ABI lock independently. Release this process's descriptor for that
+    # bounded handoff, then reacquire and revalidate before interpreting the
+    # committed result.
+    exec 8>&-
+    activation=$({ "$host_transition_helper" prepare \
+      --previous-pair "$transition_from_pair" \
+      --target-pair "$pair_name" \
+      --previous-host-layer "$transition_from_host_layer" \
+      --target-host-layer "$host_layer_sha" \
+      --publish-journal "$publish_journal"; })
+    acquire_runtime_install_lock
+    activated=true
+    [ "$(/usr/bin/python3.12 -I -c \
+      'import json,sys;v=json.load(sys.stdin);assert v == {"active_pair":sys.argv[1],"host_transition":"committed","schema_version":1};print(v["active_pair"])' \
+      "$pair_name" <<<"$activation")" = "$pair_name" ] ||
+      die "host transition activation result is invalid"
+    activated=false
+    activation_attempted=false
+    return
+  fi
   /bin/bash "$pair_final/control/deploy/an2p/install_development_runtime.sh" \
     --prepare --pair "$pair_name"
-  # Cleanup owns recovery before the child can publish a journal or switch the
-  # pointer. SIGKILL/OOM therefore converges immediately rather than waiting
-  # for a reboot of the durable recovery service.
+  # Preparation leaves an existing pair running.  From this point cleanup owns
+  # recovery before the manager can switch the pointer; SIGKILL/OOM therefore
+  # converges immediately rather than waiting for a reboot recovery.
   activation_attempted=true
   activation=$({ "$manager" activate-development "$pair_name"; })
   activated=true
@@ -2534,6 +2625,7 @@ cleanup() {
   status=$?
   trap - EXIT INT TERM
   if [ "$status" -ne 0 ] && [ "$activation_attempted" = true ] && \
+    [ "$host_transition_requested" = false ] && \
     [ -x "$manager" ] && [ -x "$selector" ]; then
     if ! "$manager" recover >/dev/null 2>&1; then
       printf '%s\n' "runtime activation recovery remains pending" >&2
@@ -2598,7 +2690,8 @@ if [ -e "$publish_journal" ] || [ -L "$publish_journal" ]; then
     [ "$(stat -c '%U:%G:%a' "$publish_journal")" = root:root:600 ] ||
     die "runtime publication journal is unsafe"
   /usr/bin/python3.12 -I - "$publish_journal" "$pair_name" "$commit" \
-    "$source_tree" "$build_policy" <<'PY'
+    "$source_tree" "$build_policy" "$host_transition_requested" \
+    "$transition_from_pair" "$transition_from_host_layer" <<'PY'
 import json, pathlib, sys
 path = pathlib.Path(sys.argv[1])
 payload = path.read_bytes()
@@ -2606,9 +2699,12 @@ value = json.loads(payload.decode("ascii"))
 expected = {
     "build_policy_sha256": sys.argv[5],
     "commit": sys.argv[3],
+    "host_transition": sys.argv[6] == "true",
     "pair_name": sys.argv[2],
     "schema_version": 1,
     "source_tree": sys.argv[4],
+    "transition_from_host_layer": sys.argv[8] or None,
+    "transition_from_pair": sys.argv[7] or None,
 }
 canonical = json.dumps(expected, ensure_ascii=True, allow_nan=False, sort_keys=True,
                        separators=(",", ":")).encode("ascii") + b"\n"
@@ -2622,10 +2718,13 @@ PY
     [ -d "$evidence_target" ] && [ ! -L "$evidence_target" ] &&
       [ "$(stat -c '%U:%G:%a' "$evidence_target")" = "root:${docker_user}:750" ] ||
       die "published development evidence is unsafe"
-    [ -x "$manager" ] && [ ! -L "$manager" ] &&
-      [ "$(stat -c '%U:%G:%a' "$manager")" = root:root:755 ] &&
-      [ "$(sha256sum "$manager" | cut -d' ' -f1)" = "${trust[PAIR_MANAGER_SHA256]}" ] ||
-      die "installed runtime manager drifted during resume"
+    if [ "$host_transition_requested" = false ]; then
+      [ -x "$manager" ] && [ ! -L "$manager" ] &&
+        [ "$(stat -c '%U:%G:%a' "$manager")" = root:root:755 ] &&
+        [ "$(sha256sum "$manager" | cut -d' ' -f1)" = \
+          "${trust[PAIR_MANAGER_SHA256]}" ] ||
+        die "installed runtime manager drifted during resume"
+    fi
     /usr/bin/python3.12 -I - "$pair_final/.pair-receipt.json" "$pair_name" \
       "$commit" "$source_tree" "$build_policy" <<'PY'
 import json, pathlib, sys
@@ -2634,6 +2733,9 @@ if (value.get("pair_name"), value.get("commit"), value.get("source_tree"),
     value.get("build_policy_sha256")) != tuple(sys.argv[2:6]):
     raise SystemExit(78)
 PY
+    host_layer_sha=$(/usr/bin/python3.12 -I -c \
+      'import json,sys;print(json.load(open(sys.argv[1],encoding="ascii"))["host_layer_sha256"])' \
+      "$pair_final/.pair-receipt.json")
     for evidence_name in compose.production.yaml images.tar release.json validation.json; do
       [ -f "$evidence_target/$evidence_name" ] &&
         [ ! -L "$evidence_target/$evidence_name" ] &&
@@ -2645,11 +2747,15 @@ PY
       -printf '%f\n' | LC_ALL=C sort)
     [ "$actual_evidence_entries" = "$expected_evidence_entries" ] ||
       die "published evidence has an unexpected file set"
-    "$manager" validate "$pair_name" >/dev/null
+    if [ "$host_transition_requested" = false ]; then
+      "$manager" validate "$pair_name" >/dev/null
+    fi
     pair_published=true
     evidence_published=true
     resume_required=true
-    if [ -L "$pair_root/current" ]; then
+    if [ "$host_transition_requested" = true ]; then
+      previous_pair=$transition_from_pair
+    elif [ -L "$pair_root/current" ]; then
       current_target=$(readlink "$pair_root/current")
       [[ "$current_target" =~ ^releases/(runtime-pair\.[0-9a-f]{40}\.[0-9a-f]{40}\.[0-9a-f]{64})$ ]] ||
         die "existing pair pointer is unsafe"
@@ -2676,6 +2782,53 @@ PY
   fi
   rm -f -- "$publish_journal"
   sync -f -- "$state_root"
+elif [ "$host_transition_requested" = true ] && \
+     { [ -e "$pair_final" ] || [ -L "$pair_final" ] || \
+       [ -e "$evidence_target" ] || [ -L "$evidence_target" ]; }; then
+  # The transition helper commits an immutable root receipt before removing
+  # the publication journal.  A kill after that commit but before this
+  # installer's success output must resume through that receipt instead of
+  # rebuilding or treating the exact target pair as unowned residue.
+  [ -d "$pair_final" ] && [ ! -L "$pair_final" ] &&
+    [ "$(stat -c '%U:%G:%a' "$pair_final")" = root:root:755 ] ||
+    die "committed host transition pair is unsafe"
+  [ -d "$evidence_target" ] && [ ! -L "$evidence_target" ] &&
+    [ "$(stat -c '%U:%G:%a' "$evidence_target")" = "root:${docker_user}:750" ] ||
+    die "committed host transition evidence is unsafe"
+  /usr/bin/python3.12 -I - "$pair_final/.pair-receipt.json" "$pair_name" \
+    "$commit" "$source_tree" "$build_policy" <<'PY'
+import json, pathlib, sys
+value = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="ascii"))
+if (value.get("pair_name"), value.get("commit"), value.get("source_tree"),
+    value.get("build_policy_sha256")) != tuple(sys.argv[2:6]):
+    raise SystemExit(78)
+PY
+  host_layer_sha=$(/usr/bin/python3.12 -I -c \
+    'import json,sys;print(json.load(open(sys.argv[1],encoding="ascii"))["host_layer_sha256"])' \
+    "$pair_final/.pair-receipt.json")
+  [[ "$host_layer_sha" =~ ^[0-9a-f]{64}$ ]] ||
+    die "committed host transition receipt is incomplete"
+  for evidence_name in compose.production.yaml images.tar release.json validation.json; do
+    [ -f "$evidence_target/$evidence_name" ] &&
+      [ ! -L "$evidence_target/$evidence_name" ] &&
+      [ "$(stat -c '%U:%G:%a' "$evidence_target/$evidence_name")" = "root:${docker_user}:640" ] ||
+      die "committed host transition evidence is incomplete: $evidence_name"
+  done
+  expected_evidence_entries=$(printf '%s\n' compose.production.yaml images.tar release.json validation.json)
+  actual_evidence_entries=$(find "$evidence_target" -mindepth 1 -maxdepth 1 \
+    -printf '%f\n' | LC_ALL=C sort)
+  [ "$actual_evidence_entries" = "$expected_evidence_entries" ] ||
+    die "committed host transition evidence has an unexpected file set"
+  pair_published=true
+  evidence_published=true
+  resume_required=true
+  rm -rf -- "$pair_stage" "$operator_output"
+  pair_stage=
+  operator_output=
+  finish_pair_install
+  trap - EXIT INT TERM
+  printf '%s\n' "{\"active_pair\":\"$pair_name\",\"control_finalized\":false,\"development_healthy\":true,\"schema_version\":1,\"source_tree\":\"$source_tree\"}"
+  exit 0
 elif [ -e "$pair_final" ] || [ -L "$pair_final" ] ||
      [ -e "$evidence_target" ] || [ -L "$evidence_target" ]; then
   die "unowned runtime publication residue requires manual review"
@@ -2721,6 +2874,7 @@ trusted_clone_file deploy/an2p/install_runtime_snapshot.sh "${trust[INSTALLER_SH
 trusted_clone_file deploy/docker/production_runtime_integrity.py "${trust[INTEGRITY_SHA256]}"
 trusted_clone_file deploy/docker/verify_clean_source.py "${trust[CLEAN_SOURCE_SHA256]}"
 trusted_clone_file deploy/an2p/runtime_pair_manager.py "${trust[PAIR_MANAGER_SHA256]}"
+trusted_clone_file deploy/an2p/host_layer_transition.py "${trust[HOST_TRANSITION_SHA256]}"
 trusted_clone_file deploy/an2p/container_evidence_handoff.py "${trust[HANDOFF_SHA256]}"
 trusted_clone_file deploy/an2p/mooncen_register_container_evidence.py "${trust[REGISTRAR_SHA256]}"
 [ "$(/usr/bin/python3.12 -I "$control_stage/deploy/docker/production_runtime_integrity.py" \
@@ -2945,8 +3099,17 @@ if [ -L "$pair_root/current" ]; then
   previous_host=$(/usr/bin/python3.12 -I -c \
     'import json,sys;print(json.load(open(sys.argv[1],encoding="ascii"))["host_layer_sha256"])' \
     "$pair_releases/$previous_pair/.pair-receipt.json")
-  [ "$previous_host" = "$host_layer_sha" ] || \
-    die "host runtime ABI changed; perform a separately reviewed host maintenance transition"
+  if [ "$previous_host" = "$host_layer_sha" ]; then
+    [ "$host_transition_requested" = false ] ||
+      die "host transition was requested for an unchanged runtime ABI"
+  else
+    [ "$host_transition_requested" = true ] &&
+      [ "$previous_pair" = "$transition_from_pair" ] &&
+      [ "$previous_host" = "$transition_from_host_layer" ] ||
+      die "host runtime ABI changed; perform a separately reviewed host maintenance transition"
+  fi
+elif [ "$host_transition_requested" = true ]; then
+  die "host transition requires one exact active source pair"
 fi
 
 install -d -o root -g root -m 0755 /usr/local/libexec /etc/systemd/system
@@ -2975,7 +3138,21 @@ host_targets=(
   /etc/systemd/system/mooncen-ops-status-agent.service
   /etc/systemd/system/mooncen-ops-db-tunnel.service
 )
-if [ -n "$previous_pair" ]; then
+if [ -n "$previous_pair" ] && [ "$host_transition_requested" = true ]; then
+  # Keep OLD fully valid and live through candidate publication. The reviewed
+  # transition helper owns the irreversible pointer=None/native checkpoint and
+  # every TARGET host-file replacement after publication is durable.
+  for index in "${!host_sources[@]}"; do
+    mode=644
+    [[ "${host_targets[$index]}" == /usr/local/libexec/* ]] && mode=755
+    [ -f "${host_targets[$index]}" ] && [ ! -L "${host_targets[$index]}" ] &&
+      [ "$(stat -c '%U:%G:%a' "${host_targets[$index]}")" = \
+        "root:root:${mode}" ] &&
+      cmp -s -- "${host_targets[$index]}" \
+        "$pair_releases/$previous_pair/control/${host_sources[$index]}" ||
+      die "installed source host runtime ABI drifted"
+  done
+elif [ -n "$previous_pair" ]; then
   for index in "${!host_sources[@]}"; do
     mode=644
     [[ "${host_targets[$index]}" == /usr/local/libexec/* ]] && mode=755
@@ -3019,15 +3196,19 @@ else
   fi
 fi
 /usr/bin/python3.12 -I - "$publish_journal" "$pair_name" "$commit" \
-  "$source_tree" "$build_policy" <<'PY'
+  "$source_tree" "$build_policy" "$host_transition_requested" \
+  "$transition_from_pair" "$transition_from_host_layer" <<'PY'
 import json, os, pathlib, sys
 path = pathlib.Path(sys.argv[1])
 value = {
     "build_policy_sha256": sys.argv[5],
     "commit": sys.argv[3],
+    "host_transition": sys.argv[6] == "true",
     "pair_name": sys.argv[2],
     "schema_version": 1,
     "source_tree": sys.argv[4],
+    "transition_from_host_layer": sys.argv[8] or None,
+    "transition_from_pair": sys.argv[7] or None,
 }
 payload = json.dumps(value, ensure_ascii=True, allow_nan=False, sort_keys=True,
                      separators=(",", ":")).encode("ascii") + b"\n"
@@ -3045,7 +3226,9 @@ mv -- "$pair_stage" "$pair_final"
 pair_stage=
 pair_published=true
 sync -f -- "$pair_releases"
-"$manager" validate "$pair_name" >/dev/null
+if [ "$host_transition_requested" = false ]; then
+  "$manager" validate "$pair_name" >/dev/null
+fi
 
 finish_pair_install
 trap - EXIT INT TERM

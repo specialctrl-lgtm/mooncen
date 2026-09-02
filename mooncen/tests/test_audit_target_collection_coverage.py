@@ -442,7 +442,7 @@ def test_failure_report_older_than_latest_saved_data_is_superseded() -> None:
             target,
             stats,
             report,
-            stale_before=datetime.now(timezone.utc) - timedelta(days=30),
+            stale_before=latest_seen_at - timedelta(days=30),
         )
         == "collected"
     )

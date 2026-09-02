@@ -27,6 +27,7 @@ DOCKER_ALIAS_ROOT = Path("/opt/mooncen-an2p-docker")
 STATE_ROOT = Path("/var/lib/mooncen-an2p-runtime")
 CONTROL_FINALIZATIONS = STATE_ROOT / "control-finalizations"
 PENDING_CONTROL_FINALIZATION = STATE_ROOT / "pending-control-finalization.json"
+CONTROL_FINALIZATION_TRANSACTION = STATE_ROOT / "control-finalization-transaction.json"
 JOURNAL = STATE_ROOT / "transaction.json"
 LOCK = STATE_ROOT / "operation.lock"
 RUNTIME_ROOT = Path("/run/mooncen-an2p-runtime")
@@ -37,6 +38,7 @@ SELECTOR = Path("/usr/local/libexec/mooncen-an2p-service-control")
 SYSTEMCTL = "/bin/systemctl"
 PYTHON = "/usr/bin/python3.12"
 SYSTEM_UNIT_ROOT = Path("/etc/systemd/system")
+RUNTIME_SYSTEM_UNIT_ROOT = Path("/run/systemd/system")
 PAIR_PATTERN = re.compile(
     r"\Aruntime-pair\.[0-9a-f]{40}\.[0-9a-f]{40}\.[0-9a-f]{64}\Z"
 )
@@ -453,6 +455,22 @@ def control_finalized(name: str) -> bool:
     return _control_finalization_receipt_valid(name)
 
 
+def _control_start_ready(name: str) -> bool:
+    """Return whether automatic control-service restoration is fully committed."""
+
+    if not control_finalized(name):
+        return False
+    try:
+        CONTROL_FINALIZATION_TRANSACTION.lstat()
+    except FileNotFoundError:
+        return True
+    except OSError as exc:
+        raise PairManagerError(
+            "control finalization transaction state is unavailable"
+        ) from exc
+    return False
+
+
 def _pending_control_value(name: str) -> dict[str, Any]:
     _pair, _control, docker, receipt = _validate_pair_structure(name)
     activation = _load_canonical(
@@ -640,6 +658,25 @@ def _systemctl(*arguments: str, check: bool = True) -> subprocess.CompletedProce
     return result
 
 
+def _mask_runtime_ops_api() -> None:
+    """Make the socket-activation barrier authoritative before stopping API."""
+
+    api = SYSTEM_UNITS["ops_api"]
+    _systemctl("mask", "--runtime", "--now", api)
+    # `mask` creates the runtime symlink, but a loaded unit can remain usable
+    # until PID 1 reloads.  Stop only after the reload closes that restart race.
+    _systemctl("daemon-reload")
+    _systemctl("stop", api)
+    _systemctl("reset-failed", api, check=False)
+
+
+def _unmask_runtime_ops_api() -> None:
+    """Remove the runtime barrier and make PID 1 load the reviewed unit."""
+
+    _systemctl("unmask", "--runtime", SYSTEM_UNITS["ops_api"])
+    _systemctl("daemon-reload")
+
+
 def _unit_property(unit: str, property_name: str) -> str:
     result = _systemctl("show", unit, f"--property={property_name}", "--value")
     try:
@@ -668,6 +705,20 @@ def _unit_loaded(unit: str) -> bool:
     ):
         raise PairManagerError("runtime unit file is unsafe")
     state = _unit_property(unit, "LoadState")
+    if state == "masked" and unit == SYSTEM_UNITS["ops_api"]:
+        mask = RUNTIME_SYSTEM_UNIT_ROOT / unit
+        try:
+            mask_metadata = mask.lstat()
+        except OSError as exc:
+            raise PairManagerError("runtime API mask is unavailable") from exc
+        if (
+            not mask.is_symlink()
+            or mask_metadata.st_uid != 0
+            or mask_metadata.st_gid != 0
+            or os.readlink(mask) != "/dev/null"
+        ):
+            raise PairManagerError("runtime API mask is unsafe")
+        return True
     if state != "loaded":
         raise PairManagerError("runtime unit load state is unsafe")
     return True
@@ -675,6 +726,8 @@ def _unit_loaded(unit: str) -> bool:
 
 def _unit_enabled(unit: str) -> bool:
     state = _unit_property(unit, "UnitFileState")
+    if state == "masked-runtime" and unit == SYSTEM_UNITS["ops_api"]:
+        return False
     if state not in {"enabled", "disabled"}:
         raise PairManagerError("runtime unit enablement is unsafe")
     return state == "enabled"
@@ -1074,11 +1127,18 @@ def _clear_journal() -> None:
 
 
 def _stop_units() -> None:
+    api = SYSTEM_UNITS["ops_api"]
+    if _unit_loaded(api):
+        # Publish the barrier before touching any other consumer.  Otherwise a
+        # queued connection can restart the API and its required tunnel while
+        # the transaction is stopping the remaining units.
+        _mask_runtime_ops_api()
+        if _unit_active(api):
+            raise PairManagerError("runtime unit remains active during switch")
     for unit in (
         SYSTEM_UNITS["docker"],
         SYSTEM_UNITS["status"],
         SYSTEM_UNITS["worker"],
-        SYSTEM_UNITS["ops_api"],
         SYSTEM_UNITS["tunnel"],
     ):
         if _unit_loaded(unit):
@@ -1115,7 +1175,19 @@ def _authorized_systemctl_start(unit: str) -> None:
         _clear_start_authorization()
 
 
-def _apply_unit_enablement(snapshot: dict[str, Any]) -> None:
+def _apply_unit_enablement(snapshot: dict[str, Any]) -> dict[str, Any]:
+    effective = dict(snapshot)
+    control_fields = (
+        "ops_api_enabled",
+        "worker_enabled",
+        "status_enabled",
+        "tunnel_enabled",
+    )
+    if any(bool(effective[field]) for field in control_fields):
+        active = current_pair(full_validation=False)
+        if active is None or not _control_start_ready(active):
+            for field in control_fields:
+                effective[field] = False
     for key, field in (
         ("ops_api", "ops_api_enabled"),
         ("worker", "worker_enabled"),
@@ -1123,12 +1195,37 @@ def _apply_unit_enablement(snapshot: dict[str, Any]) -> None:
         ("tunnel", "tunnel_enabled"),
     ):
         unit = SYSTEM_UNITS[key]
-        if snapshot[field]:
+        if effective[field]:
+            if key == "ops_api":
+                _unmask_runtime_ops_api()
             _systemctl("enable", unit)
         else:
+            if key == "ops_api":
+                _mask_runtime_ops_api()
             _systemctl("disable", unit)
-    if not snapshot["docker_selected"]:
+    if not effective["docker_selected"]:
         _systemctl("disable", SYSTEM_UNITS["docker"])
+    return effective
+
+
+def _quiesce_control_start_boundary() -> None:
+    api = SYSTEM_UNITS["ops_api"]
+    _mask_runtime_ops_api()
+    _systemctl("disable", api)
+    for key in ("status", "worker", "tunnel"):
+        unit = SYSTEM_UNITS[key]
+        if _unit_loaded(unit):
+            _systemctl("disable", "--now", unit)
+            _systemctl("reset-failed", unit, check=False)
+
+
+def _converge_control_start_boundary(name: str) -> None:
+    """Keep reserved Ops sockets inert until control authority is committed."""
+
+    if _control_start_ready(name):
+        _unmask_runtime_ops_api()
+        return
+    _quiesce_control_start_boundary()
 
 
 def _start_units(snapshot: dict[str, Any]) -> None:
@@ -1168,15 +1265,17 @@ def _select_native() -> None:
 
 
 def _rollback_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
-    if not snapshot["development_only"]:
-        return snapshot
+    previous = snapshot["previous"]
     restored = dict(snapshot)
-    finalized = (
-        snapshot["previous"] is not None and control_finalized(snapshot["previous"])
-    )
+    finalized = previous is not None and _control_start_ready(previous)
     restored.update(
         {
-            "docker_selected": snapshot["previous_docker_selected"],
+            # A Docker selection without a pair pointer cannot be reconstructed
+            # safely.  Initial activation rollback therefore returns to the
+            # reviewed native runtime instead of restarting the failed target.
+            "docker_selected": (
+                snapshot["previous_docker_selected"] if previous is not None else False
+            ),
             "ops_api_enabled": finalized,
             "status_enabled": finalized,
             "tunnel_enabled": finalized,
@@ -1189,17 +1288,17 @@ def _rollback_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
 def _rollback_transaction(snapshot: dict[str, Any]) -> None:
     _stop_units()
     _switch_pointer(snapshot["previous"])
-    if snapshot["previous"] is not None or snapshot["development_only"]:
-        restored = _rollback_snapshot(snapshot)
-        _apply_unit_enablement(restored)
-        _start_units(restored)
-        if snapshot["development_only"] and not restored["docker_selected"]:
-            _select_native()
-    if snapshot["development_only"]:
-        _clear_pending_control_finalization(snapshot["target"])
-        previous = snapshot["previous"]
-        if previous is not None and not control_finalized(previous):
-            _write_pending_control_finalization(previous)
+    restored = _rollback_snapshot(snapshot)
+    restored = _apply_unit_enablement(restored)
+    _start_units(restored)
+    if (
+        snapshot["development_only"] or snapshot["previous"] is None
+    ) and not restored["docker_selected"]:
+        _select_native()
+    _clear_pending_control_finalization(snapshot["target"])
+    previous = snapshot["previous"]
+    if previous is not None and not control_finalized(previous):
+        _write_pending_control_finalization(previous)
     _clear_journal()
 
 
@@ -1213,9 +1312,9 @@ def recover() -> None:
         and not snapshot["development_only"]
     ):
         _switch_pointer(snapshot["target"])
-        _apply_unit_enablement(snapshot)
-        _start_units(snapshot)
-        if snapshot["development_only"]:
+        effective = _apply_unit_enablement(snapshot)
+        _start_units(effective)
+        if not control_finalized(snapshot["target"]):
             _write_pending_control_finalization(snapshot["target"])
         _clear_journal()
         return
@@ -1229,16 +1328,18 @@ def recover_boot() -> None:
     if snapshot is None:
         active = current_pair()
         if active is None:
+            _quiesce_control_start_boundary()
             _clear_boot_validation()
             return
         _pair, _control, _docker, receipt = _validate_pair_structure(active)
+        _converge_control_start_boundary(active)
         _write_boot_validation(active, receipt["receipt_digest"])
         return
     _stop_units()
     if snapshot["development_only"]:
         _switch_pointer(snapshot["previous"])
         restored = _rollback_snapshot(snapshot)
-        _apply_unit_enablement(restored)
+        restored = _apply_unit_enablement(restored)
         _start_units(restored)
         if not restored["docker_selected"]:
             _select_native()
@@ -1257,8 +1358,17 @@ def recover_boot() -> None:
         _apply_unit_enablement(snapshot)
     else:
         _switch_pointer(snapshot["previous"])
-        if snapshot["previous"] is not None:
-            _apply_unit_enablement(_rollback_snapshot(snapshot))
+        _apply_unit_enablement(_rollback_snapshot(snapshot))
+        _clear_pending_control_finalization(snapshot["target"])
+        previous = snapshot["previous"]
+        if previous is not None and not control_finalized(previous):
+            _write_pending_control_finalization(previous)
+    if (
+        snapshot["previous"] is None
+        and snapshot["phase"] == "switched"
+        and not control_finalized(snapshot["target"])
+    ):
+        _write_pending_control_finalization(snapshot["target"])
     _clear_journal()
 
 
@@ -1275,8 +1385,8 @@ def activate(name: str) -> dict[str, Any]:
         _switch_pointer(name)
         snapshot["phase"] = "switched"
         _write_journal(snapshot)
-        _apply_unit_enablement(snapshot)
-        _start_units(snapshot)
+        effective = _apply_unit_enablement(snapshot)
+        _start_units(effective)
     except Exception:
         try:
             _rollback_transaction(snapshot)
@@ -1306,8 +1416,8 @@ def activate_development(name: str) -> dict[str, Any]:
         _switch_pointer(name)
         snapshot["phase"] = "switched"
         _write_journal(snapshot)
-        _apply_unit_enablement(snapshot)
-        _start_units(snapshot)
+        effective = _apply_unit_enablement(snapshot)
+        _start_units(effective)
         if not bool(_selector_status()["docker_selected"]):
             raise PairManagerError("development activation lost Docker selection")
         # Publish the new pending authority only after the replacement runtime
@@ -1339,7 +1449,7 @@ def activate_retained(name: str) -> dict[str, Any]:
     recover()
     previous = current_pair()
     snapshot = _snapshot(name, previous)
-    finalized = control_finalized(name)
+    finalized = _control_start_ready(name)
     snapshot.update(
         {
             "docker_selected": True,
@@ -1355,8 +1465,8 @@ def activate_retained(name: str) -> dict[str, Any]:
         _switch_pointer(name)
         snapshot["phase"] = "switched"
         _write_journal(snapshot)
-        _apply_unit_enablement(snapshot)
-        _start_units(snapshot)
+        effective = _apply_unit_enablement(snapshot)
+        _start_units(effective)
     except Exception:
         try:
             _rollback_transaction(snapshot)
@@ -1365,6 +1475,8 @@ def activate_retained(name: str) -> dict[str, Any]:
                 "retained switch failed and durable rollback remains incomplete"
             ) from rollback_error
         raise
+    if not finalized:
+        _write_pending_control_finalization(name, replace_pair=previous)
     if previous is not None and previous != name:
         _clear_pending_control_finalization(previous)
     _clear_journal()
@@ -1392,7 +1504,7 @@ def deactivate_initial(name: str) -> dict[str, Any]:
         "tunnel_enabled": False,
         "worker_enabled": False,
     }
-    _apply_unit_enablement(disabled)
+    disabled = _apply_unit_enablement(disabled)
     _start_units(disabled)
     _select_native()
     _clear_pending_control_finalization(name)

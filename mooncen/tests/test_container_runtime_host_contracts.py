@@ -836,6 +836,48 @@ def test_container_systemd_sandboxes_pass_the_offline_unit_parser() -> None:
     assert "mooncen-docker-dev.service" in completed.stdout
 
 
+@pytest.mark.skipif(
+    shutil.which("systemd-analyze") is None,
+    reason="systemd-analyze unavailable",
+)
+def test_an2p_ops_socket_graph_has_no_systemd_ordering_cycle() -> None:
+    root = Path(__file__).resolve().parents[1]
+    environment = os.environ.copy()
+    environment["SYSTEMD_UNIT_PATH"] = ":".join(
+        (
+            str(root / "deploy/an2p"),
+            "/usr/local/lib/systemd/system",
+            "/usr/lib/systemd/system",
+        )
+    )
+    units = (
+        "mooncen-an2p-runtime-recovery.service",
+        "mooncen-ops-api.socket",
+        "mooncen-ops-api-ipv6.socket",
+        "mooncen-ops-api.service",
+        "mooncen-ops-api-ipv6.service",
+        "mooncen-ops-db-tunnel.service",
+        "mooncen-deployment-worker.service",
+        "mooncen-ops-status-agent.service",
+    )
+
+    completed = subprocess.run(
+        [
+            shutil.which("systemd-analyze") or "systemd-analyze",
+            "verify",
+            *units,
+        ],
+        cwd=root,
+        env=environment,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=30,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
 def test_direct_native_deploy_holds_intent_through_guard_terminal() -> None:
     root = Path(__file__).resolve().parents[1]
     deploy = (root / "deploy/ubuntu/deploy_from_windows.ps1").read_text(

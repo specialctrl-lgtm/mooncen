@@ -7,6 +7,22 @@ die() {
   exit "${2:-78}"
 }
 
+# A runtime mask is only a filesystem override until PID 1 reloads it.  Keep
+# the reserved Ops sockets bound, make the mask authoritative, and then stop
+# the API explicitly so socket activation cannot restart it (or its tunnel)
+# during an environment cutover or fail-closed cleanup.
+mask_runtime_ops_api() {
+  systemctl mask --runtime --now mooncen-ops-api.service
+  systemctl daemon-reload
+  systemctl stop mooncen-ops-api.service
+  systemctl reset-failed mooncen-ops-api.service >/dev/null 2>&1 || true
+}
+
+unmask_runtime_ops_api() {
+  systemctl unmask --runtime mooncen-ops-api.service
+  systemctl daemon-reload
+}
+
 [ "$(id -u)" -eq 0 ] || die "run from a root console"
 [ "$(hostname -s)" = "an2p" ] || die "unexpected host"
 
@@ -241,20 +257,17 @@ cleanup_api_environment() {
         sync -f -- /etc/mooncen-an2p
       fi
     fi
-    if [ "$api_service_masked" = true ]; then
-      systemctl unmask --runtime mooncen-ops-api.service >/dev/null 2>&1
-      api_service_masked=false
-    fi
-    systemctl daemon-reload >/dev/null 2>&1
     if [ "$api_was_active" = true ] && [ "$api_env_had_previous" = true ]; then
+      unmask_runtime_ops_api >/dev/null 2>&1
+      api_service_masked=false
       systemctl reset-failed mooncen-ops-api.service >/dev/null 2>&1
       systemctl restart mooncen-ops-api.service >/dev/null 2>&1
     else
-      systemctl stop mooncen-ops-api.service >/dev/null 2>&1
+      mask_runtime_ops_api >/dev/null 2>&1
+      api_service_masked=true
     fi
   elif [ "$api_service_masked" = true ]; then
-    systemctl unmask --runtime mooncen-ops-api.service >/dev/null 2>&1
-    systemctl daemon-reload >/dev/null 2>&1
+    mask_runtime_ops_api >/dev/null 2>&1
   fi
   [ -z "$api_env_stage" ] || rm -f -- "$api_env_stage"
   [ -z "$api_env_backup" ] || rm -f -- "$api_env_backup"
@@ -369,7 +382,7 @@ systemctl is-active --quiet mooncen-ops-db-tunnel.service ||
   die "isolated Ops DB tunnel did not become active after credential rotation"
 systemctl enable mooncen-an2p-runtime-recovery.service \
   mooncen-ops-api.socket mooncen-ops-api-ipv6.socket \
-  mooncen-ops-api-ipv6.service mooncen-ops-api.service \
+  mooncen-ops-api-ipv6.service \
   mooncen-deployment-worker.service mooncen-ops-status-agent.service
 systemctl start mooncen-an2p-runtime-recovery.service \
   mooncen-ops-api.socket mooncen-ops-api-ipv6.socket \
@@ -378,17 +391,17 @@ systemctl start mooncen-an2p-runtime-recovery.service \
 # Keep both root-owned 5175 sockets bound while preventing a queued request
 # from reactivating the API between stop and the credential commit.
 api_cutover_started=true
-systemctl mask --runtime mooncen-ops-api.service
+mask_runtime_ops_api
 api_service_masked=true
-systemctl stop mooncen-ops-api.service
 mv -fT -- "$api_env_stage" "$api_env_destination"
 api_env_stage=
 api_env_published=true
 sync -f -- "$api_env_destination"
 sync -f -- /etc/mooncen-an2p
-systemctl unmask --runtime mooncen-ops-api.service
+unmask_runtime_ops_api
 api_service_masked=false
-systemctl daemon-reload
+systemctl reset-failed mooncen-ops-api.service >/dev/null 2>&1 || true
+systemctl enable mooncen-ops-api.service
 systemctl restart mooncen-ops-api.service
 systemctl is-active --quiet mooncen-ops-api.service || \
   die "isolated Ops API did not become active after credential rotation"

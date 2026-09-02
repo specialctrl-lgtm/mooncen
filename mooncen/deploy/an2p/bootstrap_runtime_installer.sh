@@ -11,11 +11,13 @@ die() {
 [ "$(id -u)" -eq 0 ] || die "run from an independent root console"
 [ "${SUDO_USER:-root}" = root ] || die "do not run through an untrusted user session"
 [ "$(hostname -s)" = an2p ] || die "unexpected host"
-[ "$#" -eq 14 ] && [ "$1" = --installer-sha256 ] &&
+[ "$#" -eq 16 ] && [ "$1" = --installer-sha256 ] &&
   [ "$3" = --integrity-sha256 ] && [ "$5" = --clean-source-sha256 ] &&
   [ "$7" = --pair-manager-sha256 ] && [ "$9" = --handoff-sha256 ] &&
-  [ "${11}" = --registrar-sha256 ] && [ "${13}" = --build-policy-sha256 ] ||
-  die "expected seven fixed SHA-256 options"
+  [ "${11}" = --registrar-sha256 ] &&
+  [ "${13}" = --host-transition-sha256 ] &&
+  [ "${15}" = --build-policy-sha256 ] ||
+  die "expected eight fixed SHA-256 options"
 
 installer_sha=$2
 integrity_sha=$4
@@ -23,9 +25,11 @@ clean_source_sha=$6
 pair_manager_sha=$8
 handoff_sha=${10}
 registrar_sha=${12}
-build_policy_sha=${14}
+host_transition_sha=${14}
+build_policy_sha=${16}
 for digest in "$installer_sha" "$integrity_sha" "$clean_source_sha" \
-  "$pair_manager_sha" "$handoff_sha" "$registrar_sha" "$build_policy_sha"; do
+  "$pair_manager_sha" "$handoff_sha" "$registrar_sha" \
+  "$host_transition_sha" "$build_policy_sha"; do
   [[ "$digest" =~ ^[0-9a-f]{64}$ ]] || die "invalid reviewed SHA-256 value"
 done
 
@@ -34,9 +38,13 @@ recovery_unit=/etc/systemd/system/$recovery_unit_name
 bootstrap_stage=/root/mooncen-an2p-runtime-bootstrap.sh
 source_root=/home/sgm/src/project/mooncen
 checkout_installer=$source_root/deploy/an2p/install_runtime_snapshot.sh
+checkout_host_transition=$source_root/deploy/an2p/host_layer_transition.py
 recovery_installer=/var/lib/mooncen-an2p-runtime/reviewed-install-runtime-snapshot.sh
+recovery_host_transition=/var/lib/mooncen-an2p-runtime/reviewed-host-layer-transition.py
 source_installer=$recovery_installer
+source_host_transition=$recovery_host_transition
 target_installer=/usr/local/sbin/mooncen-an2p-runtime-install
+target_host_transition=/usr/local/libexec/mooncen-an2p-host-transition
 trust_directory=/etc/mooncen-an2p
 trust_target=$trust_directory/runtime-installer.trust
 bootstrap_phase=
@@ -92,11 +100,44 @@ for url in ("http://127.0.0.1:8001/health", "http://127.0.0.1:5174"):
 PY
 }
 
+refuse_pending_runtime_transactions() {
+  local residue
+  for residue in \
+    /var/lib/mooncen-an2p-runtime/host-layer-transition.json \
+    /var/lib/mooncen-an2p-runtime/install-transaction.json \
+    /var/lib/mooncen-an2p-runtime/transaction.json \
+    /var/lib/mooncen-an2p-runtime/control-finalization-transaction.json \
+    /var/lib/mooncen-an2p-runtime/ops-rotation-transaction.json \
+    /var/lib/mooncen-an2p-runtime/ops-rotation-previous.env \
+    /etc/systemd/system/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-an2p-host-transition-continue.service \
+    /etc/systemd/system/multi-user.target.wants/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-ops-api.socket.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-ops-api-ipv6.socket.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-ops-api-ipv6.service.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-an2p-runtime-recovery.service.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-ops-db-tunnel.service.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-deployment-worker.service.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-ops-status-agent.service.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-ops-api.service.requires/mooncen-an2p-host-transition-recovery.service \
+    /etc/systemd/system/mooncen-docker-dev.service.requires/mooncen-an2p-host-transition-recovery.service; do
+    [ ! -e "$residue" ] && [ ! -L "$residue" ] ||
+      die "pending runtime transaction blocks installer bootstrap: ${residue##*/}"
+  done
+}
+
 preflight_bootstrap_inputs_and_public_runtime() {
   local journal=/var/lib/mooncen-an2p-runtime/bootstrap-development.json
   local installer_input=$source_installer
+  local host_transition_input=$source_host_transition
+  # Replacing the installed installer, transition interpreter, or trust
+  # envelope while an older transaction owns recovery would strand that
+  # transaction behind a different ABI.  The bootstrap journal below is the
+  # only recovery state this program may own.
+  refuse_pending_runtime_transactions
   if [ "${MOONCEN_AN2P_BOOTSTRAP_RECOVERY:-}" != 1 ]; then
     installer_input=$checkout_installer
+    host_transition_input=$checkout_host_transition
   fi
   [ -f "$installer_input" ] && [ ! -L "$installer_input" ] ||
     die "reviewed installer source is unavailable"
@@ -106,6 +147,15 @@ preflight_bootstrap_inputs_and_public_runtime() {
   fi
   [ "$(sha256sum "$installer_input" | cut -d' ' -f1)" = "$installer_sha" ] ||
     die "reviewed installer source digest mismatch"
+  [ -f "$host_transition_input" ] && [ ! -L "$host_transition_input" ] ||
+    die "reviewed host transition source is unavailable"
+  if [ "${MOONCEN_AN2P_BOOTSTRAP_RECOVERY:-}" = 1 ]; then
+    [ "$(stat -c '%U:%G:%a' "$host_transition_input")" = root:root:700 ] ||
+      die "root recovery host transition source is unsafe"
+  fi
+  [ "$(sha256sum "$host_transition_input" | cut -d' ' -f1)" = \
+    "$host_transition_sha" ] ||
+    die "reviewed host transition source digest mismatch"
   /usr/bin/python3 -I - <<'PY' || die "pidfd process-boundary support is unavailable"
 import os
 import signal
@@ -144,7 +194,7 @@ PY
 }
 
 stage_reviewed_installer_for_recovery() {
-  local state_root=/var/lib/mooncen-an2p-runtime stage
+  local state_root=/var/lib/mooncen-an2p-runtime stage transition_stage
   install -d -o root -g root -m 0700 "$state_root"
   if [ -e "$recovery_installer" ] || [ -L "$recovery_installer" ]; then
     [ -f "$recovery_installer" ] && [ ! -L "$recovery_installer" ] &&
@@ -152,25 +202,55 @@ stage_reviewed_installer_for_recovery() {
       [ "$(sha256sum "$recovery_installer" | cut -d' ' -f1)" = "$installer_sha" ] &&
       cmp -s -- "$checkout_installer" "$recovery_installer" ||
       die "root recovery installer residue is unsafe"
-    return
+  else
+    stage=$(mktemp "$state_root/.reviewed-install-runtime-snapshot.XXXXXXXX")
+    install -o root -g root -m 0700 "$checkout_installer" "$stage"
+    [ "$(sha256sum "$stage" | cut -d' ' -f1)" = "$installer_sha" ] || {
+      rm -f -- "$stage"
+      die "root recovery installer stage digest mismatch"
+    }
+    sync -f -- "$stage"
+    if ! ln -- "$stage" "$recovery_installer" 2>/dev/null; then
+      rm -f -- "$stage"
+      [ -f "$recovery_installer" ] && [ ! -L "$recovery_installer" ] &&
+        [ "$(stat -c '%U:%G:%a' "$recovery_installer")" = root:root:700 ] &&
+        [ "$(sha256sum "$recovery_installer" | cut -d' ' -f1)" = "$installer_sha" ] &&
+        cmp -s -- "$checkout_installer" "$recovery_installer" ||
+        die "concurrent root recovery installer stage is unsafe"
+    else
+      rm -- "$stage"
+    fi
   fi
-  stage=$(mktemp "$state_root/.reviewed-install-runtime-snapshot.XXXXXXXX")
-  install -o root -g root -m 0700 "$checkout_installer" "$stage"
-  [ "$(sha256sum "$stage" | cut -d' ' -f1)" = "$installer_sha" ] || {
-    rm -f -- "$stage"
-    die "root recovery installer stage digest mismatch"
-  }
-  sync -f -- "$stage"
-  if ! ln -- "$stage" "$recovery_installer" 2>/dev/null; then
-    rm -f -- "$stage"
-    [ -f "$recovery_installer" ] && [ ! -L "$recovery_installer" ] &&
-      [ "$(stat -c '%U:%G:%a' "$recovery_installer")" = root:root:700 ] &&
-      [ "$(sha256sum "$recovery_installer" | cut -d' ' -f1)" = "$installer_sha" ] &&
-      cmp -s -- "$checkout_installer" "$recovery_installer" ||
-      die "concurrent root recovery installer stage is unsafe"
-    return
+
+  if [ -e "$recovery_host_transition" ] || [ -L "$recovery_host_transition" ]; then
+    [ -f "$recovery_host_transition" ] && [ ! -L "$recovery_host_transition" ] &&
+      [ "$(stat -c '%U:%G:%a' "$recovery_host_transition")" = root:root:700 ] &&
+      [ "$(sha256sum "$recovery_host_transition" | cut -d' ' -f1)" = \
+        "$host_transition_sha" ] &&
+      cmp -s -- "$checkout_host_transition" "$recovery_host_transition" ||
+      die "root recovery host transition residue is unsafe"
+  else
+    transition_stage=$(mktemp "$state_root/.reviewed-host-layer-transition.XXXXXXXX")
+    install -o root -g root -m 0700 "$checkout_host_transition" "$transition_stage"
+    [ "$(sha256sum "$transition_stage" | cut -d' ' -f1)" = \
+      "$host_transition_sha" ] || {
+      rm -f -- "$transition_stage"
+      die "root recovery host transition stage digest mismatch"
+    }
+    sync -f -- "$transition_stage"
+    if ! ln -- "$transition_stage" "$recovery_host_transition" 2>/dev/null; then
+      rm -f -- "$transition_stage"
+      [ -f "$recovery_host_transition" ] &&
+        [ ! -L "$recovery_host_transition" ] &&
+        [ "$(stat -c '%U:%G:%a' "$recovery_host_transition")" = root:root:700 ] &&
+        [ "$(sha256sum "$recovery_host_transition" | cut -d' ' -f1)" = \
+          "$host_transition_sha" ] &&
+        cmp -s -- "$checkout_host_transition" "$recovery_host_transition" ||
+        die "concurrent root recovery host transition stage is unsafe"
+    else
+      rm -- "$transition_stage"
+    fi
   fi
-  rm -- "$stage"
   sync -f -- "$state_root"
 }
 
@@ -202,6 +282,7 @@ install_bootstrap_recovery_unit() {
       "$clean_source_sha" "$pair_manager_sha"
     printf ' --handoff-sha256 %s --registrar-sha256 %s' \
       "$handoff_sha" "$registrar_sha"
+    printf ' --host-transition-sha256 %s' "$host_transition_sha"
     printf ' --build-policy-sha256 %s\n' "$build_policy_sha"
     printf '%s\n' \
       'Restart=on-abnormal' \
@@ -311,7 +392,9 @@ def validate_directory(metadata: os.stat_result, mode: int, label: str) -> None:
 
 
 def main() -> None:
-    if os.geteuid() != 0 or len(sys.argv) != 16:
+    # python receives: program name, reviewed bootstrap path, then the exact
+    # sixteen option/value shell arguments.
+    if os.geteuid() != 0 or len(sys.argv) != 18:
         raise BoundaryError("outer launcher lock requires root and the reviewed arguments")
     script = pathlib.Path(sys.argv[1])
     expected_script = pathlib.Path("/root/mooncen-an2p-runtime-bootstrap.sh")
@@ -484,7 +567,8 @@ PY
 }
 
 verify_outer_bootstrap_convergence() {
-  /usr/bin/python3 -I - "$target_installer" "$installer_sha" "$trust_target" \
+  /usr/bin/python3 -I - "$target_installer" "$installer_sha" \
+    "$target_host_transition" "$host_transition_sha" "$trust_target" \
     "$integrity_sha" "$clean_source_sha" "$pair_manager_sha" "$handoff_sha" \
     "$registrar_sha" "$build_policy_sha" <<'PY'
 import hashlib
@@ -527,7 +611,18 @@ finally:
 if digest.hexdigest() != sys.argv[2]:
     raise SystemExit(78)
 
-trust = pathlib.Path(sys.argv[3])
+transition = pathlib.Path(sys.argv[3])
+transition_descriptor, _ = open_exact(transition, 0o755)
+try:
+    transition_digest = hashlib.sha256()
+    while chunk := os.read(transition_descriptor, 1024 * 1024):
+        transition_digest.update(chunk)
+finally:
+    os.close(transition_descriptor)
+if transition_digest.hexdigest() != sys.argv[4]:
+    raise SystemExit(78)
+
+trust = pathlib.Path(sys.argv[5])
 trust_descriptor, trust_metadata = open_exact(trust, 0o600)
 try:
     chunks = []
@@ -546,12 +641,13 @@ if len(payload) > 4096 or len(payload) != trust_metadata.st_size:
 expected = (
     "VERSION=1\n"
     f"INSTALLER_SHA256={sys.argv[2]}\n"
-    f"INTEGRITY_SHA256={sys.argv[4]}\n"
-    f"CLEAN_SOURCE_SHA256={sys.argv[5]}\n"
-    f"PAIR_MANAGER_SHA256={sys.argv[6]}\n"
-    f"HANDOFF_SHA256={sys.argv[7]}\n"
-    f"REGISTRAR_SHA256={sys.argv[8]}\n"
-    f"EXPECTED_BUILD_POLICY_SHA256={sys.argv[9]}\n"
+    f"INTEGRITY_SHA256={sys.argv[6]}\n"
+    f"CLEAN_SOURCE_SHA256={sys.argv[7]}\n"
+    f"PAIR_MANAGER_SHA256={sys.argv[8]}\n"
+    f"HANDOFF_SHA256={sys.argv[9]}\n"
+    f"REGISTRAR_SHA256={sys.argv[10]}\n"
+    f"HOST_TRANSITION_SHA256={sys.argv[4]}\n"
+    f"EXPECTED_BUILD_POLICY_SHA256={sys.argv[11]}\n"
 ).encode("ascii")
 if payload != expected:
     raise SystemExit(78)
@@ -617,8 +713,15 @@ if [ "${MOONCEN_AN2P_BOOTSTRAP_RECOVERY:-}" != 1 ]; then
     [ "$(stat -c '%U:%G:%a' "$recovery_installer")" = root:root:700 ] && \
     [ "$(sha256sum "$recovery_installer" | cut -d' ' -f1)" = "$installer_sha" ] || \
     die "durable bootstrap recovery source changed before cleanup"
+  [ -f "$recovery_host_transition" ] &&
+    [ ! -L "$recovery_host_transition" ] &&
+    [ "$(stat -c '%U:%G:%a' "$recovery_host_transition")" = root:root:700 ] &&
+    [ "$(sha256sum "$recovery_host_transition" | cut -d' ' -f1)" = \
+      "$host_transition_sha" ] ||
+    die "durable bootstrap host transition source changed before cleanup"
   rm -- "$recovery_unit"
   rm -- "$recovery_installer"
+  rm -- "$recovery_host_transition"
   systemctl daemon-reload
   sync -f -- /etc/systemd/system
   sync -f -- /var/lib/mooncen-an2p-runtime
@@ -699,6 +802,46 @@ PY
 then
   die "bootstrap recovery lock descriptor is unsafe"
 fi
+
+# Share the installed ABI lock with every installer and host-transition
+# helper.  This recovery worker holds it from the guarded transaction snapshot
+# through the atomic installer/helper/trust replacement, closing the pathname
+# check-to-replace race.
+runtime_install_lock=/var/lib/mooncen-an2p-runtime/install.lock
+install -o root -g root -m 0600 /dev/null "$runtime_install_lock" 2>/dev/null || true
+[ -f "$runtime_install_lock" ] && [ ! -L "$runtime_install_lock" ] && \
+  [ "$(stat -c '%U:%G:%a' "$runtime_install_lock")" = root:root:600 ] || \
+  die "runtime installer lock is unsafe during bootstrap"
+exec 8<>"$runtime_install_lock"
+/usr/bin/flock -x 8
+if ! /usr/bin/python3 -I - 8 "$runtime_install_lock" <<'PY'
+import os
+import pathlib
+import stat
+import sys
+
+
+descriptor = int(sys.argv[1])
+path = pathlib.Path(sys.argv[2])
+descriptor_metadata = os.fstat(descriptor)
+path_metadata = path.lstat()
+if (
+    path.is_symlink()
+    or not stat.S_ISREG(descriptor_metadata.st_mode)
+    or not stat.S_ISREG(path_metadata.st_mode)
+    or descriptor_metadata.st_uid != 0
+    or descriptor_metadata.st_gid != 0
+    or stat.S_IMODE(descriptor_metadata.st_mode) != 0o600
+    or descriptor_metadata.st_nlink != 1
+    or (descriptor_metadata.st_dev, descriptor_metadata.st_ino)
+    != (path_metadata.st_dev, path_metadata.st_ino)
+):
+    raise SystemExit(78)
+PY
+then
+  die "runtime installer lock descriptor is unsafe during bootstrap"
+fi
+refuse_pending_runtime_transactions
 
 drain_retained_privileged_processes() {
   local legacy_uid=$1
@@ -2026,12 +2169,20 @@ revoke_host_root_without_losing_public_development
   die "root recovery installer source is unavailable or unsafe"
 [ "$(sha256sum "$source_installer" | cut -d' ' -f1)" = "$installer_sha" ] ||
   die "root recovery installer source digest mismatch"
+[ -f "$source_host_transition" ] && [ ! -L "$source_host_transition" ] &&
+  [ "$(stat -c '%U:%G:%a' "$source_host_transition")" = root:root:700 ] ||
+  die "root recovery host transition source is unavailable or unsafe"
+[ "$(sha256sum "$source_host_transition" | cut -d' ' -f1)" = \
+  "$host_transition_sha" ] ||
+  die "root recovery host transition source digest mismatch"
 
-install -d -o root -g root -m 0755 /usr/local/sbin
+install -d -o root -g root -m 0755 /usr/local/sbin /usr/local/libexec
 installer_stage=$(mktemp /usr/local/sbin/.mooncen-an2p-runtime-install.XXXXXXXX)
+host_transition_stage=$(mktemp /usr/local/libexec/.mooncen-an2p-host-transition.XXXXXXXX)
 trust_stage=
 cleanup() {
   rm -f -- "$installer_stage"
+  rm -f -- "$host_transition_stage"
   [ -z "$trust_stage" ] || rm -f -- "$trust_stage"
 }
 trap cleanup EXIT
@@ -2039,6 +2190,11 @@ install -o root -g root -m 0755 "$source_installer" "$installer_stage"
 [ "$(sha256sum "$installer_stage" | cut -d' ' -f1)" = "$installer_sha" ] ||
   die "staged installer digest mismatch"
 sync -f -- "$installer_stage"
+install -o root -g root -m 0755 "$source_host_transition" "$host_transition_stage"
+[ "$(sha256sum "$host_transition_stage" | cut -d' ' -f1)" = \
+  "$host_transition_sha" ] ||
+  die "staged host transition digest mismatch"
+sync -f -- "$host_transition_stage"
 
 install -d -o root -g root -m 0755 "$trust_directory"
 trust_stage=$(mktemp "$trust_directory/.runtime-installer.trust.XXXXXXXX")
@@ -2050,6 +2206,7 @@ trust_stage=$(mktemp "$trust_directory/.runtime-installer.trust.XXXXXXXX")
   printf 'PAIR_MANAGER_SHA256=%s\n' "$pair_manager_sha"
   printf 'HANDOFF_SHA256=%s\n' "$handoff_sha"
   printf 'REGISTRAR_SHA256=%s\n' "$registrar_sha"
+  printf 'HOST_TRANSITION_SHA256=%s\n' "$host_transition_sha"
   printf 'EXPECTED_BUILD_POLICY_SHA256=%s\n' "$build_policy_sha"
 } >"$trust_stage"
 chown root:root "$trust_stage"
@@ -2058,12 +2215,18 @@ sync -f -- "$trust_stage"
 
 mv -fT -- "$installer_stage" "$target_installer"
 installer_stage=
+mv -fT -- "$host_transition_stage" "$target_host_transition"
+host_transition_stage=
 mv -fT -- "$trust_stage" "$trust_target"
 trust_stage=
 sync -f -- /usr/local/sbin
+sync -f -- /usr/local/libexec
 sync -f -- "$trust_directory"
 [ "$(stat -c '%U:%G:%a' "$target_installer")" = root:root:755 ] &&
   [ "$(sha256sum "$target_installer" | cut -d' ' -f1)" = "$installer_sha" ] &&
+  [ "$(stat -c '%U:%G:%a' "$target_host_transition")" = root:root:755 ] &&
+  [ "$(sha256sum "$target_host_transition" | cut -d' ' -f1)" = \
+    "$host_transition_sha" ] &&
   [ "$(stat -c '%U:%G:%a' "$trust_target")" = root:root:600 ] ||
   die "root installer bootstrap did not converge"
 

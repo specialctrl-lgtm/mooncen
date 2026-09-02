@@ -174,6 +174,35 @@ def test_builder_strips_remote_docker_environment(
     assert "DOCKER_CONTEXT" not in captured
 
 
+@pytest.mark.parametrize("service", ("api", "frontend"))
+def test_image_build_failure_identifies_service_without_leaking_output(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    service: str,
+) -> None:
+    release = tmp_path / "release"
+    release.mkdir()
+
+    def fail(*_args, **_kwargs) -> str:
+        raise builder.BuildError("secret-build-output-canary")
+
+    monkeypatch.setattr(builder, "_run", fail)
+
+    with pytest.raises(builder.BuildError) as failure:
+        builder._build_image(
+            tmp_path,
+            service=service,
+            source_tree="a" * 40,
+            snapshot_commit="b" * 40,
+            platform="linux/amd64",
+            release_dir=release,
+        )
+
+    message = str(failure.value)
+    assert message == f"release build failed during {service} Docker image build"
+    assert "secret-build-output-canary" not in message
+
+
 def test_existing_release_directory_is_never_overwritten(tmp_path: Path) -> None:
     root = tmp_path / "releases"
     root.mkdir(mode=0o700)
