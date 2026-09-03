@@ -53,15 +53,34 @@ value = {
 }
 
 remove_mooncen_docker_objects() {
-  local -a ids=()
+  local -a ids=() projects=(mooncen-dev mooncen-production)
+  local project
   command -v docker >/dev/null 2>&1 || return 0
-  mapfile -t ids < <(docker ps -aq --filter name=mooncen-)
-  [ "${#ids[@]}" -eq 0 ] || docker rm -f -- "${ids[@]}"
-  mapfile -t ids < <(docker image ls --format '{{.Repository}}:{{.Tag}} {{.ID}}' | awk '$1 ~ /^mooncen\// {print $2}' | sort -u)
+  mapfile -t ids < <(
+    docker ps -a --format '{{.Label "com.docker.compose.project"}}' |
+      awk '/^mooncen-smoke-[a-zA-Z0-9_-]+$/' | sort -u
+  )
+  projects+=("${ids[@]}")
+  ids=()
+  for project in "${projects[@]}"; do
+    mapfile -t ids < <(docker ps -aq --filter "label=com.docker.compose.project=$project")
+    [ "${#ids[@]}" -eq 0 ] || docker rm -f -- "${ids[@]}"
+  done
+  mapfile -t ids < <(
+    docker image ls --format '{{.Repository}}:{{.Tag}} {{.ID}}' |
+      awk '$1 ~ /^mooncen\/(api|frontend|postgres|ops-console-static):/ {print $2}' |
+      sort -u
+  )
   [ "${#ids[@]}" -eq 0 ] || docker image rm -f -- "${ids[@]}"
-  mapfile -t ids < <(docker volume ls -q | awk '/^mooncen-/')
+  mapfile -t ids < <(
+    docker volume ls -q |
+      awk '/^(mooncen-dev_|mooncen-production_|mooncen-smoke-)/'
+  )
   [ "${#ids[@]}" -eq 0 ] || docker volume rm -f -- "${ids[@]}"
-  mapfile -t ids < <(docker network ls --format '{{.Name}}' | awk '/^mooncen-/')
+  mapfile -t ids < <(
+    docker network ls --format '{{.Name}}' |
+      awk '/^(mooncen-dev_|mooncen-production_|mooncen-smoke-)/'
+  )
   [ "${#ids[@]}" -eq 0 ] || docker network rm -- "${ids[@]}"
 }
 payload = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("ascii") + b"\n"

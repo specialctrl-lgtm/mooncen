@@ -41,5 +41,7 @@ def test_cleanup_is_scoped_to_mooncen_docker_objects() -> None:
     assert "docker system prune" not in source
     assert "docker volume prune" not in source
     assert "docker network prune" not in source
-    assert "awk '$1 ~ /^mooncen\\// {print $2}'" in source
-    assert "awk '/^mooncen-/'" in source
+    assert "mooncen-dev mooncen-production" in source
+    assert "^mooncen-smoke-" in source
+    assert "mooncen\\/(api|frontend|postgres|ops-console-static):" in source
+    assert "mooncen-monitoring" not in source
