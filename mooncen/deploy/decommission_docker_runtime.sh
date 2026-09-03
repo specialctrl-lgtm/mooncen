@@ -64,8 +64,20 @@ PY
 
 remove_mooncen_docker_objects() {
   local -a ids=() projects=(mooncen-dev mooncen-production)
-  local project
+  local container_id image project
   command -v docker >/dev/null 2>&1 || return 0
+  mapfile -t ids < <(
+    while read -r container_id; do
+      [ -n "$container_id" ] || continue
+      image=$(docker inspect --format '{{.Config.Image}}' "$container_id") || continue
+      case "$image" in
+        mooncen/api:*|mooncen/frontend:*|mooncen/postgres:*|mooncen/ops-console-static:*)
+          printf '%s\n' "$container_id"
+          ;;
+      esac
+    done < <(docker ps -aq)
+  )
+  [ "${#ids[@]}" -eq 0 ] || docker rm -f -- "${ids[@]}"
   mapfile -t ids < <(
     docker ps -a --format '{{.Label "com.docker.compose.project"}}' |
       awk '/^mooncen-smoke-[a-zA-Z0-9_-]+$/' | sort -u

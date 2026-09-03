@@ -48,6 +48,8 @@ def test_cleanup_is_scoped_to_mooncen_docker_objects() -> None:
     assert "mooncen-dev mooncen-production" in source
     assert "^mooncen-smoke-" in source
     assert "mooncen\\/(api|frontend|postgres|ops-console-static):" in source
+    assert "mooncen/api:*|mooncen/frontend:*|mooncen/postgres:*|mooncen/ops-console-static:*" in source
+    assert "docker inspect --format '{{.Config.Image}}'" in source
     assert "mooncen-monitoring" not in source
     assert "remove_mooncen_docker_objects()" not in python_block
     assert source.index("\nPY\n") < source.index("remove_mooncen_docker_objects()")
