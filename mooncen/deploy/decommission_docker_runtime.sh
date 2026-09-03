@@ -116,8 +116,11 @@ decommission_an2p() {
     transaction_present=true
   fi
 
-  [ -x /usr/local/libexec/mooncen-an2p-service-control ] || die "native selector is unavailable"
-  /usr/local/libexec/mooncen-an2p-service-control native-select >/dev/null
+  if [ -x /usr/local/libexec/mooncen-an2p-service-control ]; then
+    /usr/local/libexec/mooncen-an2p-service-control native-select >/dev/null
+  elif [ "$transaction_present" = true ]; then
+    die "native selector is unavailable while a transaction still exists"
+  fi
 
   if [ "$transaction_present" = true ]; then
     exec 9<>"$lock"
