@@ -85,10 +85,8 @@ def test_supervisor_has_bounded_recovery_logs_and_strict_process_ownership() -> 
     assert "Test-FrontendProcess" in source
     assert "Assert-NoUntrackedOpsProcesses" in source
     assert "An untracked MoonCen Ops process is running" in source
-    assert "Test-ActiveOpsDeployment" in source
-    assert "Ops repair is deferred without stopping it" in source
     assert "occupied by an unrecognized process; no process was stopped" in source
-    assert "Deployment worker heartbeat is stale" in source
+    assert "deployment-worker" not in source
     assert "Stop-MatchingDevProcesses" not in source
 
 

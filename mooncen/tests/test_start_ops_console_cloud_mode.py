@@ -129,11 +129,9 @@ def test_session_zero_state_records_runtime_and_launcher_identities() -> None:
         "launcher_started_at",
         "process_name",
         "listener_ports",
-        "heartbeat_path",
     ):
         assert field in launcher
     assert "function New-ListenerManagedProcessEntry(" in launcher
-    assert "function New-HeartbeatManagedProcessEntry(" in launcher
     assert (
         'New-ListenerManagedProcessEntry "api" $api @($cloudApiPort)'
         in launcher
@@ -149,12 +147,11 @@ def test_session_zero_identity_checks_do_not_depend_on_visible_command_lines() -
     assert "$snapshot.CreationDate" in launcher
     assert "function Test-ProcessDescendsFrom(" in launcher
     assert "Test-ListenerRuntimeOwnership" in launcher
-    assert "Test-HeartbeatRuntimeOwnership" in launcher
     assert "if ($commandLine) {" in launcher
     assert "Recorded $($Entry.name) PID $recordedId is running but its identity cannot be verified" in launcher
 
 
-def test_stop_uses_verified_launcher_tree_and_fails_closed_for_hidden_deploy_shell() -> None:
+def test_stop_uses_verified_launcher_tree() -> None:
     launcher = _launcher()
 
     assert "function Stop-VerifiedProcess(" in launcher
@@ -165,4 +162,4 @@ def test_stop_uses_verified_launcher_tree_and_fails_closed_for_hidden_deploy_she
     assert "ParentProcessId = $parentId" in stop_tree
     assert ".CommandLine" not in stop_tree
     assert "did not stop within 5 seconds" in launcher
-    assert 'child.Name -in @("powershell.exe", "powershell", "pwsh.exe", "pwsh")' in launcher
+    assert "deployment-worker" not in launcher

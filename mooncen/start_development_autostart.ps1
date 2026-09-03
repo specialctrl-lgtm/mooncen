@@ -13,9 +13,7 @@ param(
     [ValidateRange(10, 300)]
     [int]$CheckIntervalSec = 30,
     [ValidateRange(30, 900)]
-    [int]$MaxRetrySec = 300,
-    [ValidateRange(30, 600)]
-    [int]$DeploymentHeartbeatMaxAgeSec = 90
+    [int]$MaxRetrySec = 300
 )
 
 $ErrorActionPreference = "Stop"
@@ -23,7 +21,6 @@ $root = [IO.Path]::GetFullPath($PSScriptRoot)
 $opsLauncher = Join-Path $root "start_ops_console.ps1"
 $devLauncher = Join-Path $root "start_dev.ps1"
 $opsStatePath = Join-Path $root "logs\ops-console-local\processes.json"
-$deploymentHeartbeatPath = Join-Path $root "logs\ops-console-local\deployment-worker.heartbeat.json"
 $frontendRoot = Join-Path $root "frontend2"
 $stateDir = Join-Path $root "logs\development-autostart"
 $statePath = Join-Path $stateDir "state.json"
@@ -279,7 +276,6 @@ function Test-OpsProcessEntry([object]$Entry) {
         "crawler-scheduler" = @("python.exe", "python")
         "crawler-worker" = @("python.exe", "python")
         "quality-worker" = @("python.exe", "python")
-        "deployment-worker" = @("python.exe", "python")
     }
     $entryName = [string]$Entry.name
     if (
@@ -408,14 +404,14 @@ function Get-OpsHealth {
     }
 
     $requiredProcesses = if ($DataSource -eq "Cloud") {
-        $names = @("ssh-tunnel", "api", "console", "deployment-worker")
+        $names = @("ssh-tunnel", "api", "console")
         if ($crawlerControlAnalyticsEnabled) {
             $names += "crawler-control-ssh-tunnel"
         }
         $names
     }
     else {
-        @("api", "console", "status-agent", "deployment-worker")
+        @("api", "console", "status-agent")
     }
     foreach ($name in $requiredProcesses) {
         $entry = Get-OpsEntry -State $state -Name $name
@@ -439,29 +435,6 @@ function Get-OpsHealth {
         }
         if ($crawlerControlAnalyticsEnabled -and $null -eq (Get-Listener 15433)) {
             $reasons.Add("Crawler-control database tunnel is not listening on port 15433.")
-        }
-    }
-
-    $heartbeat = Get-JsonFile $deploymentHeartbeatPath
-    $deploymentEntry = Get-OpsEntry -State $state -Name "deployment-worker"
-    if (
-        $null -eq $heartbeat -or
-        $null -eq $heartbeat.PSObject.Properties["updated_at"] -or
-        $null -eq $heartbeat.PSObject.Properties["pid"] -or
-        $null -eq $deploymentEntry -or
-        (
-            [int]$heartbeat.pid -ne [int]$deploymentEntry.pid -and
-            -not (Test-ProcessDescendsFrom -ProcessId ([int]$heartbeat.pid) -ExpectedAncestorId ([int]$deploymentEntry.pid))
-        )
-    ) {
-        $reasons.Add("Deployment worker heartbeat is missing or belongs to another process.")
-    }
-    else {
-        $epoch = [datetime]::SpecifyKind([datetime]"1970-01-01", [DateTimeKind]::Utc)
-        $heartbeatAt = $epoch.AddSeconds([double]$heartbeat.updated_at)
-        $ageSeconds = ((Get-Date).ToUniversalTime() - $heartbeatAt).TotalSeconds
-        if ($ageSeconds -lt -30 -or $ageSeconds -gt $DeploymentHeartbeatMaxAgeSec) {
-            $reasons.Add("Deployment worker heartbeat is stale.")
         }
     }
 
@@ -818,7 +791,6 @@ function Assert-NoUntrackedOpsProcesses([object]$State) {
     }
     $patterns = @(
         "backend.main:app",
-        "ops_agent.deployment_worker",
         "ops_agent.status_agent",
         "ops_agent.crawler_scheduler",
         "ops_agent.crawler_worker",
@@ -851,30 +823,6 @@ function Assert-NoUntrackedOpsProcesses([object]$State) {
     }
 }
 
-function Test-ActiveOpsDeployment([object]$State) {
-    $entry = Get-OpsEntry -State $State -Name "deployment-worker"
-    if ($null -eq $entry -or -not (Test-OpsProcessEntry $entry)) {
-        return $false
-    }
-    $pending = @([int]$entry.pid)
-    $visited = @{}
-    while ($pending.Count -gt 0) {
-        $parentId = [int]$pending[0]
-        $pending = @($pending | Select-Object -Skip 1)
-        if ($visited.ContainsKey($parentId)) {
-            continue
-        }
-        $visited[$parentId] = $true
-        foreach ($child in @(Get-CimInstance Win32_Process -Filter "ParentProcessId = $parentId" -ErrorAction SilentlyContinue)) {
-            if (([string]$child.CommandLine).IndexOf("deploy_mooncen.ps1", [StringComparison]::OrdinalIgnoreCase) -ge 0) {
-                return $true
-            }
-            $pending += [int]$child.ProcessId
-        }
-    }
-    return $false
-}
-
 function Ensure-Ops {
     $health = Get-OpsHealth
     if ($health.Ready) {
@@ -901,9 +849,6 @@ function Ensure-Ops {
         }
     }
     if ($observedRunning) {
-        if (Test-ActiveOpsDeployment $health.State) {
-            throw "An application deployment is active; Ops repair is deferred without stopping it."
-        }
         Start-Sleep -Seconds 5
         $health = Get-OpsHealth
         if ($health.Ready) {
@@ -913,9 +858,6 @@ function Ensure-Ops {
         $health = Get-OpsHealth
         if ($health.Ready) {
             return
-        }
-        if (Test-ActiveOpsDeployment $health.State) {
-            throw "An application deployment became active; Ops repair is deferred without stopping it."
         }
     }
     Assert-Prerequisites -ProbeSsh ($DataSource -eq "Cloud")

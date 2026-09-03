@@ -29,7 +29,6 @@ $opsDir = Join-Path $root "ops-console"
 $vite = Join-Path $opsDir "node_modules\vite\bin\vite.js"
 $stateDir = Join-Path $root "logs\ops-console-local"
 $statePath = Join-Path $stateDir "processes.json"
-$deploymentHeartbeat = Join-Path $stateDir "deployment-worker.heartbeat.json"
 $apiStandardOutputLog = Join-Path $stateDir "api.stdout.log"
 $apiStandardErrorLog = Join-Path $stateDir "api.stderr.log"
 $cloudSshTarget = $SshTarget
@@ -145,8 +144,7 @@ function New-ManagedProcessEntry(
     [string]$Name,
     [Diagnostics.Process]$Process,
     [Diagnostics.Process]$LauncherProcess = $null,
-    [int[]]$ListenerPorts = @(),
-    [string]$HeartbeatPath = ""
+    [int[]]$ListenerPorts = @()
 ) {
     if ($null -eq $LauncherProcess) {
         $LauncherProcess = $Process
@@ -162,7 +160,6 @@ function New-ManagedProcessEntry(
         launcher_process_name = $LauncherProcess.ProcessName
         launcher_executable_path = Get-ProcessExecutablePath $LauncherProcess
         listener_ports = @($ListenerPorts)
-        heartbeat_path = $HeartbeatPath
     }
 }
 
@@ -250,7 +247,6 @@ function Get-ExpectedProcessNames([string]$Name) {
         "crawler-scheduler" = @("python.exe", "python")
         "crawler-worker" = @("python.exe", "python")
         "quality-worker" = @("python.exe", "python")
-        "deployment-worker" = @("python.exe", "python")
     }
     if (-not $expected.ContainsKey($Name)) {
         return @()
@@ -299,34 +295,6 @@ function Test-ListenerRuntimeOwnership(
         }
     }
     return $true
-}
-
-function Test-HeartbeatRuntimeOwnership(
-    [int]$RuntimeProcessId,
-    [int]$LauncherProcessId,
-    [string]$HeartbeatPath,
-    [switch]$RequireExactRuntime
-) {
-    if (-not $HeartbeatPath -or -not (Test-Path -LiteralPath $HeartbeatPath -PathType Leaf)) {
-        return $false
-    }
-    try {
-        if ([IO.Path]::GetFullPath($HeartbeatPath) -ne [IO.Path]::GetFullPath($deploymentHeartbeat)) {
-            return $false
-        }
-        $heartbeat = Get-Content -LiteralPath $HeartbeatPath -Raw -Encoding UTF8 | ConvertFrom-Json
-        if ($null -eq $heartbeat.PSObject.Properties["pid"]) {
-            return $false
-        }
-        $heartbeatProcessId = [int]$heartbeat.pid
-        if ($RequireExactRuntime) {
-            return $heartbeatProcessId -eq $RuntimeProcessId
-        }
-        return Test-ProcessDescendsFrom $heartbeatProcessId $LauncherProcessId
-    }
-    catch {
-        return $false
-    }
 }
 
 function Get-StoredProcess(
@@ -382,28 +350,6 @@ function New-ListenerManagedProcessEntry(
     }
     $runtimeProcess = Get-Process -Id $runtimeProcessId -ErrorAction Stop
     return New-ManagedProcessEntry $Name $runtimeProcess $LauncherProcess $Ports
-}
-
-function New-HeartbeatManagedProcessEntry(
-    [string]$Name,
-    [Diagnostics.Process]$LauncherProcess,
-    [string]$HeartbeatPath
-) {
-    try {
-        $heartbeat = Get-Content -LiteralPath $HeartbeatPath -Raw -Encoding UTF8 | ConvertFrom-Json
-        if ($null -eq $heartbeat.PSObject.Properties["pid"]) {
-            throw "Heartbeat PID is missing."
-        }
-        $runtimeProcessId = [int]$heartbeat.pid
-    }
-    catch {
-        throw "$Name heartbeat identity is invalid: $($_.Exception.Message)"
-    }
-    if (-not (Test-ProcessDescendsFrom $runtimeProcessId $LauncherProcess.Id)) {
-        throw "$Name heartbeat process is outside its verified launcher process tree."
-    }
-    $runtimeProcess = Get-Process -Id $runtimeProcessId -ErrorAction Stop
-    return New-ManagedProcessEntry $Name $runtimeProcess $LauncherProcess @() $HeartbeatPath
 }
 
 function Get-ManagedProcess([object]$Entry) {
@@ -490,23 +436,6 @@ function Get-ManagedProcess([object]$Entry) {
         # recorded. The exact launcher creation time and current process tree
         # must still own every expected listener.
         if (-not (Test-ListenerRuntimeOwnership $processId $launcherProcessId $expectedListenerPorts)) {
-            return $null
-        }
-    }
-
-    $heartbeatPath = if ($null -ne $Entry.PSObject.Properties["heartbeat_path"]) {
-        [string]$Entry.heartbeat_path
-    }
-    else {
-        ""
-    }
-    if ($heartbeatPath) {
-        if (-not (Test-HeartbeatRuntimeOwnership $processId $launcherProcessId $heartbeatPath -RequireExactRuntime)) {
-            return $null
-        }
-    }
-    elseif (-not $commandLine -and $name -eq "deployment-worker") {
-        if (-not (Test-HeartbeatRuntimeOwnership $processId $launcherProcessId $deploymentHeartbeat)) {
             return $null
         }
     }
@@ -645,46 +574,8 @@ function Stop-ManagedProcessTree([object]$Entry) {
     Stop-ProcessTree $launcherProcessId $launcherStartedAt
 }
 
-function Test-ActiveDeployment([object]$State) {
-    if ($null -eq $State) {
-        return $false
-    }
-    $entry = @($State.processes | Where-Object { $_.name -eq "deployment-worker" } | Select-Object -First 1)
-    if ($entry.Count -eq 0 -or $null -eq (Get-ManagedProcess $entry[0])) {
-        return $false
-    }
-    $pending = @([int]$entry[0].pid)
-    $visited = @{}
-    while ($pending.Count -gt 0) {
-        $parentId = [int]$pending[0]
-        $pending = @($pending | Select-Object -Skip 1)
-        if ($visited.ContainsKey($parentId)) {
-            continue
-        }
-        $visited[$parentId] = $true
-        $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId = $parentId" -ErrorAction SilentlyContinue)
-        foreach ($child in $children) {
-            $commandLine = [string]$child.CommandLine
-            if ($commandLine.IndexOf("deploy_mooncen.ps1", [StringComparison]::OrdinalIgnoreCase) -ge 0) {
-                return $true
-            }
-            if (-not $commandLine -and [string]$child.Name -in @("powershell.exe", "powershell", "pwsh.exe", "pwsh")) {
-                # Session 0 can hide command lines from an interactive status
-                # process. A shell below the deployment worker may be the live
-                # deploy script, so stopping must fail closed.
-                return $true
-            }
-            $pending += [int]$child.ProcessId
-        }
-    }
-    return $false
-}
-
 function Stop-OpsConsole {
     $state = Get-State
-    if (Test-ActiveDeployment $state) {
-        throw "An application deployment is active. Wait for it to finish or cancel it from Ops Console before stopping."
-    }
     if ($null -ne $state) {
         $stopOrder = @(
             "console",
@@ -692,7 +583,6 @@ function Stop-OpsConsole {
             "crawler-worker",
             "quality-worker",
             "status-agent",
-            "deployment-worker",
             "api",
             "crawler-control-ssh-tunnel",
             "ssh-tunnel"
@@ -729,7 +619,7 @@ function Show-Status {
     if ($null -ne $state -and [bool]$state.crawler_control_analytics_enabled) {
         $statusNames += "crawler-control-ssh-tunnel"
     }
-    $statusNames += @("api", "console", "status-agent", "crawler-scheduler", "crawler-worker", "quality-worker", "deployment-worker")
+    $statusNames += @("api", "console", "status-agent", "crawler-scheduler", "crawler-worker", "quality-worker")
     foreach ($name in $statusNames) {
         $entry = @($stateProcesses | Where-Object { $_.name -eq $name } | Select-Object -First 1)
         $running = $false
@@ -816,27 +706,6 @@ function Wait-Listener(
         }
         if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
             return $true
-        }
-        Start-Sleep -Milliseconds 250
-    } while ((Get-Date) -lt $deadline)
-    return $false
-}
-
-function Wait-DeploymentWorker(
-    [int]$ProcessId,
-    [datetime]$NotBefore,
-    [int]$Seconds = 10
-) {
-    $deadline = (Get-Date).AddSeconds($Seconds)
-    do {
-        if ($null -eq (Get-WorkspaceProcess $ProcessId)) {
-            return $false
-        }
-        if (Test-Path -LiteralPath $deploymentHeartbeat -PathType Leaf) {
-            $heartbeat = Get-Item -LiteralPath $deploymentHeartbeat
-            if ($heartbeat.LastWriteTimeUtc -ge $NotBefore.ToUniversalTime()) {
-                return $true
-            }
         }
         Start-Sleep -Milliseconds 250
     } while ((Get-Date) -lt $deadline)
@@ -1493,7 +1362,7 @@ function Start-OpsConsole {
     if ($DataSource -eq "Cloud") {
         Write-Host "Data source: production cloud database via SSH tunnel on 127.0.0.1:$cloudDbTunnelPort"
         Write-Host "Control API: http://127.0.0.1:8001/health"
-        Write-Host "Deployment worker: enabled for the local reviewed worktree"
+        Write-Host "Deployment: native deploy script only"
         if ($crawlerControlEnvironmentEnabled) {
             Write-Host "Crawler analytics: gen1db crawler-control pool via dedicated SSH tunnel on 127.0.0.1:$crawlerControlDbTunnelPort"
         }
