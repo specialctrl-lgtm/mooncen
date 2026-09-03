@@ -217,10 +217,7 @@ def test_application_units_enforce_sandbox_baseline():
         line
         for line in frontend.splitlines()
         if line.startswith("ReadWritePaths=")
-    } == {
-        "ReadWritePaths=-/var/lib/mooncen-container-release",
-        "ReadWritePaths=-/run/mooncen-container-release",
-    }
+    } == set()
     assert "IPAddressDeny=any" in frontend
     assert "IPAddressAllow=localhost" in frontend
     bot = _text(SYSTEMD_DIR / "mooncen-ops-bot.service")

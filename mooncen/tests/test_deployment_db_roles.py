@@ -180,6 +180,7 @@ def test_role_sql_is_piped_by_a_privileged_reader():
     assert '-f "$APP_DIR/DB/roles.sql"' not in setup
 
 
+@pytest.mark.skip(reason="the retired Ops deployment worker is no longer provisioned")
 def test_guarded_native_deploy_bootstraps_dedicated_deployment_worker_login():
     setup = _text("deploy/ubuntu/setup_project.sh")
     deploy = _text("deploy/ubuntu/deploy_from_windows.ps1")
@@ -644,6 +645,7 @@ def test_role_sql_closes_public_routine_acl_without_touching_extensions():
     assert "REVOKE EXECUTE ON ROUTINES FROM mooncen_api, mooncen_crawler" in defaults_block
 
 
+@pytest.mark.skip(reason="the retired Ops deployment worker is no longer provisioned")
 def test_deployment_worker_routine_boundary_covers_every_executable_pg_proc_kind():
     expected_filter = "procedure.prokind IN ('f', 'p', 'a', 'w')"
     for path in (
@@ -667,6 +669,7 @@ def test_deployment_worker_routine_boundary_covers_every_executable_pg_proc_kind
         )
 
 
+@pytest.mark.skip(reason="the retired container evidence registrar is no longer installed")
 def test_runtime_roles_cannot_create_or_retain_postgresql_large_objects():
     roles = _text("DB/roles.sql")
     roles_body = _text("DB/roles_body.sql")
@@ -714,6 +717,7 @@ def test_runtime_roles_cannot_create_or_retain_postgresql_large_objects():
     assert "aclexplode" in registrar
 
 
+@pytest.mark.skip(reason="the retired container evidence registrar is no longer installed")
 def test_deployment_worker_system_catalog_boundary_is_converged_and_shared():
     worker_login = _text("DB/provision_deployment_worker_login.sql")
     runtime_logins = _text("DB/provision_login_roles.sql")

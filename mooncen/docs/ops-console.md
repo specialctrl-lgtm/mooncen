@@ -1,8 +1,7 @@
 # MoonCen integrated Ops Console
 
-Docker 불변 이미지 배포의 증적·권한·API·UI 계약은
-[`docker-ops-console.md`](docker-ops-console.md)를 참고한다. 기존
-`/api/ops/deployments` 실행 경로는 네이티브(레거시)로 구분된다.
+Ops Console의 배포 화면은 native 배포 상태와 이력만 표시한다. Docker build,
+validation, promote, rollback API와 UI는 폐기되었다.
 
 The integrated Ops Console is a separate administrator application in
 `ops-console/`. It does not add administrator code to `frontend2`, is not

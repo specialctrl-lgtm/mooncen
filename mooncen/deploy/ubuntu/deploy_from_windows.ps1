@@ -1780,10 +1780,7 @@ for required in \
   requirements.lock \
   frontend2/package-lock.json \
   deploy/ubuntu/setup_project.sh \
-  deploy/ubuntu/configure_container_pg_hba.py \
-  deploy/ubuntu/export_an2p_control_secrets.py \
   deploy/ubuntu/install_sudoers.sh \
-  deploy/ubuntu/mooncen_native_runtime_condition.py \
   deploy/ubuntu/ops_service_helper.sh \
   deploy/ubuntu/mooncen_release_guard.sh \
   deploy/ubuntu/mooncen_prebuild_release.sh \

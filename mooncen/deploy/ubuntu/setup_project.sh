@@ -1381,38 +1381,11 @@ MOONCEN_SMTP_SECURITY=${MOONCEN_SMTP_SECURITY}
 SITE_URL=https://${DOMAIN}
 ENV
 
-install_container_env container-migrator.env <<ENV
-DB_NAME=${DB_NAME}
-DB_USER=${DB_MIGRATOR_USER}
-DB_PASSWORD=${DB_PASSWORD}
-ENV
-
 install_service_env frontend.env "$FRONTEND_OS_USER" <<ENV
 FRONTEND_HOST=127.0.0.1
 FRONTEND_PORT=5173
 NODE_ENV=production
 ENV
-
-container_runtime_config="$SERVICE_CONFIG_DIR/container-frontend-runtime-config.js"
-container_runtime_stage="$(sudo mktemp "$SERVICE_CONFIG_DIR/.container-runtime-config.XXXXXX")"
-if ! sudo env -i \
-    PATH=/usr/bin:/bin \
-    MOONCEN_SITE_URL="https://${DOMAIN}" \
-    MOONCEN_OAUTH_REDIRECT_URI="$OAUTH_REDIRECT_URI" \
-    MOONCEN_KAKAO_MAPS_JAVASCRIPT_KEY="$KAKAO_MAPS_JAVASCRIPT_KEY" \
-    MOONCEN_GOOGLE_OAUTH_CLIENT_ID="$GOOGLE_OAUTH_CLIENT_ID" \
-    MOONCEN_NAVER_OAUTH_CLIENT_ID="$NAVER_OAUTH_CLIENT_ID" \
-    /usr/bin/python3 -I "$APP_DIR/deploy/docker/render_runtime_config.py" \
-      --output "$container_runtime_stage" ||
-   ! sudo chown root:root "$container_runtime_stage" ||
-   ! sudo chmod 0644 "$container_runtime_stage" ||
-   ! sudo sync -f -- "$container_runtime_stage" ||
-   ! sudo mv -fT -- "$container_runtime_stage" "$container_runtime_config"; then
-  sudo rm -f -- "$container_runtime_stage"
-  echo "Container frontend runtime configuration could not be installed." >&2
-  exit 74
-fi
-sudo sync -f -- "$SERVICE_CONFIG_DIR"
 
 if [ "$ENABLE_CRAWLER_STAGING" = "1" ]; then
   install_service_env crawler.env "$CRAWLER_OS_USER" <<ENV
@@ -1608,49 +1581,6 @@ BACKUP_MAX_SOURCE_DB_BYTES=${BACKUP_MAX_SOURCE_DB_BYTES}
 ENV
 sudo chown root:"$BACKUP_OS_GROUP" "$BACKUP_ENV_FILE"
 sudo chmod 0640 "$BACKUP_ENV_FILE"
-
-CONTAINER_PG_HBA_SOURCE="$APP_DIR/deploy/ubuntu/configure_container_pg_hba.py"
-CONTAINER_PG_HBA_HELPER=/usr/local/libexec/mooncen-configure-container-pg-hba
-NATIVE_RUNTIME_CONDITION_SOURCE="$APP_DIR/deploy/ubuntu/mooncen_native_runtime_condition.py"
-NATIVE_RUNTIME_CONDITION_HELPER=/usr/local/libexec/mooncen-native-runtime-condition
-AN2P_CONTROL_SECRETS_EXPORT_SOURCE="$APP_DIR/deploy/ubuntu/export_an2p_control_secrets.py"
-AN2P_CONTROL_SECRETS_EXPORT_HELPER=/usr/local/libexec/mooncen-export-an2p-control-secrets
-
-install_root_runtime_helper() {
-  local helper_source="$1"
-  local helper_target="$2"
-  local helper_stage
-  [ -f "$helper_source" ] && [ ! -L "$helper_source" ] || {
-    echo "Required container runtime helper source is unavailable or unsafe." >&2
-    exit 78
-  }
-  helper_stage="${helper_target}.staged.$$"
-  if sudo test -e "$helper_stage" || sudo test -L "$helper_stage"; then
-    echo "Container runtime helper staging path is unsafe." >&2
-    exit 78
-  fi
-  sudo install -o root -g root -m 0755 "$helper_source" "$helper_stage"
-  sudo mv -fT -- "$helper_stage" "$helper_target"
-  sudo test -f "$helper_target" && ! sudo test -L "$helper_target" &&
-    [ "$(sudo stat -c '%U:%G:%a' "$helper_target")" = root:root:755 ] || {
-      echo "Installed container runtime helper metadata is unsafe." >&2
-      exit 78
-    }
-}
-
-# A previous exporter must not remain callable while the database/HBA contract
-# is being changed. It is restored only after every live authorization probe
-# and the root-only source commit have succeeded.
-if sudo test -e "$AN2P_CONTROL_SECRETS_EXPORT_HELPER" ||
-   sudo test -L "$AN2P_CONTROL_SECRETS_EXPORT_HELPER"; then
-  sudo rm -f -- "$AN2P_CONTROL_SECRETS_EXPORT_HELPER"
-fi
-if sudo test -e "$AN2P_CONTROL_SECRETS_EXPORT_HELPER" ||
-   sudo test -L "$AN2P_CONTROL_SECRETS_EXPORT_HELPER"; then
-  echo "Deployment control-secret exporter could not be revoked." >&2
-  exit 78
-fi
-install_root_runtime_helper "$CONTAINER_PG_HBA_SOURCE" "$CONTAINER_PG_HBA_HELPER"
 
 if [ "$SKIP_DB_SETUP" != "1" ]; then
 DB_USE_MIGRATOR=1 \
@@ -2181,43 +2111,7 @@ if [ "$db_role_contract" != "t" ]; then
   exit 70
 fi
 
-# Ubuntu's local peer fallback intentionally remains for native administration.
-# Prove the three local container SCRAM rules and the deployment worker's
-# TLS-only exact-database fence before publishing any credential export source.
-printf '%s\n%s\n%s\n%s\n' \
-  "$DB_PASSWORD" \
-  "$DB_API_PASSWORD" \
-  "$DB_AI_PASSWORD" \
-  "$DB_DEPLOYMENT_WORKER_PASSWORD" |
-  sudo "$CONTAINER_PG_HBA_HELPER" install \
-    --database "$DB_NAME" \
-    --migrator-role "$DB_MIGRATOR_USER" \
-    --api-role "$DB_API_USER" \
-    --ai-role "$DB_AI_USER" \
-    --worker-role "$DB_DEPLOYMENT_WORKER_USER" >/dev/null
-
-# Reuse the exact registrar authorization query against the live dedicated
-# LOGIN before its credential can cross the production-to-an2p boundary.
-printf '%s\n' "$DB_DEPLOYMENT_WORKER_PASSWORD" |
-  (
-    cd "$APP_DIR"
-    env -i \
-      HOME=/nonexistent \
-      LANG=C \
-      LC_ALL=C \
-      PATH=/usr/bin:/bin \
-      PYTHONDONTWRITEBYTECODE=1 \
-      "$APP_DIR/.venv/bin/python" \
-        -m tools.register_container_deployment_evidence \
-        --verify-database-boundary \
-        --database "$DB_NAME" \
-        --user "$DB_DEPLOYMENT_WORKER_USER"
-  ) >/dev/null
-
-# Publish the export source only after the schema, dedicated LOGIN, and exact
-# ACL/HBA contracts have all converged. The user-readable deploy store remains
-# the retry journal; this second copy is the root-only source for an explicit
-# production-to-an2p encrypted pipe.
+# Preserve the validated deploy secret source for native deployment retries.
 deploy_secret_metadata="$(stat -c '%U:%a' "$DEPLOY_SECRET_FILE")"
 if [ ! -f "$DEPLOY_SECRET_FILE" ] || [ -L "$DEPLOY_SECRET_FILE" ] || \
    { [ "$deploy_secret_metadata" != "$DEPLOY_USER:600" ] && \
@@ -2260,18 +2154,9 @@ sudo mv -fT -- "$root_deploy_secret_stage" "$ROOT_DEPLOY_SECRET_FILE"
 root_deploy_secret_stage=""
 sudo sync -f -- "$SERVICE_CONFIG_DIR"
 trap - EXIT HUP INT TERM
-install_root_runtime_helper \
-  "$AN2P_CONTROL_SECRETS_EXPORT_SOURCE" \
-  "$AN2P_CONTROL_SECRETS_EXPORT_HELPER"
 else
   echo "Skipping DB setup/migration because SKIP_DB_SETUP=1."
 fi
-
-# Keep the reviewed native-condition byte installed on standby nodes too. Only
-# a primary that converged the database contract installs the exporter.
-install_root_runtime_helper \
-  "$NATIVE_RUNTIME_CONDITION_SOURCE" \
-  "$NATIVE_RUNTIME_CONDITION_HELPER"
 
 if [ "$NODE_ROLE" = "primary" ] && [ "$ENABLE_CRAWLER_STAGING" = "1" ]; then
   echo "Configuring the dedicated local crawler staging database..."
@@ -2433,23 +2318,8 @@ sudo chmod 0644 "$APP_DIR/.env"
 sudo install -d -o "$CRAWLER_OS_USER" -g "$CRAWLER_OS_USER" -m 0700 /var/log/mooncen
 
 if [ "$PREBUILT_RELEASE" = "1" ]; then
-  # Attest only after every included file's content, owner, group, and mode
-  # has converged. The marker and deploy-info are separately pinned.
-  immutable_tree_sha256="$(
-    sudo /usr/bin/python3 -I "$APP_DIR/deploy/docker/native_baseline.py" \
-      --root "$APP_DIR"
-  )" || {
-    echo "Immutable native runtime inventory could not be attested." >&2
-    exit 66
-  }
-  [[ "$immutable_tree_sha256" =~ ^[0-9a-f]{64}$ ]] || {
-    echo "Immutable native runtime inventory digest is invalid." >&2
-    exit 66
-  }
-  {
-    printf 'DEPLOY_ARCHIVE_SHA256=%s\n' "$DEPLOY_ARCHIVE_SHA256"
-    printf 'IMMUTABLE_TREE_SHA256=%s\n' "$immutable_tree_sha256"
-  } | sudo /usr/bin/tee -a "$prebuild_marker" >/dev/null
+  printf 'DEPLOY_ARCHIVE_SHA256=%s\n' "$DEPLOY_ARCHIVE_SHA256" |
+    sudo /usr/bin/tee -a "$prebuild_marker" >/dev/null
   sudo chown root:root "$prebuild_marker"
   sudo chmod 0600 "$prebuild_marker"
 fi

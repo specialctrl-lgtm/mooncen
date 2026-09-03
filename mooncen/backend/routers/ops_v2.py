@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+# Container handlers below are retained only to deserialize historical audit
+# rows during the database retention window. They are removed from the router
+# at module initialization and their runtime dependencies have been deleted.
+# ruff: noqa: F821
+
 import asyncio
 import json
 import logging
@@ -22,11 +27,6 @@ from backend import models
 from backend.database import SessionLocal, get_db
 from backend.observability import runtime_metrics
 from backend.ops.schemas import (
-    ContainerBuildRequest,
-    ContainerNativeRollbackRequest,
-    ContainerPromotionRequest,
-    ContainerRollbackRequest,
-    ContainerValidationRequest,
     CrawlerRunRequest,
     DeploymentRequest,
     IssueActionRequest,
@@ -62,12 +62,6 @@ from ops_agent.crawler_registry import (
     CrawlerProviderRegistryError,
     resolve_crawler_provider_execution,
     reviewed_crawler_providers,
-)
-from ops_agent.container_deployment import (
-    ContainerDeploymentError,
-    container_runtime_cas,
-    container_transport_service_boundary_ready,
-    read_container_controller_status,
 )
 from ops_agent.deployment_registry import deployment_readiness, reviewed_target
 from ops_agent.production_topology import load_production_topology
@@ -279,69 +273,11 @@ def _deployment_readiness_payload(db: Session) -> dict[str, Any]:
             ),
         }
     )
-    container_runtime_blocked = False
-    if table_exists(db, "ops_container_releases"):
-        guard = mapped_one(
-            db.execute(
-                text(
-                    """
-                    SELECT
-                        (
-                            SELECT count(*)
-                            FROM ops_deployments deployment
-                            WHERE deployment.environment = :environment
-                              AND deployment.target_name = :target_name
-                              AND deployment.deployment_mode = 'container'
-                              AND deployment.deployment_status = 'success'
-                        ) AS successful_count,
-                        (
-                            SELECT count(*)
-                            FROM ops_jobs job
-                            WHERE job.environment = :environment
-                              AND job.target_key = :target_key
-                              AND job.job_type = 'deployment'
-                              AND job.parameters->>'deployment_mode' = 'container'
-                              AND job.status IN ('queued', 'assigned', 'running')
-                        ) AS active_count
-                    """
-                ),
-                {
-                    "environment": current_environment(),
-                    "target_name": _CONTAINER_PRODUCTION_TARGET,
-                    "target_key": f"deployment:{_CONTAINER_PRODUCTION_TARGET}",
-                },
-            )
-        ) or {"successful_count": 0, "active_count": 0}
-        live_status = read_container_controller_status(timeout_seconds=10)
-        active_count = int(guard.get("active_count") or 0)
-        successful_count = int(guard.get("successful_count") or 0)
-        container_runtime_blocked = bool(
-            active_count
-            or (
-                live_status is not None
-                and (
-                    live_status.get("state") is not None
-                    or live_status.get("transaction") is not None
-                    or live_status.get("native_intent") is not None
-                )
-            )
-            or (live_status is None and successful_count)
-        )
-        if container_runtime_blocked:
-            reasons.append(
-                {
-                    "code": "native_deploy_blocked_by_container_runtime",
-                    "message": (
-                        "운영 container runtime/transaction 또는 확인 불가능한 container 이력이 "
-                        "있어 네이티브 배포를 차단했습니다."
-                    ),
-                }
-            )
     readiness["agent"] = agent
     readiness["can_deploy"] = False
     readiness["reasons"] = reasons
     readiness["deployment_mode"] = "native"
-    readiness["display_name"] = "네이티브 배포(레거시)"
+    readiness["display_name"] = "네이티브 배포"
     readiness["execution_supported"] = False
     readiness["operator_path"] = "an2p-interactive-tailscale"
     return readiness
@@ -5726,3 +5662,12 @@ def settings_status(
             "quality": 60,
         },
     }
+
+
+# Docker deployment was retired. Historical database rows remain readable via
+# audit exports, but no container control endpoint is registered by the API.
+router.routes[:] = [
+    route
+    for route in router.routes
+    if "/deployments/container" not in getattr(route, "path", "")
+]

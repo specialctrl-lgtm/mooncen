@@ -1,6 +1,0 @@
-#!/bin/sh
-set -eu
-
-exec /usr/bin/python3 -I \
-  /usr/local/libexec/mooncen-container-release-lib/deploy/docker/mooncen_container_release.py \
-  "$@"

@@ -43,8 +43,7 @@ def test_crawler_control_pool_is_explicit_separate_and_api_only() -> None:
     assert '"OPS_CRAWLER_SHARED_DB_HOST"] = $crawlerControlDbTunnelAddress' in launcher
     assert '"OPS_CRAWLER_API_DB_PASSWORD"] = $crawlerValues[' in launcher
 
-    worker_block = launcher.split('Worker = @{', 1)[1].split('\n        }', 1)[0]
-    assert "OPS_CRAWLER_API_DB_PASSWORD" not in worker_block
+    assert "Worker = @{" not in launcher
     assert "Crawler-control SSH must use a separate identity file" in launcher
     assert "crawler_control_analytics_enabled" in launcher
     assert "crawler_control_ssh_target" in launcher
@@ -71,13 +70,13 @@ def test_cloud_mode_starts_local_control_plane_for_the_production_database() -> 
     assert 'Get-CloudControlEnvironment $ssh' in start_function
     assert 'New-ManagedProcessEntry "ssh-tunnel" $tunnel' in start_function
     assert 'New-ManagedProcessEntry "api" $api' in start_function
-    assert 'New-ManagedProcessEntry "deployment-worker" $deploymentWorker' in start_function
+    assert 'New-ManagedProcessEntry "deployment-worker"' not in start_function
     assert 'name = "status-agent"' in start_function
     assert 'New-ManagedProcessEntry "console" $console' in start_function
     assert 'if ($DataSource -eq "Local" -and $EnableLocalCrawlerRuntime)' in start_function
     assert '$apiEnvironment = if ($DataSource -eq "Cloud") { $cloudControlEnvironment.Api } else { @{} }' in start_function
     assert '$apiStandardOutputLog $apiStandardErrorLog' in start_function
-    assert '$cloudControlEnvironment.Worker' in start_function
+    assert '$cloudControlEnvironment.Worker' not in start_function
     assert 'if ($DataSource -eq "Local") {' in start_function
     assert (
         '-EnableLocalCrawlerRuntime is allowed only with -DataSource Local.'
@@ -139,11 +138,7 @@ def test_session_zero_state_records_runtime_and_launcher_identities() -> None:
         'New-ListenerManagedProcessEntry "api" $api @($cloudApiPort)'
         in launcher
     )
-    assert (
-        'New-HeartbeatManagedProcessEntry `\n'
-        '            "deployment-worker" $deploymentWorker $deploymentHeartbeat'
-        in launcher
-    )
+    assert '"deployment-worker" $deploymentWorker' not in launcher
     assert 'New-ListenerManagedProcessEntry "console" $console @(5175)' in launcher
 
 

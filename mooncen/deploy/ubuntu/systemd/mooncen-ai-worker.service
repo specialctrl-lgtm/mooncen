@@ -6,7 +6,6 @@ After=network.target postgresql.service mooncen-api.service
 Type=simple
 User=mooncen-ai
 Group=mooncen-ai
-ExecCondition=+/usr/local/libexec/mooncen-native-runtime-condition
 WorkingDirectory=/opt/mooncen
 EnvironmentFile=/etc/mooncen/ai.env
 Environment=PYTHONDONTWRITEBYTECODE=1
@@ -22,8 +21,6 @@ UMask=0077
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ReadWritePaths=-/var/lib/mooncen-container-release
-ReadWritePaths=-/run/mooncen-container-release
 ProtectHome=true
 PrivateDevices=true
 ProtectKernelTunables=true

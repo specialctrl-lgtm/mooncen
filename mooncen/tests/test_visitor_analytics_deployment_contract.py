@@ -115,16 +115,13 @@ def test_local_cloud_ops_reads_protected_values_and_injects_only_the_api() -> No
 
     assert "Get-CloudflareAnalyticsEnvironment $SshExecutable" in launcher
     assert "SetEnvironmentVariable($analyticsEnvironmentName, $null, \"Process\")" in launcher
-    assert launcher.count("$nonApiAnalyticsEnvironment") >= 4
+    assert launcher.count("$nonApiAnalyticsEnvironment") >= 3
     assert "zone_count" in launcher and "token_count" in launcher
     assert "PAIR:" in launcher and "ABSENT" in launcher
     assert "malformed or unreadable" in launcher
     assert '"`$HOME/.config/mooncen/deploy-secrets.env"' in launcher
     assert '"`$mode" = 600' in launcher
-    worker_block = launcher.split("Worker = @{", 1)[1].split("\n        }", 1)[0]
-    for name in ENV_NAMES:
-        assert f'{name} = ""' in worker_block
-        assert f'$apiEnvironment["{name}"]' in launcher
+    assert "Worker = @{" not in launcher
 
 
 def test_operator_docs_define_metric_semantics_and_fail_closed_state() -> None:

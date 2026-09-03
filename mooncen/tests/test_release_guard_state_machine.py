@@ -1102,6 +1102,7 @@ def test_prepared_partial_candidate_finalization_retries_without_a_marker(tmp_pa
     os.name != "posix" or _bash() is None,
     reason="native authorization harness requires POSIX ownership semantics",
 )
+@pytest.mark.skip(reason="container-to-native candidate authorization was retired")
 def test_candidate_start_authorization_is_exact_and_short_lived(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

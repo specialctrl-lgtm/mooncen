@@ -956,36 +956,6 @@ function Get-LocalEnvironmentValue([string]$Name) {
     return $line.Substring($prefix.Length).Trim()
 }
 
-function Get-CloudContainerTargetIdentity([string]$SshExecutable) {
-    $sshArguments = @(
-        "-T", "-n",
-        "-o", "BatchMode=yes",
-        "-o", "ConnectTimeout=10",
-        "-o", "StrictHostKeyChecking=yes",
-        "-o", "UpdateHostKeys=no",
-        "-o", "PreferredAuthentications=publickey",
-        "-o", "PasswordAuthentication=no",
-        "-o", "KbdInteractiveAuthentication=no",
-        "-o", "NumberOfPasswordPrompts=0"
-    )
-    $sshArguments += @(Get-SshIdentityArguments)
-    $fixedCommand = "/usr/bin/sudo -n -- /usr/local/libexec/mooncen-container-release target-identity"
-    $output = @(& $SshExecutable @sshArguments $cloudSshTarget $fixedCommand 2>$null)
-    if ($LASTEXITCODE -ne 0 -or $output.Count -ne 1) {
-        throw "Canonical an2p development target identity is unavailable."
-    }
-    $wireValue = [string]$output[0]
-    $match = [regex]::Match(
-        $wireValue,
-        '^\{"schema_version":1,"target":"an2p-dev","target_identity":"([0-9a-f]{64})"\}$',
-        [Text.RegularExpressions.RegexOptions]::CultureInvariant
-    )
-    if (-not $match.Success) {
-        throw "Canonical an2p development target identity response is invalid."
-    }
-    return $match.Groups[1].Value
-}
-
 function Get-CrawlerControlEnvironmentValue(
     [string]$SshExecutable,
     [string]$Name
@@ -1109,7 +1079,6 @@ function Get-CloudControlEnvironment([string]$SshExecutable) {
     $remoteNames = @(
         "DB_NAME",
         "DB_API_PASSWORD",
-        "DB_DEPLOYMENT_WORKER_PASSWORD",
         "AUTH_SECRET"
     )
     $remoteValues = @{}
@@ -1120,15 +1089,9 @@ function Get-CloudControlEnvironment([string]$SshExecutable) {
         }
         $remoteValues[$name] = $value
     }
-    $remoteValues["OPS_CONTAINER_DEV_TARGET_IDENTITY"] = `
-        Get-CloudContainerTargetIdentity $SshExecutable
     $remoteValues["DB_API_USER"] = Get-RemoteEnvironmentValue $SshExecutable "DB_API_USER"
     if (-not $remoteValues["DB_API_USER"]) {
         $remoteValues["DB_API_USER"] = "mooncen_api_login"
-    }
-    $remoteValues["DB_DEPLOYMENT_WORKER_USER"] = Get-RemoteEnvironmentValue $SshExecutable "DB_DEPLOYMENT_WORKER_USER"
-    if (-not $remoteValues["DB_DEPLOYMENT_WORKER_USER"]) {
-        $remoteValues["DB_DEPLOYMENT_WORKER_USER"] = "mooncen_deployment_worker_login"
     }
     $remoteValues["MOONCEN_OPS_LOGIN_ID"] = Get-RemoteEnvironmentValue $SshExecutable "MOONCEN_OPS_LOGIN_ID"
     if (-not $remoteValues["MOONCEN_OPS_LOGIN_ID"]) {
@@ -1154,13 +1117,6 @@ function Get-CloudControlEnvironment([string]$SshExecutable) {
             throw "Cloudflare analytics token is unavailable or invalid."
         }
     }
-    if ($remoteValues["DB_API_USER"] -eq $remoteValues["DB_DEPLOYMENT_WORKER_USER"] -or
-        $remoteValues["DB_DEPLOYMENT_WORKER_USER"] -eq "mooncen_crawler_login") {
-        throw "Cloud API and deployment queue roles must be separated."
-    }
-    if ($remoteValues["OPS_CONTAINER_DEV_TARGET_IDENTITY"] -notmatch '^[0-9a-f]{64}$') {
-        throw "Canonical an2p development target identity is unavailable or invalid."
-    }
     $apiEnvironment = @{
             ENVIRONMENT = "production"
             DB_HOST = $cloudDbTunnelAddress
@@ -1174,7 +1130,6 @@ function Get-CloudControlEnvironment([string]$SshExecutable) {
             DB_API_PASSWORD = $remoteValues["DB_API_PASSWORD"]
             DB_CRAWLER_USER = ""
             DB_CRAWLER_PASSWORD = ""
-            OPS_CONTAINER_DEV_TARGET_IDENTITY = $remoteValues["OPS_CONTAINER_DEV_TARGET_IDENTITY"]
             AUTH_SECRET = $remoteValues["AUTH_SECRET"]
             MOONCEN_OPS_LOGIN_ID = $remoteValues["MOONCEN_OPS_LOGIN_ID"]
             MOONCEN_OPS_PASSWORD_HASH = $remoteValues["MOONCEN_OPS_PASSWORD_HASH"]
@@ -1224,33 +1179,6 @@ function Get-CloudControlEnvironment([string]$SshExecutable) {
     }
     return @{
         Api = $apiEnvironment
-        Worker = @{
-            ENVIRONMENT = "production"
-            DB_HOST = $cloudDbTunnelAddress
-            DB_PORT = "$cloudDbTunnelPort"
-            DB_NAME = $remoteValues["DB_NAME"]
-            DB_SSLMODE = "require"
-            DB_USER = "mooncen_admin"
-            DB_PASSWORD = ""
-            DB_OWNER_USER = "mooncen_admin"
-            DB_API_USER = ""
-            DB_API_PASSWORD = ""
-            DB_CRAWLER_USER = ""
-            DB_CRAWLER_PASSWORD = ""
-            OPS_DEPLOY_QUEUE_DB_HOST = $cloudDbTunnelAddress
-            OPS_DEPLOY_QUEUE_DB_PORT = "$cloudDbTunnelPort"
-            OPS_DEPLOY_QUEUE_DB_NAME = $remoteValues["DB_NAME"]
-            OPS_DEPLOY_QUEUE_DB_USER = $remoteValues["DB_DEPLOYMENT_WORKER_USER"]
-            OPS_DEPLOY_QUEUE_DB_PASSWORD = $remoteValues["DB_DEPLOYMENT_WORKER_PASSWORD"]
-            OPS_DEPLOY_AGENT_EXCLUSIVE = "true"
-            OPS_CONTAINER_DEV_TARGET_IDENTITY = $remoteValues["OPS_CONTAINER_DEV_TARGET_IDENTITY"]
-            OPS_CONTAINER_RELEASE_ROOT = ""
-            AUTH_SECRET = ""
-            MOONCEN_OPS_PASSWORD_HASH = ""
-            OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "false"
-            OPS_CLOUDFLARE_ANALYTICS_ZONE_ID = ""
-            OPS_CLOUDFLARE_ANALYTICS_TOKEN = ""
-        }
     }
 }
 
@@ -1500,35 +1428,6 @@ function Start-OpsConsole {
                 "Initial Ops status snapshot failed." -Quiet
         }
 
-        $deploymentStartedAt = Get-Date
-        $deploymentWorker = if ($DataSource -eq "Cloud") {
-            Start-ProcessWithEnvironment `
-                $python `
-                @("-m", "ops_agent.deployment_worker") `
-                $root `
-                $cloudControlEnvironment.Worker `
-                (Join-Path $stateDir "deployment-worker.stdout.log") `
-                (Join-Path $stateDir "deployment-worker.stderr.log")
-        }
-        else {
-            Start-ProcessWithEnvironment `
-                $python `
-                @("-m", "ops_agent.deployment_worker") `
-                $root `
-                $nonApiAnalyticsEnvironment
-        }
-        $deploymentEntryIndex = $started.Count
-        $started += New-ManagedProcessEntry "deployment-worker" $deploymentWorker
-        if (-not (Wait-DeploymentWorker $deploymentWorker.Id $deploymentStartedAt)) {
-            throw "Deployment worker did not become ready."
-        }
-        $started[$deploymentEntryIndex] = New-HeartbeatManagedProcessEntry `
-            "deployment-worker" $deploymentWorker $deploymentHeartbeat
-        if ($DataSource -eq "Local") {
-            Invoke-CheckedNative $python @("-m", "ops_agent.status_agent", "--once") `
-                "Deployment worker status snapshot failed." -Quiet
-        }
-
         $workers = @()
         if ($DataSource -eq "Local") {
             $workers += @(
@@ -1628,7 +1527,7 @@ function Refresh-OpsControl {
     $env:OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = if ($localCrawlerRuntimeEnabled) { "true" } else { "false" }
     Add-ExecutableDirectoryToPath (Resolve-GitExecutable)
 
-    $controlNames = @("api", "status-agent", "deployment-worker")
+    $controlNames = @("api", "status-agent")
     foreach ($entry in @($state.processes | Where-Object { $_.name -in $controlNames })) {
         Stop-ManagedProcessTree $entry
     }
@@ -1654,25 +1553,8 @@ function Refresh-OpsControl {
         }
         $started[$apiEntryIndex] = New-ListenerManagedProcessEntry "api" $api @($cloudApiPort)
 
-        # Ensure the shared host agent exists before the restricted deployment
-        # worker resolves its queue assignment identity.
         Invoke-CheckedNative $python @("-m", "ops_agent.status_agent", "--once") `
             "Initial refreshed Ops status snapshot failed." -Quiet
-
-        $deploymentStartedAt = Get-Date
-        $deploymentWorker = Start-Process -FilePath $python `
-            -ArgumentList @("-m", "ops_agent.deployment_worker") `
-            -WorkingDirectory $root -WindowStyle Hidden -PassThru
-        $deploymentEntryIndex = $started.Count
-        $started += New-ManagedProcessEntry "deployment-worker" $deploymentWorker
-        if (-not (Wait-DeploymentWorker $deploymentWorker.Id $deploymentStartedAt)) {
-            throw "Deployment worker did not become ready."
-        }
-        $started[$deploymentEntryIndex] = New-HeartbeatManagedProcessEntry `
-            "deployment-worker" $deploymentWorker $deploymentHeartbeat
-
-        Invoke-CheckedNative $python @("-m", "ops_agent.status_agent", "--once") `
-            "Deployment worker status snapshot failed." -Quiet
         $statusAgent = Start-Process -FilePath $python `
             -ArgumentList @("-m", "ops_agent.status_agent", "--interval", "30") `
             -WorkingDirectory $root -WindowStyle Hidden -PassThru
