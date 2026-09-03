@@ -20,6 +20,8 @@ def test_an2p_decommission_proves_native_health_before_archiving() -> None:
 
     assert "registration_sha256\") != \"0\" * 64" in source
     assert "pending_sha256\") != hashlib.sha256(pending_payload).hexdigest()" in source
+    assert "partial control transaction residue exists" in source
+    assert 'if [ "$transaction_present" = true ]; then' in source
     assert "systemctl --user --machine=sgm@ is-active --quiet mooncen-api.service" in source
     assert "systemctl --user --machine=sgm@ is-active --quiet mooncen-frontend.service" in source
     assert health < archive

@@ -100,22 +100,29 @@ decommission_an2p() {
   local transaction=$state/control-finalization-transaction.json
   local pending=$state/pending-control-finalization.json
   local lock=$state/operation.lock
+  local transaction_present=false
 
-  [ -f "$transaction" ] && [ ! -L "$transaction" ] || die "control finalization transaction is unavailable"
-  [ -f "$pending" ] && [ ! -L "$pending" ] || die "pending control finalization receipt is unavailable"
-  [ "$(stat -c '%U:%G:%a' "$transaction")" = root:root:600 ] || die "control transaction metadata is unsafe"
-  [ "$(stat -c '%U:%G:%a' "$pending")" = root:root:600 ] || die "pending receipt metadata is unsafe"
-  if [ ! -e "$lock" ] && [ ! -L "$lock" ]; then
-    install -o root -g root -m 0600 /dev/null "$lock"
+  if { [ -e "$transaction" ] || [ -L "$transaction" ]; } ||
+     { [ -e "$pending" ] || [ -L "$pending" ]; }; then
+    [ -f "$transaction" ] && [ ! -L "$transaction" ] || die "partial control transaction residue exists"
+    [ -f "$pending" ] && [ ! -L "$pending" ] || die "partial control transaction residue exists"
+    [ "$(stat -c '%U:%G:%a' "$transaction")" = root:root:600 ] || die "control transaction metadata is unsafe"
+    [ "$(stat -c '%U:%G:%a' "$pending")" = root:root:600 ] || die "pending receipt metadata is unsafe"
+    if [ ! -e "$lock" ] && [ ! -L "$lock" ]; then
+      install -d -o root -g root -m 0700 "$state"
+      install -o root -g root -m 0600 /dev/null "$lock"
+    fi
+    [ -f "$lock" ] && [ ! -L "$lock" ] && [ "$(stat -c '%U:%G:%a' "$lock")" = root:root:600 ] || die "operation lock is unsafe"
+    transaction_present=true
   fi
-  [ -f "$lock" ] && [ ! -L "$lock" ] && [ "$(stat -c '%U:%G:%a' "$lock")" = root:root:600 ] || die "operation lock is unsafe"
 
   [ -x /usr/local/libexec/mooncen-an2p-service-control ] || die "native selector is unavailable"
   /usr/local/libexec/mooncen-an2p-service-control native-select >/dev/null
 
-  exec 9<>"$lock"
-  flock -x 9
-  /usr/bin/python3 -I - "$transaction" "$pending" <<'PY'
+  if [ "$transaction_present" = true ]; then
+    exec 9<>"$lock"
+    flock -x 9
+    /usr/bin/python3 -I - "$transaction" "$pending" <<'PY'
 import hashlib
 import json
 import pathlib
@@ -140,6 +147,7 @@ if (
 ):
     raise SystemExit("refusing to retire a control transaction that may have crossed the registration boundary")
 PY
+  fi
 
   ! systemctl is-active --quiet mooncen-docker-dev.service || die "Docker development service remains active"
   ! systemctl is-enabled --quiet mooncen-docker-dev.service || die "Docker development service remains enabled"
