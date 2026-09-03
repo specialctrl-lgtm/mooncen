@@ -229,10 +229,16 @@ decommission_cloud() {
   [ "$(hostname -s)" = mooncen ] || die "cloud mode requires the production mooncen host"
   local state=/var/lib/mooncen-container-release
   local transition=/var/lib/mooncen-runtime-transition
+  local api_result
 
-  systemctl is-active --quiet mooncen-api.service || die "native API is inactive"
+  systemctl is-enabled --quiet mooncen-api.service || die "native API is not enabled"
+  systemctl is-enabled --quiet mooncen-frontend.service || die "native frontend is not enabled"
+  if ! systemctl is-active --quiet mooncen-api.service; then
+    api_result=$(systemctl show mooncen-api.service -p Result --value)
+    [ "$api_result" = exec-condition ] || die "native API is inactive for a reason unrelated to retired container state"
+  fi
   systemctl is-active --quiet mooncen-frontend.service || die "native frontend is inactive"
-  curl --noproxy '*' -fsS http://127.0.0.1:8001/health | grep -Fxq '{"status":"ready"}' || die "native API health failed"
+  systemctl is-active --quiet postgresql.service || die "native PostgreSQL is inactive"
   curl --noproxy '*' -fsS http://127.0.0.1:5173/ >/dev/null || die "native frontend health failed"
   for unsafe in \
     "$state/active.json" \
@@ -268,8 +274,14 @@ decommission_cloud() {
     /opt/mooncen-container-releases; do
     archive_path "$path"
   done
-  remove_mooncen_docker_objects
   systemctl daemon-reload
+  systemctl reset-failed mooncen-api.service mooncen-frontend.service
+  systemctl start mooncen-api.service mooncen-frontend.service
+  systemctl is-active --quiet mooncen-api.service || die "native API did not start after container residue removal"
+  systemctl is-active --quiet mooncen-frontend.service || die "native frontend did not remain active"
+  curl --noproxy '*' -fsS http://127.0.0.1:8001/health | grep -Fxq '{"status":"ready"}' || die "native API health failed after container residue removal"
+  curl --noproxy '*' -fsS http://127.0.0.1:5173/ >/dev/null || die "native frontend health failed after container residue removal"
+  remove_mooncen_docker_objects
   write_receipt
   echo "cloud Docker controller retired; native production is healthy"
   echo "recovery_archive=$archive_root"

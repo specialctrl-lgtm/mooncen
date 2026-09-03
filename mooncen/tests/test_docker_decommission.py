@@ -36,6 +36,11 @@ def test_cloud_decommission_refuses_active_transition_state() -> None:
     assert '"$transition/native-bootstrap-intent.json"' in source
     assert "active runtime state blocks decommission" in source
     assert "/etc/systemd/system/multi-user.target.wants/mooncen-container-stack.service" in source
+    assert "native API is inactive for a reason unrelated to retired container state" in source
+    assert "native API health failed after container residue removal" in source
+    archive = source.index('/etc/mooncen/container-runtime-installation.json')
+    restart = source.index("systemctl start mooncen-api.service mooncen-frontend.service")
+    assert archive < restart
 
 
 def test_cleanup_is_scoped_to_mooncen_docker_objects() -> None:
