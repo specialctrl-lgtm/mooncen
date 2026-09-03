@@ -51,6 +51,16 @@ value = {
     "schema_version": 1,
     "timestamp": sys.argv[3],
 }
+payload = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("ascii") + b"\n"
+descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+try:
+    os.write(descriptor, payload)
+    os.fsync(descriptor)
+finally:
+    os.close(descriptor)
+PY
+  sync -f -- "$archive_root"
+}
 
 remove_mooncen_docker_objects() {
   local -a ids=() projects=(mooncen-dev mooncen-production)
@@ -82,16 +92,6 @@ remove_mooncen_docker_objects() {
       awk '/^(mooncen-dev_|mooncen-production_|mooncen-smoke-)/'
   )
   [ "${#ids[@]}" -eq 0 ] || docker network rm -- "${ids[@]}"
-}
-payload = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("ascii") + b"\n"
-descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
-try:
-    os.write(descriptor, payload)
-    os.fsync(descriptor)
-finally:
-    os.close(descriptor)
-PY
-  sync -f -- "$archive_root"
 }
 
 decommission_an2p() {

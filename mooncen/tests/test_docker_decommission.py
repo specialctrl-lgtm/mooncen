@@ -40,6 +40,7 @@ def test_cloud_decommission_refuses_active_transition_state() -> None:
 
 def test_cleanup_is_scoped_to_mooncen_docker_objects() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
+    python_block = source.split("<<'PY'", 1)[1].split("\nPY\n", 1)[0]
 
     assert "docker system prune" not in source
     assert "docker volume prune" not in source
@@ -48,3 +49,6 @@ def test_cleanup_is_scoped_to_mooncen_docker_objects() -> None:
     assert "^mooncen-smoke-" in source
     assert "mooncen\\/(api|frontend|postgres|ops-console-static):" in source
     assert "mooncen-monitoring" not in source
+    assert "remove_mooncen_docker_objects()" not in python_block
+    assert source.index("\nPY\n") < source.index("remove_mooncen_docker_objects()")
+    compile(python_block, str(SCRIPT), "exec")
