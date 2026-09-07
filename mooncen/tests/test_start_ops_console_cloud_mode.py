@@ -147,6 +147,9 @@ def test_session_zero_identity_checks_do_not_depend_on_visible_command_lines() -
     assert "$snapshot.CreationDate" in launcher
     assert "function Test-ProcessDescendsFrom(" in launcher
     assert "Test-ListenerRuntimeOwnership" in launcher
+    assert "function Get-ExpectedCommandLineTokens([string]$Name)" in launcher
+    assert '"api" = @("-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8001")' in launcher
+    assert "foreach ($requiredToken in @(Get-ExpectedCommandLineTokens $name))" in launcher
     assert "if ($commandLine) {" in launcher
     assert "Recorded $($Entry.name) PID $recordedId is running but its identity cannot be verified" in launcher
 

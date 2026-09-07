@@ -83,6 +83,8 @@ def test_supervisor_has_bounded_recovery_logs_and_strict_process_ownership() -> 
     assert "Test-ProcessStartTime" in source
     assert "Test-ProcessDescendsFrom" in source
     assert "Test-FrontendProcess" in source
+    assert '"api" = @("-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8001")' in source
+    assert "$fixedTokens.ContainsKey($entryName)" in source
     assert "Assert-NoUntrackedOpsProcesses" in source
     assert "An untracked MoonCen Ops process is running" in source
     assert "occupied by an unrecognized process; no process was stopped" in source

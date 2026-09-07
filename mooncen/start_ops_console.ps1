@@ -267,6 +267,20 @@ function Get-ExpectedListenerPorts([string]$Name) {
     return @($ports[$Name])
 }
 
+function Get-ExpectedCommandLineTokens([string]$Name) {
+    $tokens = @{
+        "api" = @("-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8001")
+        "status-agent" = @("-m", "ops_agent.status_agent")
+        "crawler-scheduler" = @("-m", "ops_agent.crawler_scheduler")
+        "crawler-worker" = @("-m", "ops_agent.crawler_worker")
+        "quality-worker" = @("-m", "ops_agent.quality_worker")
+    }
+    if (-not $tokens.ContainsKey($Name)) {
+        return @()
+    }
+    return @($tokens[$Name])
+}
+
 function Test-ListenerRuntimeOwnership(
     [int]$RuntimeProcessId,
     [int]$LauncherProcessId,
@@ -461,6 +475,13 @@ function Get-ManagedProcess([object]$Entry) {
                 "ExitOnForwardFailure=yes"
             )) {
                 if ($commandLine.IndexOf($requiredToken, [StringComparison]::Ordinal) -lt 0) {
+                    return $null
+                }
+            }
+        }
+        elseif (@(Get-ExpectedCommandLineTokens $name).Count -gt 0) {
+            foreach ($requiredToken in @(Get-ExpectedCommandLineTokens $name)) {
+                if ($commandLine.IndexOf($requiredToken, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
                     return $null
                 }
             }

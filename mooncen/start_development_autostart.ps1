@@ -309,6 +309,21 @@ function Test-OpsProcessEntry([object]$Entry) {
     if (-not $commandLine) {
         return $true
     }
+    $fixedTokens = @{
+        "api" = @("-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8001")
+        "status-agent" = @("-m", "ops_agent.status_agent")
+        "crawler-scheduler" = @("-m", "ops_agent.crawler_scheduler")
+        "crawler-worker" = @("-m", "ops_agent.crawler_worker")
+        "quality-worker" = @("-m", "ops_agent.quality_worker")
+    }
+    if ($fixedTokens.ContainsKey($entryName)) {
+        foreach ($token in @($fixedTokens[$entryName])) {
+            if ($commandLine.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+                return $false
+            }
+        }
+        return $true
+    }
     return $commandLine.IndexOf($root, [StringComparison]::OrdinalIgnoreCase) -ge 0
 }
 
