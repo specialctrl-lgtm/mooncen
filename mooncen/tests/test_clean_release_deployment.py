@@ -772,7 +772,7 @@ def test_ci_smoke_tests_the_real_git_archive() -> None:
 
     assert "Smoke-test immutable production archive" in workflow
     assert "git archive --format=tar.gz" in workflow
-    assert "tests/test_an2p_docker_release_selection.py" in workflow
+    assert "backend/routers/crawler_owner.py" in workflow
     assert "tools/ops_dashboard.py" not in workflow
     assert "tools/ops_dashboard.html" not in workflow
     assert "Production archive contains a symbolic link" in workflow

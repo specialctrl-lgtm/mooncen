@@ -21,6 +21,22 @@ type CrawlerSummary = Record<string, unknown> & {
   run_blocked_reason?: string | null;
 };
 
+type CrawlerOwnerStatus = {
+  available: boolean;
+  owner: string;
+  host?: string;
+  reason?: string;
+  timer?: Record<string, unknown>;
+  run?: Record<string, unknown>;
+  dispatch: {
+    running: boolean;
+    started_at?: string | null;
+    finished_at?: string | null;
+    exit_code?: number | null;
+    error?: string | null;
+  };
+};
+
 function runTriggerLabel(trigger: unknown): string {
   if (trigger === 'local_schedule') return '자동';
   if (trigger === 'standalone') return '직접 실행';
@@ -31,6 +47,10 @@ function runTriggerLabel(trigger: unknown): string {
 function confirmProduction(environment: string): boolean {
   if (environment !== 'production') return window.confirm('크롤러 작업을 대기열에 등록할까요?');
   return window.prompt('운영 크롤러 실행 확인을 위해 MOONCEN-PRODUCTION을 입력하세요.') === 'MOONCEN-PRODUCTION';
+}
+
+function confirmProductionRunAll(): boolean {
+  return window.prompt('운영 크롤러 전체 실행 확인을 위해 MOONCEN-CRAWLER-ALL을 입력하세요.') === 'MOONCEN-CRAWLER-ALL';
 }
 
 function providerRunPayload(provider: string, contentType: string): Record<string, unknown> {
@@ -67,6 +87,11 @@ export default function CrawlersPage() {
     queryKey: ['crawlers'],
     queryFn: () => opsApi<{ available: boolean; items: CrawlerSummary[]; total: number }>('/crawlers'),
     refetchInterval: 30_000,
+  });
+  const ownerStatus = useQuery({
+    queryKey: ['crawler-owner-status'],
+    queryFn: () => opsApi<CrawlerOwnerStatus>('/crawlers/owner/status'),
+    refetchInterval: 15_000,
   });
   const runs = useQuery({
     queryKey: ['crawler-runs', requestedProvider],
@@ -121,6 +146,16 @@ export default function CrawlersPage() {
     onSuccess: (result) => {
       setShowProbe(false);
       navigate(`/jobs/${result.job.id}`);
+    },
+  });
+  const runAllMutation = useMutation({
+    mutationFn: () => opsApi<{ accepted: boolean; owner: string }>('/crawlers/owner/run-all', {
+      method: 'POST',
+      body: JSON.stringify({ confirmation: 'MOONCEN-CRAWLER-ALL' }),
+    }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['crawler-owner-status'] });
+      void queryClient.invalidateQueries({ queryKey: ['crawler-runs'] });
     },
   });
   const submitRun = (event: FormEvent) => {
@@ -251,6 +286,23 @@ export default function CrawlersPage() {
             </Link>
             {session.role !== 'viewer' ? (
               <>
+                <button
+                  className="button primary"
+                  type="button"
+                  disabled={
+                    ownerStatus.isLoading
+                    || ownerStatus.data?.available !== true
+                    || ownerStatus.data?.dispatch.running === true
+                    || ['active', 'activating', 'reloading'].includes(String(ownerStatus.data?.run?.ActiveState || ''))
+                    || runAllMutation.isPending
+                  }
+                  title={ownerStatus.data?.available === false ? ownerStatus.data.reason : 'gen1crawler에서 모든 Provider를 1회 실행합니다.'}
+                  onClick={() => {
+                    if (confirmProductionRunAll()) runAllMutation.mutate();
+                  }}
+                >
+                  {runAllMutation.isPending || ownerStatus.data?.dispatch.running ? '전체 실행 요청 중…' : '전체 크롤러 실행'}
+                </button>
                 <button className="button subtle" type="button" onClick={() => setShowProbe(true)}>
                   Parser Probe
                 </button>
@@ -262,7 +314,30 @@ export default function CrawlersPage() {
           </>
         }
       />
-      {(runMutation.error || probeMutation.error) && <QueryState error={runMutation.error || probeMutation.error} />}
+      {(runMutation.error || probeMutation.error || runAllMutation.error) && <QueryState error={runMutation.error || probeMutation.error || runAllMutation.error} />}
+      <section className="panel">
+        <header className="section-header">
+          <div>
+            <h2>운영 전체 실행</h2>
+            <small>고정된 gen1crawler 운영 helper를 통해 모든 Provider를 1회 실행합니다.</small>
+          </div>
+        </header>
+        <QueryState loading={ownerStatus.isLoading} error={ownerStatus.error} />
+        {ownerStatus.data && (
+          <DefinitionList
+            value={{
+              available: ownerStatus.data.available,
+              owner: ownerStatus.data.owner,
+              timer_state: ownerStatus.data.timer?.ActiveState || 'unknown',
+              timer_enabled: ownerStatus.data.timer?.UnitFileState || 'unknown',
+              run_state: ownerStatus.data.run?.ActiveState || 'unknown',
+              run_result: ownerStatus.data.run?.Result || 'unknown',
+              dispatch_running: ownerStatus.data.dispatch.running,
+              dispatch_error: ownerStatus.data.dispatch.error || ownerStatus.data.reason || null,
+            }}
+          />
+        )}
+      </section>
       <section className="panel">
         <header className="section-header">
           <h2>{requestedProvider ? `${requestedProvider} 크롤러` : '크롤러 목록'}</h2>

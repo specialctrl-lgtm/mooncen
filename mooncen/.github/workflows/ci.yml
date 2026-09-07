@@ -143,6 +143,7 @@ jobs:
           tar --extract --gzip --file "$archive" --directory "$release"
           for required in \
             requirements.lock \
+            backend/routers/crawler_owner.py \
             deploy/ubuntu/setup_project.sh \
             deploy/decommission_docker_runtime.sh \
             tools/ops_service_action.py; do

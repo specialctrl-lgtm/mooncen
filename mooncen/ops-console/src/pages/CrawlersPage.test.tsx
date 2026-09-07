@@ -69,6 +69,19 @@ describe('CrawlersPage automatic runs', () => {
           ],
         };
       }
+      if (path === '/crawlers/owner/status') {
+        return {
+          available: true,
+          owner: 'gen1crawler',
+          host: 'gen1crawler',
+          timer: { ActiveState: 'inactive', UnitFileState: 'disabled' },
+          run: { ActiveState: 'inactive', Result: 'success', ExecMainStatus: '0' },
+          dispatch: { running: false, started_at: null, finished_at: null, exit_code: null, error: null },
+        };
+      }
+      if (path === '/crawlers/owner/run-all') {
+        return { accepted: true, owner: 'gen1crawler' };
+      }
       if (path === '/crawlers/runs?limit=100') {
         return {
           available: true,
@@ -169,5 +182,22 @@ describe('CrawlersPage automatic runs', () => {
     expect(screen.queryByText('MUNI_OTHER')).not.toBeInTheDocument();
     expect(mockedOpsApi).toHaveBeenCalledWith('/crawlers/runs?limit=100&provider=HOMEPLUS');
     expect(screen.getByRole('link', { name: '개선 큐' })).toHaveAttribute('href', '/crawler-improvements');
+  });
+
+  it('requires the production phrase before dispatching a full owner run', async () => {
+    const prompt = vi.spyOn(window, 'prompt').mockReturnValue('MOONCEN-CRAWLER-ALL');
+    renderPage();
+
+    const button = await screen.findByRole('button', { name: '전체 크롤러 실행' });
+    await vi.waitFor(() => expect(button).not.toBeDisabled());
+    fireEvent.click(button);
+
+    await vi.waitFor(() => {
+      expect(mockedOpsApi).toHaveBeenCalledWith('/crawlers/owner/run-all', {
+        method: 'POST',
+        body: JSON.stringify({ confirmation: 'MOONCEN-CRAWLER-ALL' }),
+      });
+    });
+    expect(prompt).toHaveBeenCalledWith(expect.stringContaining('MOONCEN-CRAWLER-ALL'));
   });
 });
