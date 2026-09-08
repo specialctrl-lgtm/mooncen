@@ -1209,6 +1209,7 @@ function Start-OpsConsole {
     $cloudControlEnvironment = $null
     Add-ExecutableDirectoryToPath (Resolve-GitExecutable)
     $env:VITE_OPS_API_PROXY_TARGET = "http://127.0.0.1:8001"
+    $env:VITE_OPS_CSRF_COOKIE_NAME = "mooncen_ops_csrf"
     if ($DataSource -eq "Cloud") {
         $ssh = Resolve-SshExecutable
         $cloudControlEnvironment = Get-CloudControlEnvironment $ssh
@@ -1303,6 +1304,13 @@ function Start-OpsConsole {
         $apiArguments = @("-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8001")
         Prepare-ApiLogs
         $apiEnvironment = if ($DataSource -eq "Cloud") { $cloudControlEnvironment.Api } else { @{} }
+        # The standalone browser and its loopback API must agree on the
+        # dedicated Ops cookie namespace.  The API remains bound to
+        # 127.0.0.1, so production credentials can use non-Secure cookies only
+        # for this explicitly reviewed local HTTP launcher.
+        $apiEnvironment["MOONCEN_AUTH_COOKIE_PREFIX"] = "mooncen_ops"
+        $apiEnvironment["MOONCEN_AUTH_COOKIE_SECURE"] = "false"
+        $apiEnvironment["MOONCEN_LOCAL_LOOPBACK_OPS_HTTP"] = "true"
         $api = Start-ProcessWithEnvironment `
             $python $apiArguments $root $apiEnvironment `
             $apiStandardOutputLog $apiStandardErrorLog

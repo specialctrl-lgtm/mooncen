@@ -93,7 +93,7 @@ def _auth_cookie_secure() -> bool:
         "on",
     }
     profile = os.getenv("MOONCEN_API_PROFILE", "combined").strip().lower()
-    if _is_production() and not (profile == "ops" and local_ops_http):
+    if _is_production() and not (profile in {"combined", "ops"} and local_ops_http):
         raise RuntimeError("production auth cookies must be Secure")
     return False
 

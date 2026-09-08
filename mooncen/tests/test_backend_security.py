@@ -389,6 +389,25 @@ def test_browser_session_cookie_is_httponly_and_cookie_mutations_require_csrf(mo
     assert exc_info.value.status_code == 403
 
 
+def test_combined_loopback_ops_api_can_issue_http_cookies_in_production(monkeypatch):
+    monkeypatch.setenv("ENVIRONMENT", "production")
+    monkeypatch.setenv("MOONCEN_API_PROFILE", "combined")
+    monkeypatch.setenv("MOONCEN_AUTH_COOKIE_SECURE", "false")
+    monkeypatch.setenv("MOONCEN_LOCAL_LOOPBACK_OPS_HTTP", "true")
+
+    assert auth._auth_cookie_secure() is False
+
+
+def test_production_combined_api_rejects_insecure_cookies_without_loopback_contract(monkeypatch):
+    monkeypatch.setenv("ENVIRONMENT", "production")
+    monkeypatch.setenv("MOONCEN_API_PROFILE", "combined")
+    monkeypatch.setenv("MOONCEN_AUTH_COOKIE_SECURE", "false")
+    monkeypatch.delenv("MOONCEN_LOCAL_LOOPBACK_OPS_HTTP", raising=False)
+
+    with pytest.raises(RuntimeError, match="production auth cookies must be Secure"):
+        auth._auth_cookie_secure()
+
+
 def test_dedicated_ops_sessions_are_revoked_when_the_password_verifier_changes(
     monkeypatch,
 ):

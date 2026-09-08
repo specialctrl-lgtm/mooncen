@@ -23,6 +23,7 @@ def test_ops_console_defaults_to_fixed_production_cloud_tunnel() -> None:
     assert '[string]$CrawlerControlSshTarget = "sgm@gen1db"' in launcher
     assert '[string]$CrawlerControlSshIdentityFile = ""' in launcher
     assert '$env:VITE_OPS_API_PROXY_TARGET = "http://127.0.0.1:8001"' in launcher
+    assert '$env:VITE_OPS_CSRF_COOKIE_NAME = "mooncen_ops_csrf"' in launcher
     assert '"-o", "BatchMode=yes"' in launcher
     assert '"-o", "ExitOnForwardFailure=yes"' in launcher
     assert '"-o", "StrictHostKeyChecking=yes"' in launcher
@@ -75,6 +76,9 @@ def test_cloud_mode_starts_local_control_plane_for_the_production_database() -> 
     assert 'New-ManagedProcessEntry "console" $console' in start_function
     assert 'if ($DataSource -eq "Local" -and $EnableLocalCrawlerRuntime)' in start_function
     assert '$apiEnvironment = if ($DataSource -eq "Cloud") { $cloudControlEnvironment.Api } else { @{} }' in start_function
+    assert '$apiEnvironment["MOONCEN_AUTH_COOKIE_PREFIX"] = "mooncen_ops"' in start_function
+    assert '$apiEnvironment["MOONCEN_AUTH_COOKIE_SECURE"] = "false"' in start_function
+    assert '$apiEnvironment["MOONCEN_LOCAL_LOOPBACK_OPS_HTTP"] = "true"' in start_function
     assert '$apiStandardOutputLog $apiStandardErrorLog' in start_function
     assert '$cloudControlEnvironment.Worker' not in start_function
     assert 'if ($DataSource -eq "Local") {' in start_function
