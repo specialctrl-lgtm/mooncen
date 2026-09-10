@@ -403,7 +403,7 @@ def create_ops_static_manifest(
     trusted_uid: int = 0,
     trusted_gid: int = 0,
 ) -> dict[str, Any]:
-    """Seal one root-owned Docker build output with an exact canonical receipt."""
+    """Seal one root-owned static build output with an exact canonical receipt."""
 
     trusted_root = _directory_metadata(root, uid=trusted_uid, gid=trusted_gid)
     manifest_path = trusted_root / MANIFEST_NAME

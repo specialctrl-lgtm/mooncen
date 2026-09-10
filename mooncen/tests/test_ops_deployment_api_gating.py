@@ -448,108 +448,20 @@ class _CancellationDB:
         self.commits += 1
 
 
-@pytest.mark.parametrize(
-    ("job_status", "stale_assignment", "expected_status", "disposition", "terminal"),
-    (
-        ("queued", False, "cancelled", "cancelled_queued", True),
-        (
-            "assigned",
-            True,
-            "cancelled",
-            "cancelled_stale_assignment",
-            True,
-        ),
-        (
-            "assigned",
-            False,
-            "assigned",
-            "cancellation_requested",
-            False,
-        ),
-        (
-            "running",
-            False,
-            "running",
-            "cancellation_requested",
-            False,
-        ),
-    ),
-)
-def test_deployment_cancel_contract_distinguishes_unowned_and_live_jobs(
+def test_deployment_jobs_are_read_only_through_the_generic_cancel_endpoint(
     monkeypatch,
-    job_status: str,
-    stale_assignment: bool,
-    expected_status: str,
-    disposition: str,
-    terminal: bool,
 ) -> None:
     job_id = uuid4()
     db = _CancellationDB(
         {
             "id": str(job_id),
-            "status": job_status,
+            "status": "running",
             "job_type": "deployment",
             "target_key": "deployment:cloud",
             "assigned_at": datetime.now(timezone.utc),
-            "started_at": None if job_status != "running" else datetime.now(timezone.utc),
+            "started_at": datetime.now(timezone.utc),
             "heartbeat_at": datetime.now(timezone.utc),
-            "stale_assignment": stale_assignment,
-        }
-    )
-    audit: list[dict] = []
-    monkeypatch.setattr(ops_v2, "require_ops_schema", lambda *_args: None)
-    monkeypatch.setattr(ops_v2, "deployment_heartbeat_lease_seconds", lambda: 300)
-    monkeypatch.setattr(ops_v2, "add_job_log", lambda *_args, **_kwargs: None)
-    monkeypatch.setattr(
-        ops_v2,
-        "append_audit",
-        lambda *_args, **kwargs: audit.append(kwargs),
-    )
-
-    result = ops_v2.cancel_job(
-        job_id,
-        JobActionRequest(reason="operator requested cancellation"),
-        SimpleNamespace(),  # type: ignore[arg-type]
-        SimpleNamespace(id=uuid4()),  # type: ignore[arg-type]
-        db,  # type: ignore[arg-type]
-    )
-
-    assert result["status"] == expected_status
-    assert result["terminal"] is terminal
-    assert result["cancellation_disposition"] == disposition
-    assert audit[0]["after_data"]["cancellation_disposition"] == disposition
-    select_sql, select_params = next(
-        (sql, params) for sql, params in db.calls if "FOR UPDATE" in sql
-    )
-    assert select_params["stale_after_seconds"] == 300
-    assert "status = 'assigned'" in select_sql
-    assert "started_at IS NULL" in select_sql
-    assert "COALESCE(" in select_sql
-    assert "make_interval(secs => :stale_after_seconds)" in select_sql
-    deployment_updates = [sql for sql, _params in db.calls if "UPDATE ops_deployments" in sql]
-    assert bool(deployment_updates) is terminal
-    if deployment_updates:
-        assert "deployment_status IN ('queued', 'running')" in deployment_updates[0]
-    assert db.commits == 1
-
-
-@pytest.mark.parametrize("job_status", ("assigned", "running"))
-def test_container_deployment_rejects_cancellation_after_remote_assignment(
-    monkeypatch: pytest.MonkeyPatch,
-    job_status: str,
-) -> None:
-    job_id = uuid4()
-    db = _CancellationDB(
-        {
-            "id": str(job_id),
-            "status": job_status,
-            "job_type": "deployment",
-            "target_key": "deployment:cloud",
-            "deployment_mode": "container",
-            "assigned_at": datetime.now(timezone.utc),
-            "started_at": None if job_status == "assigned" else datetime.now(timezone.utc),
-            "heartbeat_at": datetime.now(timezone.utc),
-            "stale_assignment": job_status == "assigned",
+            "stale_assignment": False,
         }
     )
     monkeypatch.setattr(ops_v2, "require_ops_schema", lambda *_args: None)
@@ -564,9 +476,8 @@ def test_container_deployment_rejects_cancellation_after_remote_assignment(
             db,  # type: ignore[arg-type]
         )
 
-    assert raised.value.status_code == 409
-    assert raised.value.detail["code"] == "container_deployment_cancellation_forbidden"
-    assert not any("UPDATE ops_jobs" in sql for sql, _params in db.calls)
+    assert raised.value.status_code == 405
+    assert "전용 운영 경로" in str(raised.value.detail)
     assert db.commits == 0
 
 
@@ -699,7 +610,7 @@ def test_create_deployment_rejects_target_from_a_different_environment(
     }
 
 
-def test_deployment_retry_still_requires_a_new_reviewed_request(monkeypatch) -> None:
+def test_deployment_retry_is_disabled_in_read_only_console(monkeypatch) -> None:
     class RetryDB:
         def execute(self, *_args, **_kwargs):
             return _Result(
@@ -725,7 +636,7 @@ def test_deployment_retry_still_requires_a_new_reviewed_request(monkeypatch) -> 
             RetryDB(),  # type: ignore[arg-type]
         )
 
-    assert raised.value.status_code == 409
+    assert raised.value.status_code == 405
 
 
 def test_active_deployment_target_migration_is_partial_and_non_destructive() -> None:

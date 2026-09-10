@@ -1,13 +1,13 @@
 version: 2
 updates:
   - package-ecosystem: pip
-    directory: /
+    directory: /mooncen
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
 
   - package-ecosystem: npm
-    directory: /frontend2
+    directory: /mooncen/frontend2
     schedule:
       interval: weekly
     groups:
@@ -17,22 +17,22 @@ updates:
         dependency-type: development
 
   - package-ecosystem: npm
-    directory: /frontend
+    directory: /mooncen/frontend
     schedule:
       interval: monthly
 
   - package-ecosystem: npm
-    directory: /mooncen-app
+    directory: /mooncen/mooncen-app
     schedule:
       interval: weekly
 
   - package-ecosystem: gradle
-    directory: /android
+    directory: /mooncen/android
     schedule:
       interval: monthly
 
   - package-ecosystem: docker
-    directory: /deploy/monitoring
+    directory: /mooncen/deploy/monitoring
     schedule:
       interval: weekly
 

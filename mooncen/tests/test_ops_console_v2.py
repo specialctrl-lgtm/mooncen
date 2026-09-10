@@ -779,7 +779,6 @@ def test_priority_ops_routes_are_registered_with_role_dependencies():
         assert any("require_ops_viewer" in dependencies for dependencies in matching)
 
     mutation_routes = {
-        "/api/ops/crawlers/run",
         "/api/ops/crawlers/parser-probe",
         "/api/ops/quality/scan",
         "/api/ops/jobs/{job_id}/cancel",
@@ -841,20 +840,20 @@ def test_partial_crawler_outcome_is_supported_across_job_contracts() -> None:
     assert ops_status_for_crawler_exit_code(1) == "failed"
 
 
-def test_local_crawler_runtime_requires_explicit_opt_in(monkeypatch) -> None:
+def test_local_crawler_runtime_is_permanently_disabled(monkeypatch) -> None:
     monkeypatch.delenv("OPS_LOCAL_CRAWLER_RUNTIME_ENABLED", raising=False)
     assert local_crawler_runtime_enabled() is False
 
     monkeypatch.setenv("OPS_LOCAL_CRAWLER_RUNTIME_ENABLED", "true")
-    assert local_crawler_runtime_enabled() is True
+    assert local_crawler_runtime_enabled() is False
 
     monkeypatch.setenv("OPS_LOCAL_CRAWLER_RUNTIME_ENABLED", "false")
     assert local_crawler_runtime_enabled() is False
 
     router = (ROOT / "backend/routers/ops_v2.py").read_text(encoding="utf-8")
     launcher = (ROOT / "start_ops_console.ps1").read_text(encoding="utf-8")
-    assert router.count("local_crawler_runtime_enabled()") >= 4
-    assert 'OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "true"' in launcher
+    assert router.count("local_crawler_runtime_enabled()") >= 3
+    assert 'OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "true"' not in launcher
     assert 'OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "false"' in launcher
 
 
@@ -1107,23 +1106,22 @@ def test_ops_crawler_runtime_disabled_message_uses_configured_owner(monkeypatch)
     assert "cloud" not in detail
     router = (ROOT / "backend/routers/ops_v2.py").read_text(encoding="utf-8")
     assert "one-shot on cloud" not in router
-    assert router.count("detail=_crawler_runtime_disabled_detail()") == 3
+    assert router.count("detail=_crawler_runtime_disabled_detail()") == 2
 
 
-def test_local_launcher_contains_control_plane_and_opt_in_data_components():
+def test_local_launcher_contains_only_the_status_control_plane():
     launcher = (ROOT / "start_ops_console.ps1").read_text(encoding="utf-8")
     launcher_wrapper = (ROOT / "start_ops_console.cmd").read_text(encoding="utf-8")
     schema_helper = (ROOT / "tools/ensure_ops_console_schema.py").read_text(encoding="utf-8")
 
-    for component in (
-        "backend.main:app",
-        "ops_agent.status_agent",
-        "ops_agent.crawler_worker",
-        "ops_agent.quality_worker",
-    ):
+    for component in ("backend.main:app", "ops_agent.status_agent"):
         assert component in launcher
-    assert "[switch]$EnableLocalCrawlerRuntime" in launcher
-    assert "if ($EnableLocalCrawlerRuntime)" in launcher
+    start_function = launcher.split("function Start-OpsConsole {", 1)[1].split(
+        "function Refresh-OpsControl {", 1
+    )[0]
+    assert "ops_agent.crawler_worker" not in start_function
+    assert "ops_agent.quality_worker" not in start_function
+    assert "EnableLocalCrawlerRuntime" not in launcher
     assert "tools\\ensure_ops_console_schema.py" in launcher
     assert "20260725_001_ops_console_core" in schema_helper
     assert "Required Ops migration checksum mismatch" in schema_helper

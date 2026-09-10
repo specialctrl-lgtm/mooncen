@@ -1,7 +1,6 @@
 # an2p native 개발 환경
 
-an2p는 MoonCen API와 frontend를 사용자 systemd 서비스로 실행한다. Docker 개발 runtime,
-runtime pair, container 승격 및 운영 controller는 폐기되었다.
+an2p는 MoonCen API와 frontend를 사용자 systemd 서비스로 실행한다.
 
 ## 서비스
 
@@ -34,13 +33,3 @@ systemctl --user is-active mooncen-frontend.service
 curl --noproxy '*' -fsS http://127.0.0.1:8001/health
 curl --noproxy '*' -fsSI http://127.0.0.1:5174/
 ```
-
-## Docker 배포 폐기
-
-기존 호스트에 남아 있는 Docker runtime은 저장소 루트의
-`deploy/decommission_docker_runtime.sh`로 철회한다. 이 도구는 native health를 먼저
-검증하며, 제거 대상은 즉시 삭제하지 않고 `/var/lib/mooncen-native-recovery/` 아래의
-root 전용 archive로 이동한다.
-
-an2p의 미완료 control transaction은 `phase=started`, registration digest가 0이고 pending
-receipt hash가 일치하는 경우에만 철회된다. DB 등록 이후 단계는 자동 철회하지 않는다.

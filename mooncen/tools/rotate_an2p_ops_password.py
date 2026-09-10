@@ -43,12 +43,9 @@ CREDENTIAL_PATH = DEFAULT_BOOTSTRAP_ROOT / "ops-credentials.txt"
 ENVELOPE_ORDER = (
     "DB_API_PASSWORD",
     "DB_API_USER",
-    "DB_DEPLOYMENT_WORKER_PASSWORD",
-    "DB_DEPLOYMENT_WORKER_USER",
     "DB_NAME",
     "MOONCEN_OPS_LOGIN_ID",
     "MOONCEN_OPS_PASSWORD_HASH",
-    "OPS_CONTAINER_DEV_TARGET_IDENTITY",
 )
 
 
@@ -104,12 +101,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise PreparationError("Ops password rotation is restricted to an2p")
     stage_rotation()
     print(f"Staged new Ops credentials at {CREDENTIAL_PATH}.")
-    print(
-        "Next: prepare_an2p_ops_control.py. For a pending first install, run "
-        "the trusted finalize-control --pair <pending-pair> command; for an "
-        "already finalized pair, run apply-ops-rotation --pair "
-        "<active-finalized-pair>."
-    )
+    print("Next: run prepare_an2p_ops_control.py and restart the Ops API service.")
     return 0
 
 

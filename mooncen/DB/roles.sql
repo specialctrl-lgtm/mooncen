@@ -568,50 +568,29 @@ BEGIN
                 TO mooncen_crawler;
         END IF;
     END IF;
-    IF to_regclass('public.ops_container_releases') IS NOT NULL THEN
-        GRANT SELECT ON ops_container_releases,
-            ops_container_validation_receipts,
-            ops_container_approval_evidence
-            TO mooncen_api;
-        GRANT INSERT ON ops_container_approval_evidence TO mooncen_api;
-        IF EXISTS (
-            SELECT 1 FROM pg_roles WHERE rolname = 'mooncen_deployment_worker'
-        ) THEN
-            REVOKE ALL PRIVILEGES ON ops_container_releases,
-                ops_container_validation_receipts,
-                ops_container_approval_evidence
-                FROM mooncen_deployment_worker;
-            GRANT SELECT, INSERT ON ops_container_releases,
-                ops_container_validation_receipts
+    IF to_regclass('public.ops_agents') IS NOT NULL AND EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname = 'mooncen_deployment_worker'
+    ) THEN
+        GRANT SELECT, INSERT, UPDATE ON ops_agents
+            TO mooncen_deployment_worker;
+        GRANT SELECT ON ops_jobs, ops_deployments, ops_job_logs
+            TO mooncen_deployment_worker;
+        GRANT UPDATE (
+            status, agent_id, assigned_at, started_at, heartbeat_at,
+            progress, result, error_code, error_message,
+            cancel_requested_at, finished_at, updated_at,
+            lease_token, lease_epoch, leased_until
+        ) ON ops_jobs TO mooncen_deployment_worker;
+        GRANT UPDATE (
+            target_version, target_commit, deployment_status, started_at,
+            finished_at, runtime_generation, activated_release_digest,
+            runtime_previous_release_digest, controller_state_sha256,
+            runtime_target_kind, runtime_native_baseline_identity
+        ) ON ops_deployments TO mooncen_deployment_worker;
+        GRANT INSERT ON ops_job_logs TO mooncen_deployment_worker;
+        IF to_regclass('public.ops_job_logs_id_seq') IS NOT NULL THEN
+            GRANT USAGE, SELECT ON SEQUENCE ops_job_logs_id_seq
                 TO mooncen_deployment_worker;
-            GRANT SELECT ON ops_container_approval_evidence
-                TO mooncen_deployment_worker;
-            GRANT SELECT, INSERT, UPDATE ON ops_agents
-                TO mooncen_deployment_worker;
-            GRANT SELECT ON ops_jobs, ops_deployments, ops_job_logs
-                TO mooncen_deployment_worker;
-            GRANT UPDATE (
-                status, agent_id, assigned_at, started_at, heartbeat_at,
-                progress, result, error_code, error_message,
-                cancel_requested_at, finished_at, updated_at,
-                lease_token, lease_epoch, leased_until
-            ) ON ops_jobs TO mooncen_deployment_worker;
-            GRANT UPDATE (
-                target_version, target_commit, deployment_status, started_at,
-                finished_at, runtime_generation, activated_release_digest,
-                runtime_previous_release_digest, controller_state_sha256,
-                runtime_target_kind, runtime_native_baseline_identity
-            ) ON ops_deployments TO mooncen_deployment_worker;
-            GRANT INSERT ON ops_job_logs TO mooncen_deployment_worker;
-            IF to_regclass('public.ops_job_logs_id_seq') IS NOT NULL THEN
-                GRANT USAGE, SELECT ON SEQUENCE ops_job_logs_id_seq
-                    TO mooncen_deployment_worker;
-            END IF;
-            IF to_regclass('public.ops_container_deployment_lease_epoch_seq') IS NOT NULL THEN
-                GRANT USAGE, SELECT ON SEQUENCE
-                    ops_container_deployment_lease_epoch_seq
-                    TO mooncen_deployment_worker;
-            END IF;
         END IF;
     END IF;
     IF to_regclass('public.crawl_progress') IS NOT NULL THEN

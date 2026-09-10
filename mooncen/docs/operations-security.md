@@ -69,7 +69,7 @@
 
 ## 6. CI와 변경 승인
 
-[CI workflow](../.github/workflows/ci.yml)는 운영 비밀 없이 다음을 검증합니다.
+[CI workflow](../../.github/workflows/ci.yml)는 운영 비밀 없이 다음을 검증합니다.
 
 - Python 해시 잠금 설치, PostGIS migration, `pytest`, `pip-audit`
 - 기본 웹 앱 lint/test/build/npm audit

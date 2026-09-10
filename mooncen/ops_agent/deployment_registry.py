@@ -22,11 +22,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEPLOY_REGISTRY_PATH = Path("config/deploy_servers.json")
 DEPLOY_SCRIPT_PATH = Path("deploy_mooncen.ps1")
 DEPLOY_LOCAL_PATH = Path("deploy.local.ps1")
-# The isolated system worker cannot write into the immutable application
-# release mounted at PROJECT_ROOT.  Its private state is deliberately pinned
-# outside the release tree and is not shared with the Ops API account.
-DEPLOYMENT_WORKER_STATE_ROOT = Path("/var/lib/mooncen-deployment-worker/state")
-DEPLOYMENT_WORKER_HEARTBEAT_PATH = Path("heartbeat.json")
 DEPLOYMENT_HOLD_PATH = Path("logs/ops-console-local/deployment.hold.json")
 DEPLOYMENT_RELEASE_MANIFEST_DIR = Path(
     "logs/ops-console-local/deployment-releases"
@@ -821,40 +816,6 @@ def powershell_executable() -> str:
             if validated:
                 return validated
     return ""
-
-
-def deployment_worker_heartbeat_ready(
-    root: Path = DEPLOYMENT_WORKER_STATE_ROOT,
-    *,
-    maximum_age_seconds: int = 15,
-) -> bool:
-    path = root / DEPLOYMENT_WORKER_HEARTBEAT_PATH
-    try:
-        root_metadata = root.stat()
-        if (
-            root.is_symlink()
-            or not root.is_dir()
-            or (os.name != "nt" and root_metadata.st_uid != os.geteuid())
-            or root_metadata.st_mode & 0o077
-            or not path.is_file()
-            or path.is_symlink()
-        ):
-            return False
-        metadata = path.stat()
-        if (
-            (os.name != "nt" and metadata.st_uid != os.geteuid())
-            or metadata.st_mode & 0o077
-            or metadata.st_size > 4_096
-        ):
-            return False
-        age = time.time() - metadata.st_mtime
-        if age < -5 or age > maximum_age_seconds:
-            return False
-        payload = json.loads(path.read_text(encoding="ascii"))
-        pid = payload.get("pid") if isinstance(payload, dict) else None
-        return isinstance(pid, int) and pid > 0
-    except (OSError, UnicodeError, json.JSONDecodeError):
-        return False
 
 
 def load_deployment_hold(root: Path = PROJECT_ROOT) -> dict[str, str] | None:

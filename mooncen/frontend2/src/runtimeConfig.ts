@@ -55,8 +55,8 @@ function publicValue(key: keyof RuntimeConfig, viteFallback: unknown): string {
   return safePublicString(frozenWindowConfig()?.[key]) || safePublicString(viteFallback);
 }
 
-// Getters keep Vite's development/test fallback behavior while the Docker image
-// reads the immutable object installed by /runtime-config.js before main.tsx.
+// Getters keep Vite's development/test fallback behavior while production reads
+// the immutable object installed by /runtime-config.js before main.tsx.
 export const runtimeConfig: RuntimeConfig = Object.freeze({
   get siteUrl() {
     return publicValue('siteUrl', import.meta.env.VITE_SITE_URL);

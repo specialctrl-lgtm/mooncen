@@ -768,7 +768,7 @@ def test_release_preflight_requires_staging_promotion_runtime_files() -> None:
 
 
 def test_ci_smoke_tests_the_real_git_archive() -> None:
-    workflow = _text(ROOT / ".github" / "workflows" / "ci.yml")
+    workflow = _text(ROOT.parent / ".github" / "workflows" / "ci.yml")
 
     assert "Smoke-test immutable production archive" in workflow
     assert "git archive --format=tar.gz" in workflow

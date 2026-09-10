@@ -25,6 +25,8 @@ def test_ops_console_defaults_to_fixed_production_cloud_tunnel() -> None:
     assert '$env:VITE_OPS_API_PROXY_TARGET = "http://127.0.0.1:8001"' in launcher
     assert '$env:VITE_OPS_CSRF_COOKIE_NAME = "mooncen_ops_csrf"' in launcher
     assert '"-o", "BatchMode=yes"' in launcher
+    assert launcher.count('"-o", "ProxyCommand=none"') == 5
+    assert launcher.count('"-o", "ProxyJump=none"') == 5
     assert '"-o", "ExitOnForwardFailure=yes"' in launcher
     assert '"-o", "StrictHostKeyChecking=yes"' in launcher
     assert '"-L", $cloudTunnelForward' in launcher
@@ -74,7 +76,7 @@ def test_cloud_mode_starts_local_control_plane_for_the_production_database() -> 
     assert 'New-ManagedProcessEntry "deployment-worker"' not in start_function
     assert 'name = "status-agent"' in start_function
     assert 'New-ManagedProcessEntry "console" $console' in start_function
-    assert 'if ($DataSource -eq "Local" -and $EnableLocalCrawlerRuntime)' in start_function
+    assert 'name = "crawler-worker"' not in start_function
     assert '$apiEnvironment = if ($DataSource -eq "Cloud") { $cloudControlEnvironment.Api } else { @{} }' in start_function
     assert '$apiEnvironment["MOONCEN_AUTH_COOKIE_PREFIX"] = "mooncen_ops"' in start_function
     assert '$apiEnvironment["MOONCEN_AUTH_COOKIE_SECURE"] = "false"' in start_function
@@ -82,10 +84,7 @@ def test_cloud_mode_starts_local_control_plane_for_the_production_database() -> 
     assert '$apiStandardOutputLog $apiStandardErrorLog' in start_function
     assert '$cloudControlEnvironment.Worker' not in start_function
     assert 'if ($DataSource -eq "Local") {' in start_function
-    assert (
-        '-EnableLocalCrawlerRuntime is allowed only with -DataSource Local.'
-        in launcher
-    )
+    assert "EnableLocalCrawlerRuntime" not in launcher
 
 
 def test_tunnel_process_is_recorded_validated_stopped_and_reported() -> None:

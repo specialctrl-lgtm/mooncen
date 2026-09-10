@@ -259,11 +259,6 @@ def test_guarded_native_deploy_bootstraps_dedicated_deployment_worker_login():
         "permission_group.rolname = 'mooncen_deployment_worker'",
         "NOT permission_group.rolcanlogin",
         "parent.rolname = 'mooncen_deployment_worker'",
-        "public.ops_container_releases', 'INSERT'",
-        "public.ops_container_validation_receipts', 'INSERT'",
-        "public.ops_container_approval_evidence', 'SELECT'",
-        "public.ops_container_approval_evidence', 'INSERT'",
-        "public.ops_container_deployment_lease_epoch_seq', 'USAGE'",
         "attribute.attrelid = 'public.ops_jobs'::regclass",
         "attribute.attrelid = 'public.ops_deployments'::regclass",
         "dependency.classid = 'pg_namespace'::regclass",
@@ -645,147 +640,10 @@ def test_role_sql_closes_public_routine_acl_without_touching_extensions():
     assert "REVOKE EXECUTE ON ROUTINES FROM mooncen_api, mooncen_crawler" in defaults_block
 
 
-@pytest.mark.skip(reason="the retired Ops deployment worker is no longer provisioned")
-def test_deployment_worker_routine_boundary_covers_every_executable_pg_proc_kind():
-    expected_filter = "procedure.prokind IN ('f', 'p', 'a', 'w')"
-    for path in (
-        "DB/roles.sql",
-        "DB/roles_body.sql",
-        "DB/provision_deployment_worker_login.sql",
-        "deploy/ubuntu/setup_project.sh",
-        "tools/register_container_deployment_evidence.py",
-    ):
-        source = _text(path)
-        assert expected_filter in source, path
-        assert "procedure.prokind IN ('f', 'p')" not in source, path
-
-    for path in ("DB/roles.sql", "DB/roles_body.sql"):
-        source = _text(path)
-        assert source.count(expected_filter) == 3
-        assert "IF routine.prokind IN ('f', 'p') THEN" in source
-        assert (
-            "CASE routine.prokind WHEN 'p' THEN 'PROCEDURE' ELSE 'FUNCTION' END"
-            in source
-        )
 
 
-@pytest.mark.skip(reason="the retired container evidence registrar is no longer installed")
-def test_runtime_roles_cannot_create_or_retain_postgresql_large_objects():
-    roles = _text("DB/roles.sql")
-    roles_body = _text("DB/roles_body.sql")
-    worker_login = _text("DB/provision_deployment_worker_login.sql")
-    runtime_logins = _text("DB/provision_login_roles.sql")
-    setup = _text("deploy/ubuntu/setup_project.sh")
-    registrar = _text("tools/register_container_deployment_evidence.py")
-    creator_signatures = (
-        "pg_catalog.lo_creat(integer)",
-        "pg_catalog.lo_create(oid)",
-        "pg_catalog.lo_from_bytea(oid,bytea)",
-        "pg_catalog.lo_import(text)",
-        "pg_catalog.lo_import(text,oid)",
-        "pg_catalog.lo_export(oid,text)",
-    )
-
-    # roles_body is also executed by a non-superuser crawler schema installer;
-    # keep the pg_catalog mutation in the postgres-only LOGIN provision step.
-    for role_source in (roles, roles_body):
-        assert "ALL ROUTINES IN SCHEMA pg_catalog" not in role_source
-        assert "ALTER LARGE OBJECT" not in role_source
-
-    assert "rolname = current_user AND rolsuper" in worker_login
-    assert "FROM pg_largeobject_metadata large_object" in worker_login
-    assert "ALTER LARGE OBJECT %s OWNER TO %I" in worker_login
-    assert "REVOKE ALL PRIVILEGES ON LARGE OBJECT %s FROM PUBLIC" in worker_login
-    assert "ALL ROUTINES IN SCHEMA pg_catalog" in worker_login
-    assert "REVOKE EXECUTE ON FUNCTION %s FROM PUBLIC" in worker_login
-    for signature in creator_signatures:
-        assert signature in worker_login
-
-    assert "FROM pg_largeobject_metadata large_object" in runtime_logins
-    assert "REVOKE ALL PRIVILEGES ON LARGE OBJECT %s FROM %I" in runtime_logins
-    assert "ALL ROUTINES IN SCHEMA pg_catalog" in runtime_logins
-
-    for boundary_source in (setup, registrar):
-        assert "pg_largeobject_metadata" in boundary_source
-        assert "has_largeobject_privilege" not in boundary_source
-        for signature in creator_signatures:
-            assert signature in boundary_source
-
-    assert "large_objects_absent" in registrar
-    assert "large_object_entry_points_denied" in registrar
-    assert "pg_catalog_routine_privileges_exact" in registrar
-    assert "aclexplode" in registrar
 
 
-@pytest.mark.skip(reason="the retired container evidence registrar is no longer installed")
-def test_deployment_worker_system_catalog_boundary_is_converged_and_shared():
-    worker_login = _text("DB/provision_deployment_worker_login.sql")
-    runtime_logins = _text("DB/provision_login_roles.sql")
-    setup = _text("deploy/ubuntu/setup_project.sh")
-    registrar = _text("tools/register_container_deployment_evidence.py")
-
-    for source in (worker_login, runtime_logins):
-        assert "ALTER ROLE %I RESET ALL" in source
-        assert "pg_catalog.pg_db_role_setting" in source
-        assert "ALL TABLES IN SCHEMA %I" in source
-        assert "ALL SEQUENCES IN SCHEMA %I" in source
-        assert "ALL ROUTINES IN SCHEMA %I" in source
-        assert "pg_catalog.pg_attribute" in source
-        assert "REVOKE ALL PRIVILEGES (%I) ON TABLE %I.%I" in source
-        assert "pg_catalog.pg_parameter_acl" in source
-        assert "FOREIGN DATA WRAPPER" in source
-        assert "FOREIGN SERVER" in source
-        assert "pg_catalog.pg_user_mapping" in source
-        assert "information_schema" in source
-
-    assert "pg_catalog.pg_init_privs" in worker_login
-    assert "pg_catalog.acldefault('c', relation.relowner)" in worker_login
-    assert "current_acl.is_grantable" in worker_login
-    assert "REVOKE ALL PRIVILEGES ON SCHEMA %I" in worker_login
-    assert "ON SCHEMA %I FROM PUBLIC" in worker_login
-    assert "initial_acl.initprivs" in worker_login
-
-    for field in (
-        "role_settings_safe",
-        "system_schema_inventory_exact",
-        "system_schema_privileges_exact",
-        "extension_inventory_exact",
-        "system_relation_privileges_exact",
-        "user_defined_system_objects_absent",
-        "pg_catalog_routine_privileges_exact",
-        "parameter_privileges_absent",
-        "foreign_data_access_denied",
-    ):
-        assert field in registrar
-
-    for token in (
-        "pg_catalog.pg_init_privs",
-        "pg_catalog.pg_parameter_acl",
-        "pg_catalog.pg_db_role_setting",
-        "current_setting('session_replication_role') = 'origin'",
-        "pg_catalog.pg_foreign_data_wrapper",
-        "pg_catalog.pg_foreign_server",
-        "pg_catalog.pg_user_mapping",
-        "relation.relkind IN ('r', 'p', 'v', 'm', 'f', 'S', 't')",
-        "relation.relkind IN ('r', 'p', 'v', 'm', 'f', 't')",
-        "namespace.nspname = 'information_schema'",
-    ):
-        assert token in registrar
-
-    for extension in (
-        "pg_trgm|1.6|public|postgres",
-        "pgcrypto|1.3|public|postgres",
-        "plpgsql|1.0|pg_catalog|postgres",
-        "postgis|3.4.2|public|postgres",
-        "uuid-ossp|1.1|public|postgres",
-    ):
-        assert extension in registrar
-
-    # setup_project must run the exact registrar query after the HBA probe and
-    # before publishing the root-only exporter source; no divergent inline
-    # approximation may be treated as the final boundary.
-    verify = "--verify-database-boundary"
-    assert setup.index(verify) < setup.index("root_deploy_secret_stage=")
 
 
 def test_crawler_runtime_tables_are_owner_managed_not_runtime_ddl():

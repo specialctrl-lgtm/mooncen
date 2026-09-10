@@ -10,10 +10,15 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY_ROOT = ROOT.parent
 
 
 def _text(relative: str) -> str:
     return (ROOT / relative).read_text(encoding="utf-8")
+
+
+def _repository_text(relative: str) -> str:
+    return (REPOSITORY_ROOT / relative).read_text(encoding="utf-8")
 
 
 def test_ubuntu_installer_verifies_node_chrome_and_driver_before_install() -> None:
@@ -124,7 +129,7 @@ def test_backup_ssh_port_is_validated_and_propagated_through_windows_deploy() ->
 def test_secret_scan_allowlist_is_narrow_and_emart_key_is_not_embedded() -> None:
     policy = _text(".gitleaks.toml")
     emart = _text("Crawler/Crawler_Emart.py")
-    workflow = _text(".github/workflows/ci.yml")
+    workflow = _repository_text(".github/workflows/ci.yml")
 
     assert "useDefault = true" in policy
     assert 'condition = "AND"' in policy
@@ -136,11 +141,11 @@ def test_secret_scan_allowlist_is_narrow_and_emart_key_is_not_embedded() -> None
     assert 'regexTarget = "secret"' in policy
     assert 'os.getenv("EMART_GRAPHQL_API_KEY", "").strip()' in emart
     assert not re.search(r'"da2-[a-z0-9]{20,}"', emart)
-    assert "--config .gitleaks.toml" in workflow
+    assert "--config mooncen/.gitleaks.toml" in workflow
 
 
 def test_secret_scan_binary_and_default_rule_canary_fail_closed() -> None:
-    workflow_source = _text(".github/workflows/ci.yml")
+    workflow_source = _repository_text(".github/workflows/ci.yml")
     workflow = yaml.safe_load(workflow_source)
     steps = workflow["jobs"]["secret-scan"]["steps"]
     named_steps = {step["name"]: step for step in steps}
@@ -156,17 +161,47 @@ def test_secret_scan_binary_and_default_rule_canary_fail_closed() -> None:
     assert 'mktemp --directory "$RUNNER_TEMP/gitleaks-canary.XXXXXX"' in canary
     assert "\\x67\\x68\\x70\\x5f" in canary
     assert '"$RUNNER_TEMP/gitleaks" dir' in canary
-    assert "--config .gitleaks.toml" in canary
+    assert "--config mooncen/.gitleaks.toml" in canary
     assert "canary_status=$?" in canary
     assert '[[ "$canary_status" -ne 1 ]]' in canary
     assert "exit 1" in canary
     assert "--pipe" not in canary
     assert not re.search(r"ghp_[0-9A-Za-z]{36}", workflow_source)
 
+    assert workflow["defaults"]["run"]["working-directory"] == "mooncen"
+    assert not (ROOT / ".github" / "workflows" / "ci.yml").exists()
+
     step_names = [step["name"] for step in steps]
     assert step_names.index("Install verified Gitleaks binary") < step_names.index(
         "Prove Gitleaks default rules detect a synthetic secret"
     ) < step_names.index("Scan Git history and checked-out files")
+
+
+def test_ci_smokes_imports_and_clis_from_the_clean_application_archive() -> None:
+    workflow_source = _repository_text(".github/workflows/ci.yml")
+    workflow = yaml.safe_load(workflow_source)
+    steps = workflow["jobs"]["backend"]["steps"]
+    archive_step = next(
+        step for step in steps if step["name"] == "Smoke-test immutable production archive"
+    )
+    script = archive_step["run"]
+
+    assert "git archive --format=tar.gz" in script
+    assert "HEAD:mooncen" in script
+    assert 'cd "$release"' in script
+    assert "python -m compileall" in script
+    assert 'Path(os.environ["MOONCEN_ARCHIVE_ROOT"]).resolve()' in script
+    assert "source.is_relative_to(root)" in script
+    for module in (
+        "backend.main",
+        "backend.ops.service",
+        "backend.routers.crawler_owner",
+        "tools.ops_service_action",
+        "tools.postgres_scram_verifier",
+    ):
+        assert f'"{module}"' in script
+    assert "python -m tools.generate_ops_password --help" in script
+    assert "python -m tools.postgres_scram_verifier --help" in script
 
 
 def test_windows_exporter_is_pinned_verified_and_private() -> None:

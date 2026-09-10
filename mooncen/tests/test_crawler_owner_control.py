@@ -40,6 +40,8 @@ def test_owner_ssh_commands_are_fixed_noninteractive_and_unforwarded() -> None:
 
     assert status_command[:2] == ["ssh", "-o"]
     assert "BatchMode=yes" in status_command
+    assert "ProxyCommand=none" in status_command
+    assert "ProxyJump=none" in status_command
     assert "StrictHostKeyChecking=yes" in status_command
     assert "ClearAllForwardings=yes" in status_command
     assert "sgm@gen1crawler" in status_command

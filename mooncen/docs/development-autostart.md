@@ -114,7 +114,7 @@ To remove it, use an elevated PowerShell window:
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install_development_autostart.ps1 -Action Uninstall -DataSource Cloud
 ```
 
-The supervisor log and state live under `logs/development-autostart/`. The log rotates at 5 MiB and keeps three prior files. The monitor applies bounded exponential retry, checks the Ops process identity and deployment-worker heartbeat, and never stops an unrelated process that happens to own one of its ports.
+The supervisor log and state live under `logs/development-autostart/`. The log rotates at 5 MiB and keeps three prior files. The monitor applies bounded exponential retry, checks the Ops process identity, and never stops an unrelated process that happens to own one of its ports.
 
 ## Failure behavior
 
@@ -124,4 +124,4 @@ The supervisor log and state live under `logs/development-autostart/`. The log r
 - An active deployment prevents Ops shutdown/restart through the existing Ops safety gate.
 - Local data mode requires a real PostgreSQL listener on `5432`; it never enables the local crawler runtime automatically.
 
-After installation, verify one actual reboot before treating the host as boot-ready: check the task result, all three HTTP endpoints, port `15432`, and a fresh `logs/ops-console-local/deployment-worker.heartbeat.json`.
+After installation, verify one actual reboot before treating the host as boot-ready: check the task result, all three HTTP endpoints, and port `15432`.

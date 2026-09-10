@@ -63,7 +63,7 @@ npx expo start
 
 ## 검증과 CI
 
-[GitHub Actions CI](.github/workflows/ci.yml)는 다음 검사를 PR·push마다 수행합니다.
+[GitHub Actions CI](../.github/workflows/ci.yml)는 다음 검사를 PR·push마다 수행합니다.
 
 - 해시 잠금된 Python 설치, PostGIS 마이그레이션, 전체 `pytest`, `pip-audit`
 - `frontend2` lint/test/build/npm audit

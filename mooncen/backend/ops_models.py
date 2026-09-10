@@ -107,33 +107,6 @@ class OpsDeployment(Base):
     previous_commit = Column(Text)
     target_commit = Column(Text, nullable=False)
     branch = Column(Text)
-    deployment_mode = Column(Text, nullable=False, server_default=text("'native'"))
-    deployment_action = Column(Text, nullable=False, server_default=text("'deploy'"))
-    target_environment = Column(Text)
-    target_name = Column(Text)
-    target_identity = Column(Text)
-    container_release_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_releases.id", ondelete="RESTRICT"),
-    )
-    container_release_digest = Column(Text)
-    previous_container_release_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_releases.id", ondelete="RESTRICT"),
-    )
-    previous_container_release_digest = Column(Text)
-    validation_receipt_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_validation_receipts.id", ondelete="RESTRICT"),
-    )
-    validation_receipt_digest = Column(Text)
-    approval_evidence_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_approval_evidence.id", ondelete="RESTRICT"),
-    )
-    api_image_digest = Column(Text)
-    frontend_image_digest = Column(Text)
-    bundle_sha256 = Column(Text)
     deployment_status = Column(Text, nullable=False, server_default=text("'queued'"))
     health_check_result = Column(JSONB)
     smoke_test_result = Column(JSONB)
@@ -142,90 +115,6 @@ class OpsDeployment(Base):
     started_at = Column(DateTime(timezone=True))
     finished_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-
-
-class OpsContainerRelease(Base):
-    __tablename__ = "ops_container_releases"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    release_digest = Column(Text, nullable=False, unique=True)
-    base_commit = Column(Text, nullable=False)
-    source_tree = Column(Text, nullable=False)
-    snapshot_commit = Column(Text, nullable=False)
-    platform = Column(Text, nullable=False)
-    api_image_digest = Column(Text, nullable=False)
-    frontend_image_digest = Column(Text, nullable=False)
-    bundle_sha256 = Column(Text, nullable=False)
-    compose_sha256 = Column(Text, nullable=False)
-    build_policy_sha256 = Column(Text, nullable=False)
-    migration_ledger_sha256 = Column(Text, nullable=False)
-    manifest_json = Column(JSONB, nullable=False)
-    builder_target_identity = Column(Text, nullable=False)
-    builder_hostname = Column(Text, nullable=False)
-    built_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
-    built_at = Column(DateTime(timezone=True), nullable=False)
-    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-
-
-class OpsContainerValidationReceipt(Base):
-    __tablename__ = "ops_container_validation_receipts"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    receipt_digest = Column(Text, nullable=False, unique=True)
-    release_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_releases.id", ondelete="RESTRICT"),
-        nullable=False,
-    )
-    release_digest = Column(Text, nullable=False)
-    source_tree = Column(Text, nullable=False)
-    target = Column(Text, nullable=False)
-    target_identity = Column(Text, nullable=False)
-    platform = Column(Text, nullable=False)
-    bundle_sha256 = Column(Text, nullable=False)
-    compose_sha256 = Column(Text, nullable=False)
-    api_image_digest = Column(Text, nullable=False)
-    frontend_image_digest = Column(Text, nullable=False)
-    checks = Column(JSONB, nullable=False)
-    status = Column(Text, nullable=False)
-    receipt_json = Column(JSONB, nullable=False)
-    validated_at = Column(DateTime(timezone=True), nullable=False)
-    expires_at = Column(DateTime(timezone=True), nullable=False)
-    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
-    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-
-
-class OpsContainerApprovalEvidence(Base):
-    __tablename__ = "ops_container_approval_evidence"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    action = Column(Text, nullable=False)
-    target_environment = Column(Text, nullable=False)
-    target_identity = Column(Text, nullable=False)
-    target_name = Column(Text, nullable=False)
-    release_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_releases.id", ondelete="RESTRICT"),
-        nullable=False,
-    )
-    release_digest = Column(Text, nullable=False)
-    current_release_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_releases.id", ondelete="RESTRICT"),
-    )
-    current_release_digest = Column(Text)
-    validation_receipt_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("ops_container_validation_receipts.id", ondelete="RESTRICT"),
-    )
-    validation_receipt_digest = Column(Text)
-    typed_confirmation = Column(Text, nullable=False)
-    reason = Column(Text, nullable=False)
-    approved_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
-    approved_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-    expires_at = Column(DateTime(timezone=True), nullable=False)
-    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-
 
 class OpsAuditLog(Base):
     __tablename__ = "ops_audit_logs"

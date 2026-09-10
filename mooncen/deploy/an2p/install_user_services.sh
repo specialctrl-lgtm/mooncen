@@ -30,7 +30,7 @@ while [[ $# -gt 0 ]]; do
                 exit 2
             }
             [[ "$2" == native ]] || {
-                echo "Docker development runtime has been retired; use native." >&2
+                echo "--development-runtime accepts only native." >&2
                 exit 2
             }
             shift 2
@@ -41,17 +41,6 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
-
-if systemctl is-active --quiet mooncen-docker-dev.service ||
-   systemctl is-enabled --quiet mooncen-docker-dev.service; then
-    echo "Retired Docker development runtime is still selected; run the reviewed root decommission first." >&2
-    exit 78
-fi
-if [[ -e /etc/mooncen-an2p/docker-development-enabled ||
-      -L /etc/mooncen-an2p/docker-development-enabled ]]; then
-    echo "Retired Docker development marker is still present." >&2
-    exit 78
-fi
 
 for prerequisite in \
     "${user_home}/.config/mooncen-an2p/api.env" \

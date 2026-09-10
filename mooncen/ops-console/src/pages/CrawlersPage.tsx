@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
-import { useCallback, useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { opsApi } from '../api';
 import DataTable from '../components/DataTable';
@@ -44,28 +44,8 @@ function runTriggerLabel(trigger: unknown): string {
   return '확인 불가';
 }
 
-function confirmProduction(environment: string): boolean {
-  if (environment !== 'production') return window.confirm('크롤러 작업을 대기열에 등록할까요?');
-  return window.prompt('운영 크롤러 실행 확인을 위해 MOONCEN-PRODUCTION을 입력하세요.') === 'MOONCEN-PRODUCTION';
-}
-
 function confirmProductionRunAll(): boolean {
   return window.prompt('운영 크롤러 전체 실행 확인을 위해 MOONCEN-CRAWLER-ALL을 입력하세요.') === 'MOONCEN-CRAWLER-ALL';
-}
-
-function providerRunPayload(provider: string, contentType: string): Record<string, unknown> {
-  const supportedType = ['culture_center', 'experience', 'education'].includes(contentType)
-    ? contentType
-    : 'all';
-  return {
-    scope: 'provider',
-    provider: provider.trim().toUpperCase(),
-    content_type: supportedType,
-    run_mode: 'apply',
-    compare_existing: true,
-    max_retries: 1,
-    concurrency: 1,
-  };
 }
 
 export default function CrawlersPage() {
@@ -78,9 +58,6 @@ export default function CrawlersPage() {
   const crawlerRunsPath = requestedProvider
     ? `/crawlers/runs?limit=100&provider=${encodeURIComponent(requestedProvider)}`
     : '/crawlers/runs?limit=100';
-  const [provider, setProvider] = useState(requestedProvider);
-  const [contentType, setContentType] = useState('all');
-  const [showRun, setShowRun] = useState(false);
   const [showProbe, setShowProbe] = useState(false);
   const [probeUrl, setProbeUrl] = useState('');
   const crawlers = useQuery({
@@ -119,24 +96,6 @@ export default function CrawlersPage() {
     enabled: Boolean(id && runJobId),
     refetchInterval: id && ['queued', 'assigned', 'running'].includes(String(detail.data?.status)) ? 5_000 : false,
   });
-  const runMutation = useMutation<
-    { job: { id: string }; crawler_run: { id: string } },
-    Error,
-    Record<string, unknown>
-  >({
-    mutationFn: (body: Record<string, unknown>) =>
-      opsApi<{ job: { id: string }; crawler_run: { id: string } }>('/crawlers/run', {
-        method: 'POST',
-        body: JSON.stringify(body),
-      }),
-    onSuccess: (result) => {
-      setShowRun(false);
-      void queryClient.invalidateQueries({ queryKey: ['crawlers'] });
-      void queryClient.invalidateQueries({ queryKey: ['crawler-runs'] });
-      void queryClient.invalidateQueries({ queryKey: ['jobs'] });
-      navigate(`/crawlers/runs/${result.crawler_run.id}`);
-    },
-  });
   const probeMutation = useMutation({
     mutationFn: () =>
       opsApi<{ job: { id: string } }>('/crawlers/parser-probe', {
@@ -158,52 +117,12 @@ export default function CrawlersPage() {
       void queryClient.invalidateQueries({ queryKey: ['crawler-runs'] });
     },
   });
-  const submitRun = (event: FormEvent) => {
-    event.preventDefault();
-    if (!provider.trim() || !confirmProduction(session.environment)) return;
-    runMutation.mutate(providerRunPayload(provider, contentType));
-  };
-  const queueProviderRun = useCallback(
-    (crawler: CrawlerSummary) => {
-      if (!confirmProduction(session.environment)) return;
-      runMutation.mutate(providerRunPayload(crawler.provider, crawler.content_type));
-    },
-    [runMutation, session.environment],
-  );
   const crawlerColumns = useMemo<ColumnDef<CrawlerSummary>[]>(
     () => [
       {
         accessorKey: 'provider',
-        header: 'Provider · 실행',
-        cell: ({ row }) => {
-          const isRunning = ['queued', 'running', 'stopping'].includes(row.original.status);
-          const isSubmitting = runMutation.isPending
-            && runMutation.variables?.provider === row.original.provider;
-          if (session.role === 'viewer') return row.original.provider;
-          const isDisabled = !row.original.can_run || isRunning || runMutation.isPending;
-          const title = !row.original.can_run
-            ? row.original.run_blocked_reason || '실행할 수 없는 Provider입니다.'
-            : isRunning
-              ? '이미 실행 중입니다.'
-              : `${row.original.provider} 크롤러 실행`;
-          return (
-            <button
-              className="table-provider-button"
-              type="button"
-              disabled={isDisabled}
-              title={title}
-              onClick={(event) => {
-                event.stopPropagation();
-                queueProviderRun(row.original);
-              }}
-            >
-              <span>{row.original.provider}</span>
-              <small>
-                {!row.original.can_run ? '실행 불가' : isRunning ? '실행 중' : isSubmitting ? '등록 중…' : '실행'}
-              </small>
-            </button>
-          );
-        },
+        header: 'Provider',
+        cell: ({ row }) => row.original.provider,
       },
       { accessorKey: 'content_type', header: '유형' },
       { accessorKey: 'status', header: '현재 상태', cell: ({ row }) => <StatusBadge status={row.original.status} /> },
@@ -239,7 +158,7 @@ export default function CrawlersPage() {
         ),
       },
     ],
-    [navigate, queueProviderRun, runMutation.isPending, runMutation.variables, session.role],
+    [navigate],
   );
   const runColumns = useMemo<ColumnDef<CrawlerRun>[]>(
     () => [
@@ -306,15 +225,12 @@ export default function CrawlersPage() {
                 <button className="button subtle" type="button" onClick={() => setShowProbe(true)}>
                   Parser Probe
                 </button>
-                <button className="button primary" type="button" onClick={() => setShowRun(true)}>
-                  크롤러 실행
-                </button>
               </>
             ) : null}
           </>
         }
       />
-      {(runMutation.error || probeMutation.error || runAllMutation.error) && <QueryState error={runMutation.error || probeMutation.error || runAllMutation.error} />}
+      {(probeMutation.error || runAllMutation.error) && <QueryState error={probeMutation.error || runAllMutation.error} />}
       <section className="panel">
         <header className="section-header">
           <div>
@@ -360,29 +276,6 @@ export default function CrawlersPage() {
         ) : null}
       </section>
 
-      {showRun && (
-        <DetailPanel title="크롤러 실행 등록" onClose={() => setShowRun(false)}>
-          <form className="stack-form" onSubmit={submitRun}>
-            <label>
-              Provider 코드
-              <input value={provider} onChange={(event) => setProvider(event.target.value)} required maxLength={100} placeholder="예: SUWON_LIBRARY" />
-            </label>
-            <label>
-              데이터 유형
-              <select value={contentType} onChange={(event) => setContentType(event.target.value)}>
-                <option value="all">전체 / Provider 기준</option>
-                <option value="culture_center">문화센터</option>
-                <option value="experience">체험</option>
-                <option value="education">교육</option>
-              </select>
-            </label>
-            <p className="form-note">작업은 즉시 성공 처리되지 않습니다. PostgreSQL 대기열 등록 후 Agent 처리 결과가 Job에 기록됩니다.</p>
-            <button className="button primary" type="submit" disabled={runMutation.isPending}>
-              {runMutation.isPending ? '등록 중…' : '대기열에 등록'}
-            </button>
-          </form>
-        </DetailPanel>
-      )}
       {showProbe && (
         <DetailPanel title="Parser Probe" onClose={() => setShowProbe(false)}>
           <form

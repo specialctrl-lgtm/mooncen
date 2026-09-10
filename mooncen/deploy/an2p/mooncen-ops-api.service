@@ -40,7 +40,6 @@ InaccessiblePaths=-/run/docker.sock
 InaccessiblePaths=-/var/run/docker.sock
 InaccessiblePaths=-/etc/mooncen-an2p/deploy-transport
 InaccessiblePaths=-/etc/mooncen-an2p/db-tunnel
-InaccessiblePaths=-/etc/mooncen-an2p/deployment-worker.env
 InaccessiblePaths=-/var/lib/mooncen-deployment-worker
 
 [Install]

@@ -3,7 +3,6 @@ Description=MoonCen an2p user development frontend
 After=mooncen-api.service
 Wants=mooncen-api.service
 Before=mooncen-development-runtime.target
-ConditionPathExists=!/etc/mooncen-an2p/docker-development-enabled
 
 [Service]
 Type=simple

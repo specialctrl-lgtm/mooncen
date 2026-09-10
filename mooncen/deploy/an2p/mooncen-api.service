@@ -3,7 +3,6 @@ Description=MoonCen an2p development API
 After=network-online.target
 Wants=network-online.target
 Before=mooncen-development-runtime.target
-ConditionPathExists=!/etc/mooncen-an2p/docker-development-enabled
 
 [Service]
 Type=simple

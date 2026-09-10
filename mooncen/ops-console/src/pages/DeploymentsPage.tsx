@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CloudUpload, GitBranch, RefreshCw, Server, ShieldCheck } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
@@ -7,7 +7,6 @@ import { opsApi } from '../api';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
 import { DefinitionList, DetailPanel, PageHeader, QueryState, StreamStatus } from '../components/Ui';
-import { useOpsSession } from '../context';
 import { appendStreamLog, useJobEventStream } from '../hooks/useJobEventStream';
 import type { OpsService, PageResponse } from '../types';
 import { formatDate } from '../utils';
@@ -73,12 +72,7 @@ function targetServiceSummary(target: DeployTarget): string {
 export default function DeploymentsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const session = useOpsSession();
   const queryClient = useQueryClient();
-  const [showDeploy, setShowDeploy] = useState(false);
-  const [selectedTarget, setSelectedTarget] = useState('');
-  const [skipWorkers, setSkipWorkers] = useState(false);
-  const [confirmation, setConfirmation] = useState('');
 
   const current = useQuery({
     queryKey: ['deployment-services'],
@@ -111,12 +105,6 @@ export default function DeploymentsPage() {
     refetchInterval: jobId ? 5_000 : false,
   });
 
-  useEffect(() => {
-    if (!selectedTarget && readiness.data?.default_target) {
-      setSelectedTarget(readiness.data.default_target);
-    }
-  }, [readiness.data?.default_target, selectedTarget]);
-
   const stream = useJobEventStream({
     jobId,
     enabled: Boolean(jobId && ['queued', 'assigned', 'running'].includes(String(detail.data?.job_status))),
@@ -138,39 +126,7 @@ export default function DeploymentsPage() {
     },
   });
 
-  const selected = readiness.data?.targets.find((target) => target.name === selectedTarget);
   const snapshot = readiness.data?.snapshot;
-  const confirmationText = selected && snapshot ? `DEPLOY ${selected.name} ${snapshot.short_source_tree}` : '';
-  const canCreate = Boolean(
-    session.role === 'admin' && readiness.data?.can_deploy && selected?.key_ready && snapshot?.source_tree,
-  );
-
-  const createDeployment = useMutation({
-    mutationFn: () => opsApi<{ deployment: Deployment }>('/deployments', {
-      method: 'POST',
-      body: JSON.stringify({
-        target: selectedTarget,
-        target_commit: snapshot?.commit,
-        source_tree: snapshot?.source_tree,
-        skip_workers: skipWorkers,
-        confirmation,
-      }),
-    }),
-    onSuccess: (result) => {
-      setShowDeploy(false);
-      setConfirmation('');
-      void queryClient.invalidateQueries({ queryKey: ['deployments'] });
-      void queryClient.invalidateQueries({ queryKey: ['deployment-readiness'] });
-      navigate(`/deployments/${result.deployment.id}`);
-    },
-  });
-  const cancelDeployment = useMutation({
-    mutationFn: () => opsApi(`/jobs/${jobId}/cancel`, {
-      method: 'POST',
-      body: JSON.stringify({ reason: 'Deployments 화면에서 배포 취소 요청' }),
-    }),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['deployment', id] }),
-  });
 
   const columns = useMemo<ColumnDef<Deployment>[]>(() => [
     { accessorKey: 'target', header: '대상', cell: ({ row }) => String(row.original.target || '-') },
@@ -204,22 +160,16 @@ export default function DeploymentsPage() {
       <PageHeader
         eyebrow="NATIVE RELEASE"
         title="Deployments"
-        description="검토된 개발 스냅샷을 운영 서버의 native 서비스로 배포합니다."
+        description="운영 서버의 native 배포 상태와 이력을 조회합니다. 배포 실행은 이 화면에서 제공하지 않습니다."
         actions={<>
           <button className="icon-button" type="button" onClick={refreshAll} title="배포 상태 새로고침" aria-label="배포 상태 새로고침">
             <RefreshCw size={17} aria-hidden="true" />
           </button>
-          {session.role === 'admin' ? (
-            <button className="button primary button-with-icon" type="button" disabled={!canCreate}
-              onClick={() => { setSelectedTarget(readiness.data?.default_target || readiness.data?.targets[0]?.name || ''); setConfirmation(''); setShowDeploy(true); }}>
-              <CloudUpload size={17} aria-hidden="true" /> 네이티브 배포
-            </button>
-          ) : null}
         </>}
       />
 
       <section className="panel">
-        <header className="section-header"><div><h2>네이티브 배포 스냅샷</h2><small>Docker 승격 없이 native 서비스를 직접 갱신합니다.</small></div></header>
+        <header className="section-header"><div><h2>네이티브 배포 상태</h2><small>검토된 소스와 대상 정보를 읽기 전용으로 표시합니다.</small></div></header>
         <QueryState loading={readiness.isLoading} error={readiness.error} unavailable={readiness.data?.available === false} />
         {snapshot ? <div className="deploy-source-grid">
           <div><GitBranch size={18} /><span>브랜치</span><strong>{snapshot.branch}</strong></div>
@@ -255,30 +205,9 @@ export default function DeploymentsPage() {
         {deployments.data?.items.length ? <DataTable data={deployments.data.items} columns={columns} exportName="mooncen-deployments.csv" onRowClick={(row) => navigate(`/deployments/${row.id}`)} /> : null}
       </section>
 
-      {showDeploy ? <DetailPanel title="네이티브 배포" onClose={() => setShowDeploy(false)}>
-        <form className="stack-form" onSubmit={(event) => { event.preventDefault(); if (confirmation === confirmationText) createDeployment.mutate(); }}>
-          <label>배포 대상<select value={selectedTarget} onChange={(event) => { setSelectedTarget(event.target.value); setConfirmation(''); }}>
-            {readiness.data?.targets.map((target) => <option key={target.name} value={target.name} disabled={!target.key_ready}>{target.name} · {target.role} · {target.server}</option>)}
-          </select></label>
-          <label>개발 스냅샷<input className="mono-value" value={snapshot?.source_tree || ''} readOnly /></label>
-          <label className="check-row"><input type="checkbox" checked={skipWorkers} onChange={(event) => setSkipWorkers(event.target.checked)} />크롤러·AI worker 갱신 제외</label>
-          <label>확인 문구<code className="confirmation-code">{confirmationText}</code><input aria-label="확인 문구" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} autoComplete="off" required /></label>
-          <QueryState error={createDeployment.error} />
-          <button className="button primary button-with-icon" type="submit" disabled={!canCreate || confirmation !== confirmationText || createDeployment.isPending}>
-            <CloudUpload size={17} /> {createDeployment.isPending ? '등록 중…' : `${selectedTarget} 배포 시작`}
-          </button>
-        </form>
-      </DetailPanel> : null}
-
       {id ? <DetailPanel title="배포 상세" onClose={() => navigate('/deployments')}>
-        <QueryState loading={detail.isLoading} error={detail.error || cancelDeployment.error} />
-        {detail.data ? <><DefinitionList value={detail.data} />
-          {session.role === 'admin' && ['queued', 'assigned', 'running'].includes(String(detail.data.job_status)) ? (
-            <button className="button danger" type="button" disabled={cancelDeployment.isPending} onClick={() => {
-              const expected = `CANCEL ${String(detail.data?.target || '')}`;
-              if (window.prompt(`배포 취소 확인을 위해 ${expected}을 입력하세요.`) === expected) cancelDeployment.mutate();
-            }}>배포 취소 요청</button>
-          ) : null}</> : null}
+        <QueryState loading={detail.isLoading} error={detail.error} />
+        {detail.data ? <DefinitionList value={detail.data} /> : null}
         <h3>실시간 배포 로그</h3><StreamStatus state={stream.state} detail={stream.detail} />
         <QueryState loading={logs.isLoading} error={logs.error} empty={logs.data?.items.length === 0} />
         {logs.data?.items.length ? <div className="log-viewer">{logs.data.items.map((log) => <div key={String(log.id)}>

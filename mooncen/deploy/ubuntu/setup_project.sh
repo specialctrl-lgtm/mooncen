@@ -843,27 +843,6 @@ install_service_env() {
   sudo tee "$SERVICE_CONFIG_DIR/$filename" >/dev/null
 }
 
-# Container runtime inputs use a separate root-only boundary.  The native
-# services keep their root:<service> 0640 files so a first-cutover rollback can
-# restart them without changing their credential contract.  Container files
-# are rendered from explicit allowlists; combined native env files are never
-# copied across the public-container boundary.
-install_container_env() {
-  local destination_filename="$1"
-  local stage
-
-  stage="$(sudo mktemp "$SERVICE_CONFIG_DIR/.${destination_filename}.XXXXXX")"
-  if ! sudo chown root:root "$stage" ||
-     ! sudo chmod 0600 "$stage" ||
-     ! sudo tee "$stage" >/dev/null ||
-     ! sudo sync -f -- "$stage" ||
-     ! sudo mv -fT -- "$stage" "$SERVICE_CONFIG_DIR/$destination_filename"; then
-    sudo rm -f -- "$stage"
-    return 1
-  fi
-  sudo sync -f -- "$SERVICE_CONFIG_DIR"
-}
-
 # The operations bot contains three fixed PostgreSQL health queries. Preserve
 # those diagnostics without granting the network-facing bot arbitrary psql or
 # postgres-shell access: sudo may execute only this root-owned query allowlist.
@@ -1354,33 +1333,6 @@ VITE_SITE_URL=https://${DOMAIN}
 SITE_URL=https://${DOMAIN}
 ENV
 
-install_container_env container-api.env <<ENV
-ENVIRONMENT=production
-DB_NAME=${DB_NAME}
-DB_API_USER=${DB_API_USER}
-DB_API_PASSWORD=${DB_API_PASSWORD}
-DB_POOL_MIN=${DB_POOL_MIN:-1}
-DB_POOL_MAX=${DB_POOL_MAX:-8}
-MOONCEN_CORS_ORIGINS=${cors_origins}
-MOONCEN_TRUSTED_HOSTS=${trusted_hosts}
-AUTH_SECRET=${AUTH_SECRET}
-NAVER_OAUTH_CLIENT_ID=${NAVER_OAUTH_CLIENT_ID}
-NAVER_OAUTH_CLIENT_SECRET=${NAVER_OAUTH_CLIENT_SECRET}
-GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID}
-GOOGLE_OAUTH_CLIENT_SECRET=${GOOGLE_OAUTH_CLIENT_SECRET}
-OAUTH_REDIRECT_URIS=${OAUTH_REDIRECT_URI}
-MOONCEN_ADMIN_EMAILS=${MOONCEN_ADMIN_EMAILS}
-MOONCEN_ADMIN_PROVIDER_IDS=${MOONCEN_ADMIN_PROVIDER_IDS}
-MOONCEN_BUG_REPORT_TO=${MOONCEN_BUG_REPORT_TO}
-MOONCEN_BUG_REPORT_FROM=${MOONCEN_BUG_REPORT_FROM}
-MOONCEN_SMTP_HOST=${MOONCEN_SMTP_HOST}
-MOONCEN_SMTP_PORT=${MOONCEN_SMTP_PORT}
-MOONCEN_SMTP_USERNAME=${MOONCEN_SMTP_USERNAME}
-MOONCEN_SMTP_PASSWORD=${MOONCEN_SMTP_PASSWORD}
-MOONCEN_SMTP_SECURITY=${MOONCEN_SMTP_SECURITY}
-SITE_URL=https://${DOMAIN}
-ENV
-
 install_service_env frontend.env "$FRONTEND_OS_USER" <<ENV
 FRONTEND_HOST=127.0.0.1
 FRONTEND_PORT=5173
@@ -1443,27 +1395,6 @@ ENVIRONMENT=production
 DB_SSLROOTCERT=${SERVICE_DB_SSLROOTCERT}
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=${DB_NAME}
-DB_RUNTIME_USER=${DB_AI_USER}
-DB_RUNTIME_PASSWORD=${DB_AI_PASSWORD}
-DB_APPLICATION_NAME=mooncen-ai
-DB_POOL_MIN=${DB_POOL_MIN:-1}
-DB_POOL_MAX=${DB_POOL_MAX:-8}
-OLLAMA_HOST=${OLLAMA_HOST}
-OLLAMA_HOSTS=${OLLAMA_HOSTS}
-OLLAMA_MODEL=${OLLAMA_MODEL}
-AI_PROVIDER=OLLAMA
-AI_WORKERS=${AI_WORKERS:-2}
-AI_BATCH_SIZE=20
-AI_DELAY=0
-AI_POLL_INTERVAL=60
-AI_ACTIVE_START=22:00
-AI_ACTIVE_END=07:00
-AI_WEEKEND_24H=1
-ENV
-
-install_container_env container-ai.env <<ENV
-ENVIRONMENT=production
 DB_NAME=${DB_NAME}
 DB_RUNTIME_USER=${DB_AI_USER}
 DB_RUNTIME_PASSWORD=${DB_AI_PASSWORD}
@@ -1745,18 +1676,6 @@ SELECT
   AND NOT has_database_privilege('${DB_BACKUP_USER}', '${DB_NAME}', 'TEMPORARY')
   AND NOT has_database_privilege('${DB_CHECK_USER}', '${DB_NAME}', 'TEMPORARY')
   AND NOT has_database_privilege('${DB_DEPLOYMENT_WORKER_USER}', '${DB_NAME}', 'TEMPORARY')
-  AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_releases', 'SELECT')
-  AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_releases', 'INSERT')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_releases', 'UPDATE')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_releases', 'DELETE')
-  AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_validation_receipts', 'SELECT')
-  AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_validation_receipts', 'INSERT')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_validation_receipts', 'UPDATE')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_validation_receipts', 'DELETE')
-  AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_approval_evidence', 'SELECT')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_approval_evidence', 'INSERT')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_approval_evidence', 'UPDATE')
-  AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_approval_evidence', 'DELETE')
   AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_agents', 'SELECT')
   AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_agents', 'INSERT')
   AND has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_agents', 'UPDATE')
@@ -1777,10 +1696,7 @@ SELECT
   AND NOT has_any_column_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_job_logs', 'REFERENCES')
   AND has_sequence_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_job_logs_id_seq', 'USAGE')
   AND has_sequence_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_job_logs_id_seq', 'SELECT')
-  AND has_sequence_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_deployment_lease_epoch_seq', 'USAGE')
-  AND has_sequence_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_deployment_lease_epoch_seq', 'SELECT')
   AND NOT has_sequence_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_job_logs_id_seq', 'UPDATE')
-  AND NOT has_sequence_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_container_deployment_lease_epoch_seq', 'UPDATE')
   AND NOT has_any_column_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_jobs', 'INSERT')
   AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_jobs', 'DELETE')
   AND NOT has_table_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public.ops_jobs', 'TRUNCATE')
@@ -1909,9 +1825,7 @@ SELECT
       AND (
         namespace.nspname <> 'public'
         OR relation.relname::text <> ALL (ARRAY[
-          'ops_container_releases', 'ops_container_validation_receipts',
-          'ops_container_approval_evidence', 'ops_agents', 'ops_jobs',
-          'ops_deployments', 'ops_job_logs'
+          'ops_agents', 'ops_jobs', 'ops_deployments', 'ops_job_logs'
         ])
       )
       AND (
@@ -1940,8 +1854,7 @@ SELECT
       AND (
         namespace.nspname <> 'public'
         OR sequence.relname::text <> ALL (ARRAY[
-          'ops_job_logs_id_seq',
-          'ops_container_deployment_lease_epoch_seq'
+          'ops_job_logs_id_seq'
         ])
       )
       AND (
@@ -2018,10 +1931,6 @@ SELECT
   )
   AND NOT has_schema_privilege('${DB_DEPLOYMENT_WORKER_USER}', 'public', 'CREATE')
   AND NOT has_database_privilege('${DB_DEPLOYMENT_WORKER_USER}', '${DB_NAME}', 'CREATE')
-  AND NOT has_table_privilege('${DB_API_USER}', 'public.ops_container_releases', 'INSERT')
-  AND NOT has_table_privilege('${DB_API_USER}', 'public.ops_container_validation_receipts', 'INSERT')
-  AND NOT has_table_privilege('${DB_CRAWLER_USER}', 'public.ops_container_releases', 'INSERT')
-  AND NOT has_table_privilege('${DB_CRAWLER_USER}', 'public.ops_container_validation_receipts', 'INSERT')
   AND NOT EXISTS (
     SELECT 1
     FROM public_sequences sequence

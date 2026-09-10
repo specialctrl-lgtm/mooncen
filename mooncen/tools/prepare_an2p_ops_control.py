@@ -28,25 +28,19 @@ DEFAULT_BOOTSTRAP_ROOT = Path("/root/mooncen-an2p-bootstrap")
 DEFAULT_SOURCE = DEFAULT_BOOTSTRAP_ROOT / "control-secrets.env"
 DEFAULT_OPS_AUTH_SECRET = DEFAULT_BOOTSTRAP_ROOT / "ops-auth-secret"
 DEFAULT_API_ENV = DEFAULT_BOOTSTRAP_ROOT / "ops-api.env"
-DEFAULT_WORKER_ENV = DEFAULT_BOOTSTRAP_ROOT / "deployment-worker.env"
-DEFAULT_RELEASE_ROOT = Path("/var/lib/mooncen-deployment-worker/releases")
 NAME_PATTERN = re.compile(r"\A[A-Z][A-Z0-9_]{1,63}\Z")
 LOGIN_PATTERN = re.compile(r"\A[a-z_][a-z0-9_]{0,62}\Z")
-SHA256_PATTERN = re.compile(r"\A[0-9a-f]{64}\Z")
 OPS_AUTH_SECRET_PATTERN = re.compile(r"\A[A-Za-z0-9_-]{64}\Z")
 REQUIRED_NAMES = frozenset(
     {
         "DB_API_PASSWORD",
-        "DB_DEPLOYMENT_WORKER_PASSWORD",
         "DB_NAME",
         "MOONCEN_OPS_PASSWORD_HASH",
-        "OPS_CONTAINER_DEV_TARGET_IDENTITY",
     }
 )
 OPTIONAL_NAMES = frozenset(
     {
         "DB_API_USER",
-        "DB_DEPLOYMENT_WORKER_USER",
         "MOONCEN_OPS_LOGIN_ID",
     }
 )
@@ -104,16 +98,10 @@ def load_protected_values(path: Path) -> dict[str, str]:
     if REQUIRED_NAMES.difference(values):
         raise PreparationError("bootstrap secret envelope is incomplete")
     values.setdefault("DB_API_USER", "mooncen_api_login")
-    values.setdefault("DB_DEPLOYMENT_WORKER_USER", "mooncen_deployment_worker_login")
     values.setdefault("MOONCEN_OPS_LOGIN_ID", "opsadmin")
     if (
         LOGIN_PATTERN.fullmatch(values["DB_API_USER"]) is None
-        or values["DB_DEPLOYMENT_WORKER_USER"]
-        != "mooncen_deployment_worker_login"
-        or values["DB_API_USER"] == values["DB_DEPLOYMENT_WORKER_USER"]
         or values["MOONCEN_OPS_LOGIN_ID"] != "opsadmin"
-        or SHA256_PATTERN.fullmatch(values["OPS_CONTAINER_DEV_TARGET_IDENTITY"])
-        is None
         or re.fullmatch(r"[A-Za-z_][A-Za-z0-9_-]{0,62}", values["DB_NAME"])
         is None
     ):
@@ -168,7 +156,7 @@ def render_environments(
     values: Mapping[str, str],
     *,
     ops_auth_secret: str,
-) -> tuple[str, str]:
+) -> str:
     ops_auth_secret = _validate_ops_auth_secret(ops_auth_secret, values)
     common = (
         ("ENVIRONMENT", "production"),
@@ -197,38 +185,11 @@ def render_environments(
             ("OPS_LOCAL_CRAWLER_RUNTIME_ENABLED", "false"),
             ("OPS_CRAWLER_API_DB_REQUIRED", "false"),
             ("OPS_DEPLOY_REQUIRED_AGENT_HOSTNAME", "an2p"),
-            (
-                "OPS_CONTAINER_DEV_TARGET_IDENTITY",
-                values["OPS_CONTAINER_DEV_TARGET_IDENTITY"],
-            ),
             ("MOONCEN_TRUSTED_HOSTS", "localhost,127.0.0.1,[::1]"),
             ("LOG_LEVEL", "INFO"),
         )
     )
-    worker = _environment(
-        (
-            *common,
-            ("DB_OWNER_USER", "mooncen_admin"),
-            ("OPS_DEPLOY_QUEUE_DB_HOST", "127.0.0.1"),
-            ("OPS_DEPLOY_QUEUE_DB_PORT", "15432"),
-            ("OPS_DEPLOY_QUEUE_DB_NAME", values["DB_NAME"]),
-            ("OPS_DEPLOY_QUEUE_DB_USER", values["DB_DEPLOYMENT_WORKER_USER"]),
-            (
-                "OPS_DEPLOY_QUEUE_DB_PASSWORD",
-                values["DB_DEPLOYMENT_WORKER_PASSWORD"],
-            ),
-            ("OPS_DEPLOY_AGENT_EXCLUSIVE", "true"),
-            ("OPS_DEPLOY_REQUIRED_AGENT_HOSTNAME", "an2p"),
-            (
-                "OPS_CONTAINER_DEV_TARGET_IDENTITY",
-                values["OPS_CONTAINER_DEV_TARGET_IDENTITY"],
-            ),
-            ("OPS_CONTAINER_RELEASE_ROOT", str(DEFAULT_RELEASE_ROOT)),
-            ("OPS_LOCAL_CRAWLER_RUNTIME_ENABLED", "false"),
-            ("LOG_LEVEL", "INFO"),
-        )
-    )
-    return api, worker
+    return api
 
 
 def _atomic_root_write(path: Path, content: str) -> None:
@@ -274,7 +235,6 @@ def _parser() -> argparse.ArgumentParser:
         default=DEFAULT_OPS_AUTH_SECRET,
     )
     parser.add_argument("--api-output", type=Path, default=DEFAULT_API_ENV)
-    parser.add_argument("--worker-output", type=Path, default=DEFAULT_WORKER_ENV)
     return parser
 
 
@@ -287,10 +247,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     arguments = _parser().parse_args(argv)
     values = load_protected_values(arguments.source)
     ops_auth_secret = load_ops_auth_secret(arguments.ops_auth_secret, values)
-    api, worker = render_environments(values, ops_auth_secret=ops_auth_secret)
+    api = render_environments(values, ops_auth_secret=ops_auth_secret)
     _atomic_root_write(arguments.api_output, api)
-    _atomic_root_write(arguments.worker_output, worker)
-    print("Prepared isolated an2p environments without reading or printing a service key.")
+    print("Prepared the isolated an2p Ops API environment without printing a secret.")
     return 0
 
 

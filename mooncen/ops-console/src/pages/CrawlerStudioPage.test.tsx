@@ -239,7 +239,7 @@ describe('CrawlerStudioPage', () => {
     expect(screen.getByLabelText('Provider')).toHaveValue('UNREVIEWED');
     expect(mockedOpsApi).toHaveBeenCalledWith('/crawlers/runs?limit=100&provider=UNREVIEWED');
     expect(screen.getByRole('option', { name: 'UNREVIEWED · 등록되지 않음' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'dry_run 등록' })).toBeDisabled();
+    expect(screen.getByText(/gen1crawler의 검토된 전체 실행 경로/)).toBeInTheDocument();
     expect(mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawler-studio/drafts' && init?.method === 'POST')).toBeUndefined();
     expect(mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawlers/run' && init?.method === 'POST')).toBeUndefined();
   });
@@ -369,20 +369,13 @@ describe('CrawlerStudioPage', () => {
     expect(screen.getByText('signer_is_outside_ops_api')).toBeInTheDocument();
   });
 
-  it('preserves the bounded legacy dry-run workflow for a registered provider', async () => {
+  it('does not expose the retired local dry-run workflow', async () => {
     renderPage();
 
     expect(await screen.findByRole('option', { name: /HOMEPLUS · culture_center/ })).toBeInTheDocument();
-    expect(screen.queryByRole('option', { name: /apply/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'dry_run 등록' }));
-
-    await waitFor(() => {
-      const call = mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawlers/run' && init?.method === 'POST');
-      expect(call).toBeDefined();
-      const payload = JSON.parse(String(call?.[1]?.body));
-      expect(payload).toMatchObject({ provider: 'HOMEPLUS', run_mode: 'dry_run', concurrency: 1, max_retries: 0 });
-      expect(payload.run_mode).not.toBe('apply');
-    });
+    expect(screen.queryByRole('button', { name: 'dry_run 등록' })).not.toBeInTheDocument();
+    expect(screen.getByText(/gen1crawler의 검토된 전체 실행 경로/)).toBeInTheDocument();
+    expect(mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawlers/run' && init?.method === 'POST')).toBeUndefined();
   });
 
   it('shows an explicit central-routing block for a distributed parser probe 503', async () => {

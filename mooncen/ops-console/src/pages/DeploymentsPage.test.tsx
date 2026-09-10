@@ -31,7 +31,7 @@ function renderPage() {
   );
 }
 
-describe('DeploymentsPage native deployment', () => {
+describe('DeploymentsPage deployment status', () => {
   afterEach(cleanup);
 
   beforeEach(() => {
@@ -65,19 +65,10 @@ describe('DeploymentsPage native deployment', () => {
     });
   });
 
-  it('shows only the native deployment workflow', async () => {
+  it('is explicitly read-only', async () => {
     renderPage();
-    expect(await screen.findByText('네이티브 배포 스냅샷')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '네이티브 배포' })).toBeDisabled();
-    expect(screen.queryByText('Docker 배포 파이프라인')).not.toBeInTheDocument();
-  });
-
-  it('does not request retired container endpoints', async () => {
-    renderPage();
-    await screen.findByText('mooncen.kr');
-    expect(mockedOpsApi).not.toHaveBeenCalledWith(
-      expect.stringContaining('/deployments/container'),
-      expect.anything(),
-    );
+    expect(await screen.findByText('네이티브 배포 상태')).toBeInTheDocument();
+    expect(screen.getByText(/배포 실행은 이 화면에서 제공하지 않습니다/)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '네이티브 배포' })).not.toBeInTheDocument();
   });
 });

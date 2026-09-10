@@ -16,6 +16,11 @@ env:
   CI: "true"
   TZ: Asia/Seoul
 
+defaults:
+  run:
+    shell: bash
+    working-directory: mooncen
+
 jobs:
   secret-scan:
     name: Repository secret scan
@@ -29,6 +34,7 @@ jobs:
 
       - name: Install verified Gitleaks binary
         shell: bash
+        working-directory: .
         run: |
           archive="$RUNNER_TEMP/gitleaks.tar.gz"
           curl --fail --silent --show-error --location \
@@ -39,6 +45,7 @@ jobs:
 
       - name: Prove Gitleaks default rules detect a synthetic secret
         shell: bash
+        working-directory: .
         run: |
           set -euo pipefail
           canary_dir="$(mktemp --directory "$RUNNER_TEMP/gitleaks-canary.XXXXXX")"
@@ -56,7 +63,7 @@ jobs:
 
           set +e
           "$RUNNER_TEMP/gitleaks" dir \
-            --config .gitleaks.toml \
+            --config mooncen/.gitleaks.toml \
             --redact \
             --no-banner \
             "$canary_dir"
@@ -68,9 +75,10 @@ jobs:
           fi
 
       - name: Scan Git history and checked-out files
+        working-directory: .
         run: |
-          "$RUNNER_TEMP/gitleaks" git --config .gitleaks.toml --redact --no-banner --verbose
-          "$RUNNER_TEMP/gitleaks" dir --config .gitleaks.toml --redact --no-banner --verbose .
+          "$RUNNER_TEMP/gitleaks" git --config mooncen/.gitleaks.toml --redact --no-banner --verbose
+          "$RUNNER_TEMP/gitleaks" dir --config mooncen/.gitleaks.toml --redact --no-banner --verbose .
 
   backend:
     name: Backend Python ${{ matrix.python-version }}, migration, and audit
@@ -115,7 +123,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-          cache-dependency-path: requirements-dev.lock
+          cache-dependency-path: mooncen/requirements-dev.lock
 
       - name: Install hash-locked Python dependencies
         run: python -m pip install --require-hashes -r requirements-dev.lock
@@ -138,14 +146,13 @@ jobs:
         run: |
           archive="$RUNNER_TEMP/mooncen-release.tar.gz"
           release="$RUNNER_TEMP/mooncen-release"
-          git archive --format=tar.gz --output="$archive" HEAD
+          git archive --format=tar.gz --output="$archive" HEAD:mooncen
           mkdir -p "$release"
           tar --extract --gzip --file "$archive" --directory "$release"
           for required in \
             requirements.lock \
             backend/routers/crawler_owner.py \
             deploy/ubuntu/setup_project.sh \
-            deploy/decommission_docker_runtime.sh \
             tools/ops_service_action.py; do
             test -f "$release/$required" && test ! -L "$release/$required"
           done
@@ -165,8 +172,38 @@ jobs:
             echo "Production archive contains a symbolic link."
             exit 1
           fi
-          MOONCEN_APP_DIR="$release" python -I -c \
-            'import os,sys; root=os.environ["MOONCEN_APP_DIR"]; sys.path.insert(0,root); from tools import ops_service_action as action; assert "ollama-test" in action.ACTION_ACCOUNT_ENV; assert not hasattr(action, "_dashboard_module")'
+          (
+            cd "$release"
+            python -m compileall -q \
+              backend DB Crawler tools utils run_crawlers.py service_group.py
+            MOONCEN_ARCHIVE_ROOT="$release" python -I - <<'PY'
+          import importlib
+          import os
+          import sys
+          from pathlib import Path
+
+          root = Path(os.environ["MOONCEN_ARCHIVE_ROOT"]).resolve()
+          sys.path.insert(0, str(root))
+          modules = (
+              "backend.main",
+              "backend.ops.service",
+              "backend.routers.crawler_owner",
+              "tools.ops_service_action",
+              "tools.postgres_scram_verifier",
+          )
+          for name in modules:
+              module = importlib.import_module(name)
+              source = Path(module.__file__).resolve()
+              assert source.is_relative_to(root), (name, source)
+
+          from tools import ops_service_action as action
+
+          assert "ollama-test" in action.ACTION_ACCOUNT_ENV
+          assert not hasattr(action, "_dashboard_module")
+          PY
+            python -m tools.generate_ops_password --help >/dev/null
+            python -m tools.postgres_scram_verifier --help >/dev/null
+          )
 
       - name: Run Python tests
         run: python -m pytest -q
@@ -181,7 +218,7 @@ jobs:
     timeout-minutes: 20
     defaults:
       run:
-        working-directory: frontend2
+        working-directory: mooncen/frontend2
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -191,7 +228,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: frontend2/package-lock.json
+          cache-dependency-path: mooncen/frontend2/package-lock.json
 
       - name: Install dependencies
         run: npm ci --no-audit --fund=false
@@ -225,7 +262,7 @@ jobs:
     timeout-minutes: 15
     defaults:
       run:
-        working-directory: ops-console
+        working-directory: mooncen/ops-console
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -235,7 +272,7 @@ jobs:
         with:
           node-version: "22.22.0"
           cache: npm
-          cache-dependency-path: ops-console/package-lock.json
+          cache-dependency-path: mooncen/ops-console/package-lock.json
 
       - name: Install dependencies
         run: npm ci --no-audit --fund=false
@@ -286,7 +323,7 @@ jobs:
       EXPO_NO_TELEMETRY: "1"
     defaults:
       run:
-        working-directory: mooncen-app
+        working-directory: mooncen/mooncen-app
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -296,7 +333,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: mooncen-app/package-lock.json
+          cache-dependency-path: mooncen/mooncen-app/package-lock.json
 
       - name: Install dependencies
         run: npm ci --no-audit --fund=false
@@ -395,7 +432,7 @@ jobs:
           http {
               access_log off;
               include /etc/nginx/mime.types;
-              include $GITHUB_WORKSPACE/$source;
+              include $PWD/$source;
           }
           EOF
 

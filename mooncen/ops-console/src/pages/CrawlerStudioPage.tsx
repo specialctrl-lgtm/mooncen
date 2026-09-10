@@ -80,7 +80,6 @@ type StudioDraftDetailResponse = {
 };
 type StudioDraftPage = PageResponse<StudioDraft> & { available: boolean };
 type StudioRevisionPage = PageResponse<StudioRevision> & { available: boolean };
-type RunMode = 'dry_run' | 'review';
 type SourceIdentity = {
   source: string;
   sha256: string;
@@ -94,10 +93,6 @@ const MAX_SOURCE_BYTES = 512 * 1024;
 function centralRoutingUnavailable(error: unknown, environment: string): boolean {
   return error instanceof OpsApiError
     && (error.status === 503 || (environment !== 'development' && error.status === 409));
-}
-
-function supportedContentType(value: string): string {
-  return ['culture_center', 'experience', 'education'].includes(value) ? value : 'all';
 }
 
 function hasUnpairedSurrogate(value: string): boolean {
@@ -205,12 +200,8 @@ export default function CrawlerStudioPage() {
   const requestedProvider = (searchParams.get('provider') || '').trim().slice(0, 100);
 
   const [validationProvider, setValidationProvider] = useState(requestedProvider);
-  const [runMode, setRunMode] = useState<RunMode>('dry_run');
   const [probeUrl, setProbeUrl] = useState('');
   const [probeTimeout, setProbeTimeout] = useState(25);
-  const [compareExisting, setCompareExisting] = useState(true);
-  const [saveHtml, setSaveHtml] = useState(false);
-  const [saveScreenshot, setSaveScreenshot] = useState(false);
 
   const [draftProvider, setDraftProvider] = useState(requestedProvider);
   const [draftSourcePath, setDraftSourcePath] = useState('');
@@ -418,17 +409,6 @@ export default function CrawlerStudioPage() {
     },
   });
 
-  const runMutation = useMutation<
-    { job: { id: string }; crawler_run: { id: string } },
-    Error,
-    Record<string, unknown>
-  >({
-    mutationFn: (body) => opsApi('/crawlers/run', { method: 'POST', body: JSON.stringify(body) }),
-    onSuccess: (result) => {
-      void queryClient.invalidateQueries({ queryKey: ['crawler-studio-runs', session.environment] });
-      navigate(`/crawler-studio/runs/${result.crawler_run.id}`);
-    },
-  });
   const probeMutation = useMutation<{ job: { id: string } }, Error>({
     mutationFn: () => opsApi('/crawlers/parser-probe', {
       method: 'POST',
@@ -537,24 +517,6 @@ export default function CrawlerStudioPage() {
       .slice(0, 20),
     [validationProvider, runs.data?.items],
   );
-  const submitRun = (event: FormEvent) => {
-    event.preventDefault();
-    if (!selectedValidationProvider || !selectedValidationProvider.can_run || session.role === 'viewer') return;
-    runMutation.mutate({
-      scope: 'provider',
-      provider: selectedValidationProvider.provider.trim().toUpperCase(),
-      content_type: supportedContentType(selectedValidationProvider.content_type),
-      run_mode: runMode,
-      compare_existing: compareExisting,
-      review_before_apply: runMode === 'review',
-      save_html: saveHtml,
-      save_screenshot: saveScreenshot,
-      browser_visible: false,
-      max_retries: 0,
-      concurrency: 1,
-      force_full_refresh: false,
-    });
-  };
 
   const draftColumns = useMemo<ColumnDef<StudioDraft>[]>(() => [
     {
@@ -587,7 +549,7 @@ export default function CrawlerStudioPage() {
       String(selectedValidationProvider.run_blocked_reason || ''),
     );
   const routingBlocked = registryRoutingBlocked
-    || centralRoutingUnavailable(runMutation.error || probeMutation.error, session.environment);
+    || centralRoutingUnavailable(probeMutation.error, session.environment);
   const reviewBusy = reviewDraft.isPending;
 
   return (
@@ -865,7 +827,7 @@ export default function CrawlerStudioPage() {
           <span>이 환경에서는 브라우저가 로컬 크롤러를 직접 실행하지 않습니다. 중앙 서버의 probe/dry-run 작업 라우팅이 연결된 뒤 다시 시도하세요.</span>
         </div>
       ) : (
-        (runMutation.error || probeMutation.error) && <QueryState error={runMutation.error || probeMutation.error} />
+        probeMutation.error && <QueryState error={probeMutation.error} />
       )}
 
       <div className="studio-columns">
@@ -923,23 +885,8 @@ export default function CrawlerStudioPage() {
 
       <section className="panel">
         <header className="section-header">
-          <div><h2>Dry-run / Review</h2><small>apply를 제외하고 동시성 1, 재시도 0으로 제한합니다.</small></div>
+          <div><h2>실행 정책</h2><small>크롤러 실행은 gen1crawler의 검토된 전체 실행 경로에서만 수행합니다.</small></div>
         </header>
-        <form className="studio-run-form" onSubmit={submitRun}>
-          <label>
-            실행 방식
-            <select value={runMode} onChange={(event) => setRunMode(event.target.value as RunMode)}>
-              <option value="dry_run">dry_run · 저장하지 않고 비교</option>
-              <option value="review">review · 검토 대상으로 보류</option>
-            </select>
-          </label>
-          <label className="check-row"><input type="checkbox" checked={compareExisting} onChange={(event) => setCompareExisting(event.target.checked)} />기존 데이터와 비교</label>
-          <label className="check-row"><input type="checkbox" checked={saveHtml} onChange={(event) => setSaveHtml(event.target.checked)} />HTML 근거 저장</label>
-          <label className="check-row"><input type="checkbox" checked={saveScreenshot} onChange={(event) => setSaveScreenshot(event.target.checked)} />스크린샷 근거 저장</label>
-          <button className="button primary" type="submit" disabled={session.role === 'viewer' || !selectedValidationProvider?.can_run || runMutation.isPending || routingBlocked}>
-            {runMutation.isPending ? '검증 등록 중…' : `${runMode} 등록`}
-          </button>
-        </form>
       </section>
 
       <section className="panel">

@@ -9,8 +9,7 @@ param(
     [string]$SshIdentityFile = "",
     [ValidatePattern('^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+$')]
     [string]$CrawlerControlSshTarget = "sgm@gen1db",
-    [string]$CrawlerControlSshIdentityFile = "",
-    [switch]$EnableLocalCrawlerRuntime
+    [string]$CrawlerControlSshIdentityFile = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -50,9 +49,6 @@ $nonApiAnalyticsEnvironment = @{
     OPS_CLOUDFLARE_ANALYTICS_TOKEN = ""
 }
 
-if ($EnableLocalCrawlerRuntime -and $DataSource -ne "Local") {
-    throw "-EnableLocalCrawlerRuntime is allowed only with -DataSource Local."
-}
 if ($SshIdentityFile -and $DataSource -ne "Cloud") {
     throw "-SshIdentityFile is allowed only with -DataSource Cloud."
 }
@@ -801,6 +797,8 @@ function Get-RemoteEnvironmentValue(
     $sshArguments = @(
         "-T", "-n",
         "-o", "BatchMode=yes",
+        "-o", "ProxyCommand=none",
+        "-o", "ProxyJump=none",
         "-o", "ConnectTimeout=10",
         "-o", "StrictHostKeyChecking=yes",
         "-o", "UpdateHostKeys=no",
@@ -856,6 +854,8 @@ function Get-CrawlerControlEnvironmentValue(
     $sshArguments = @(
         "-T", "-n",
         "-o", "BatchMode=yes",
+        "-o", "ProxyCommand=none",
+        "-o", "ProxyJump=none",
         "-o", "ConnectTimeout=10",
         "-o", "StrictHostKeyChecking=yes",
         "-o", "UpdateHostKeys=no",
@@ -903,6 +903,8 @@ function Get-CloudflareAnalyticsEnvironment([string]$SshExecutable) {
     $sshArguments = @(
         "-T", "-n",
         "-o", "BatchMode=yes",
+        "-o", "ProxyCommand=none",
+        "-o", "ProxyJump=none",
         "-o", "ConnectTimeout=10",
         "-o", "StrictHostKeyChecking=yes",
         "-o", "UpdateHostKeys=no",
@@ -1215,12 +1217,7 @@ function Start-OpsConsole {
         $cloudControlEnvironment = Get-CloudControlEnvironment $ssh
     }
     else {
-        if ($EnableLocalCrawlerRuntime) {
-            $env:OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "true"
-        }
-        else {
-            $env:OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "false"
-        }
+        $env:OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "false"
     }
     New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
     $started = @()
@@ -1230,6 +1227,8 @@ function Start-OpsConsole {
                 "-N",
                 "-T",
                 "-o", "BatchMode=yes",
+                "-o", "ProxyCommand=none",
+                "-o", "ProxyJump=none",
                 "-o", "ExitOnForwardFailure=yes",
                 "-o", "StrictHostKeyChecking=yes",
                 "-o", "ConnectTimeout=10",
@@ -1262,6 +1261,8 @@ function Start-OpsConsole {
                     "-N",
                     "-T",
                     "-o", "BatchMode=yes",
+                    "-o", "ProxyCommand=none",
+                    "-o", "ProxyJump=none",
                     "-o", "ExitOnForwardFailure=yes",
                     "-o", "StrictHostKeyChecking=yes",
                     "-o", "ConnectTimeout=10",
@@ -1296,11 +1297,6 @@ function Start-OpsConsole {
             Invoke-CheckedNative $python @((Join-Path $root "tools\ensure_ops_console_schema.py")) `
                 "Ops schema preparation failed."
         }
-        if ($DataSource -eq "Local" -and $EnableLocalCrawlerRuntime) {
-            Invoke-CheckedNative $python @("-m", "ops_agent.crawler_scheduler", "--check") `
-                "Local crawler scheduler configuration is invalid."
-        }
-
         $apiArguments = @("-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8001")
         Prepare-ApiLogs
         $apiEnvironment = if ($DataSource -eq "Cloud") { $cloudControlEnvironment.Api } else { @{} }
@@ -1330,13 +1326,6 @@ function Start-OpsConsole {
         if ($DataSource -eq "Local") {
             $workers += @(
                 @{ name = "status-agent"; module = "ops_agent.status_agent"; extra = @("--interval", "30") }
-            )
-        }
-        if ($DataSource -eq "Local" -and $EnableLocalCrawlerRuntime) {
-            $workers += @(
-                @{ name = "crawler-scheduler"; module = "ops_agent.crawler_scheduler"; extra = @() },
-                @{ name = "crawler-worker"; module = "ops_agent.crawler_worker"; extra = @() },
-                @{ name = "quality-worker"; module = "ops_agent.quality_worker"; extra = @() }
             )
         }
         foreach ($worker in $workers) {
@@ -1374,7 +1363,7 @@ function Start-OpsConsole {
             else {
                 $null
             }
-            local_crawler_runtime_enabled = [bool]$EnableLocalCrawlerRuntime
+            local_crawler_runtime_enabled = $false
             processes = $started
         } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $statePath -Encoding UTF8
     }
@@ -1402,9 +1391,7 @@ function Start-OpsConsole {
     else {
         Write-Host "API:         http://127.0.0.1:8001/health"
     }
-    if ($DataSource -eq "Local" -and -not $EnableLocalCrawlerRuntime) {
-        Write-Host "Local crawler/quality runtime: disabled (use -EnableLocalCrawlerRuntime for isolated development only)"
-    }
+    Write-Host "Crawler execution: gen1crawler direct owner path only"
 }
 
 function Refresh-OpsControl {
@@ -1421,8 +1408,7 @@ function Refresh-OpsControl {
     if (-not (Test-Path -LiteralPath $python -PathType Leaf)) {
         throw "Python environment is missing: $python"
     }
-    $localCrawlerRuntimeEnabled = [bool]$state.local_crawler_runtime_enabled
-    $env:OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = if ($localCrawlerRuntimeEnabled) { "true" } else { "false" }
+    $env:OPS_LOCAL_CRAWLER_RUNTIME_ENABLED = "false"
     Add-ExecutableDirectoryToPath (Resolve-GitExecutable)
 
     $controlNames = @("api", "status-agent")
@@ -1464,7 +1450,7 @@ function Refresh-OpsControl {
         $state | Add-Member -NotePropertyName "api_proxy_target" -NotePropertyValue "http://127.0.0.1:8001" -Force
         $state | Add-Member -NotePropertyName "api_stdout_log" -NotePropertyValue $apiStandardOutputLog -Force
         $state | Add-Member -NotePropertyName "api_stderr_log" -NotePropertyValue $apiStandardErrorLog -Force
-        $state | Add-Member -NotePropertyName "local_crawler_runtime_enabled" -NotePropertyValue $localCrawlerRuntimeEnabled -Force
+        $state | Add-Member -NotePropertyName "local_crawler_runtime_enabled" -NotePropertyValue $false -Force
         $state.processes = @($preserved + $started)
         $state | ConvertTo-Json -Depth 4 |
             Set-Content -LiteralPath $statePath -Encoding UTF8
@@ -1476,7 +1462,7 @@ function Refresh-OpsControl {
         throw
     }
 
-    Write-Host "Ops control plane refreshed without stopping crawler workers."
+    Write-Host "Ops control plane refreshed. Crawler execution remains on gen1crawler."
     Write-Host "Ops Console: http://127.0.0.1:5175/"
     Write-Host "API:         http://127.0.0.1:8001/health"
 }

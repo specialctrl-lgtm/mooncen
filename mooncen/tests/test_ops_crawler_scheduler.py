@@ -44,14 +44,15 @@ def test_scheduler_rejects_unknown_or_non_development_configuration(
         crawler_scheduler.load_config()
 
 
-def test_local_launcher_requires_explicit_opt_in_for_data_workers() -> None:
+def test_local_launcher_cannot_start_data_workers() -> None:
     launcher = (ROOT / "start_ops_console.ps1").read_text(encoding="utf-8")
 
-    assert "[switch]$EnableLocalCrawlerRuntime" in launcher
-    assert "if ($EnableLocalCrawlerRuntime)" in launcher
+    assert "EnableLocalCrawlerRuntime" not in launcher
     assert "OPS_LOCAL_CRAWLER_RUNTIME_ENABLED" in launcher
-    assert '@("-m", "ops_agent.crawler_scheduler", "--check")' in launcher
-    assert '@{ name = "crawler-scheduler"; module = "ops_agent.crawler_scheduler"' in launcher
-    assert '@{ name = "crawler-worker"; module = "ops_agent.crawler_worker"' in launcher
-    assert '@{ name = "quality-worker"; module = "ops_agent.quality_worker"' in launcher
-    assert "Local crawler/quality runtime: disabled" in launcher
+    start_function = launcher.split("function Start-OpsConsole {", 1)[1].split(
+        "function Refresh-OpsControl {", 1
+    )[0]
+    assert "ops_agent.crawler_scheduler" not in start_function
+    assert "ops_agent.crawler_worker" not in start_function
+    assert "ops_agent.quality_worker" not in start_function
+    assert "gen1crawler direct owner path only" in start_function

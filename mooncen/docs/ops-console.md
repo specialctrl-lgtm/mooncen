@@ -1,30 +1,29 @@
 # MoonCen integrated Ops Console
 
-Ops Console의 배포 화면은 native 배포 상태와 이력만 표시한다. Docker build,
-validation, promote, rollback API와 UI는 폐기되었다.
+Ops Console의 배포 화면은 native 배포 상태와 이력만 표시한다.
 
 The integrated Ops Console is a separate administrator application in
 `ops-console/`. It does not add administrator code to `frontend2`, is not
 served by the public MoonCen website, and is the only supported Ops Console.
 The former Python/HTML console on port 8765 has been retired.
 
-This document describes the first production-safe delivery: shared schema,
-role-based APIs, Dashboard, crawler/job inspection and queueing, Data Quality,
-Services inventory, deployment inventory, and Audit Log.
+This document describes the production-safe delivery: shared schema,
+role-based APIs, Dashboard, crawler/job inspection, Data Quality, Services
+inventory, read-only deployment inventory, and Audit Log.
 
 ## Retired-console feature mapping
 
 | Existing local screen | Integrated menu | Current integration |
 | --- | --- | --- |
-| Summary / deployment control | Dashboard, Deployments | Immutable development-tree deployment and history are connected |
+| Summary / deployment control | Dashboard, Deployments | Deployment status and history are read-only; execution is not exposed |
 | Monitoring | Dashboard, Services | Registered `ops_services` plus existing crawler telemetry |
-| Operations | Services, Crawlers, Deployments | Crawler provider and reviewed deployment Jobs are connected |
+| Operations | Services, Crawlers, Deployments | The reviewed gen1crawler owner action and read-only deployment Jobs are connected |
 | Job Results | Jobs & Audit | PostgreSQL-backed jobs, logs, SSE, audit |
 | AI Work | Services | Status agent reports the configured Ollama endpoint |
 | 품질 작업대 | Data Quality | Production `service_group` data and `course_quality_score` |
 | 문화센터 / 체험 / 교육 | Content with a type filter | List/detail/source evidence is live; mutation is not exposed |
 | Address Fix | Data Quality | Read-only candidate list is live; update workflow is not exposed |
-| 복구 및 감사 | Jobs & Audit, Deployments | Deployment execution is audited; rollback and restore are not exposed |
+| 복구 및 감사 | Jobs & Audit, Deployments | Deployment history is audited; deploy, cancel, retry, rollback, and restore are not exposed |
 
 Functions that are not marked as connected in this table are intentionally not
 exposed as legacy fallbacks. They must be added to the standalone console with
@@ -77,6 +76,19 @@ python -m uvicorn backend.main:app --host 127.0.0.1 --port 8001
 ```
 
 All Ops routes are provided by `backend/routers/ops_v2.py` under `/api/ops`.
+
+### Operations SSH transport
+
+The Windows launcher and crawler-owner control use the Windows/OpenSSH `ssh`
+client directly. They do not invoke `tailscale ssh`, a `ProxyCommand`, or a
+`ProxyJump`. Host names such as `cloud` and `gen1crawler` are resolved over the
+Tailscale network, while authentication and port forwarding remain ordinary
+OpenSSH operations with pinned host keys and public-key-only authentication.
+
+Each remote node must therefore run OpenSSH `sshd` on its tailnet address and
+must have Tailscale SSH server mode disabled. Enabling Tailscale SSH changes the
+server-side authentication path and can reintroduce an interactive Tailscale
+web check, which the non-interactive Ops launcher intentionally rejects.
 
 The standalone console uses one independent administrator identity. It is not
 a MoonCen signup or OAuth account:
@@ -325,52 +337,6 @@ finalization failures remain `failed`. Production systemd keeps code `3` as a
 non-success result so the existing crawler alert remains visible, while the
 timer still schedules the next run normally. Per-provider completeness and
 close-missing gates are unchanged.
-
-## Deployment worker
-
-`ops_agent/deployment_worker.py` claims only `deployment` Jobs assigned to the
-local development Agent. The API and worker independently validate the same
-`config/deploy_servers.json` target, target identity, exact base commit, current
-development tree hash, and readable SSH key. A temporary Git index captures
-tracked changes, deletions, and safe untracked source files without changing
-the user's branch or index. The worker builds a fixed argument list for:
-
-```powershell
-.\deploy_mooncen.ps1 deploy `
-  -Target <reviewed-target> `
-  -ExpectedCommit <exact-base-commit> `
-  -SourceCommit <ephemeral-snapshot-commit> `
-  -ExpectedSourceTree <reviewed-tree> `
-  -ExpectedTargetIdentity <sha256>
-```
-
-No shell command, server address, key path, secret, full-deploy flag, or crawler
-interruption override is accepted from the browser. Deployment output,
-heartbeat, cancellation, and final status are written to the existing
-`ops_jobs`, `ops_job_logs`, `ops_deployments`, and `ops_audit_logs` tables.
-
-The local launcher starts this worker in both cloud-data and isolated-local
-modes. Crawler and quality workers remain opt-in and local-development-only.
-For a separately managed development Agent:
-
-```env
-OPS_DEPLOY_QUEUE_DB_HOST=
-OPS_DEPLOY_QUEUE_DB_NAME=mooncen
-OPS_DEPLOY_QUEUE_DB_USER=mooncen_crawler_login
-OPS_DEPLOY_QUEUE_DB_PASSWORD=
-OPS_AGENT_ID=
-```
-
-```bash
-python -m ops_agent.deployment_worker
-```
-
-The Deployments button can package a dirty development worktree. The typed
-confirmation uses the exact source-tree hash, and the worker rejects the job
-if HEAD or any included file changes before it creates the immutable commit.
-Local-only and secret-bearing paths such as `.env`, `deploy.local.ps1`,
-`config/deploy_servers.json`, `ops-console`, virtual environments, logs, and
-caches are excluded before Git reads their contents.
 
 `ops_agent/quality_worker.py` separately claims `data_quality_scan` Jobs with
 the DB check role. It applies the versioned `ops_quality_v1` required-field,

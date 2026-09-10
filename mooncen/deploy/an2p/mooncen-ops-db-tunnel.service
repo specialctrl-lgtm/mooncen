@@ -31,7 +31,6 @@ InaccessiblePaths=-/var/run/docker.sock
 InaccessiblePaths=-/etc/mooncen-an2p/deploy-transport
 InaccessiblePaths=-/etc/mooncen-an2p/status-transport
 InaccessiblePaths=-/etc/mooncen-an2p/ops-api.env
-InaccessiblePaths=-/etc/mooncen-an2p/deployment-worker.env
 
 [Install]
 WantedBy=multi-user.target

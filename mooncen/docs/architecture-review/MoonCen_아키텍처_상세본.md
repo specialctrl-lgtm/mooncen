@@ -55,7 +55,7 @@ MoonCen은 유통사 문화센터, 지방자치단체, 공공기관과 교육·�
 | `ops_agent/` | 22 | 15,035 | 운영·분산 제어 worker |
 | `tools/` | 125 | 63,668 | staging apply, 점검, 생성·운영 도구 |
 | `tests/` | 487 | 222,004 | Python 테스트 함수 약 4,805개 |
-| `deploy/` | 140 | 24,668 | Docker, Ubuntu, systemd, Nginx, monitoring, HA |
+| `deploy/` | 140 | 24,668 | Ubuntu, systemd, Nginx, monitoring, HA |
 | `config/` | 45 | 629,976 | 생성·provider·target 데이터 포함 |
 
 전체적으로 Python 파일 약 1,170개, TypeScript/TSX 167개, SQL 57개, YAML/YML 49개이며 versioned DB migration SQL은 primary/control 계열을 합쳐 40개입니다.
@@ -71,7 +71,6 @@ MoonCen은 유통사 문화센터, 지방자치단체, 공공기관과 교육·�
 | `backend/routers/ops_v2.py` | 4,031행 | 운영 API 도메인이 단일 router에 집중 |
 | `backend/services/crawler_analytics.py` | 2,848행 | 분석 쿼리와 응답 조합의 높은 응집도 |
 | `frontend2/src/App.tsx` | 2,207행, `useState` 59개 | 사용자 웹의 상태·흐름·모달이 단일 root에 집중 |
-| `ops_agent/deployment_worker.py` | 2,463행 | 배포 검증·실행·상태 관리 집중 |
 
 ### 2.3 운영 산출물 분류
 
@@ -623,4 +622,3 @@ MoonCen은 데이터 반영 경계와 운영 안전에 상당한 투자가 돼 �
 - 모바일 스토어 계정·서명·출시 상태
 
 운영 가이드의 “최초 기준선 확인” 절차로 위 항목을 증거화한 뒤 이 문서의 선언 상태와 대조해야 합니다.
-
