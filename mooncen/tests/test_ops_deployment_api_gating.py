@@ -10,15 +10,28 @@ from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 
 from DB import connection_settings
-from backend.ops.schemas import DeploymentRequest, JobActionRequest, ParserProbeRequest
+from backend.ops.schemas import JobActionRequest, ParserProbeRequest
 from backend.ops import service as ops_service
-from backend.routers import ops_v2
+from backend.routers import ops_deployments, ops_v2
 from tools.ensure_ops_console_schema import REQUIRED_MIGRATIONS
 
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMIT = "1" * 40
 TREE = "2" * 40
+
+
+def test_deployment_routes_are_isolated_and_read_only() -> None:
+    legacy_source = (ROOT / "backend/routers/ops_v2.py").read_text(encoding="utf-8")
+    deployment_source = (ROOT / "backend/routers/ops_deployments.py").read_text(encoding="utf-8")
+
+    assert '@router.get("/deployments' not in legacy_source
+    assert "create_deployment" not in legacy_source
+    assert '@router.get("")' in deployment_source
+    assert '@router.get("/readiness")' in deployment_source
+    assert '@router.get("/{deployment_id}")' in deployment_source
+    assert "@router.post" not in deployment_source
+    assert ops_deployments._readiness_payload()["execution_supported"] is False
 
 
 class _Result:
@@ -480,134 +493,6 @@ def test_deployment_jobs_are_read_only_through_the_generic_cancel_endpoint(
     assert "전용 운영 경로" in str(raised.value.detail)
     assert db.commits == 0
 
-
-def test_create_deployment_uses_environment_returned_by_enqueue_service(monkeypatch) -> None:
-    job_id = uuid4()
-    deployment_id = uuid4()
-    calls: list[tuple[str, str, str]] = []
-    enqueued_parameters: list[dict] = []
-
-    class CreateDB:
-        commits = 0
-
-        def execute(self, statement, _params=None):
-            if "INSERT INTO ops_deployments" in str(statement):
-                return _Result({"id": str(deployment_id), "job_id": str(job_id)})
-            return _Result()
-
-        def commit(self):
-            self.commits += 1
-
-    db = CreateDB()
-    monkeypatch.setattr(ops_v2, "require_ops_schema", lambda *_args: None)
-    monkeypatch.setattr(
-        ops_v2,
-        "_deployment_readiness_payload",
-        lambda _db: {
-            "can_deploy": True,
-            "snapshot": {"commit": COMMIT, "source_tree": TREE, "branch": "main"},
-            "targets": [
-                {"name": "cloud", "key_ready": True, "deploy_profile": "full-stack"}
-            ],
-            "agent": {"id": str(uuid4()), "hostname": "an2p"},
-        },
-    )
-    monkeypatch.setattr(
-        ops_v2,
-        "reviewed_target",
-        lambda _name: SimpleNamespace(
-            name="cloud",
-            identity="3" * 64,
-            deploy_profile="full-stack",
-            environment="production",
-        ),
-    )
-    monkeypatch.setattr(ops_v2, "current_environment", lambda: "production")
-    def enqueue(_db, **kwargs):
-        calls.append(("enqueue", "production", kwargs["target_key"]))
-        enqueued_parameters.append(kwargs["parameters"])
-        return {"id": job_id, "status": "queued", "environment": "production"}
-
-    monkeypatch.setattr(ops_v2, "enqueue_job", enqueue)
-    monkeypatch.setattr(ops_v2, "append_audit", lambda *_args, **_kwargs: None)
-    payload = DeploymentRequest(
-        target="cloud",
-        target_commit=COMMIT,
-        source_tree=TREE,
-        confirmation=f"DEPLOY cloud {TREE[:12]}",
-    )
-
-    result = ops_v2.create_deployment(
-        payload,
-        SimpleNamespace(),  # type: ignore[arg-type]
-        SimpleNamespace(id=uuid4()),  # type: ignore[arg-type]
-        db,  # type: ignore[arg-type]
-    )
-
-    assert calls == [("enqueue", "production", "deployment:cloud")]
-    assert enqueued_parameters[0]["required_agent_hostname"] == "an2p"
-    assert result["deployment"]["id"] == str(deployment_id)
-    assert db.commits == 1
-
-
-def test_create_deployment_rejects_target_from_a_different_environment(
-    monkeypatch,
-) -> None:
-    class CreateDB:
-        def execute(self, *_args, **_kwargs):
-            return _Result()
-
-    monkeypatch.setattr(ops_v2, "require_ops_schema", lambda *_args: None)
-    monkeypatch.setattr(
-        ops_v2,
-        "_deployment_readiness_payload",
-        lambda _db: {
-            "can_deploy": True,
-            "snapshot": {"commit": COMMIT, "source_tree": TREE, "branch": "main"},
-            "targets": [
-                {
-                    "name": "cloud",
-                    "key_ready": True,
-                    "deploy_profile": "full-stack",
-                    "environment": "staging",
-                }
-            ],
-            "agent": {"id": str(uuid4()), "hostname": "an2p"},
-        },
-    )
-    monkeypatch.setattr(
-        ops_v2,
-        "reviewed_target",
-        lambda _name: SimpleNamespace(
-            name="cloud",
-            identity="3" * 64,
-            deploy_profile="full-stack",
-            environment="staging",
-        ),
-    )
-    monkeypatch.setattr(ops_v2, "current_environment", lambda: "production")
-    payload = DeploymentRequest(
-        target="cloud",
-        target_commit=COMMIT,
-        source_tree=TREE,
-        confirmation=f"DEPLOY cloud {TREE[:12]}",
-    )
-
-    with pytest.raises(HTTPException) as raised:
-        ops_v2.create_deployment(
-            payload,
-            SimpleNamespace(),  # type: ignore[arg-type]
-            SimpleNamespace(id=uuid4()),  # type: ignore[arg-type]
-            CreateDB(),  # type: ignore[arg-type]
-        )
-
-    assert raised.value.status_code == 409
-    assert raised.value.detail == {
-        "code": "deployment_target_environment_mismatch",
-        "message": "The selected deployment target belongs to a different environment.",
-        "current_environment": "production",
-        "target_environment": "staging",
-    }
 
 
 def test_deployment_retry_is_disabled_in_read_only_console(monkeypatch) -> None:

@@ -24,7 +24,6 @@ from backend.database import SessionLocal, get_db
 from backend.observability import runtime_metrics
 from backend.ops.schemas import (
     CrawlerRunRequest,
-    DeploymentRequest,
     IssueActionRequest,
     JobActionRequest,
     ParserProbeRequest,
@@ -50,7 +49,6 @@ from backend.readiness import OPS_API_READINESS_QUERIES, assert_database_ready
 from backend.routers.auth import (
     ops_role_for_user,
     rate_limit,
-    require_ops_admin,
     require_ops_operator,
     require_ops_viewer,
 )
@@ -59,7 +57,6 @@ from ops_agent.crawler_registry import (
     resolve_crawler_provider_execution,
     reviewed_crawler_providers,
 )
-from ops_agent.deployment_registry import deployment_readiness, reviewed_target
 from ops_agent.production_topology import load_production_topology
 from service_group import (
     CULTURE_CENTER_PROVIDERS,
@@ -200,59 +197,6 @@ END
 
 _CATEGORY_HARD_DAMAGE_MARKERS = "".join(MOJIBAKE_HARD_MARKERS)
 _CATEGORY_SOFT_DAMAGE_MARKERS = "".join(MOJIBAKE_SOFT_MARKERS)
-
-
-def _deployment_agent(db: Session) -> dict[str, Any] | None:
-    if not table_exists(db, "ops_agents"):
-        return None
-    return mapped_one(
-        db.execute(
-            text(
-                """
-                SELECT id::text, name, hostname, status, last_seen_at
-                FROM ops_agents
-                WHERE environment = :environment
-                  AND status = 'healthy'
-                  AND last_seen_at >= CURRENT_TIMESTAMP - INTERVAL '2 minutes'
-                  AND capabilities @> CAST(:capability AS jsonb)
-                  AND (:required_hostname = '' OR hostname = :required_hostname)
-                ORDER BY last_seen_at DESC
-                LIMIT 1
-                """
-            ),
-            {
-                "environment": current_environment(),
-                "capability": json.dumps(["deployment_queue"]),
-                "required_hostname": os.getenv("OPS_DEPLOY_REQUIRED_AGENT_HOSTNAME", "").strip(),
-            },
-        )
-    )
-
-
-
-
-def _deployment_readiness_payload(db: Session) -> dict[str, Any]:
-    readiness = deployment_readiness()
-    agent = None
-    reasons = list(readiness.get("reasons") or [])
-    reasons.append(
-        {
-            "code": "native_deployment_operator_only",
-            "message": (
-                "네이티브 배포는 long-lived 서비스 키로 실행하지 않습니다. "
-                "an2p의 신뢰된 운영자가 Tailscale 대화형 경로에서만 수행합니다."
-            ),
-        }
-    )
-    readiness["agent"] = agent
-    readiness["can_deploy"] = False
-    readiness["reasons"] = reasons
-    readiness["deployment_mode"] = "native"
-    readiness["display_name"] = "네이티브 배포"
-    readiness["execution_supported"] = False
-    readiness["operator_path"] = "an2p-interactive-tailscale"
-    return readiness
-
 
 
 
@@ -3518,244 +3462,6 @@ def agents(db: Session = Depends(get_db)) -> dict[str, Any]:
     )
     return {"available": True, "items": items}
 
-
-@router.get("/deployments")
-def deployments(
-    limit: int = Query(default=50, ge=1, le=200),
-    offset: int = Query(default=0, ge=0, le=100_000),
-    db: Session = Depends(get_db),
-) -> dict[str, Any]:
-    if not table_exists(db, "ops_deployments"):
-        return _page([], total=0, limit=limit, offset=offset, available=False)
-    params = {"environment": current_environment(), "limit": limit, "offset": offset}
-    total = int(
-        db.execute(
-            text("SELECT COUNT(*) FROM ops_deployments WHERE environment = :environment"),
-            params,
-        ).scalar()
-        or 0
-    )
-    items = mapped_rows(
-        db.execute(
-            text(
-                """
-                SELECT d.id::text, d.job_id::text, d.environment, d.service_type,
-                       d.previous_version, d.target_version, d.previous_commit,
-                       d.target_commit, d.branch, d.deployment_status,
-                       d.requested_by::text, d.started_at, d.finished_at, d.created_at,
-                       j.parameters->>'target' AS target,
-                       j.status AS job_status, j.progress,
-                       j.error_code, j.error_message
-                FROM ops_deployments d
-                JOIN ops_jobs j ON j.id = d.job_id
-                WHERE d.environment = :environment
-                ORDER BY d.created_at DESC
-                LIMIT :limit OFFSET :offset
-                """
-            ),
-            params,
-        )
-    )
-    return _page(items, total=total, limit=limit, offset=offset)
-
-
-@router.get("/deployments/readiness")
-def deployment_readiness_status(db: Session = Depends(get_db)) -> dict[str, Any]:
-    return _deployment_readiness_payload(db)
-
-
-def create_deployment(
-    payload: DeploymentRequest,
-    request: Request,
-    user: models.User = Depends(require_ops_admin),
-    db: Session = Depends(get_db),
-) -> dict[str, Any]:
-    require_ops_schema(
-        db,
-        "ops_agents",
-        "ops_jobs",
-        "ops_job_logs",
-        "ops_deployments",
-        "ops_audit_logs",
-    )
-    readiness = _deployment_readiness_payload(db)
-    snapshot = readiness.get("snapshot") or {}
-    target_rows = {str(item.get("name")): item for item in readiness.get("targets") or [] if isinstance(item, dict)}
-    target_row = target_rows.get(payload.target)
-    if target_row is None:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="검토된 배포 대상이 아닙니다.",
-        )
-    if target_row.get("deploy_profile") != "full-stack":
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={
-                "code": "deployment_target_profile_forbidden",
-                "message": "The selected target does not accept full-stack deployments.",
-            },
-        )
-    if not readiness.get("can_deploy"):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail={
-                "code": "deployment_not_ready",
-                "message": "현재 개발 스냅샷을 배포할 수 없습니다.",
-                "reasons": readiness.get("reasons") or [],
-            },
-        )
-    if not target_row.get("key_ready"):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="선택한 대상의 배포 키를 읽을 수 없습니다.",
-        )
-    if payload.target_commit != snapshot.get("commit"):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="화면에서 검토한 commit과 현재 개발 HEAD가 다릅니다.",
-        )
-    if payload.source_tree != snapshot.get("source_tree"):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="화면에서 검토한 개발 스냅샷과 현재 파일 내용이 다릅니다.",
-        )
-
-    target = reviewed_target(payload.target)
-    environment = current_environment()
-    if target.environment != environment:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail={
-                "code": "deployment_target_environment_mismatch",
-                "message": "The selected deployment target belongs to a different environment.",
-                "current_environment": environment,
-                "target_environment": target.environment,
-            },
-        )
-    if target.deploy_profile != "full-stack":
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={
-                "code": "deployment_target_profile_forbidden",
-                "message": "The reviewed target does not accept full-stack deployments.",
-            },
-        )
-    agent = readiness["agent"]
-    parameters = {
-        "action": "deploy",
-        "target": target.name,
-        "target_commit": payload.target_commit,
-        "source_tree": payload.source_tree,
-        "target_identity": target.identity,
-        "service_type": "full",
-        "skip_workers": payload.skip_workers,
-        "required_agent_hostname": agent["hostname"],
-    }
-    target_key = f"deployment:{target.name}"
-    job = enqueue_job(
-        db,
-        job_type="deployment",
-        requested_by=user.id,
-        parameters=parameters,
-        target_key=target_key,
-        max_retries=0,
-    )
-    environment = job["environment"]
-    db.execute(
-        text(
-            """
-            UPDATE ops_jobs
-            SET agent_id = :agent_id, updated_at = CURRENT_TIMESTAMP
-            WHERE id = :job_id
-            """
-        ),
-        {"agent_id": agent["id"], "job_id": str(job["id"])},
-    )
-    job["agent_id"] = agent["id"]
-    deployment = mapped_one(
-        db.execute(
-            text(
-                """
-                INSERT INTO ops_deployments (
-                    job_id, environment, service_type, target_version,
-                    target_commit, branch, deployment_status, requested_by
-                )
-                VALUES (
-                    :job_id, :environment, 'full', :target_version,
-                    :target_commit, :branch, 'queued', :requested_by
-                )
-                RETURNING id::text, job_id::text, environment, service_type,
-                          target_version, target_commit, branch,
-                          deployment_status, requested_by::text, created_at
-                """
-            ),
-            {
-                "job_id": str(job["id"]),
-                "environment": environment,
-                "target_version": f"worktree-tree@{payload.source_tree[:12]}",
-                "target_commit": payload.source_tree,
-                "branch": snapshot.get("branch"),
-                "requested_by": str(user.id),
-            },
-        )
-    )
-    append_audit(
-        db,
-        request,
-        user_id=user.id,
-        action="deployment.create",
-        resource_type="deployment",
-        resource_id=deployment["id"] if deployment else None,
-        after_data={
-            "target": target.name,
-            "target_commit": payload.target_commit,
-            "source_tree": payload.source_tree,
-            "branch": snapshot.get("branch"),
-            "skip_workers": payload.skip_workers,
-        },
-        job_id=job["id"],
-    )
-    db.commit()
-    return {"job": job, "deployment": deployment}
-
-
-
-
-@router.get("/deployments/{deployment_id}")
-def deployment_detail(
-    deployment_id: UUID,
-    db: Session = Depends(get_db),
-) -> dict[str, Any]:
-    require_ops_schema(db, "ops_deployments", "ops_jobs")
-    item = mapped_one(
-        db.execute(
-            text(
-                """
-                SELECT d.id::text, d.job_id::text, d.environment, d.service_type,
-                       d.previous_version, d.target_version, d.previous_commit,
-                       d.target_commit, d.branch, d.deployment_status,
-                       d.health_check_result, d.smoke_test_result,
-                       d.requested_by::text, d.started_at, d.finished_at, d.created_at,
-                       j.parameters->>'target' AS target,
-                       j.status AS job_status, j.progress, j.result,
-                       j.error_code, j.error_message, j.cancel_requested_at,
-                       j.heartbeat_at
-                FROM ops_deployments d
-                JOIN ops_jobs j ON j.id = d.job_id
-                WHERE d.id = :deployment_id
-                  AND d.environment = :environment
-                """
-            ),
-            {
-                "deployment_id": str(deployment_id),
-                "environment": current_environment(),
-            },
-        )
-    )
-    if item is None:
-        raise HTTPException(status_code=404, detail="Deployment not found")
-    item["result"] = sanitize_for_audit(item.get("result")) if item.get("result") else None
-    return _redact_rows([item])[0]
 
 
 @router.get("/content")

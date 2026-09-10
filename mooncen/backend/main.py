@@ -32,6 +32,7 @@ from .routers import (
     crawler_studio,
     locations,
     ops_auth,
+    ops_deployments,
     ops_v2,
     seo_pages,
     server_monitor,
@@ -93,6 +94,7 @@ if _api_profile in {"combined", "ops"}:
     if _api_profile == "ops":
         app.include_router(ops_auth.router, prefix="/api")
     app.include_router(ops_v2.router)
+    app.include_router(ops_deployments.router)
     app.include_router(crawler_analytics.router)
     app.include_router(crawler_owner.router)
     app.include_router(crawler_releases.router)

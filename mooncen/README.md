@@ -6,6 +6,12 @@
 [`docs/ops-console.md`](docs/ops-console.md)에 정리되어 있습니다. 일반
 사용자용 `frontend2`에는 운영 콘솔 코드를 포함하지 않습니다.
 
+독립 실행 구성요소는
+[`mooncen-bot`](https://github.com/specialctrl-lgtm/mooncen-bot)과
+[`mooncen-crawler-legacy`](https://github.com/specialctrl-lgtm/mooncen-crawler-legacy)로
+분리했습니다. 소유권 경계는 [`docs/external-components.md`](docs/external-components.md)를
+참조하십시오.
+
 ## 현재 구성
 
 - `frontend2/`: 운영 기준 React 18 + TypeScript + Vite 웹 앱
