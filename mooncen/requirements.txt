@@ -13,7 +13,7 @@ SQLAlchemy==2.0.51
 python-dotenv==1.2.2
 
 # Data Processing
-pandas==3.0.3
+pandas==3.0.5
 PyYAML==6.0.3
 
 # Backend
