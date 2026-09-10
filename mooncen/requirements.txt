@@ -24,4 +24,4 @@ PyJWT==2.13.0
 argon2-cffi==25.1.0
 
 # Utilities
-geopy==2.4.1
+geopy==2.5.0
