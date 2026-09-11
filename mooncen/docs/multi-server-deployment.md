@@ -132,20 +132,25 @@ crawler unit is ever discovered on cloud, report it as topology drift and
 handle it in a separately reviewed cleanup—it is not part of application
 deployment or crawler update.
 
-There is currently no supported automated crawler-only release uploader from
-Windows. `deploy` and `full-deploy` therefore reject `-Target gen1crawler`, and
-`deploy-all` excludes its `crawler-only` profile. The explicit updater status
-action is fail-closed and performs no SSH or remote mutation:
+Crawler-only releases use a separate signed, transactional uploader from
+Windows. `deploy` and `full-deploy` still reject `-Target gen1crawler`, and
+`deploy-all` excludes its `crawler-only` profile. Build and sign the exact Git
+commit, then provide the rebuilt archive/tree digests explicitly:
 
 ```powershell
-.\deploy_mooncen.ps1 crawler-update -Target gen1crawler
+.\deploy_mooncen.ps1 crawler-update -Target gen1crawler `
+  -ExpectedCommit REVIEWED_COMMIT `
+  -ExpectedArchiveSha256 REVIEWED_ARCHIVE_SHA256 `
+  -ExpectedReleaseTreeSha256 REVIEWED_TREE_SHA256 `
+  -ReleaseSignaturePath .\gen1crawler-release.env.sig
 ```
 
-It reports unavailable until a transactional, provenance-verified crawler
-release uploader exists. Do not substitute an in-place copy followed by
-`setup_split_crawler.sh`: setup disables the current timers and has no release
-rollback, so it is bootstrap/lab tooling rather than a supported live-owner
-update.
+The root verifier requires the fixed gen1crawler hostname/role and a protected
+allowed-signers policy, prepares a new release before stopping automation, and
+restores the previous path, units, and active/enabled states on failure. Do not
+substitute an in-place copy followed by `setup_split_crawler.sh`.
+The transport is fail-closed when any reviewed input or remote prerequisite is
+missing.
 
 `crawler-activate` is narrower than a release update. It may activate an exact
 reviewed staging batch only after a separately trusted, quiescent installation

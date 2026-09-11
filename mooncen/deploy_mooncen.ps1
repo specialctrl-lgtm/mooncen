@@ -697,8 +697,8 @@ if ($ExpectedArchiveSha256) {
     if ($ExpectedArchiveSha256 -notmatch '^[0-9a-f]{64}$') {
         throw "ExpectedArchiveSha256 must be an exact lowercase SHA-256 digest"
     }
-    if ($Action -ne "crawler-control-install") {
-        throw "ExpectedArchiveSha256 is only valid with crawler-control-install"
+    if ($Action -notin @("crawler-control-install", "crawler-update")) {
+        throw "ExpectedArchiveSha256 is only valid with crawler-control-install or crawler-update"
     }
 }
 if ($ExpectedReleaseTreeSha256) {
@@ -706,12 +706,12 @@ if ($ExpectedReleaseTreeSha256) {
     if ($ExpectedReleaseTreeSha256 -cnotmatch '^[0-9a-f]{64}$') {
         throw "ExpectedReleaseTreeSha256 must be an exact lowercase SHA-256 digest"
     }
-    if ($Action -ne "crawler-control-install") {
-        throw "ExpectedReleaseTreeSha256 is only valid with crawler-control-install"
+    if ($Action -notin @("crawler-control-install", "crawler-update")) {
+        throw "ExpectedReleaseTreeSha256 is only valid with crawler-control-install or crawler-update"
     }
 }
-if ($ReleaseSignaturePath -and $Action -ne "crawler-control-install") {
-    throw "ReleaseSignaturePath is only valid with crawler-control-install"
+if ($ReleaseSignaturePath -and $Action -notin @("crawler-control-install", "crawler-update")) {
+    throw "ReleaseSignaturePath is only valid with crawler-control-install or crawler-update"
 }
 if ([bool]$SourceCommit -xor [bool]$ExpectedSourceTree) {
     throw "SourceCommit and ExpectedSourceTree must be provided together"
@@ -1197,6 +1197,40 @@ function Assert-CrawlerControlBackupAttestationReady {
     throw "NOT READY: crawler-control-install requires fresh real-gen1db mooncen_staging backup/restore evidence at /etc/mooncen/crawler-control-backup-attestation.json and its protected key. No SSH connection, release activation, or database mutation was attempted."
 }
 
+function Invoke-Gen1CrawlerUpdate {
+    if (
+        $targetConfig.Name -ne $crawlerTarget -or
+        $targetConfig.Name -ne "gen1crawler" -or
+        $targetConfig.Server -ne "gen1crawler" -or
+        $targetConfig.Role -ne "crawler" -or
+        $targetConfig.DeployProfile -ne "crawler-only" -or
+        $targetConfig.RemoteDir -ne "/opt/mooncen" -or
+        $targetConfig.Active
+    ) {
+        throw "crawler-update is pinned to the reviewed inactive gen1crawler crawler-only target."
+    }
+    if (-not $ExpectedCommit -or -not $ExpectedArchiveSha256 -or -not $ExpectedReleaseTreeSha256 -or -not $ReleaseSignaturePath) {
+        throw "crawler-update requires ExpectedCommit, ExpectedArchiveSha256, ExpectedReleaseTreeSha256, and a detached OpenSSH ReleaseSignaturePath."
+    }
+    if ($SourceCommit -or $ExpectedSourceTree) {
+        throw "crawler-update packages only the exact reviewed Git HEAD; development snapshots are forbidden."
+    }
+    Assert-ExpectedDeployCommit $ExpectedCommit
+    $releaseScript = Join-Path $PSScriptRoot "deploy/ubuntu/deploy_gen1crawler_release_from_windows.ps1"
+    $proof = & $releaseScript `
+        -Server $targetConfig.Server `
+        -User $targetConfig.User `
+        -IdentityFile $identityFile `
+        -ExpectedCommit $ExpectedCommit `
+        -ExpectedArchiveSha256 $ExpectedArchiveSha256 `
+        -ExpectedTreeSha256 $ExpectedReleaseTreeSha256 `
+        -ReleaseSignaturePath $ReleaseSignaturePath
+    if ($LASTEXITCODE -ne 0 -or ($proof -join "`n") -cnotmatch '^MOONCEN_GEN1CRAWLER_RELEASE_ACTIVATED=') {
+        throw "gen1crawler release did not return the exact provenance proof."
+    }
+    $proof
+}
+
 function Invoke-CrawlerControlInstall {
     if (
         $targetConfig.Name -ne $crawlerControlTarget -or
@@ -1578,7 +1612,7 @@ switch ($Action) {
         if ($targetConfig.Name -ne $crawlerTarget -or $targetConfig.DeployProfile -ne "crawler-only") {
             throw "crawler-update requires the reviewed crawler owner '-Target $crawlerTarget'."
         }
-        throw "crawler-update is unavailable: no transactional, provenance-verified gen1crawler release uploader is implemented. No remote change was attempted."
+        Invoke-Gen1CrawlerUpdate
     }
     "crawler-activate" {
         Invoke-CurrentCrawlerActivation

@@ -65,15 +65,23 @@ def test_crawler_activation_contacts_only_reviewed_gen1_owner() -> None:
     assert "Invoke-RemoteBashScriptForDeployServer $targetConfig" in function
 
 
-def test_crawler_release_update_status_is_explicitly_fail_closed() -> None:
+def test_crawler_release_update_uses_only_reviewed_transactional_transport() -> None:
     source = _read("deploy_mooncen.ps1")
     branch = source.split('"crawler-update" {', 1)[1].split(
         '"crawler-activate" {', 1
     )[0]
 
-    assert "no transactional, provenance-verified gen1crawler release uploader" in branch
-    assert "No remote change was attempted" in branch
-    assert "Invoke-Remote" not in branch
+    function = source.split("function Invoke-Gen1CrawlerUpdate", 1)[1].split(
+        "function Invoke-CrawlerControlInstall", 1
+    )[0]
+    assert "Invoke-Gen1CrawlerUpdate" in branch
+    assert "deploy_gen1crawler_release_from_windows.ps1" in function
+    assert "ExpectedArchiveSha256" in function
+    assert "ExpectedReleaseTreeSha256" in function
+    assert "ReleaseSignaturePath" in function
+    assert "Assert-ExpectedDeployCommit" in function
+    assert "SourceCommit" in function and "development snapshots are forbidden" in function
+    assert "Invoke-Remote" not in function
 
 
 def test_cloud_deploy_has_no_legacy_owner_guard_or_nonowner_unit_shutdown() -> None:

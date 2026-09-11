@@ -297,10 +297,11 @@ def test_reviewed_commit_and_target_identity_are_verified_through_archive_creati
     assert orchestrator.index("$currentTargetIdentity = Get-DeployTargetIdentity $targetConfig") < orchestrator.index(
         "$server = $targetConfig.Server"
     )
-    # Both full-stack paths and the signed control-only path pin the reviewed
-    # commit. The control action still stops on backup attestation before SSH.
-    assert orchestrator.count("Assert-ExpectedDeployCommit $ExpectedCommit") == 3
-    assert orchestrator.count("-ExpectedCommit $ExpectedCommit") == 3
+    # Both full-stack paths and both signed role-specific release paths pin the
+    # reviewed commit. The control action still stops on backup attestation
+    # before SSH.
+    assert orchestrator.count("Assert-ExpectedDeployCommit $ExpectedCommit") == 4
+    assert orchestrator.count("-ExpectedCommit $ExpectedCommit") == 4
 
     assert "[string]$ExpectedCommit" in wrapper
     assert "-ExpectedCommit $ExpectedCommit" in wrapper

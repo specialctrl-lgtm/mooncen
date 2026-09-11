@@ -57,22 +57,45 @@ cutover. Setup and activation never open SSH to cloud or manage cloud systemd
 state. They do use the restricted applier/check database roles to validate and
 update production PostgreSQL on the reviewed DNS host `cloud`.
 
-There is currently no supported live-owner crawler release uploader. Confirm
-the fail-closed status without contacting the server:
+The live owner is updated only through the signed, commit-only release
+transport. Build the reviewed artifacts before contacting the server:
 
 ```powershell
-.\deploy_mooncen.ps1 crawler-update -Target gen1crawler
+$commit = git rev-parse HEAD
+$plan = python -I .\tools\build_gen1crawler_release.py `
+  --repository-root (git rev-parse --show-toplevel) `
+  --commit $commit `
+  --output-directory .\artifacts\gen1crawler | ConvertFrom-Json
+
+ssh-keygen -Y sign `
+  -f $env:USERPROFILE\.ssh\mooncen_release_signing `
+  -n mooncen-gen1crawler-release `
+  $plan.metadata
+
+.\deploy_mooncen.ps1 crawler-update `
+  -Target gen1crawler `
+  -ExpectedCommit $commit `
+  -ExpectedArchiveSha256 $plan.archive_sha256 `
+  -ExpectedReleaseTreeSha256 $plan.tree_sha256 `
+  -ReleaseSignaturePath "$($plan.metadata).sig"
 ```
 
-The full-stack deployment path also rejects `gen1crawler`. Do not copy a new
-tree over the active `/opt/mooncen` and run setup as an update: the script
-disables timers before dependency/environment/unit replacement and cannot
-transactionally restore the old release. The setup command above is restricted
-to an initial or otherwise quiescent bootstrap whose release provenance was
-established by a separate reviewed process. The setup script is pinned to the
-`gen1crawler` hostname and crawler node role, takes the shared split-runtime
-lock, strictly disables only gen1crawler automation, and refuses to replace the
-runtime while a one-shot or pinned apply/dry-run unit is active.
+The fixed root helper is installed once through an independently authenticated
+root session as `/usr/local/libexec/mooncen-activate-gen1crawler-release`, mode
+`0755`, together with the root-owned mode-`0644`
+`/etc/mooncen/gen1crawler-release-allowed-signers` policy. The transport then
+rebuilds the exact commit, verifies both reviewed digests and the detached
+OpenSSH signature, rejects links and mutable paths, prepares the venv before
+the maintenance boundary, and rolls the path, unit files, and prior service
+state back if activation fails. A successful activation retires the competing
+long-running service and enables only the nightly one-shot and hourly pinned
+promotion timers.
+Every identity, signature, digest, path, host-role, and quiescence check is
+fail-closed before the active runtime is changed.
+
+The full-stack deployment path still rejects `gen1crawler`. Never copy a new
+tree over the active `/opt/mooncen` or use `setup_split_crawler.sh` as an
+update.
 
 Setup requires the DB client file to name `DB_HOST=cloud`; an arbitrary
 database endpoint is rejected. A setup failure leaves gen1crawler timers
