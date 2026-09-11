@@ -24,6 +24,12 @@ assert_host() {
   [ "$(stat -c '%U:%G:%a:%h' "$allowed")" = root:root:644:1 ] || die "release allowed-signers policy is unsafe"
   command -v python3.12 >/dev/null || die "CPython 3.12 is required" 69
   python3.12 -I -c 'import sys; raise SystemExit(sys.version_info[:2] != (3,12))' || die "exact CPython 3.12 is required" 69
+  getent group mooncen >/dev/null || die "mooncen runtime group is missing"
+  for service_user in mooncen-crawler mooncen-applier; do
+    id "$service_user" >/dev/null 2>&1 || die "runtime service user is missing: $service_user"
+    id -nG "$service_user" | tr ' ' '\n' | grep -Fx mooncen >/dev/null || \
+      die "runtime service user is not in the mooncen group: $service_user"
+  done
 }
 
 assert_host

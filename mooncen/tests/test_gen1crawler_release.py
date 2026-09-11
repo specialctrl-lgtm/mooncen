@@ -74,6 +74,7 @@ def test_root_activator_has_fixed_signature_and_rollback_boundaries() -> None:
     assert "mooncen-staging-apply.service" in source
     assert "/var/lib/mooncen-crawler/logs" in source
     assert "active log tree contains links or special files" in source
+    assert "runtime service user is not in the mooncen group" in source
     assert "sys.path.insert(0, root)" in source
     assert 'runpy.run_path(sys.argv[0], run_name="__main__")' in source
     assert 'python" -I "$candidate/run_crawlers.py"' not in source
