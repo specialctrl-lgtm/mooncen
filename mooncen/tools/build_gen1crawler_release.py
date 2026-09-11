@@ -100,7 +100,12 @@ def canonical_archive(root: Path, commit: str) -> tuple[bytes, bytes, str, int]:
     )
     if not selected:
         raise BuildError("release path selection is empty")
-    raw_tar = git(root, "archive", "--format=tar", f"{commit}:mooncen", "--", *selected)
+    # Do not pass every selected path on the command line.  A real crawler
+    # release contains enough files to exceed Windows' process command-line
+    # limit.  Read the commit subtree once and retain only the reviewed
+    # selection while rebuilding the canonical archive below.
+    selected_set = set(selected)
+    raw_tar = git(root, "archive", "--format=tar", f"{commit}:mooncen")
     records: list[str] = []
     files: set[str] = set()
     release_files: list[tuple[str, bytes, int]] = []
@@ -110,10 +115,10 @@ def canonical_archive(root: Path, commit: str) -> tuple[bytes, bytes, str, int]:
             raise BuildError("release contains too many archive members")
         for member in members:
             name = member.name.rstrip("/")
+            if member.isdir() or name not in selected_set:
+                continue
             if not safe_path(name):
                 raise BuildError(f"unsafe release path: {name}")
-            if member.isdir():
-                continue
             if not member.isfile() or member.size < 0 or member.size > MAX_FILE_BYTES:
                 raise BuildError(f"non-regular or oversized release member: {name}")
             stream = archive.extractfile(member)
