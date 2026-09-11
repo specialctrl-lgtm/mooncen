@@ -145,7 +145,15 @@ PY
 python3.12 -m venv "$candidate/.venv"
 "$candidate/.venv/bin/python" -m pip install --disable-pip-version-check --no-input --require-hashes -r "$candidate/requirements.lock"
 "$candidate/.venv/bin/python" -I -m compileall -q "$candidate/Crawler" "$candidate/DB" "$candidate/tools" "$candidate/run_crawlers.py"
-"$candidate/.venv/bin/python" -I "$candidate/run_crawlers.py" --help >/dev/null
+"$candidate/.venv/bin/python" -I -c '
+import runpy
+import sys
+
+root = sys.argv[1]
+sys.path.insert(0, root)
+sys.argv = [root + "/run_crawlers.py", "--help"]
+runpy.run_path(sys.argv[0], run_name="__main__")
+' "$candidate" >/dev/null
 chown -R root:mooncen "$candidate"
 find "$candidate" -type d -exec chmod 0750 {} +
 
