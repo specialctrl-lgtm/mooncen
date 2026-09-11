@@ -87,3 +87,11 @@ def test_uploader_bootstrap_installs_only_fixed_helper_sudo_rule() -> None:
     assert "NOPASSWD: /usr/local/libexec/mooncen-activate-gen1crawler-release" in source
     assert "NOPASSWD: ALL" not in source
     assert "gen1crawler-release-allowed-signers" in source
+
+
+def test_windows_transport_accepts_one_exact_proof_among_native_noise() -> None:
+    source = Path("deploy/ubuntu/deploy_gen1crawler_release_from_windows.ps1").read_text(
+        encoding="utf-8"
+    )
+    assert "$proofLines | Where-Object { $_ -ceq $expected }" in source
+    assert "$verifiedLines | Where-Object { $_ -ceq $expectedVerified }" in source

@@ -229,7 +229,7 @@ for unit in "${units[@]}"; do
 done
 systemctl daemon-reload
 systemctl disable mooncen-crawler.service >/dev/null 2>&1 || true
-systemctl enable mooncen-crawler.timer mooncen-staging-apply.timer >/dev/null
+systemctl enable mooncen-crawler.timer mooncen-staging-apply.timer >/dev/null 2>&1
 systemctl start mooncen-crawler.timer mooncen-staging-apply.timer
 systemctl is-enabled --quiet mooncen-crawler.timer
 systemctl is-active --quiet mooncen-crawler.timer

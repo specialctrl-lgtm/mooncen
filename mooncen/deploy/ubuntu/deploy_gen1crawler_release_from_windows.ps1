@@ -60,14 +60,16 @@ try {
     $proof = & ssh @sshArgs $remote "sudo -n '$helper' '$releaseId' '$User' '$remoteUpload' '$ExpectedCommit' '$ExpectedArchiveSha256' '$ExpectedTreeSha256'"
     Assert-Exit "gen1crawler release activation failed or rolled back"
     $expected = "MOONCEN_GEN1CRAWLER_RELEASE_ACTIVATED=${ExpectedCommit}:${ExpectedArchiveSha256}:${ExpectedTreeSha256}"
-    if ((@($proof | Where-Object { $_ }).Count -ne 1) -or ([string](@($proof | Where-Object { $_ })[0]) -cne $expected)) {
+    $proofLines = @($proof | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
+    if (@($proofLines | Where-Object { $_ -ceq $expected }).Count -ne 1) {
         throw "gen1crawler returned an invalid activation proof"
     }
     $remoteUpload = ""
     $verified = & ssh @sshArgs $remote "sudo -n '$helper' --verify-active '$ExpectedCommit' '$ExpectedArchiveSha256' '$ExpectedTreeSha256'"
     Assert-Exit "Activated gen1crawler release failed independent verification"
     $expectedVerified = "MOONCEN_GEN1CRAWLER_RELEASE_VERIFIED=${ExpectedCommit}:${ExpectedArchiveSha256}:${ExpectedTreeSha256}"
-    if ((@($verified | Where-Object { $_ }).Count -ne 1) -or ([string](@($verified | Where-Object { $_ })[0]) -cne $expectedVerified)) {
+    $verifiedLines = @($verified | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
+    if (@($verifiedLines | Where-Object { $_ -ceq $expectedVerified }).Count -ne 1) {
         throw "gen1crawler returned an invalid active-release proof"
     }
     Write-Output $expected
