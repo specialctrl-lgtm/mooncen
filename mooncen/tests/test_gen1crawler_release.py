@@ -77,6 +77,7 @@ def test_root_activator_has_fixed_signature_and_rollback_boundaries() -> None:
     assert "sys.path.insert(0, root)" in source
     assert 'runpy.run_path(sys.argv[0], run_name="__main__")' in source
     assert 'python" -I "$candidate/run_crawlers.py"' not in source
+    assert 'find "$candidate" -type f -exec chmod g+r,o-rwx {} +' in source
 
 
 def test_uploader_bootstrap_installs_only_fixed_helper_sudo_rule() -> None:

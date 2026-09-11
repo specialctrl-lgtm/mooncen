@@ -156,6 +156,11 @@ runpy.run_path(sys.argv[0], run_name="__main__")
 ' "$candidate" >/dev/null
 chown -R root:mooncen "$candidate"
 find "$candidate" -type d -exec chmod 0750 {} +
+# The bootstrap runs with umask 077, so venv and compileall outputs otherwise
+# remain root-only even after their group ownership is corrected.  Runtime
+# service accounts are members of the mooncen group and need read access to
+# every regular release file while world access remains forbidden.
+find "$candidate" -type f -exec chmod g+r,o-rwx {} +
 
 state="$transactions/$release_id"
 install -d -o root -g root -m 0700 "$state"
