@@ -103,3 +103,17 @@ def test_windows_transport_accepts_one_exact_proof_among_native_noise() -> None:
     )
     assert "$proofLines | Where-Object { $_ -ceq $expected }" in source
     assert "$verifiedLines | Where-Object { $_ -ceq $expectedVerified }" in source
+    assert "$bootstrapProof = & ssh" in source
+    assert "gen1crawler-release-bootstrap-ok" in source
+
+
+def test_outer_launcher_requires_both_exact_gen1crawler_provenance_proofs() -> None:
+    source = Path("deploy_mooncen.ps1").read_text(encoding="utf-8")
+    function = source.split("function Invoke-Gen1CrawlerUpdate", 1)[1].split(
+        "function Invoke-CrawlerControlInstall", 1
+    )[0]
+    assert "$proofLines.Count -ne 2" in function
+    assert "MOONCEN_GEN1CRAWLER_RELEASE_ACTIVATED=" in function
+    assert "MOONCEN_GEN1CRAWLER_RELEASE_VERIFIED=" in function
+    assert "-ceq $expectedActivated" in function
+    assert "-ceq $expectedVerified" in function

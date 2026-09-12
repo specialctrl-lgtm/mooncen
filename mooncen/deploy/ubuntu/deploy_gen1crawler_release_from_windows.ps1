@@ -46,8 +46,12 @@ try {
         throw "Rebuilt gen1crawler release differs from the reviewed digests"
     }
     $helper = "/usr/local/libexec/mooncen-activate-gen1crawler-release"
-    & ssh @sshArgs $remote "sudo -n '$helper' --verify-bootstrap"
+    $bootstrapProof = & ssh @sshArgs $remote "sudo -n '$helper' --verify-bootstrap"
     Assert-Exit "gen1crawler fixed-helper preflight failed"
+    $bootstrapLines = @($bootstrapProof | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
+    if ($bootstrapLines.Count -ne 1 -or $bootstrapLines[0] -cne "gen1crawler-release-bootstrap-ok") {
+        throw "gen1crawler fixed-helper preflight returned an invalid proof"
+    }
     $remoteUpload = ((& ssh @sshArgs $remote "umask 077; mktemp -d /tmp/mooncen-gen1crawler-$releaseId.XXXXXXXX") -join "").Trim()
     Assert-Exit "Unable to create gen1crawler upload directory"
     if ($remoteUpload -notmatch "^/tmp/mooncen-gen1crawler-$releaseId\.[A-Za-z0-9]{8}$") { throw "Remote upload path is invalid" }

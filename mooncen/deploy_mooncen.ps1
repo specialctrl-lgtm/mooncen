@@ -1225,10 +1225,18 @@ function Invoke-Gen1CrawlerUpdate {
         -ExpectedArchiveSha256 $ExpectedArchiveSha256 `
         -ExpectedTreeSha256 $ExpectedReleaseTreeSha256 `
         -ReleaseSignaturePath $ReleaseSignaturePath
-    if ($LASTEXITCODE -ne 0 -or ($proof -join "`n") -cnotmatch '^MOONCEN_GEN1CRAWLER_RELEASE_ACTIVATED=') {
+    $expectedActivated = "MOONCEN_GEN1CRAWLER_RELEASE_ACTIVATED=${ExpectedCommit}:${ExpectedArchiveSha256}:${ExpectedReleaseTreeSha256}"
+    $expectedVerified = "MOONCEN_GEN1CRAWLER_RELEASE_VERIFIED=${ExpectedCommit}:${ExpectedArchiveSha256}:${ExpectedReleaseTreeSha256}"
+    $proofLines = @($proof | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
+    if (
+        $proofLines.Count -ne 2 -or
+        @($proofLines | Where-Object { $_ -ceq $expectedActivated }).Count -ne 1 -or
+        @($proofLines | Where-Object { $_ -ceq $expectedVerified }).Count -ne 1
+    ) {
         throw "gen1crawler release did not return the exact provenance proof."
     }
-    $proof
+    Write-Output $expectedActivated
+    Write-Output $expectedVerified
 }
 
 function Invoke-CrawlerControlInstall {
