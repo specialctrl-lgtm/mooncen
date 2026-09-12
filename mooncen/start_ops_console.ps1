@@ -588,6 +588,15 @@ function Stop-ManagedProcessTree([object]$Entry) {
     else {
         [string]$Entry.process_started_at
     }
+    # Listener runtimes such as Vite may detach from their npm/cmd launcher
+    # while the launcher tree is being terminated.  Get-ManagedProcess has
+    # already verified the exact PID, creation time, executable identity, and
+    # listener ownership, so stop that runtime before walking the launcher
+    # tree.  This prevents Restart from leaving port 5175 occupied by an
+    # orphaned node process.
+    if ([int]$Entry.pid -ne $launcherProcessId) {
+        Stop-VerifiedProcess ([int]$Entry.pid) ([string]$Entry.process_started_at)
+    }
     Stop-ProcessTree $launcherProcessId $launcherStartedAt
 }
 

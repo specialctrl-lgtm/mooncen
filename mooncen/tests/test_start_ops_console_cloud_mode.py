@@ -162,6 +162,7 @@ def test_stop_uses_verified_launcher_tree() -> None:
 
     assert "function Stop-VerifiedProcess(" in launcher
     assert "Stop-ProcessTree $launcherProcessId $launcherStartedAt" in launcher
+    assert "Stop-VerifiedProcess ([int]$Entry.pid) ([string]$Entry.process_started_at)" in launcher
     stop_tree = launcher.split("function Stop-ProcessTree(", 1)[1].split(
         "function Stop-ManagedProcessTree", 1
     )[0]
