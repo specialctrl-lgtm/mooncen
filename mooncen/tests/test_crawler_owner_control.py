@@ -48,6 +48,13 @@ def test_owner_ssh_commands_are_fixed_noninteractive_and_unforwarded() -> None:
     assert status_command[-len(crawler_owner._STATUS_ARGUMENTS) :] == list(
         crawler_owner._STATUS_ARGUMENTS
     )
+    assert status_command[-5:] == [
+        "/usr/bin/sudo",
+        "-n",
+        "--",
+        "/usr/local/libexec/mooncen-ops-service",
+        "crawler-status",
+    ]
     assert run_command[-len(crawler_owner._RUN_ARGUMENTS) :] == [
         "/usr/bin/sudo",
         "-n",

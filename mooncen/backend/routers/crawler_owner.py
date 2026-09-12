@@ -23,22 +23,11 @@ from ops_agent.production_topology import load_production_topology
 
 _REMOTE_HELPER = "/usr/local/libexec/mooncen-ops-service"
 _STATUS_ARGUMENTS = (
-    "/usr/bin/systemctl",
-    "show",
-    "mooncen-crawler.timer",
-    "mooncen-crawler-once.service",
-    "--property=Id",
-    "--property=LoadState",
-    "--property=ActiveState",
-    "--property=SubState",
-    "--property=UnitFileState",
-    "--property=Result",
-    "--property=ExecMainStatus",
-    "--property=NextElapseUSecRealtime",
-    "--property=ExecMainStartTimestamp",
-    "--property=ExecMainExitTimestamp",
-    "--property=StateChangeTimestamp",
-    "--no-pager",
+    "/usr/bin/sudo",
+    "-n",
+    "--",
+    _REMOTE_HELPER,
+    "crawler-status",
 )
 _RUN_ARGUMENTS = (
     "/usr/bin/sudo",

@@ -60,6 +60,8 @@ if [ "$#" -eq 4 ] && [ "$1" = --verify-active ]; then
     die "active Ops service helper differs"
   cmp -s /opt/mooncen/tools/ops_service_action.py /usr/local/libexec/mooncen-ops-service-action.py || \
     die "active Ops action runner differs"
+  grep -Fx 'sgm ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-status' \
+    /etc/sudoers.d/mooncen-gen1crawler-ops >/dev/null || die "active Ops status sudo policy differs"
   grep -Fx 'sgm ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-once-start' \
     /etc/sudoers.d/mooncen-gen1crawler-ops >/dev/null || die "active Ops sudo policy differs"
   systemctl is-enabled --quiet mooncen-crawler.timer || die "crawler timer is not enabled"
@@ -283,8 +285,10 @@ install -d -o root -g root -m 0755 /usr/local/libexec
 install -o root -g root -m 0755 "$candidate/deploy/ubuntu/ops_service_helper.sh" "$ops_helper"
 install -o root -g root -m 0755 "$candidate/tools/ops_service_action.py" "$ops_runner"
 ops_sudoers_tmp="$(mktemp /etc/sudoers.d/.mooncen-gen1crawler-ops.XXXXXX)"
-printf '%s ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-once-start\n' \
+printf '%s ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-status\n' \
   "$deploy_user" >"$ops_sudoers_tmp"
+printf '%s ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-once-start\n' \
+  "$deploy_user" >>"$ops_sudoers_tmp"
 chmod 0440 "$ops_sudoers_tmp"
 visudo -cf "$ops_sudoers_tmp" >/dev/null
 mv -fT "$ops_sudoers_tmp" "$ops_sudoers"

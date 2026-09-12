@@ -63,6 +63,22 @@ run_oneshot() {
   return "$status"
 }
 
+crawler_status() {
+  /usr/bin/systemctl show "$CRAWLER_SCHEDULER" "$CRAWLER_RUNNER" \
+    --property=Id \
+    --property=LoadState \
+    --property=ActiveState \
+    --property=SubState \
+    --property=UnitFileState \
+    --property=Result \
+    --property=ExecMainStatus \
+    --property=NextElapseUSecRealtime \
+    --property=ExecMainStartTimestamp \
+    --property=ExecMainExitTimestamp \
+    --property=StateChangeTimestamp \
+    --no-pager
+}
+
 case "$action" in
   start-all)
     if [ "$NODE_ROLE" = "crawler" ]; then
@@ -122,17 +138,16 @@ case "$action" in
     run_oneshot "$CRAWLER_RUNNER"
     exit $?
     ;;
+  crawler-status)
+    require_crawler_owner
+    crawler_status
+    exit 0
+    ;;
   crawler-once-start)
     require_crawler_owner
     /usr/bin/systemctl start --no-block "$CRAWLER_RUNNER"
-    exec /usr/bin/systemctl show "$CRAWLER_RUNNER" \
-      --property=Id \
-      --property=LoadState \
-      --property=ActiveState \
-      --property=SubState \
-      --property=Result \
-      --property=ExecMainStatus \
-      --no-pager
+    crawler_status
+    exit 0
     ;;
   functional-test)
     run_oneshot mooncen-functional-test.service
