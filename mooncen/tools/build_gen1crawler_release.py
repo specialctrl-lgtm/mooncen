@@ -33,10 +33,12 @@ REQUIRED_PATHS = {
     "deploy/ubuntu/activate_gen1crawler_release.sh",
     "deploy/ubuntu/activate_split_crawler.sh",
     "deploy/ubuntu/install_gen1crawler_release_uploader.sh",
+    "deploy/ubuntu/ops_service_helper.sh",
     "deploy/ubuntu/systemd/mooncen-crawler-once.service",
     "deploy/ubuntu/systemd/mooncen-crawler.timer",
     "deploy/ubuntu/systemd/mooncen-staging-apply.service",
     "deploy/ubuntu/systemd/mooncen-staging-apply.timer",
+    "tools/ops_service_action.py",
 }
 RUNTIME_PREFIXES = ("Crawler/", "DB/", "backend/", "config/", "deploy/ubuntu/", "ops_agent/", "tools/", "utils/")
 RUNTIME_ROOT_FILES = {

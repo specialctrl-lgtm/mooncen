@@ -76,6 +76,7 @@ Cmnd_Alias MOONCEN_ROLE_OPS = \
   ${OPS_HELPER} logs-backup, \
   ${OPS_HELPER} logs-staging, \
   ${OPS_HELPER} crawler-once, \
+  ${OPS_HELPER} crawler-once-start, \
   ${OPS_HELPER} functional-test, \
   ${OPS_HELPER} cloudflare-gate-enable, \
   ${OPS_HELPER} cloudflare-gate-disable, \

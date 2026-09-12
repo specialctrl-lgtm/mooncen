@@ -74,13 +74,24 @@ describe('CrawlersPage automatic runs', () => {
           available: true,
           owner: 'gen1crawler',
           host: 'gen1crawler',
-          timer: { ActiveState: 'inactive', UnitFileState: 'disabled' },
-          run: { ActiveState: 'inactive', Result: 'success', ExecMainStatus: '0' },
+          timer: {
+            ActiveState: 'active',
+            UnitFileState: 'enabled',
+            NextElapseUSecRealtime: 'Fri 2026-09-11 22:00:00 KST',
+          },
+          run: {
+            ActiveState: 'inactive',
+            SubState: 'dead',
+            Result: 'success',
+            ExecMainStatus: '0',
+            ExecMainStartTimestamp: 'Fri 2026-09-11 10:00:00 KST',
+            ExecMainExitTimestamp: 'Fri 2026-09-11 13:00:00 KST',
+          },
           dispatch: { running: false, started_at: null, finished_at: null, exit_code: null, error: null },
         };
       }
       if (path === '/crawlers/owner/run-all') {
-        return { accepted: true, owner: 'gen1crawler' };
+        return { accepted: true, owner: 'gen1crawler', dispatch: { started_at: '2026-09-11T07:00:00Z' } };
       }
       if (path === '/crawlers/runs?limit=100') {
         return {
@@ -199,5 +210,15 @@ describe('CrawlersPage automatic runs', () => {
       });
     });
     expect(prompt).toHaveBeenCalledWith(expect.stringContaining('MOONCEN-CRAWLER-ALL'));
+    expect(await screen.findByText(/gen1crawler가 전체 실행 요청을 접수했습니다/)).toBeInTheDocument();
+  });
+
+  it('shows the remote timer and one-shot execution evidence', async () => {
+    renderPage();
+
+    expect(await screen.findByText('Fri 2026-09-11 22:00:00 KST')).toBeInTheDocument();
+    expect(screen.getByText('Fri 2026-09-11 10:00:00 KST')).toBeInTheDocument();
+    expect(screen.getByText('Fri 2026-09-11 13:00:00 KST')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '상태 새로고침' })).toBeInTheDocument();
   });
 });

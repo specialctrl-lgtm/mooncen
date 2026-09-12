@@ -48,6 +48,11 @@ function confirmProductionRunAll(): boolean {
   return window.prompt('운영 크롤러 전체 실행 확인을 위해 MOONCEN-CRAWLER-ALL을 입력하세요.') === 'MOONCEN-CRAWLER-ALL';
 }
 
+function systemdValue(value: unknown): string {
+  const text = String(value || '').trim();
+  return text && text !== 'n/a' ? text : '-';
+}
+
 export default function CrawlersPage() {
   const session = useOpsSession();
   const queryClient = useQueryClient();
@@ -60,6 +65,7 @@ export default function CrawlersPage() {
     : '/crawlers/runs?limit=100';
   const [showProbe, setShowProbe] = useState(false);
   const [probeUrl, setProbeUrl] = useState('');
+  const [runAcceptedAt, setRunAcceptedAt] = useState<string | null>(null);
   const crawlers = useQuery({
     queryKey: ['crawlers'],
     queryFn: () => opsApi<{ available: boolean; items: CrawlerSummary[]; total: number }>('/crawlers'),
@@ -108,11 +114,12 @@ export default function CrawlersPage() {
     },
   });
   const runAllMutation = useMutation({
-    mutationFn: () => opsApi<{ accepted: boolean; owner: string }>('/crawlers/owner/run-all', {
+    mutationFn: () => opsApi<{ accepted: boolean; owner: string; dispatch?: { started_at?: string | null } }>('/crawlers/owner/run-all', {
       method: 'POST',
       body: JSON.stringify({ confirmation: 'MOONCEN-CRAWLER-ALL' }),
     }),
-    onSuccess: () => {
+    onSuccess: (result) => {
+      setRunAcceptedAt(result.dispatch?.started_at || new Date().toISOString());
       void queryClient.invalidateQueries({ queryKey: ['crawler-owner-status'] });
       void queryClient.invalidateQueries({ queryKey: ['crawler-runs'] });
     },
@@ -235,21 +242,41 @@ export default function CrawlersPage() {
         <header className="section-header">
           <div>
             <h2>운영 전체 실행</h2>
-            <small>고정된 gen1crawler 운영 helper를 통해 모든 Provider를 1회 실행합니다.</small>
+            <small>gen1crawler systemd의 실제 예약과 one-shot 실행 상태를 직접 조회합니다.</small>
           </div>
+          <button
+            className="button subtle"
+            type="button"
+            disabled={ownerStatus.isFetching}
+            onClick={() => void ownerStatus.refetch()}
+          >
+            {ownerStatus.isFetching ? '확인 중…' : '상태 새로고침'}
+          </button>
         </header>
         <QueryState loading={ownerStatus.isLoading} error={ownerStatus.error} />
+        {runAcceptedAt && (
+          <p className="form-note" role="status">
+            gen1crawler가 전체 실행 요청을 접수했습니다: {formatDate(runAcceptedAt)}
+          </p>
+        )}
         {ownerStatus.data && (
           <DefinitionList
             value={{
-              available: ownerStatus.data.available,
-              owner: ownerStatus.data.owner,
-              timer_state: ownerStatus.data.timer?.ActiveState || 'unknown',
-              timer_enabled: ownerStatus.data.timer?.UnitFileState || 'unknown',
-              run_state: ownerStatus.data.run?.ActiveState || 'unknown',
-              run_result: ownerStatus.data.run?.Result || 'unknown',
-              dispatch_running: ownerStatus.data.dispatch.running,
-              dispatch_error: ownerStatus.data.dispatch.error || ownerStatus.data.reason || null,
+              연결_가능: ownerStatus.data.available,
+              실행_호스트: ownerStatus.data.host || ownerStatus.data.owner,
+              예약_상태: systemdValue(ownerStatus.data.timer?.ActiveState),
+              예약_활성화: systemdValue(ownerStatus.data.timer?.UnitFileState),
+              다음_자동_실행: systemdValue(ownerStatus.data.timer?.NextElapseUSecRealtime),
+              실행_상태: systemdValue(ownerStatus.data.run?.ActiveState),
+              실행_세부상태: systemdValue(ownerStatus.data.run?.SubState),
+              최근_결과: systemdValue(ownerStatus.data.run?.Result),
+              종료_코드: systemdValue(ownerStatus.data.run?.ExecMainStatus),
+              실행_시작: systemdValue(ownerStatus.data.run?.ExecMainStartTimestamp),
+              실행_종료: systemdValue(ownerStatus.data.run?.ExecMainExitTimestamp),
+              요청_전달중: ownerStatus.data.dispatch.running,
+              최근_요청: ownerStatus.data.dispatch.started_at || null,
+              최근_요청완료: ownerStatus.data.dispatch.finished_at || null,
+              오류: ownerStatus.data.dispatch.error || ownerStatus.data.reason || null,
             }}
           />
         )}

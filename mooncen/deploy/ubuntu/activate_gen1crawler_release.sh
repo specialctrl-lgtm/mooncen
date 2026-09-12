@@ -50,6 +50,18 @@ if [ "$#" -eq 4 ] && [ "$1" = --verify-active ]; then
   [ "$(read_value DEPLOY_COMMIT "$marker")" = "$verify_commit" ] || die "active release commit differs"
   [ "$(read_value ARCHIVE_SHA256 "$marker")" = "$verify_archive" ] || die "active archive digest differs"
   [ "$(read_value TREE_SHA256 "$marker")" = "$verify_tree" ] || die "active tree digest differs"
+  [ "$(stat -c '%U:%G:%a:%h' /usr/local/libexec/mooncen-ops-service)" = root:root:755:1 ] || \
+    die "active Ops service helper metadata is unsafe"
+  [ "$(stat -c '%U:%G:%a:%h' /usr/local/libexec/mooncen-ops-service-action.py)" = root:root:755:1 ] || \
+    die "active Ops action runner metadata is unsafe"
+  [ "$(stat -c '%U:%G:%a:%h' /etc/sudoers.d/mooncen-gen1crawler-ops)" = root:root:440:1 ] || \
+    die "active Ops sudo policy metadata is unsafe"
+  cmp -s /opt/mooncen/deploy/ubuntu/ops_service_helper.sh /usr/local/libexec/mooncen-ops-service || \
+    die "active Ops service helper differs"
+  cmp -s /opt/mooncen/tools/ops_service_action.py /usr/local/libexec/mooncen-ops-service-action.py || \
+    die "active Ops action runner differs"
+  grep -Fx 'sgm ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-once-start' \
+    /etc/sudoers.d/mooncen-gen1crawler-ops >/dev/null || die "active Ops sudo policy differs"
   systemctl is-enabled --quiet mooncen-crawler.timer || die "crawler timer is not enabled"
   systemctl is-active --quiet mooncen-crawler.timer || die "crawler timer is not active"
   systemctl is-enabled --quiet mooncen-staging-apply.timer || die "staging timer is not enabled"
@@ -167,9 +179,34 @@ find "$candidate" -type d -exec chmod 0750 {} +
 # service accounts are members of the mooncen group and need read access to
 # every regular release file while world access remains forbidden.
 find "$candidate" -type f -exec chmod g+r,o-rwx {} +
+bash -n "$candidate/deploy/ubuntu/ops_service_helper.sh"
 
 state="$transactions/$release_id"
 install -d -o root -g root -m 0700 "$state"
+ops_helper=/usr/local/libexec/mooncen-ops-service
+ops_runner=/usr/local/libexec/mooncen-ops-service-action.py
+ops_sudoers=/etc/sudoers.d/mooncen-gen1crawler-ops
+ops_sudoers_tmp=
+snapshot_managed_file() {
+  local source="$1" label="$2"
+  if [ -e "$source" ] || [ -L "$source" ]; then
+    [ -f "$source" ] && [ ! -L "$source" ] || die "managed Ops path is unsafe: $source"
+    cp -a -- "$source" "$state/managed.$label"
+  else
+    : >"$state/managed.$label.absent"
+  fi
+}
+restore_managed_file() {
+  local label="$1" target="$2"
+  if [ -f "$state/managed.$label" ]; then
+    cp -a -- "$state/managed.$label" "$target"
+  else
+    rm -f -- "$target"
+  fi
+}
+snapshot_managed_file "$ops_helper" helper
+snapshot_managed_file "$ops_runner" runner
+snapshot_managed_file "$ops_sudoers" sudoers
 units=(
   mooncen-branch-coordinates.service
   mooncen-crawler.service
@@ -216,12 +253,16 @@ restore() {
   status=$?
   trap - EXIT INT TERM HUP
   if [ "$rollback" -eq 1 ]; then
+    [ -z "$ops_sudoers_tmp" ] || rm -f -- "$ops_sudoers_tmp"
     rm -f /opt/mooncen
     if [ "$old_kind" = link ]; then ln -s "$old_target" /opt/mooncen; fi
     if [ "$old_kind" = directory ]; then mv "$old_target" /opt/mooncen; fi
     for unit in "${units[@]}"; do
       if [ -f "$state/$unit.file" ]; then cp -a "$state/$unit.file" "/etc/systemd/system/$unit"; else rm -f "/etc/systemd/system/$unit"; fi
     done
+    restore_managed_file helper "$ops_helper"
+    restore_managed_file runner "$ops_runner"
+    restore_managed_file sudoers "$ops_sudoers"
     systemctl daemon-reload || true
     for unit in "${units[@]}"; do
       grep -qx enabled "$state/$unit.enabled" 2>/dev/null && systemctl enable "$unit" >/dev/null 2>&1 || true
@@ -238,6 +279,16 @@ mv -Tf /opt/.mooncen-next-$release_id /opt/mooncen
 for unit in "${units[@]}"; do
   install -o root -g root -m 0644 "$candidate/deploy/ubuntu/systemd/$unit" "/etc/systemd/system/$unit"
 done
+install -d -o root -g root -m 0755 /usr/local/libexec
+install -o root -g root -m 0755 "$candidate/deploy/ubuntu/ops_service_helper.sh" "$ops_helper"
+install -o root -g root -m 0755 "$candidate/tools/ops_service_action.py" "$ops_runner"
+ops_sudoers_tmp="$(mktemp /etc/sudoers.d/.mooncen-gen1crawler-ops.XXXXXX)"
+printf '%s ALL=(root) NOPASSWD: /usr/local/libexec/mooncen-ops-service crawler-once-start\n' \
+  "$deploy_user" >"$ops_sudoers_tmp"
+chmod 0440 "$ops_sudoers_tmp"
+visudo -cf "$ops_sudoers_tmp" >/dev/null
+mv -fT "$ops_sudoers_tmp" "$ops_sudoers"
+ops_sudoers_tmp=
 systemctl daemon-reload
 systemctl disable mooncen-crawler.service >/dev/null 2>&1 || true
 systemctl enable mooncen-crawler.timer mooncen-staging-apply.timer >/dev/null 2>&1

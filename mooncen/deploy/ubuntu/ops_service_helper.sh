@@ -122,6 +122,18 @@ case "$action" in
     run_oneshot "$CRAWLER_RUNNER"
     exit $?
     ;;
+  crawler-once-start)
+    require_crawler_owner
+    /usr/bin/systemctl start --no-block "$CRAWLER_RUNNER"
+    exec /usr/bin/systemctl show "$CRAWLER_RUNNER" \
+      --property=Id \
+      --property=LoadState \
+      --property=ActiveState \
+      --property=SubState \
+      --property=Result \
+      --property=ExecMainStatus \
+      --no-pager
+    ;;
   functional-test)
     run_oneshot mooncen-functional-test.service
     exit $?

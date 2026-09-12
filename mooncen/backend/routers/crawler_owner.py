@@ -35,6 +35,9 @@ _STATUS_ARGUMENTS = (
     "--property=Result",
     "--property=ExecMainStatus",
     "--property=NextElapseUSecRealtime",
+    "--property=ExecMainStartTimestamp",
+    "--property=ExecMainExitTimestamp",
+    "--property=StateChangeTimestamp",
     "--no-pager",
 )
 _RUN_ARGUMENTS = (
@@ -42,7 +45,7 @@ _RUN_ARGUMENTS = (
     "-n",
     "--",
     _REMOTE_HELPER,
-    "crawler-once",
+    "crawler-once-start",
 )
 _OUTPUT_LIMIT = 8_192
 
@@ -59,7 +62,7 @@ class CrawlerOwnerRunRequest(BaseModel):
 
 
 _dispatch_lock = threading.Lock()
-_dispatch_process: subprocess.Popen[str] | None = None
+_dispatch_running = False
 _dispatch_started_at: str | None = None
 _dispatch_finished_at: str | None = None
 _dispatch_exit_code: int | None = None
@@ -167,6 +170,9 @@ def _parse_status(output: str) -> dict[str, dict[str, Any]]:
             "Result",
             "ExecMainStatus",
             "NextElapseUSecRealtime",
+            "ExecMainStartTimestamp",
+            "ExecMainExitTimestamp",
+            "StateChangeTimestamp",
         }:
             current[key] = value
     return units
@@ -200,9 +206,8 @@ def _remote_status(control: _OwnerControl) -> dict[str, Any]:
 
 def _dispatch_snapshot() -> dict[str, Any]:
     with _dispatch_lock:
-        running = _dispatch_process is not None and _dispatch_process.poll() is None
         return {
-            "running": running,
+            "running": _dispatch_running,
             "started_at": _dispatch_started_at,
             "finished_at": _dispatch_finished_at,
             "exit_code": _dispatch_exit_code,
@@ -210,43 +215,51 @@ def _dispatch_snapshot() -> dict[str, Any]:
         }
 
 
-def _reap_dispatch(process: subprocess.Popen[str]) -> None:
-    global _dispatch_finished_at, _dispatch_exit_code, _dispatch_error
-    stdout, stderr = process.communicate()
-    with _dispatch_lock:
-        if process is not _dispatch_process:
-            return
-        _dispatch_finished_at = datetime.now(timezone.utc).isoformat()
-        _dispatch_exit_code = process.returncode
-        _dispatch_error = _bounded_output(stderr or stdout) if process.returncode else None
-
-
 def _launch_dispatch(control: _OwnerControl) -> dict[str, Any]:
-    global _dispatch_process, _dispatch_started_at, _dispatch_finished_at
+    global _dispatch_running
+    global _dispatch_started_at, _dispatch_finished_at
     global _dispatch_exit_code, _dispatch_error
     with _dispatch_lock:
-        if _dispatch_process is not None and _dispatch_process.poll() is None:
+        if _dispatch_running:
             raise RuntimeError("crawler-owner execution is already being dispatched")
-        try:
-            process = subprocess.Popen(
-                _ssh_command(control, _RUN_ARGUMENTS),
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                creationflags=_creation_flags(),
-            )
-        except OSError as exc:
-            raise RuntimeError("crawler-owner execution could not start") from exc
-        _dispatch_process = process
+        _dispatch_running = True
         _dispatch_started_at = datetime.now(timezone.utc).isoformat()
         _dispatch_finished_at = None
         _dispatch_exit_code = None
         _dispatch_error = None
-        threading.Thread(target=_reap_dispatch, args=(process,), daemon=True).start()
-        return {"pid": process.pid, "started_at": _dispatch_started_at}
+    try:
+        try:
+            completed = subprocess.run(
+                _ssh_command(control, _RUN_ARGUMENTS),
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=20,
+                check=False,
+                creationflags=_creation_flags(),
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise RuntimeError("crawler-owner execution could not start") from exc
+        if completed.returncode != 0:
+            detail = _bounded_output(completed.stderr or completed.stdout) or "crawler-owner start command failed"
+            raise RuntimeError(detail)
+        return {"started_at": _dispatch_started_at, "accepted": True}
+    finally:
+        with _dispatch_lock:
+            _dispatch_running = False
+            _dispatch_finished_at = datetime.now(timezone.utc).isoformat()
+            if "completed" in locals():
+                _dispatch_exit_code = completed.returncode
+                _dispatch_error = (
+                    _bounded_output(completed.stderr or completed.stdout)
+                    if completed.returncode
+                    else None
+                )
+            else:
+                _dispatch_exit_code = None
+                _dispatch_error = "crawler-owner execution could not start"
 
 
 @router.get("/status", dependencies=[Depends(require_ops_viewer)])
@@ -301,7 +314,7 @@ def run_all_crawlers(
         action="crawler.run_all.request",
         resource_type="crawler_owner",
         resource_id=control.target.name,
-        after_data={"command": "crawler-once", "host": control.target.server},
+        after_data={"command": "crawler-once-start", "host": control.target.server},
         result="success",
     )
     db.commit()

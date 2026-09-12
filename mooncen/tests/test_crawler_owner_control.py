@@ -53,7 +53,7 @@ def test_owner_ssh_commands_are_fixed_noninteractive_and_unforwarded() -> None:
         "-n",
         "--",
         "/usr/local/libexec/mooncen-ops-service",
-        "crawler-once",
+        "crawler-once-start",
     ]
     assert "shell" not in run_command
 
@@ -71,6 +71,8 @@ def test_status_parser_keeps_only_reviewed_systemd_fields() -> None:
                 "ActiveState=inactive",
                 "Result=success",
                 "ExecMainStatus=0",
+                "ExecMainStartTimestamp=Fri 2026-09-11 10:00:00 KST",
+                "ExecMainExitTimestamp=Fri 2026-09-11 13:00:00 KST",
                 "",
             )
         )
@@ -82,6 +84,7 @@ def test_status_parser_keeps_only_reviewed_systemd_fields() -> None:
         "UnitFileState": "disabled",
     }
     assert parsed["mooncen-crawler-once.service"]["Result"] == "success"
+    assert parsed["mooncen-crawler-once.service"]["ExecMainStartTimestamp"].startswith("Fri 2026")
     assert "Unexpected" not in parsed["mooncen-crawler.timer"]
 
 
@@ -149,7 +152,31 @@ def test_run_all_audits_before_launching_fixed_dispatch(monkeypatch: pytest.Monk
     assert isinstance(audit, dict)
     assert audit["action"] == "crawler.run_all.request"
     assert audit["result"] == "success"
-    assert audit["after_data"] == {"command": "crawler-once", "host": "gen1crawler"}
+    assert audit["after_data"] == {"command": "crawler-once-start", "host": "gen1crawler"}
+
+
+def test_dispatch_waits_for_the_remote_acceptance_result(monkeypatch: pytest.MonkeyPatch) -> None:
+    completed = SimpleNamespace(returncode=0, stdout="ActiveState=activating\n", stderr="")
+    monkeypatch.setattr(crawler_owner.subprocess, "run", lambda *_args, **_kwargs: completed)
+
+    result = crawler_owner._launch_dispatch(_control())
+
+    assert result["accepted"] is True
+    assert crawler_owner._dispatch_snapshot()["running"] is False
+    assert crawler_owner._dispatch_snapshot()["exit_code"] == 0
+
+
+def test_dispatch_surfaces_remote_start_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+    completed = SimpleNamespace(returncode=1, stdout="", stderr="sudo: a password is required\n")
+    monkeypatch.setattr(crawler_owner.subprocess, "run", lambda *_args, **_kwargs: completed)
+
+    with pytest.raises(RuntimeError, match="password is required"):
+        crawler_owner._launch_dispatch(_control())
+
+    snapshot = crawler_owner._dispatch_snapshot()
+    assert snapshot["running"] is False
+    assert snapshot["exit_code"] == 1
+    assert snapshot["error"] == "sudo: a password is required"
 
 
 def test_run_all_rejects_an_active_remote_service(monkeypatch: pytest.MonkeyPatch) -> None:
