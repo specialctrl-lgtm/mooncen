@@ -89,6 +89,9 @@ def test_latest_selector_excludes_held_control_plane_batches() -> None:
 
     assert "result->>'control_plane' IS DISTINCT FROM 'true'" in connection.query.sql
     assert "result->>'promotion_eligible' = 'true'" in connection.query.sql
+    assert "status = 'COLLECTED'" in connection.query.sql
+    assert "status IN ('COLLECTED', 'FAILED')" not in connection.query.sql
+    assert "result->>'collection_complete' = 'true'" in connection.query.sql
 
 
 def test_latest_batch_is_dry_run_and_applied_with_one_fingerprint(

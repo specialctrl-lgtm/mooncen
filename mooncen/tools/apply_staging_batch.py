@@ -657,15 +657,12 @@ def latest_batch_id(conn) -> str:
             FROM crawl_batches
             WHERE crawl_batch_id IS NOT NULL
               AND btrim(crawl_batch_id) <> ''
-              AND status IN ('COLLECTED', 'FAILED')
+              AND status = 'COLLECTED'
               AND (
                   result->>'control_plane' IS DISTINCT FROM 'true'
                   OR result->>'promotion_eligible' = 'true'
               )
-              AND (
-                  status = 'FAILED'
-                  OR result->>'collection_complete' = 'true'
-              )
+              AND result->>'collection_complete' = 'true'
               AND COALESCE(total_courses, 0) > 0
               AND jsonb_typeof(result->'course_provider_owners') = 'object'
               AND (
