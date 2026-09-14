@@ -140,6 +140,10 @@ def test_remote_production_database_defaults_to_full_certificate_verification(mo
 
 def test_all_database_clients_receive_connection_and_query_timeouts(monkeypatch):
     monkeypatch.setenv("ENVIRONMENT", "production")
+    # CI migrations run with DB_USE_MIGRATOR=true, but this test exercises
+    # runtime clients.  Do not let the job-level migration environment change
+    # the runtime search_path contract under test.
+    monkeypatch.delenv("DB_USE_MIGRATOR", raising=False)
     monkeypatch.setenv("DB_HOST", "db.example.test")
     monkeypatch.setenv("DB_CONNECT_TIMEOUT", "7")
     monkeypatch.setenv("DB_STATEMENT_TIMEOUT_MS", "12000")

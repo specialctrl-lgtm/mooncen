@@ -186,7 +186,7 @@ def test_ci_smokes_imports_and_clis_from_the_clean_application_archive() -> None
     )
     script = archive_step["run"]
 
-    assert "git archive --format=tar.gz" in script
+    assert "git -C .. archive --format=tar.gz" in script
     assert "HEAD:mooncen" in script
     assert 'cd "$release"' in script
     assert "python -m compileall" in script
