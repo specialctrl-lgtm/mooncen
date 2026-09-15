@@ -77,6 +77,9 @@ crawler_status() {
     --property=ExecMainExitTimestamp \
     --property=StateChangeTimestamp \
     --no-pager
+  printf 'CrawlerSummary='
+  /opt/mooncen/.venv/bin/python -I \
+    /opt/mooncen/tools/crawler_runtime_summary.py
 }
 
 case "$action" in

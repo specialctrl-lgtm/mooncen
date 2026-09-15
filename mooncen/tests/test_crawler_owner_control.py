@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 from uuid import uuid4
 
@@ -93,6 +94,15 @@ def test_status_parser_keeps_only_reviewed_systemd_fields() -> None:
     assert parsed["mooncen-crawler-once.service"]["Result"] == "success"
     assert parsed["mooncen-crawler-once.service"]["ExecMainStartTimestamp"].startswith("Fri 2026")
     assert "Unexpected" not in parsed["mooncen-crawler.timer"]
+
+
+def test_summary_parser_accepts_only_versioned_json_marker() -> None:
+    payload = {"schema_version": 1, "status": "failed", "failed": 30}
+    output = "Id=mooncen-crawler.timer\n\nCrawlerSummary=" + json.dumps(payload)
+
+    assert crawler_owner._parse_summary(output) == payload
+    assert crawler_owner._parse_summary("CrawlerSummary={bad") is None
+    assert crawler_owner._parse_summary('CrawlerSummary={"schema_version":2}') is None
 
 
 def test_owner_control_is_pinned_to_reviewed_legacy_crawler(monkeypatch: pytest.MonkeyPatch) -> None:

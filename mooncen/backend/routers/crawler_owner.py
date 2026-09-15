@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -167,6 +168,21 @@ def _parse_status(output: str) -> dict[str, dict[str, Any]]:
     return units
 
 
+def _parse_summary(output: str) -> dict[str, Any] | None:
+    marker = "CrawlerSummary="
+    for line in output.splitlines():
+        if not line.startswith(marker):
+            continue
+        try:
+            value = json.loads(line[len(marker) :])
+        except json.JSONDecodeError:
+            return None
+        if isinstance(value, dict) and value.get("schema_version") == 1:
+            return value
+        return None
+    return None
+
+
 def _remote_status(control: _OwnerControl) -> dict[str, Any]:
     try:
         completed = subprocess.run(
@@ -190,7 +206,7 @@ def _remote_status(control: _OwnerControl) -> dict[str, Any]:
     run = units.get("mooncen-crawler-once.service")
     if timer is None or run is None:
         raise RuntimeError("crawler-owner returned an incomplete service status")
-    return {"timer": timer, "run": run}
+    return {"timer": timer, "run": run, "summary": _parse_summary(completed.stdout)}
 
 
 def _dispatch_snapshot() -> dict[str, Any]:

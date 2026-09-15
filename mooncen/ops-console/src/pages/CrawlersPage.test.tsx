@@ -87,6 +87,19 @@ describe('CrawlersPage automatic runs', () => {
             ExecMainStartTimestamp: 'Fri 2026-09-11 10:00:00 KST',
             ExecMainExitTimestamp: 'Fri 2026-09-11 13:00:00 KST',
           },
+          summary: {
+            schema_version: 1,
+            status: 'failed',
+            crawl_batch_id: 'gen1crawler-test-batch',
+            total: 3,
+            completed: 3,
+            success: 1,
+            failed: 2,
+            providers: [
+              { provider: 'HOMEPLUS', state: 'failed', exit_code: 1, error_message: 'homepage selector changed' },
+              { provider: 'LIVE_ONLY', state: 'success', exit_code: 0, total: 12 },
+            ],
+          },
           dispatch: { running: false, started_at: null, finished_at: null, exit_code: null, error: null },
         };
       }
@@ -220,5 +233,14 @@ describe('CrawlersPage automatic runs', () => {
     expect(screen.getByText('Fri 2026-09-11 10:00:00 KST')).toBeInTheDocument();
     expect(screen.getByText('Fri 2026-09-11 13:00:00 KST')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '상태 새로고침' })).toBeInTheDocument();
+  });
+
+  it('overlays live gen1crawler progress and includes providers not promoted to production', async () => {
+    renderPage();
+
+    expect(await screen.findByText('gen1crawler-test-batch')).toBeInTheDocument();
+    expect(screen.getByText('homepage selector changed')).toBeInTheDocument();
+    expect(screen.getByText('LIVE_ONLY')).toBeInTheDocument();
+    expect(screen.getByText('Provider 실행 상태는 gen1crawler 실시간 진행 정보이며, 활성 데이터 수는 마지막 운영 DB 승격 상태입니다.')).toBeInTheDocument();
   });
 });

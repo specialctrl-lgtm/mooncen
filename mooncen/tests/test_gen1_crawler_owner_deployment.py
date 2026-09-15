@@ -139,6 +139,7 @@ def test_cloud_runtime_controls_are_role_scoped_away_from_crawler_units() -> Non
     assert 'crawler-once-start)' in helper
     assert 'crawler-status)' in helper
     assert 'systemctl start --no-block "$CRAWLER_RUNNER"' in helper
+    assert "crawler_runtime_summary.py" in helper
     assert '${OPS_HELPER} crawler-status' in _read("deploy/ubuntu/install_sudoers.sh")
     assert '${OPS_HELPER} crawler-once-start' in _read("deploy/ubuntu/install_sudoers.sh")
     assert 'is_crawler_owner()' in control

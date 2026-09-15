@@ -19,6 +19,8 @@ type CrawlerSummary = Record<string, unknown> & {
   last_run_trigger: string;
   can_run: boolean;
   run_blocked_reason?: string | null;
+  runtime_error?: string | null;
+  runtime_exit_code?: number | null;
 };
 
 type CrawlerOwnerStatus = {
@@ -28,6 +30,29 @@ type CrawlerOwnerStatus = {
   reason?: string;
   timer?: Record<string, unknown>;
   run?: Record<string, unknown>;
+  summary?: {
+    available?: boolean;
+    status?: string;
+    crawl_batch_id?: string | null;
+    started_at?: string | null;
+    finished_at?: string | null;
+    updated_at?: string | null;
+    total?: number;
+    completed?: number;
+    success?: number;
+    failed?: number;
+    error?: string | null;
+    providers?: Array<{
+      provider: string;
+      state: string;
+      exit_code?: number | null;
+      error_type?: string | null;
+      error_message?: string | null;
+      started_at?: string | null;
+      finished_at?: string | null;
+      total?: number | null;
+    }>;
+  } | null;
   dispatch: {
     running: boolean;
     started_at?: string | null;
@@ -147,6 +172,11 @@ export default function CrawlersPage() {
       { accessorKey: 'active_course_count', header: '활성 데이터', cell: ({ row }) => formatNumber(row.original.active_course_count) },
       { accessorKey: 'consecutive_failures', header: '연속 실패', cell: ({ row }) => formatNumber(row.original.consecutive_failures) },
       {
+        accessorKey: 'runtime_error',
+        header: '이번 실행 오류',
+        cell: ({ row }) => row.original.runtime_error || '-',
+      },
+      {
         id: 'content',
         header: '수집 내용',
         enableSorting: false,
@@ -189,7 +219,42 @@ export default function CrawlersPage() {
     ],
     [],
   );
-  const crawlerItems = (crawlers.data?.items || []).filter(
+  const liveProviders = new Map(
+    (ownerStatus.data?.summary?.providers || []).map((item) => [item.provider, item]),
+  );
+  const databaseItems = (crawlers.data?.items || []).map((item) => {
+    const live = liveProviders.get(item.provider);
+    if (!live) return item;
+    return {
+      ...item,
+      status: live.state,
+      last_run_status: live.state,
+      last_run_at: live.started_at || item.last_run_at,
+      collected_count: live.total ?? item.collected_count,
+      runtime_error: live.error_message || live.error_type || null,
+      runtime_exit_code: live.exit_code ?? null,
+    };
+  });
+  const databaseProviderNames = new Set(databaseItems.map((item) => item.provider));
+  const liveOnlyItems: CrawlerSummary[] = [...liveProviders.values()]
+    .filter((item) => !databaseProviderNames.has(item.provider))
+    .map((item) => ({
+      provider: item.provider,
+      crawler_name: item.provider,
+      content_type: 'unknown',
+      status: item.state,
+      last_run_status: item.state,
+      last_run_trigger: 'manual',
+      last_run_at: item.started_at,
+      active_course_count: 0,
+      consecutive_failures: item.state === 'failed' || item.state === 'stopped' ? 1 : 0,
+      collected_count: item.total || 0,
+      can_run: false,
+      run_blocked_reason: '운영 DB에 아직 반영되지 않은 gen1crawler 실행 Provider입니다.',
+      runtime_error: item.error_message || item.error_type || null,
+      runtime_exit_code: item.exit_code ?? null,
+    }));
+  const crawlerItems = [...databaseItems, ...liveOnlyItems].filter(
     (item) => !requestedProvider || item.provider === requestedProvider,
   );
   const runItems = (runs.data?.items || []).filter(
@@ -273,6 +338,13 @@ export default function CrawlersPage() {
               종료_코드: systemdValue(ownerStatus.data.run?.ExecMainStatus),
               실행_시작: systemdValue(ownerStatus.data.run?.ExecMainStartTimestamp),
               실행_종료: systemdValue(ownerStatus.data.run?.ExecMainExitTimestamp),
+              최근_배치: ownerStatus.data.summary?.crawl_batch_id || null,
+              배치_상태: ownerStatus.data.summary?.status || null,
+              Provider_진행: ownerStatus.data.summary
+                ? `${ownerStatus.data.summary.completed || 0}/${ownerStatus.data.summary.total || 0}`
+                : null,
+              Provider_성공: ownerStatus.data.summary?.success ?? null,
+              Provider_실패: ownerStatus.data.summary?.failed ?? null,
               요청_전달중: ownerStatus.data.dispatch.running,
               최근_요청: ownerStatus.data.dispatch.started_at || null,
               최근_요청완료: ownerStatus.data.dispatch.finished_at || null,
@@ -283,7 +355,10 @@ export default function CrawlersPage() {
       </section>
       <section className="panel">
         <header className="section-header">
-          <h2>{requestedProvider ? `${requestedProvider} 크롤러` : '크롤러 목록'}</h2>
+          <div>
+            <h2>{requestedProvider ? `${requestedProvider} 크롤러` : '크롤러 목록'}</h2>
+            <small>Provider 실행 상태는 gen1crawler 실시간 진행 정보이며, 활성 데이터 수는 마지막 운영 DB 승격 상태입니다.</small>
+          </div>
         </header>
         <QueryState loading={crawlers.isLoading} error={crawlers.error} unavailable={crawlers.data?.available === false} empty={crawlers.data?.available === true && crawlerItems.length === 0} />
         {crawlerItems.length ? (
