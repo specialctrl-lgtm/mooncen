@@ -504,7 +504,13 @@ export default function QualityPage() {
           <span>{requestedProvider}</span>
           <small>위치 보정과 품질 문제는 정확히 일치하는 Provider만 표시합니다.</small>
         </div>
-      ) : null}
+      ) : (
+        <div className="data-source-banner">
+          <strong>품질 감사 및 조사 모드</strong>
+          <span>READ-ONLY AUDIT</span>
+          <small>데이터 정합성 및 위치 보정 후보 조사는 운영 안전을 위해 조회 전용으로 제공됩니다.</small>
+        </div>
+      )}
       {(scan.error || closeIssue.error) && <QueryState error={scan.error || closeIssue.error} />}
       <QueryState loading={summary.isLoading} error={summary.error} unavailable={summary.data?.available === false} />
       {summary.data?.available && (

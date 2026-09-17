@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo, useRef, useState } from 'react';
 import { opsApi } from '../api';
+import CrawlerNav from '../components/CrawlerNav';
 import DataTable from '../components/DataTable';
 import { DetailPanel, PageHeader, QueryState, StatCard } from '../components/Ui';
 import { useUrlFilters } from '../hooks/useUrlFilters';
@@ -604,6 +605,7 @@ export default function RegionCoveragePage() {
           </button>
         )}
       />
+      <CrawlerNav />
       <QueryState loading={coverage.isLoading} error={coverage.error} unavailable={coverage.data?.available === false} />
       {coverage.data?.available ? (
         <>

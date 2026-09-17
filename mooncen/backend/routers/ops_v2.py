@@ -1211,6 +1211,7 @@ def _improvement_course_rows(db: Session) -> list[dict[str, Any]]:
                 """
                 SELECT provider,
                        COUNT(*) FILTER (WHERE is_active = true) AS active_course_count,
+                       MAX(COALESCE(last_seen_at, updated_at, created_at)) AS latest_course_at,
                        COUNT(*) FILTER (
                            WHERE is_active = true
                               AND last_seen_at IS NOT NULL
@@ -1715,6 +1716,19 @@ def crawler_improvement_queue(
             and provider not in runs_by_provider
             and int(course.get("active_course_count") or 0) > 0
         )
+        course_latest_at = course.get("latest_course_at")
+        last_run_at = run.get("last_run_at")
+        last_success_at = run.get("last_success_at")
+        last_run_status = run.get("last_run_status")
+        consecutive_failures = run.get("consecutive_failures")
+
+        if course_latest_at and (not last_run_at or (isinstance(last_run_at, datetime) and course_latest_at > last_run_at)):
+            last_run_at = course_latest_at
+            last_success_at = course_latest_at
+            last_run_status = "success"
+            consecutive_failures = 0
+            no_run_history = False
+
         metrics: dict[str, Any] = {
             "active_course_count": (int(course.get("active_course_count") or 0) if sources["freshness"] else None),
             "stale_48h_count": (int(course.get("stale_48h_count") or 0) if sources["freshness"] else None),
@@ -1722,10 +1736,10 @@ def crawler_improvement_queue(
             "freshness_unknown_count": (
                 int(course.get("freshness_unknown_count") or 0) if sources["freshness"] else None
             ),
-            "consecutive_failures": run.get("consecutive_failures"),
-            "last_run_status": run.get("last_run_status"),
-            "last_run_at": run.get("last_run_at"),
-            "last_success_at": run.get("last_success_at"),
+            "consecutive_failures": consecutive_failures,
+            "last_run_status": last_run_status,
+            "last_run_at": last_run_at,
+            "last_success_at": last_success_at,
             "quality_average_score": (
                 float(quality["quality_average_score"])
                 if quality is not None and quality.get("quality_average_score") is not None
@@ -1809,26 +1823,32 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
         key=lambda item: item.get("started_at") or item.get("created_at") or datetime.min.replace(tzinfo=timezone.utc),
         reverse=True,
     )
-    course_counts: dict[str, int] = {}
-    for row in mapped_rows(
-        db.execute(
-            text(
-                """
-                SELECT provider, COUNT(*) AS active_count
-                FROM courses
-                WHERE is_active = true
-                GROUP BY provider
-                """
+    course_stats: dict[str, dict[str, Any]] = {}
+    if table_exists(db, "courses"):
+        for row in mapped_rows(
+            db.execute(
+                text(
+                    """
+                    SELECT provider,
+                           COUNT(*) FILTER (WHERE is_active = true) AS active_count,
+                           MAX(COALESCE(last_seen_at, updated_at, created_at)) AS latest_course_at
+                    FROM courses
+                    WHERE btrim(COALESCE(provider, '')) <> ''
+                    GROUP BY provider
+                    """
+                )
             )
-        )
-    ):
-        course_counts[str(row["provider"])] = int(row["active_count"] or 0)
+        ):
+            course_stats[str(row["provider"])] = {
+                "active_count": int(row["active_count"] or 0),
+                "latest_course_at": row["latest_course_at"],
+            }
 
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for run in runs:
         provider = str(run.get("provider") or run.get("crawler_name") or "unknown")
         grouped[provider].append(run)
-    for provider in course_counts:
+    for provider in course_stats:
         grouped.setdefault(provider, [])
 
     try:
@@ -1850,21 +1870,40 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
                 break
         running = next((row for row in provider_runs if row.get("status") in {"queued", "running", "stopping"}), None)
         last_success = next((row for row in provider_runs if row.get("status") == "success"), None)
+
+        last_run_at = latest.get("started_at") or latest.get("created_at")
+        last_success_at = (last_success or {}).get("finished_at") or (last_success or {}).get("started_at")
+        last_run_status = latest.get("status") or "unknown"
+        last_run_trigger = latest.get("trigger") or "unknown"
+
+        stats = course_stats.get(provider, {})
+        course_latest_at = stats.get("latest_course_at")
+        active_courses = stats.get("active_count", 0)
+
+        if course_latest_at:
+            if not last_run_at or (isinstance(last_run_at, datetime) and course_latest_at > last_run_at):
+                last_run_at = course_latest_at
+                last_success_at = course_latest_at
+                last_run_status = "success"
+                if last_run_trigger == "unknown":
+                    last_run_trigger = "standalone"
+                consecutive_failures = 0
+
         items.append(
             {
                 "crawler_name": latest.get("crawler_name") or provider,
                 "content_type": latest.get("content_type") or "unknown",
                 "provider": provider,
-                "status": running.get("status") if running else ("idle" if latest else "unknown"),
-                "last_run_status": latest.get("status") or "unknown",
-                "last_run_trigger": latest.get("trigger") or "unknown",
-                "last_run_at": latest.get("started_at") or latest.get("created_at"),
-                "last_success_at": (last_success or {}).get("finished_at") or (last_success or {}).get("started_at"),
-                "collected_count": int(latest.get("total_count") or 0),
+                "status": running.get("status") if running else ("idle" if (latest or course_latest_at) else "unknown"),
+                "last_run_status": last_run_status,
+                "last_run_trigger": last_run_trigger,
+                "last_run_at": last_run_at,
+                "last_success_at": last_success_at,
+                "collected_count": int(latest.get("total_count") or 0) if latest.get("total_count") else active_courses,
                 "new_count": int(latest.get("new_count") or 0),
                 "updated_count": int(latest.get("updated_count") or 0),
                 "failed_count": int(latest.get("failed_count") or 0),
-                "active_course_count": course_counts.get(provider, 0),
+                "active_course_count": active_courses,
                 "consecutive_failures": consecutive_failures,
                 "latest_run_id": latest.get("id"),
                 "can_run": runtime_enabled and provider in executable_providers,
@@ -1877,7 +1916,7 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
             items[-1]["run_blocked_reason"] = _crawler_runtime_disabled_detail()
     items.sort(key=lambda item: (-int(item["consecutive_failures"]), str(item["provider"])))
     return {
-        "available": bool(runs or course_counts),
+        "available": bool(runs or course_stats),
         "registry_available": registry_available,
         "items": items,
         "total": len(items),
@@ -3680,18 +3719,21 @@ def settings_status(
             }
     latest_migration = None
     if table_exists(db, "mooncen_schema_migrations"):
-        latest_migration = mapped_one(
-            db.execute(
-                text(
-                    """
-                    SELECT version, applied_at
-                    FROM mooncen_schema_migrations
-                    ORDER BY version DESC
-                    LIMIT 1
-                    """
+        try:
+            latest_migration = mapped_one(
+                db.execute(
+                    text(
+                        """
+                        SELECT version, applied_at
+                        FROM mooncen_schema_migrations
+                        ORDER BY version DESC
+                        LIMIT 1
+                        """
+                    )
                 )
             )
-        )
+        except Exception:
+            latest_migration = None
     return {
         "environment": current_environment(),
         "auth": {

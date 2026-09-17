@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { opsApi } from '../api';
+import CrawlerNav from '../components/CrawlerNav';
 import { PageHeader, QueryState } from '../components/Ui';
 import { useOpsSession } from '../context';
 import { formatDate, formatNumber } from '../utils';
@@ -156,13 +157,8 @@ export default function CrawlerImprovementsPage() {
         eyebrow="CRAWLER IMPROVEMENT QUEUE"
         title="크롤러 개선 큐"
         description="실행 실패, 데이터 최신성, 품질 점수와 활성 이슈를 함께 계산해 개선할 Provider를 우선순위순으로 보여줍니다."
-        actions={(
-          <>
-            <Link className="button subtle" to="/crawlers">실행 운영 · 이력</Link>
-            <Link className="button subtle" to="/crawler-analytics">중앙 분석</Link>
-          </>
-        )}
       />
+      <CrawlerNav />
       <QueryState loading={queue.isLoading} error={queue.error} />
       {data?.available === false ? (
         <div className="deploy-blockers crawler-improvement-unavailable" role="alert">

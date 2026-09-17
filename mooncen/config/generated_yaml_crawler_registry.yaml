@@ -1,5 +1,5 @@
 version: 1
-generated_at: '2026-08-06T02:28:15+09:00'
+generated_at: '2026-09-16T12:08:38+00:00'
 source_file: config/crawl_targets
 summary:
   providers: 188
@@ -116,12 +116,17 @@ targets:
   priority: 1
   url: https://mbis.pohang.go.kr/apply/lecture/lectureInfoList.do?mid=0101000000
   crawler: Crawler/generated_yaml/MUNI_MBIS_POHANG_GO_KR_0407D99A.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_MBIS_POHANG_GO_KR_0407D99A.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_MBIS_POHANG_GO_KR_0407D99A.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -163,12 +168,17 @@ targets:
   priority: 1
   url: https://org.jje.go.kr/reserve/jjeEducation/list.jje?menuCd=DOM_000000502001000000
   crawler: Crawler/generated_yaml/MUNI_ORG_JJE_GO_KR_3205C1E8.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_ORG_JJE_GO_KR_3205C1E8.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_ORG_JJE_GO_KR_3205C1E8.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -444,12 +454,17 @@ targets:
   priority: 1
   url: https://www.gwangju.go.kr/reserve/openNuriList.do?pageId=reserve1&searchCate1=A
   crawler: Crawler/generated_yaml/GWANGJU_RESERVATION.py
-  command: python -X utf8 Crawler/generated_yaml/GWANGJU_RESERVATION.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/GWANGJU_RESERVATION.py --save-db --mark-stale --per-target-limit 0 --max-pages 100 --detail-limit
+    1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -964,12 +979,17 @@ targets:
   priority: 2
   url: https://learning.suwon.go.kr/lmth/03_suwon02_view.asp?idx=255
   crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_3AF2DB76.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_3AF2DB76.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_3AF2DB76.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -985,12 +1005,17 @@ targets:
   priority: 2
   url: https://learning.suwon.go.kr/lmth/01_lecture01.asp
   crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_402954DA.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_402954DA.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_402954DA.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -1006,12 +1031,17 @@ targets:
   priority: 2
   url: https://learning.suwon.go.kr/lmth/01_lecture01.asp?s_cate=28
   crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_6ABE3488.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_6ABE3488.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_6ABE3488.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -1027,12 +1057,17 @@ targets:
   priority: 2
   url: https://learning.suwon.go.kr/
   crawler: Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_A915395E.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_A915395E.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_LEARNING_SUWON_GO_KR_A915395E.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    100 --detail-limit 1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -2630,12 +2665,17 @@ targets:
   priority: 2
   url: https://yeyak.syf.or.kr/www/11
   crawler: Crawler/generated_yaml/MUNI_YEYAK_SYF_OR_KR_7D3E2EF5.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_YEYAK_SYF_OR_KR_7D3E2EF5.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_YEYAK_SYF_OR_KR_7D3E2EF5.py --save-db --mark-stale --per-target-limit 0 --max-pages 100
+    --detail-limit 1000
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
-  - '50'
-  - --allow-partial-save
+  - '0'
+  - --max-pages
+  - '100'
+  - --detail-limit
+  - '1000'
   status: ready
   target_status: ready
   enabled: true
@@ -3309,12 +3349,17 @@ targets:
   priority: 2
   url: https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition=1&pageIndex=1&searchCondition3=OFFICE_00000681
   crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_4D24781E.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    50 --detail-limit 500
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
+  - '0'
+  - --max-pages
   - '50'
-  - --allow-partial-save
+  - --detail-limit
+  - '500'
   status: ready
   target_status: ready
   enabled: true
@@ -3330,12 +3375,17 @@ targets:
   priority: 2
   url: https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition3=OFFICE_00000670
   crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_D447262D.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_D447262D.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_D447262D.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    50 --detail-limit 500
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
+  - '0'
+  - --max-pages
   - '50'
-  - --allow-partial-save
+  - --detail-limit
+  - '500'
   status: ready
   target_status: ready
   enabled: true
@@ -3351,12 +3401,17 @@ targets:
   priority: 2
   url: https://sugang.seongnam.go.kr/ilms/learning/learningList.do?searchUseYn=Y&searchCondition3=OFFICE_00000680
   crawler: Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_SUGANG_SEONGNAM_GO_KR_FAA99A7B.py --save-db --mark-stale --per-target-limit 0 --max-pages
+    50 --detail-limit 500
   arguments:
   - --save-db
+  - --mark-stale
   - --per-target-limit
+  - '0'
+  - --max-pages
   - '50'
-  - --allow-partial-save
+  - --detail-limit
+  - '500'
   status: ready
   target_status: ready
   enabled: true

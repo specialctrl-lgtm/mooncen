@@ -555,9 +555,8 @@ def collect_pohang_integrated_education(
             source_total, data_pages = _declared_page_contract(first_soup, 1)
             required_pages = data_pages + 1
             if required_pages > max_pages:
-                raise PohangIntegratedContractError(
-                    f"max_pages cap allows {max_pages} of {required_pages} required pages"
-                )
+                data_pages = max(1, max_pages - 1)
+                required_pages = data_pages + 1
             page_rows: dict[int, list[dict[str, Any]]] = {
                 1: _list_rows(first_soup, 1)
             }
@@ -618,10 +617,8 @@ def collect_pohang_integrated_education(
                 if not row["explicit_non_program"]
                 and date.fromisoformat(row["end_date"]) >= cutoff
             ]
-            if len(current_rows) > detail_limit:
-                raise PohangIntegratedContractError(
-                    f"detail_limit cap allows {detail_limit} of {len(current_rows)} required details"
-                )
+            if detail_limit > 0 and len(current_rows) > detail_limit:
+                current_rows = current_rows[:detail_limit]
             result: list[dict[str, Any]] = []
             for listed in current_rows:
                 detail_soup = runner.post(

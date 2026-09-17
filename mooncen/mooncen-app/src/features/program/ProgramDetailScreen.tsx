@@ -1,9 +1,10 @@
 import { router } from "expo-router";
 import { ArrowLeft, ExternalLink, Heart, MapPinned, Share2 } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  BackHandler,
   Image,
   Linking,
   Pressable,
@@ -80,6 +81,15 @@ export function ProgramDetailScreen({ programId }: ProgramDetailScreenProps) {
     if (router.canGoBack()) router.back();
     else router.replace("/");
   }
+
+  useEffect(() => {
+    const onBackPress = () => {
+      goBack();
+      return true;
+    };
+    const subscription = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+    return () => subscription.remove();
+  }, []);
 
   async function openExternalUrl(url: string, errorTitle: string) {
     try {

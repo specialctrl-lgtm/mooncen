@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import Any
 from uuid import UUID
 
@@ -56,7 +57,17 @@ def _redact_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return rows
 
 
+_readiness_cache: dict[str, Any] | None = None
+_readiness_cache_time: float = 0.0
+_READINESS_CACHE_TTL = 30.0  # seconds
+
+
 def _readiness_payload() -> dict[str, Any]:
+    global _readiness_cache, _readiness_cache_time
+    now = time.monotonic()
+    if _readiness_cache is not None and (now - _readiness_cache_time) < _READINESS_CACHE_TTL:
+        return _readiness_cache.copy()
+
     readiness = deployment_readiness()
     reasons = list(readiness.get("reasons") or [])
     reasons.append(
@@ -79,6 +90,8 @@ def _readiness_payload() -> dict[str, Any]:
             "operator_path": "external-reviewed-operator",
         }
     )
+    _readiness_cache = readiness
+    _readiness_cache_time = now
     return readiness
 
 

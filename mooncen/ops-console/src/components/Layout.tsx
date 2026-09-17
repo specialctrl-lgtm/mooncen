@@ -16,6 +16,7 @@ const navigation = [
   { to: '/content', label: 'Content', short: 'CT' },
   { to: '/deployments', label: 'Deployments', short: 'DP' },
   { to: '/jobs', label: 'Jobs & Audit', short: 'JA' },
+  { to: '/settings', label: 'Settings', short: 'ST' },
 ];
 
 export default function Layout() {

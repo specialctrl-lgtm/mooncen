@@ -14,6 +14,7 @@ import {
   Alert,
   FlatList,
   Linking,
+  Platform,
   Pressable,
   RefreshControl,
   StyleSheet,
@@ -302,6 +303,8 @@ export function CenterSearchScreen() {
     <FlatList
       contentContainerStyle={[styles.content, branches.length === 0 && styles.emptyContent]}
       data={branches}
+      keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
+      keyboardShouldPersistTaps="handled"
       keyExtractor={(branch) => branch.id}
       ListEmptyComponent={
         branchesQuery.isLoading ? (

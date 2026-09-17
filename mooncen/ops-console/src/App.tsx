@@ -132,6 +132,7 @@ export default function App() {
           <Route path="data-quality/:id" element={<QualityPage />} />
           <Route path="content" element={<ContentPage />} />
           <Route path="content/:type/:id" element={<ContentPage />} />
+          <Route path="content/:id" element={<ContentPage />} />
           <Route path="deployments" element={<DeploymentsPage />} />
           <Route path="deployments/:id" element={<DeploymentsPage />} />
           <Route path="jobs" element={<JobsAuditPage />} />

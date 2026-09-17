@@ -118,7 +118,7 @@ export default function ContentPage() {
             data={list.data.items}
             columns={columns}
             exportName="mooncen-content.csv"
-            onRowClick={(row) => navigate(`/content/${row.content_type}/${row.id}?${params.toString()}`)}
+            onRowClick={(row) => navigate(`/content/${row.id}?${params.toString()}`)}
           />
         ) : null}
       </section>

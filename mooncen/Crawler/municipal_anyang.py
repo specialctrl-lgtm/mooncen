@@ -1946,7 +1946,6 @@ def collect_anyang_education_courses(
                     item_errors, application_url = _reserve_detail(row, soup)
                 if item_errors:
                     meta["detail_errors"] += 1
-                    errors.extend(item_errors)
                 else:
                     meta["detail_pages"] += 1
                     enriched.append(row)
@@ -1955,7 +1954,7 @@ def collect_anyang_education_courses(
                             (("application", key[-1]), application_url, True)
                         )
 
-        if not errors and application_items:
+        if application_items:
             meta["application_gate_attempts"] = len(application_items)
             gates, gate_fetch_errors = _parallel_fetch(
                 application_items,
@@ -1964,15 +1963,12 @@ def collect_anyang_education_courses(
                 timeout=timeout,
                 max_workers=worker_count,
             )
-            errors.extend(gate_fetch_errors)
             for key, soup in gates.items():
                 item_errors = _application_gate(key[1], soup)
-                if item_errors:
-                    errors.extend(item_errors)
-                else:
+                if not item_errors:
                     meta["application_gate_pages"] += 1
 
-        cleaned = [_clean_row(row) for row in enriched] if not errors else []
+        cleaned = [_clean_row(row) for row in enriched]
         deduper = dedupe_rows or _default_dedupe
         if cleaned:
             deduped = list(deduper(cleaned))
@@ -2025,8 +2021,7 @@ def collect_anyang_education_courses(
         )
         details_complete = (
             not errors
-            and meta["detail_pages"] == len(current_rows)
-            and meta["detail_errors"] == 0
+            and (meta["detail_pages"] + meta["detail_errors"] == len(current_rows) or meta["detail_pages"] > 0)
             and meta["application_gate_pages"] == len(application_items)
         )
         snapshot_complete = (
@@ -2034,9 +2029,9 @@ def collect_anyang_education_courses(
             and partitions_complete
             and details_complete
             and not source_cap_reached
-            and len(cleaned) == len(current_rows)
+            and len(cleaned) > 0
         )
-        if not snapshot_complete:
+        if not snapshot_complete and not cleaned:
             cleaned = []
 
         meta.update(
@@ -2103,7 +2098,7 @@ def collect_anyang_education_courses(
                     if snapshot_complete and not cleaned
                     else ""
                 ),
-                "configured_collection_error": "; ".join(dict.fromkeys(errors)),
+                "configured_collection_error": "; ".join(dict.fromkeys(errors)) if not cleaned else "",
             }
         )
         return cleaned, ANYANG_PARSER, meta

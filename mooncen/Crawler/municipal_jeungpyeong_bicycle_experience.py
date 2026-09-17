@@ -664,7 +664,7 @@ def collect_jeungpyeong_bicycle_experience(
             for programme_time, capacity_marker, state_marker in slots:
                 candidates.append(_row(day, programme_time, capacity_marker, state_marker))
 
-        result = list(dedupe_rows([], candidates) if dedupe_rows else candidates)
+        result = list(dedupe_rows(candidates) if dedupe_rows else candidates)
         identities = [_clean(row.get("provider_course_id")) for row in result]
         duplicate_count = len(identities) - len(set(identities))
         if duplicate_count or any(not value.startswith(f"{JEUNGPYEONG_BICYCLE_PROVIDER}:") for value in identities):

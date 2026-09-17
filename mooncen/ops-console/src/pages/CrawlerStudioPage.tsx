@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { OpsApiError, opsApi } from '../api';
+import CrawlerNav from '../components/CrawlerNav';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
 import { DefinitionList, DetailPanel, PageHeader, QueryState } from '../components/Ui';
@@ -558,15 +559,8 @@ export default function CrawlerStudioPage() {
         eyebrow="CENTRAL CRAWLER STUDIO"
         title="Crawler Studio"
         description="중앙 서버에 Provider allowlist 기반 소스 초안과 append-only 리비전·리뷰 근거를 저장합니다. 이 화면은 소스를 실행하거나 빌드·서명·배포하지 않습니다."
-        actions={(
-          <>
-            <Link className="button subtle" to="/crawlers">실행 운영 · 이력</Link>
-            <Link className="button subtle" to="/crawler-improvements">개선 큐</Link>
-            <Link className="button subtle" to="/data-quality">품질 분석</Link>
-            <Link className="button subtle" to="/crawler-releases">릴리스</Link>
-          </>
-        )}
       />
+      <CrawlerNav />
 
       <section className="panel studio-capability-panel">
         <header className="section-header">

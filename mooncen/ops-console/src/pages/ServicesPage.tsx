@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { NavLink, useNavigate, useParams } from 'react-router';
 import { opsApi } from '../api';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
@@ -64,12 +64,11 @@ export default function ServicesPage() {
         eyebrow="RUNTIME INVENTORY"
         title="Services"
         description="설정 소유자와 상태 보고 출처를 분리해 표시합니다. Endpoint와 보고 Agent는 실행 호스트 증거가 아닙니다."
-        actions={
-          <button className="button subtle" type="button" onClick={() => navigate('/agents')}>
-            Agent 목록
-          </button>
-        }
       />
+      <div className="segmented">
+        <NavLink to="/services" end>Services</NavLink>
+        <NavLink to="/agents">Agents</NavLink>
+      </div>
       <div className="filter-row">
         <label>
           서비스 종류

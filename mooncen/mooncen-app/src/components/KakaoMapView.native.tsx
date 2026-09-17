@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
 import type { BranchDto } from "../api/mooncenApi";
@@ -123,6 +123,7 @@ export function KakaoMapView({
       <WebView
         accessibilityLabel={`카카오 지도, 주변 기관 ${markers.length}곳`}
         allowsLinkPreview={false}
+        androidLayerType="hardware"
         domStorageEnabled
         javaScriptEnabled
         mixedContentMode="never"
@@ -143,7 +144,18 @@ export function KakaoMapView({
             // Ignore malformed messages from the embedded document.
           }
         }}
-        originWhitelist={["https://*", "about:blank"]}
+        onShouldStartLoadWithRequest={(request) => {
+          if (
+            request.url === "about:blank" ||
+            request.url.startsWith("data:") ||
+            request.url.startsWith("https://mooncen.kr")
+          ) {
+            return true;
+          }
+          void Linking.openURL(request.url).catch(() => {});
+          return false;
+        }}
+        originWhitelist={["https://*", "http://*", "about:blank", "data:*"]}
         setSupportMultipleWindows={false}
         source={{
           html: buildMapHtml(apiKey, markers, center, selectedBranchId),

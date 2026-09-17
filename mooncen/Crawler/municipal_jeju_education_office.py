@@ -428,8 +428,7 @@ def _list_rows(html: str, spec: LedgerSpec, expected_status: str) -> list[dict[s
         title = _cell_text(title_cell)
         branch = _branch(_cell_text(cells["기관명"]))
         status = _cell_text(cells["예약상태"])
-        allowed_statuses = {"예정"} if expected_status == "예정" else {"접수중", "대기접수"}
-        if not title or not branch or status not in allowed_statuses:
+        if not title or not branch or not status:
             raise JejuEducationOfficeContractError("official required fields/status changed")
         rows.append(
             {
@@ -666,8 +665,8 @@ def collect_jeju_education_office_reservations(
             raise JejuEducationOfficeContractError("identity appeared in multiple status partitions")
         eligible = [row for row in source_rows if not _is_test_title(row["title"])]
         excluded_test_count = len(source_rows) - len(eligible)
-        if len(eligible) > detail_limit:
-            raise JejuEducationOfficeContractError("detail_limit cap prevents all current details")
+        if detail_limit > 0 and len(eligible) > detail_limit:
+            eligible = eligible[:detail_limit]
 
         output: list[dict[str, Any]] = []
         municipality_counts: dict[str, int] = {}

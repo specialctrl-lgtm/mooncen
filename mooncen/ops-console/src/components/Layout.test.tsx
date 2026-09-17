@@ -27,10 +27,11 @@ describe('Layout', () => {
 
     expect(screen.getByText('PRODUCTION')).toBeInTheDocument();
     expect(screen.getByText('dashboard body')).toBeInTheDocument();
-    expect(screen.getByRole('navigation', { name: '운영 콘솔 메뉴' }).querySelectorAll('a')).toHaveLength(11);
+    expect(screen.getByRole('navigation', { name: '운영 콘솔 메뉴' }).querySelectorAll('a')).toHaveLength(12);
     expect(screen.getByRole('link', { name: /Crawler Studio/ })).toHaveAttribute('href', '/crawler-studio');
     expect(screen.getByRole('link', { name: /Crawler Improvements/ })).toHaveAttribute('href', '/crawler-improvements');
     expect(screen.getByRole('link', { name: /Crawler Releases/ })).toHaveAttribute('href', '/crawler-releases');
     expect(screen.getByRole('link', { name: /Crawler Analytics/ })).toHaveAttribute('href', '/crawler-analytics');
+    expect(screen.getByRole('link', { name: /Settings/ })).toHaveAttribute('href', '/settings');
   });
 });

@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { opsApi } from '../api';
+import CrawlerNav from '../components/CrawlerNav';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
 import { DefinitionList, DetailPanel, PageHeader, QueryState, StatCard } from '../components/Ui';
@@ -353,14 +354,15 @@ export default function CrawlerReleasesPage() {
         eyebrow="CENTRAL RELEASE CONTROL"
         title="Crawler Releases"
         description="중앙 서버에 등록된 서명 아티팩트, 단계적 배포, Worker 수렴 상태와 감사 가능한 변경 요청을 관리합니다. 요청은 대기열에만 기록되며 브라우저에서 배포를 직접 실행하지 않습니다."
-        actions={(
-          <>
-            <Link className="button subtle" to="/crawler-studio">Studio</Link>
-            <Link className="button subtle" to="/crawler-analytics">운영 분석</Link>
-            {session.role === 'admin' && <button className="button primary" type="button" disabled>{releaseMutationsUnavailable ? '배포 변경 잠김' : '별도 승인 필요'}</button>}
-          </>
-        )}
+        actions={
+          session.role === 'admin' ? (
+            <button className="button primary" type="button" disabled>
+              {releaseMutationsUnavailable ? '배포 변경 잠김' : '별도 승인 필요'}
+            </button>
+          ) : undefined
+        }
       />
+      <CrawlerNav />
       <QueryState loading={summary.isLoading} error={summary.error} />
       {controlUnavailable && (
         <div className="deploy-blockers crawler-control-unavailable" role="alert">

@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { opsApi } from '../api';
+import CrawlerNav from '../components/CrawlerNav';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
 import { DefinitionList, DetailPanel, PageHeader, QueryState } from '../components/Ui';
@@ -257,6 +258,47 @@ export default function CrawlersPage() {
   const crawlerItems = [...databaseItems, ...liveOnlyItems].filter(
     (item) => !requestedProvider || item.provider === requestedProvider,
   );
+  const [providerSearch, setProviderSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const filteredCrawlerItems = useMemo(() => {
+    return crawlerItems.filter((item) => {
+      if (providerSearch.trim()) {
+        const query = providerSearch.trim().toLowerCase();
+        if (!item.provider.toLowerCase().includes(query) && !item.crawler_name.toLowerCase().includes(query)) {
+          return false;
+        }
+      }
+      if (statusFilter === 'success') {
+        return item.last_run_status === 'success';
+      }
+      if (statusFilter === 'failed') {
+        return (
+          item.last_run_status === 'failed'
+          || item.last_run_status === 'partial_success'
+          || item.last_run_status === 'blocked'
+        );
+      }
+      if (statusFilter === 'idle') {
+        return item.status === 'idle' || !item.status;
+      }
+      return true;
+    });
+  }, [crawlerItems, providerSearch, statusFilter]);
+
+  const stats = useMemo(() => {
+    const total = crawlerItems.length;
+    const success = crawlerItems.filter((item) => item.last_run_status === 'success').length;
+    const failed = crawlerItems.filter(
+      (item) =>
+        item.last_run_status === 'failed'
+        || item.last_run_status === 'partial_success'
+        || item.last_run_status === 'blocked',
+    ).length;
+    const idle = total - success - failed;
+    return { total, success, failed, idle };
+  }, [crawlerItems]);
+
   const runItems = (runs.data?.items || []).filter(
     (item) => !requestedProvider || item.provider === requestedProvider,
   );
@@ -268,40 +310,33 @@ export default function CrawlersPage() {
         title="Crawlers"
         description="Provider별 현재 상태, 실행 이력, 실패 근거와 대기열 작업을 한 흐름으로 확인합니다."
         actions={
-          <>
-            <Link className="button subtle" to="/crawler-improvements">
-              개선 큐
-            </Link>
-            <Link className="button subtle" to="/crawlers/region-coverage">
-              지역별 수집 현황
-            </Link>
-            {session.role !== 'viewer' ? (
-              <>
-                <button
-                  className="button primary"
-                  type="button"
-                  disabled={
-                    ownerStatus.isLoading
-                    || ownerStatus.data?.available !== true
-                    || ownerStatus.data?.dispatch.running === true
-                    || ['active', 'activating', 'reloading'].includes(String(ownerStatus.data?.run?.ActiveState || ''))
-                    || runAllMutation.isPending
-                  }
-                  title={ownerStatus.data?.available === false ? ownerStatus.data.reason : 'gen1crawler에서 모든 Provider를 1회 실행합니다.'}
-                  onClick={() => {
-                    if (confirmProductionRunAll()) runAllMutation.mutate();
-                  }}
-                >
-                  {runAllMutation.isPending || ownerStatus.data?.dispatch.running ? '전체 실행 요청 중…' : '전체 크롤러 실행'}
-                </button>
-                <button className="button subtle" type="button" onClick={() => setShowProbe(true)}>
-                  Parser Probe
-                </button>
-              </>
-            ) : null}
-          </>
+          session.role !== 'viewer' ? (
+            <>
+              <button
+                className="button primary"
+                type="button"
+                disabled={
+                  ownerStatus.isLoading
+                  || ownerStatus.data?.available !== true
+                  || ownerStatus.data?.dispatch.running === true
+                  || ['active', 'activating', 'reloading'].includes(String(ownerStatus.data?.run?.ActiveState || ''))
+                  || runAllMutation.isPending
+                }
+                title={ownerStatus.data?.available === false ? ownerStatus.data.reason : 'gen1crawler에서 모든 Provider를 1회 실행합니다.'}
+                onClick={() => {
+                  if (confirmProductionRunAll()) runAllMutation.mutate();
+                }}
+              >
+                {runAllMutation.isPending || ownerStatus.data?.dispatch.running ? '전체 실행 요청 중…' : '전체 크롤러 실행'}
+              </button>
+              <button className="button subtle" type="button" onClick={() => setShowProbe(true)}>
+                Parser Probe
+              </button>
+            </>
+          ) : undefined
         }
       />
+      <CrawlerNav />
       {(probeMutation.error || runAllMutation.error) && <QueryState error={probeMutation.error || runAllMutation.error} />}
       <section className="panel">
         <header className="section-header">
@@ -325,32 +360,37 @@ export default function CrawlersPage() {
           </p>
         )}
         {ownerStatus.data && (
-          <DefinitionList
-            value={{
-              연결_가능: ownerStatus.data.available,
-              실행_호스트: ownerStatus.data.host || ownerStatus.data.owner,
-              예약_상태: systemdValue(ownerStatus.data.timer?.ActiveState),
-              예약_활성화: systemdValue(ownerStatus.data.timer?.UnitFileState),
-              다음_자동_실행: systemdValue(ownerStatus.data.timer?.NextElapseUSecRealtime),
-              실행_상태: systemdValue(ownerStatus.data.run?.ActiveState),
-              실행_세부상태: systemdValue(ownerStatus.data.run?.SubState),
-              최근_결과: systemdValue(ownerStatus.data.run?.Result),
-              종료_코드: systemdValue(ownerStatus.data.run?.ExecMainStatus),
-              실행_시작: systemdValue(ownerStatus.data.run?.ExecMainStartTimestamp),
-              실행_종료: systemdValue(ownerStatus.data.run?.ExecMainExitTimestamp),
-              최근_배치: ownerStatus.data.summary?.crawl_batch_id || null,
-              배치_상태: ownerStatus.data.summary?.status || null,
-              Provider_진행: ownerStatus.data.summary
-                ? `${ownerStatus.data.summary.completed || 0}/${ownerStatus.data.summary.total || 0}`
-                : null,
-              Provider_성공: ownerStatus.data.summary?.success ?? null,
-              Provider_실패: ownerStatus.data.summary?.failed ?? null,
-              요청_전달중: ownerStatus.data.dispatch.running,
-              최근_요청: ownerStatus.data.dispatch.started_at || null,
-              최근_요청완료: ownerStatus.data.dispatch.finished_at || null,
-              오류: ownerStatus.data.dispatch.error || ownerStatus.data.reason || null,
-            }}
-          />
+          <>
+            <DefinitionList
+              value={{
+                연결_가능: ownerStatus.data.available,
+                실행_호스트: ownerStatus.data.host || ownerStatus.data.owner,
+                예약_상태: systemdValue(ownerStatus.data.timer?.ActiveState),
+                예약_활성화: systemdValue(ownerStatus.data.timer?.UnitFileState),
+                다음_자동_실행: systemdValue(ownerStatus.data.timer?.NextElapseUSecRealtime),
+                실행_상태: systemdValue(ownerStatus.data.run?.ActiveState),
+                실행_세부상태: systemdValue(ownerStatus.data.run?.SubState),
+                최근_결과: systemdValue(ownerStatus.data.run?.Result),
+                종료_코드: systemdValue(ownerStatus.data.run?.ExecMainStatus),
+                실행_시작: systemdValue(ownerStatus.data.run?.ExecMainStartTimestamp),
+                실행_종료: systemdValue(ownerStatus.data.run?.ExecMainExitTimestamp),
+                최근_배치: ownerStatus.data.summary?.crawl_batch_id || null,
+                배치_상태: ownerStatus.data.summary?.status || null,
+                스케줄_잡_진행: ownerStatus.data.summary
+                  ? `${ownerStatus.data.summary.completed || 0}/${ownerStatus.data.summary.total || 0} (하위 374개 Provider 대상)`
+                  : null,
+                스케줄_잡_성공: ownerStatus.data.summary?.success ?? null,
+                스케줄_잡_실패: ownerStatus.data.summary?.failed ?? null,
+                요청_전달중: ownerStatus.data.dispatch.running,
+                최근_요청: ownerStatus.data.dispatch.started_at || null,
+                최근_요청완료: ownerStatus.data.dispatch.finished_at || null,
+                오류: ownerStatus.data.dispatch.error || ownerStatus.data.reason || null,
+              }}
+            />
+            <p className="form-note">
+              gen1crawler는 상위 스케줄러 잡(Job) 단위로 실행을 관리하며, 하위 통합 타겟(통합예약·체험)을 통해 운영 DB의 374개 프로바이더 전체를 수집·적재합니다.
+            </p>
+          </>
         )}
       </section>
       <section className="panel">
@@ -360,9 +400,33 @@ export default function CrawlersPage() {
             <small>Provider 실행 상태는 gen1crawler 실시간 진행 정보이며, 활성 데이터 수는 마지막 운영 DB 승격 상태입니다.</small>
           </div>
         </header>
-        <QueryState loading={crawlers.isLoading} error={crawlers.error} unavailable={crawlers.data?.available === false} empty={crawlers.data?.available === true && crawlerItems.length === 0} />
-        {crawlerItems.length ? (
-          <DataTable data={crawlerItems} columns={crawlerColumns} exportName="mooncen-crawlers.csv" />
+        <div className="filter-row">
+          <label>
+            Provider 검색
+            <input
+              type="text"
+              placeholder="예: PEN, JINAN, HOMEPLUS..."
+              value={providerSearch}
+              onChange={(e) => setProviderSearch(e.target.value)}
+            />
+          </label>
+          <label>
+            상태 필터
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="all">전체 ({stats.total})</option>
+              <option value="success">수집 성공 ({stats.success})</option>
+              <option value="failed">점검 필요 ({stats.failed})</option>
+              <option value="idle">대기 ({stats.idle})</option>
+            </select>
+          </label>
+          <span className="table-summary-chip">
+            전체 {formatNumber(stats.total)}개 중 {stats.success}개 성공 · {stats.failed}개 점검 필요
+            {providerSearch || statusFilter !== 'all' ? ` (${formatNumber(filteredCrawlerItems.length)}건)` : ''}
+          </span>
+        </div>
+        <QueryState loading={crawlers.isLoading} error={crawlers.error} unavailable={crawlers.data?.available === false} empty={crawlers.data?.available === true && filteredCrawlerItems.length === 0} />
+        {filteredCrawlerItems.length ? (
+          <DataTable data={filteredCrawlerItems} columns={crawlerColumns} exportName="mooncen-crawlers.csv" />
         ) : null}
       </section>
       <section className="panel">

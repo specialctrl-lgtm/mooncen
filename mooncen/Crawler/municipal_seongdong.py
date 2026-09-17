@@ -617,8 +617,10 @@ def _parse_education_page(soup: BeautifulSoup, page: int) -> list[dict[str, Any]
         if not title or len(dates) != 4:
             raise ValueError(f"education page {page} contains an invalid course row")
         apply_start, apply_end, start, end = dates
-        if apply_end < apply_start or end < start:
-            raise ValueError(f"education page {page} contains a reversed date range")
+        if apply_end < apply_start:
+            apply_start, apply_end = apply_end, apply_start
+        if end < start:
+            start, end = end, start
         capacity = _clean(cells[6].get_text(" ", strip=True))
         capacity_current, capacity_total = _capacity_pair(capacity)
         if capacity_current is None or capacity_total is None:
@@ -670,8 +672,10 @@ def _parse_experience_page(soup: BeautifulSoup, page: int) -> list[dict[str, Any
         if not title or len(dates) != 4:
             raise ValueError(f"experience page {page} contains an invalid programme row")
         apply_start, apply_end, start, end = dates
-        if apply_end < apply_start or end < start:
-            raise ValueError(f"experience page {page} contains a reversed date range")
+        if apply_end < apply_start:
+            apply_start, apply_end = apply_end, apply_start
+        if end < start:
+            start, end = end, start
         identity, detail_url, detail_kind, preclassified_exclusion = _experience_identity(
             link.get("href"), current_url
         )

@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { opsApi } from '../api';
+import CrawlerNav from '../components/CrawlerNav';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
 import { DefinitionList, DetailPanel, PageHeader, QueryState, StatCard } from '../components/Ui';
@@ -315,13 +316,17 @@ export default function CrawlerAnalyticsPage() {
         title="Crawler Analytics"
         description="중앙 제어 DB 기준으로 배포 수렴, 수집 결과, 검증 품질, Worker와 작업 대기열을 같은 시간 창에서 분석합니다."
         actions={(
-          <>
-            <label className="analytics-window">분석 기간<select aria-label="분석 기간" value={windowHours} onChange={(event) => setWindowHours(Number(event.target.value))}><option value={24}>최근 24시간</option><option value={72}>최근 72시간</option><option value={168}>최근 7일</option></select></label>
-            <Link className="button subtle" to="/crawler-improvements">개선 큐</Link>
-            <Link className="button subtle" to="/crawler-releases">릴리스 관리</Link>
-          </>
+          <label className="analytics-window">
+            분석 기간
+            <select aria-label="분석 기간" value={windowHours} onChange={(event) => setWindowHours(Number(event.target.value))}>
+              <option value={24}>최근 24시간</option>
+              <option value={72}>최근 72시간</option>
+              <option value={168}>최근 7일</option>
+            </select>
+          </label>
         )}
       />
+      <CrawlerNav />
       <QueryState loading={analytics.isLoading} error={analytics.error} />
       {data?.available === false && (
         <div className="deploy-blockers crawler-control-unavailable" role="alert">

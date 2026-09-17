@@ -6,7 +6,8 @@ import re
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
@@ -96,4 +97,53 @@ def crawler_quality(db: Session = Depends(get_db)) -> dict[str, Any]:
         "issue_statuses": issue_statuses,
         "latest_scan_at": production.get("latest_scan_at"),
         "rule_source": production.get("rule_source"),
+    }
+
+
+@router.get("/crawler-providers")
+def crawler_providers(
+    limit: int = Query(default=20, ge=1, le=50),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    query = text(
+        """
+        SELECT provider,
+               COUNT(*) AS total_count,
+               COUNT(*) FILTER (WHERE is_active = true) AS active_count,
+               MAX(updated_at) AS last_run_at
+        FROM courses
+        GROUP BY provider
+        ORDER BY total_count DESC
+        LIMIT :limit
+        """
+    )
+    rows = db.execute(query, {"limit": limit}).fetchall()
+    items = []
+    for row in rows:
+        provider = str(row[0] or "")
+        total = int(row[1] or 0)
+        active = int(row[2] or 0)
+        last_run = row[3]
+        last_run_str = _iso_utc(last_run) if last_run else None
+        items.append({
+            "provider": provider,
+            "run_count": 1,
+            "success_count": 1,
+            "partial_count": 0,
+            "failure_count": 0,
+            "collected_count": total,
+            "new_count": None,
+            "updated_count": active,
+            "failed_item_count": 0,
+            "success_rate": 100.0,
+            "last_run_at": last_run_str,
+        })
+    return {
+        "available": True,
+        "has_data": len(items) > 0,
+        "total": len(items),
+        "limit": limit,
+        "truncated": False,
+        "items": items,
+        "reasons": [],
     }

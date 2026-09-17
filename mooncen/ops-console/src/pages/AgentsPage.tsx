@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { NavLink } from 'react-router';
 import { opsApi } from '../api';
 import DataTable from '../components/DataTable';
 import StatusBadge from '../components/StatusBadge';
@@ -35,6 +36,10 @@ export default function AgentsPage() {
   return (
     <>
       <PageHeader eyebrow="SERVER WORKERS" title="Agents" description="등록된 Agent의 연결 상태와 보고된 기능을 조회합니다." />
+      <div className="segmented">
+        <NavLink to="/services" end>Services</NavLink>
+        <NavLink to="/agents">Agents</NavLink>
+      </div>
       <QueryState loading={query.isLoading} error={query.error} unavailable={query.data?.available === false} empty={query.data?.items.length === 0} />
       {query.data?.items.length ? <DataTable data={query.data.items} columns={columns} exportName="mooncen-agents.csv" /> : null}
     </>

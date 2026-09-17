@@ -4,20 +4,23 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+WORK_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
-cd "${REPO_DIR}"
+cd "${WORK_DIR}"
 
-# Check virtualenv
-if [ -d ".venv" ]; then
-    PYTHON_BIN=".venv/bin/python"
+# Check virtualenv in work dir or parent
+if [ -f "${WORK_DIR}/.venv/bin/python" ]; then
+    PYTHON_BIN="${WORK_DIR}/.venv/bin/python"
+elif [ -f "${WORK_DIR}/../.venv/bin/python" ]; then
+    PYTHON_BIN="${WORK_DIR}/../.venv/bin/python"
 elif command -v python3 >/dev/null 2>&1; then
-    PYTHON_BIN="python3"
+    PYTHON_BIN="$(command -v python3)"
 else
     echo "Python 3 not found" >&2
     exit 1
 fi
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 export PYTHONUNBUFFERED=1
 export TZ=Asia/Seoul
 export WORKER_NODE="mac"
