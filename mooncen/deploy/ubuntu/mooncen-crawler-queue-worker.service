@@ -1,0 +1,27 @@
+[Unit]
+Description=MoonCen Distributed Crawler Queue Worker
+After=network.target
+
+[Service]
+Type=simple
+User=mooncen-crawler
+Group=mooncen-crawler
+WorkingDirectory=/opt/mooncen
+EnvironmentFile=-/etc/mooncen/crawler.env
+Environment=TZ=Asia/Seoul
+Environment=HOME=/tmp
+Environment=XDG_CACHE_HOME=/tmp/.cache
+Environment=XDG_CONFIG_HOME=/tmp/.config
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/mooncen/.venv/bin/python -X utf8 /opt/mooncen/tools/crawler_queue_worker.py --worker-node gen1crawler --poll-interval 5.0 --heartbeat-interval 30.0
+Restart=always
+RestartSec=10s
+TimeoutStopSec=120s
+KillMode=mixed
+MemoryHigh=70%
+MemoryMax=80%
+TasksMax=512
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

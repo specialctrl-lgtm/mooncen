@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 import stat
+import sys
 import tempfile
 import weakref
 from pathlib import Path
@@ -88,15 +89,36 @@ def _windows_chromedriver() -> str | None:
     return _first_existing_file(candidates)
 
 
+def _macos_chrome_binary() -> str | None:
+    candidates = [
+        Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        Path(os.path.expanduser("~/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")),
+    ]
+    return _first_existing_file(candidates)
+
+
+def _macos_chromedriver() -> str | None:
+    candidates = [
+        Path("/opt/homebrew/bin/chromedriver"),
+        Path("/usr/local/bin/chromedriver"),
+        Path("/usr/local/bin/mooncen-chromedriver"),
+    ]
+    return _first_existing_file(candidates)
+
+
 def _default_chrome_binary() -> str:
     if os.name == "nt":
         return _windows_chrome_binary() or DEFAULT_CHROME_BINARY
+    if sys.platform == "darwin":
+        return _macos_chrome_binary() or DEFAULT_CHROME_BINARY
     return DEFAULT_CHROME_BINARY
 
 
 def _default_chromedriver() -> str:
     if os.name == "nt":
         return _windows_chromedriver() or DEFAULT_CHROMEDRIVER
+    if sys.platform == "darwin":
+        return _macos_chromedriver() or DEFAULT_CHROMEDRIVER
     return DEFAULT_CHROMEDRIVER
 
 
@@ -133,6 +155,21 @@ def _required_root_executable(value: str, label: str) -> str:
     if not resolved.is_file() or (os.name != "nt" and not os.access(resolved, os.X_OK)):
         raise RuntimeError(f"{label} must be an executable regular file")
     if os.name == "nt":
+        return str(resolved)
+    if sys.platform == "darwin":
+        # On macOS, binaries in Homebrew or /Applications can be owned by root or local admin user.
+        # Ensure not world-writable.
+        current_uid = os.getuid()
+        protected_paths = {resolved, *resolved.parents, *candidate.parents}
+        try:
+            for component in protected_paths:
+                component_metadata = component.stat()
+                if component_metadata.st_uid not in (0, current_uid) or stat.S_IMODE(component_metadata.st_mode) & 0o002:
+                    raise RuntimeError(
+                        f"{label} and its parent path must be root- or user-owned and not world-writable"
+                    )
+        except OSError as exc:
+            raise RuntimeError(f"{label} path cannot be verified") from exc
         return str(resolved)
     protected_paths = {resolved, *resolved.parents, *candidate.parents}
     try:
