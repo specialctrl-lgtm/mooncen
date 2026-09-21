@@ -45,7 +45,7 @@ INSERT INTO crawler_run_log (
 ) VALUES (
     {", ".join(f"%({col})s" for col in SYNC_COLUMNS)}
 )
-ON CONFLICT ON CONSTRAINT uq_crawler_run_log_target_started DO UPDATE SET
+ON CONFLICT (target_key, started_at) DO UPDATE SET
     source_type = EXCLUDED.source_type,
     crawler_name = EXCLUDED.crawler_name,
     status = EXCLUDED.status,
@@ -147,6 +147,10 @@ def sync_crawler_run_logs(
             "upserted": 0,
             "since": since.isoformat() if since else None,
         }
+
+    ensure_unique_index(primary_conn)
+    if hasattr(primary_conn, "commit"):
+        primary_conn.commit()
 
     with primary_conn.cursor() as cur:
         execute_batch(cur, UPSERT_SQL, rows, page_size=batch_size)
