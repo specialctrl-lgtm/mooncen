@@ -39,24 +39,31 @@ SYNC_COLUMNS = [
     "created_at",
 ]
 
-UPSERT_SQL = f"""
+INSERT_IF_NOT_EXISTS_SQL = f"""
 INSERT INTO crawler_run_log (
     {", ".join(SYNC_COLUMNS)}
-) VALUES (
+) SELECT
     {", ".join(f"%({col})s" for col in SYNC_COLUMNS)}
+WHERE NOT EXISTS (
+    SELECT 1 FROM crawler_run_log
+    WHERE target_key = %(target_key)s AND started_at = %(started_at)s
 )
-ON CONFLICT (target_key, started_at) DO UPDATE SET
-    source_type = EXCLUDED.source_type,
-    crawler_name = EXCLUDED.crawler_name,
-    status = EXCLUDED.status,
-    ended_at = EXCLUDED.ended_at,
-    duration_seconds = EXCLUDED.duration_seconds,
-    collected_count = EXCLUDED.collected_count,
-    inserted_count = EXCLUDED.inserted_count,
-    updated_count = EXCLUDED.updated_count,
-    skipped_count = EXCLUDED.skipped_count,
-    error_type = EXCLUDED.error_type,
-    error_message = EXCLUDED.error_message
+"""
+
+UPDATE_IF_EXISTS_SQL = """
+UPDATE crawler_run_log SET
+    source_type = %(source_type)s,
+    crawler_name = %(crawler_name)s,
+    status = %(status)s,
+    ended_at = %(ended_at)s,
+    duration_seconds = %(duration_seconds)s,
+    collected_count = %(collected_count)s,
+    inserted_count = %(inserted_count)s,
+    updated_count = %(updated_count)s,
+    skipped_count = %(skipped_count)s,
+    error_type = %(error_type)s,
+    error_message = %(error_message)s
+WHERE target_key = %(target_key)s AND started_at = %(started_at)s
 """
 
 
@@ -160,12 +167,12 @@ def sync_crawler_run_logs(
             "since": since.isoformat() if since else None,
         }
 
-    ensure_unique_index(primary_conn)
-    if hasattr(primary_conn, "commit"):
-        primary_conn.commit()
-
+    # Phase 1: insert rows that don't yet exist (no unique index required)
     with primary_conn.cursor() as cur:
-        execute_batch(cur, UPSERT_SQL, rows, page_size=batch_size)
+        execute_batch(cur, INSERT_IF_NOT_EXISTS_SQL, rows, page_size=batch_size)
+    # Phase 2: update rows that already existed
+    with primary_conn.cursor() as cur:
+        execute_batch(cur, UPDATE_IF_EXISTS_SQL, rows, page_size=batch_size)
     if hasattr(primary_conn, "commit"):
         primary_conn.commit()
     print(f"[sync_crawler_run_logs] Successfully upserted and committed {len(rows)} rows to primary", file=sys.stderr)
