@@ -61,15 +61,27 @@ ON CONFLICT (target_key, started_at) DO UPDATE SET
 
 
 def ensure_unique_index(conn: Any) -> None:
-    """Ensure the unique index required for ON CONFLICT exists on primary."""
+    """Ensure the unique index required for ON CONFLICT exists on primary.
+
+    Silently skips if the index already exists or if the caller lacks
+    CREATE INDEX privileges (the index may have been created by a superuser).
+    """
     if not hasattr(conn, "cursor"):
         return
-    with conn.cursor() as cur:
-        cur.execute(
-            """
-            CREATE UNIQUE INDEX IF NOT EXISTS uq_crawler_run_log_target_started
-            ON crawler_run_log(target_key, started_at)
-            """
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                CREATE UNIQUE INDEX IF NOT EXISTS uq_crawler_run_log_target_started
+                ON crawler_run_log(target_key, started_at)
+                """
+            )
+    except Exception as exc:
+        # Rollback the failed DDL so the connection stays usable for DML
+        conn.rollback()
+        print(
+            f"[sync_crawler_run_logs] ensure_unique_index skipped: {exc}",
+            file=sys.stderr,
         )
 
 
