@@ -45,7 +45,7 @@ INSERT INTO crawler_run_log (
 ) VALUES (
     {", ".join(f"%({col})s" for col in SYNC_COLUMNS)}
 )
-ON CONFLICT (target_key, started_at) DO UPDATE SET
+ON CONFLICT ON CONSTRAINT uq_crawler_run_log_target_started DO UPDATE SET
     source_type = EXCLUDED.source_type,
     crawler_name = EXCLUDED.crawler_name,
     status = EXCLUDED.status,
