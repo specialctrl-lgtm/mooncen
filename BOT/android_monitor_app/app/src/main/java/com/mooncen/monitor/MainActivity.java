@@ -465,7 +465,9 @@ public class MainActivity extends Activity {
                 );
                 long latestVersionCode = data.optLong("version_code", 0);
                 String latestVersionName = data.optString("version_name", "").trim();
-                String apkUrl = data.optString("apk_url", "").trim();
+                String apkUrl = data.has("apk_url") && !data.optString("apk_url", "").trim().isEmpty()
+                        ? data.optString("apk_url", "").trim()
+                        : data.optString("download_url", "").trim();
                 String sha256 = data.optString("sha256", "").trim();
                 String notes = data.optString("notes", "").trim();
                 if (latestVersionCode <= 0
@@ -1055,6 +1057,7 @@ public class MainActivity extends Activity {
         renderCrawlerQuality(snapshot.quality);
         renderCrawlerProviders(snapshot.providers, snapshot.errors);
         renderCrawlerNodes(snapshot);
+        renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
         renderCrawlerMonitoringErrors(snapshot.errors);
     }
 
@@ -1492,13 +1495,32 @@ public class MainActivity extends Activity {
         return criticalWhenPositive ? COLOR_CRITICAL : COLOR_WARNING;
     }
 
+    private int nodeCrawlerStatusColor(CrawlerMonitoringSnapshot.Node node) {
+        if (!node.available || "down".equals(node.status)) {
+            return COLOR_CRITICAL;
+        }
+        if (!node.crawlerAvailable || "not_configured".equals(node.crawlerStatus)) {
+            return COLOR_MUTED;
+        }
+        if (node.crawlerRunning || "running".equals(node.crawlerStatus)) {
+            return COLOR_INFO;
+        }
+        if ("success".equals(node.crawlerStatus) || "idle".equals(node.crawlerStatus)) {
+            return COLOR_HEALTHY;
+        }
+        if ("failed".equals(node.crawlerStatus)) {
+            return COLOR_CRITICAL;
+        }
+        return COLOR_WARNING;
+    }
+
     private void renderCrawlerNodes(CrawlerMonitoringSnapshot snapshot) {
         content.addView(sectionHeading(
                 "크롤러 노드",
-                "현재 실행·목표 워커·중앙 제어 노드의 자원과 온도입니다."
+                "현재 실행·목표 워커·중앙 제어·워커 노드의 자원과 수집 상태입니다."
         ));
-        for (String role : new String[]{"runtime", "target", "control"}) {
-            CrawlerMonitoringSnapshot.Node node = snapshot.node(role);
+        for (CrawlerMonitoringSnapshot.Node node : snapshot.nodes) {
+            String role = node.role;
             String roleLabel = CrawlerMonitoringPresentation.nodeRoleLabel(role);
             if (!node.valid) {
                 content.addView(statusCard(
@@ -1509,49 +1531,124 @@ public class MainActivity extends Activity {
                 ));
                 continue;
             }
-            int nodeColor = !node.available || "unknown".equals(node.status)
-                    ? COLOR_WARNING
-                    : "down".equals(node.status) ? COLOR_CRITICAL : COLOR_HEALTHY;
-            String detail = "역할 " + roleLabel;
-            if (!node.error.isEmpty()) {
-                detail += " · " + node.error;
+            if (node.crawlerAvailable) {
+                int nodeColor = nodeCrawlerStatusColor(node);
+                String badge = !node.available || "down".equals(node.status)
+                        ? "오프라인"
+                        : CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(node);
+                StringBuilder detail = new StringBuilder();
+                detail.append("역할 ").append(roleLabel);
+                detail.append(" · 시스템 ").append(CrawlerMonitoringPresentation.nodeStatusLabel(node));
+                if (node.crawlerTimerActive != null) {
+                    detail.append(node.crawlerTimerActive ? " · 타이머 활성" : " · 타이머 대기 없음");
+                }
+                if (node.crawlerRunning) {
+                    detail.append(" · 수집 실행 중");
+                }
+                if (!node.crawlerCompletedAt.isEmpty()) {
+                    detail.append("\n최근 완료 ").append(formatTimestamp(node.crawlerCompletedAt));
+                    if (node.crawlerDurationSeconds != null) {
+                        detail.append(" (소요 ").append(CrawlerMonitoringPresentation.duration(node.crawlerDurationSeconds)).append(")");
+                    }
+                }
+                if (!node.crawlerLastSuccessAt.isEmpty()) {
+                    detail.append("\n마지막 성공 ").append(formatTimestamp(node.crawlerLastSuccessAt));
+                    if (node.crawlerLastSuccessAgeSeconds != null) {
+                        detail.append(" (").append(CrawlerMonitoringPresentation.age(node.crawlerLastSuccessAgeSeconds)).append(" 전)");
+                    }
+                }
+                if (!node.error.isEmpty()) {
+                    detail.append("\n").append(node.error);
+                }
+                content.addView(statusMetricCard(
+                        node.node,
+                        badge,
+                        detail.toString(),
+                        nodeColor,
+                        new String[]{"수집 상태", "완료 Provider", "실패 Provider", "소요 시간", "CPU", "메모리", "디스크", "온도"},
+                        new String[]{
+                                CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(node),
+                                CrawlerMonitoringPresentation.count(node.crawlerProvidersSucceeded, "개"),
+                                CrawlerMonitoringPresentation.count(node.crawlerProvidersFailed, "개"),
+                                CrawlerMonitoringPresentation.duration(node.crawlerDurationSeconds),
+                                node.available
+                                        ? CrawlerMonitoringPresentation.percentage(node.cpuPercent)
+                                        : "확인 불가",
+                                node.available
+                                        ? CrawlerMonitoringPresentation.percentage(node.memoryPercent)
+                                        : "확인 불가",
+                                node.available
+                                        ? CrawlerMonitoringPresentation.percentage(node.diskPercent)
+                                        : "확인 불가",
+                                node.temperatureAvailable && node.temperatureCelsius != null
+                                        ? CrawlerMonitoringPresentation.temperature(node.temperatureCelsius)
+                                        : "미지원"
+                        },
+                        new int[]{
+                                nodeColor,
+                                node.crawlerProvidersSucceeded != null ? COLOR_INFO : COLOR_WARNING,
+                                node.crawlerProvidersFailed != null && node.crawlerProvidersFailed > 0
+                                        ? COLOR_WARNING : COLOR_HEALTHY,
+                                node.crawlerDurationSeconds != null ? COLOR_INFO : COLOR_WARNING,
+                                node.available && node.cpuPercent != null ? COLOR_INFO : COLOR_WARNING,
+                                node.available && node.memoryPercent != null ? COLOR_INFO : COLOR_WARNING,
+                                node.available && node.diskPercent != null ? COLOR_INFO : COLOR_WARNING,
+                                node.available && node.temperatureAvailable && node.temperatureCelsius != null
+                                        ? COLOR_INFO : COLOR_MUTED
+                        }
+                ));
+            } else {
+                int nodeColor = !node.available || "unknown".equals(node.status)
+                        ? COLOR_WARNING
+                        : "down".equals(node.status) ? COLOR_CRITICAL : COLOR_HEALTHY;
+                String detail = "역할 " + roleLabel;
+                if ("control".equals(role)) {
+                    detail += " (중앙 제어/DB) · 크롤러 미배치";
+                } else if ("worker".equals(role)) {
+                    detail += " · 크롤러 대기";
+                }
+                if (!node.error.isEmpty()) {
+                    detail += " · " + node.error;
+                }
+                content.addView(statusMetricCard(
+                        node.node,
+                        CrawlerMonitoringPresentation.nodeStatusLabel(node),
+                        detail,
+                        nodeColor,
+                        new String[]{"CPU", "메모리", "1분 부하", "디스크", "논리 CPU", "온도"},
+                        new String[]{
+                                node.available
+                                        ? CrawlerMonitoringPresentation.percentage(node.cpuPercent)
+                                        : "확인 불가",
+                                node.available
+                                        ? CrawlerMonitoringPresentation.percentage(node.memoryPercent)
+                                        : "확인 불가",
+                                node.available
+                                        ? CrawlerMonitoringPresentation.load(node.load1m)
+                                        : "확인 불가",
+                                node.available
+                                        ? CrawlerMonitoringPresentation.percentage(node.diskPercent)
+                                        : "확인 불가",
+                                node.available
+                                        ? CrawlerMonitoringPresentation.count(
+                                        node.logicalCpuCount,
+                                        "개"
+                                ) : "확인 불가",
+                                node.temperatureAvailable && node.temperatureCelsius != null
+                                        ? CrawlerMonitoringPresentation.temperature(node.temperatureCelsius)
+                                        : "미지원"
+                        },
+                        nullableMetricColors(
+                                node.available ? node.cpuPercent : null,
+                                node.available ? node.memoryPercent : null,
+                                node.available ? node.load1m : null,
+                                node.available ? node.diskPercent : null,
+                                node.available ? node.logicalCpuCount : null,
+                                node.available && node.temperatureAvailable
+                                        ? node.temperatureCelsius : null
+                        )
+                ));
             }
-            content.addView(statusMetricCard(
-                    node.node,
-                    CrawlerMonitoringPresentation.nodeStatusLabel(node),
-                    detail,
-                    nodeColor,
-                    new String[]{"CPU", "메모리", "1분 부하", "디스크", "논리 CPU", "온도"},
-                    new String[]{
-                            node.available
-                                    ? CrawlerMonitoringPresentation.percentage(node.cpuPercent)
-                                    : "확인 불가",
-                            node.available
-                                    ? CrawlerMonitoringPresentation.percentage(node.memoryPercent)
-                                    : "확인 불가",
-                            node.available
-                                    ? CrawlerMonitoringPresentation.load(node.load1m)
-                                    : "확인 불가",
-                            node.available
-                                    ? CrawlerMonitoringPresentation.percentage(node.diskPercent)
-                                    : "확인 불가",
-                            node.available
-                                    ? CrawlerMonitoringPresentation.count(
-                                    node.logicalCpuCount,
-                                    "개"
-                            ) : "확인 불가",
-                            CrawlerMonitoringPresentation.nodeTemperatureLabel(node)
-                    },
-                    nullableMetricColors(
-                            node.available ? node.cpuPercent : null,
-                            node.available ? node.memoryPercent : null,
-                            node.available ? node.load1m : null,
-                            node.available ? node.diskPercent : null,
-                            node.available ? node.logicalCpuCount : null,
-                            node.available && node.temperatureAvailable
-                                    ? node.temperatureCelsius : null
-                    )
-            ));
         }
     }
 
@@ -1574,6 +1671,190 @@ public class MainActivity extends Activity {
                 detail.toString(),
                 COLOR_WARNING
         ));
+    }
+
+    private void renderCrawlerRecentLogs(
+            java.util.List<CrawlerMonitoringSnapshot.LogItem> logs,
+            boolean available
+    ) {
+        content.addView(sectionHeading(
+                "최근 크롤링 실행 로그",
+                "DB에 기록된 최근 수집 실행 이력입니다. 카드를 눌러 오류 및 실행 상세를 확인하세요."
+        ));
+        if (!available && logs.isEmpty()) {
+            content.addView(statusCard(
+                    "최근 크롤링 실행 로그",
+                    "확인 불가",
+                    "크롤러 실행 로그를 조회할 수 없습니다.",
+                    COLOR_WARNING
+            ));
+            return;
+        }
+        if (logs.isEmpty()) {
+            content.addView(statusCard(
+                    "최근 크롤링 실행 로그",
+                    "이력 없음",
+                    "기록된 최근 크롤러 실행 이력이 없습니다.",
+                    COLOR_INFO
+            ));
+            return;
+        }
+
+        for (CrawlerMonitoringSnapshot.LogItem log : logs) {
+            content.addView(createCrawlerLogCard(log));
+        }
+    }
+
+    private View createCrawlerLogCard(CrawlerMonitoringSnapshot.LogItem log) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(dp(14), dp(12), dp(14), dp(12));
+        card.setBackground(roundedBackground(COLOR_SURFACE, COLOR_BORDER, 14));
+        card.setClickable(true);
+        card.setFocusable(true);
+        card.setOnClickListener(v -> showCrawlerLogDetailDialog(log));
+
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        cardParams.setMargins(0, 0, 0, dp(10));
+        card.setLayoutParams(cardParams);
+
+        // Top Row: Status Badge, Crawler Name, Time
+        LinearLayout topRow = new LinearLayout(this);
+        topRow.setOrientation(LinearLayout.HORIZONTAL);
+        topRow.setGravity(Gravity.CENTER_VERTICAL);
+
+        int statusColor = "success".equals(log.status) ? COLOR_HEALTHY
+                : ("failed".equals(log.status) || "stopped".equals(log.status)) ? COLOR_CRITICAL
+                : "running".equals(log.status) ? COLOR_INFO : COLOR_WARNING;
+
+        TextView badge = new TextView(this);
+        badge.setText(CrawlerMonitoringPresentation.logStatusLabel(log.status));
+        badge.setTextSize(10);
+        badge.setTypeface(Typeface.DEFAULT_BOLD);
+        badge.setTextColor(COLOR_BACKGROUND);
+        badge.setPadding(dp(6), dp(2), dp(6), dp(2));
+        badge.setBackground(roundedBackground(statusColor, statusColor, 6));
+        topRow.addView(badge);
+
+        TextView nameView = new TextView(this);
+        nameView.setText(log.crawlerName);
+        nameView.setTextSize(13);
+        nameView.setTypeface(Typeface.DEFAULT_BOLD);
+        nameView.setTextColor(COLOR_TEXT);
+        nameView.setSingleLine(true);
+        nameView.setEllipsize(TextUtils.TruncateAt.END);
+        nameView.setPadding(dp(8), 0, dp(8), 0);
+        LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1
+        );
+        topRow.addView(nameView, nameParams);
+
+        TextView timeView = new TextView(this);
+        timeView.setText(formatShortTime(log.startedAt));
+        timeView.setTextSize(11);
+        timeView.setTextColor(COLOR_MUTED);
+        topRow.addView(timeView);
+
+        card.addView(topRow);
+
+        // Metric Row: Duration, Counts
+        StringBuilder metricSb = new StringBuilder();
+        if (log.durationSeconds != null) {
+            metricSb.append("소요 ").append(CrawlerMonitoringPresentation.duration(log.durationSeconds));
+        }
+        if (log.collectedCount != null) {
+            if (metricSb.length() > 0) metricSb.append(" · ");
+            metricSb.append("수집 ").append(CrawlerMonitoringPresentation.count(log.collectedCount, "건"));
+        }
+        if (log.newCount != null && log.newCount > 0) {
+            metricSb.append(" (신규 ").append(log.newCount).append("건)");
+        }
+        if (log.updatedCount != null && log.updatedCount > 0) {
+            metricSb.append(" (수정 ").append(log.updatedCount).append("건)");
+        }
+        if (log.skippedCount != null && log.skippedCount > 0) {
+            metricSb.append(" (건너뜀 ").append(log.skippedCount).append("건)");
+        }
+
+        if (metricSb.length() > 0) {
+            TextView metricView = new TextView(this);
+            metricView.setText(metricSb.toString());
+            metricView.setTextSize(12);
+            metricView.setTextColor(COLOR_MUTED);
+            metricView.setPadding(0, dp(4), 0, 0);
+            card.addView(metricView);
+        }
+
+        // Error row if failed
+        boolean isFailed = "failed".equals(log.status) || "stopped".equals(log.status);
+        if (isFailed && (!log.errorType.isEmpty() || !log.errorMessage.isEmpty())) {
+            TextView errView = new TextView(this);
+            String errText = (!log.errorType.isEmpty() ? log.errorType + ": " : "")
+                    + (!log.errorMessage.isEmpty() ? log.errorMessage : "실행 중 오류 발생");
+            errView.setText(errText);
+            errView.setTextSize(11);
+            errView.setTextColor(COLOR_CRITICAL);
+            errView.setMaxLines(2);
+            errView.setEllipsize(TextUtils.TruncateAt.END);
+            errView.setPadding(0, dp(4), 0, 0);
+            card.addView(errView);
+        }
+
+        return card;
+    }
+
+    private void showCrawlerLogDetailDialog(CrawlerMonitoringSnapshot.LogItem log) {
+        StringBuilder msg = new StringBuilder();
+        msg.append("상태: ").append(CrawlerMonitoringPresentation.logStatusLabel(log.status));
+        if (!log.provider.isEmpty()) {
+            msg.append("\n대상: ").append(log.provider);
+        }
+        if (!log.startedAt.isEmpty()) {
+            msg.append("\n시작: ").append(formatTimestamp(log.startedAt));
+        }
+        if (!log.endedAt.isEmpty()) {
+            msg.append("\n종료: ").append(formatTimestamp(log.endedAt));
+        }
+        if (log.durationSeconds != null) {
+            msg.append("\n소요 시간: ").append(CrawlerMonitoringPresentation.duration(log.durationSeconds));
+        }
+        msg.append("\n\n[수집 결과]");
+        msg.append("\n• 총 수집: ").append(CrawlerMonitoringPresentation.count(log.collectedCount, "건"));
+        msg.append("\n• 신규 등록: ").append(CrawlerMonitoringPresentation.count(log.newCount, "건"));
+        msg.append("\n• 정보 갱신: ").append(CrawlerMonitoringPresentation.count(log.updatedCount, "건"));
+        msg.append("\n• 건너뜀: ").append(CrawlerMonitoringPresentation.count(log.skippedCount, "건"));
+
+        if (!log.errorType.isEmpty() || !log.errorMessage.isEmpty()) {
+            msg.append("\n\n[오류 내용]");
+            if (!log.errorType.isEmpty()) {
+                msg.append("\n• 오류 유형: ").append(log.errorType);
+            }
+            if (!log.errorMessage.isEmpty()) {
+                msg.append("\n• 상세 메시지:\n").append(log.errorMessage);
+            }
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(log.crawlerName)
+                .setMessage(msg.toString())
+                .setPositiveButton("닫기", null)
+                .show();
+    }
+
+    private String formatShortTime(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return "-";
+        }
+        try {
+            return OffsetDateTime.parse(value)
+                    .atZoneSameInstant(ZoneId.systemDefault())
+                    .format(DateTimeFormatter.ofPattern("MM.dd HH:mm", Locale.KOREA));
+        } catch (Exception ignored) {
+            return value;
+        }
     }
 
     private String crawlerUnavailableReason(

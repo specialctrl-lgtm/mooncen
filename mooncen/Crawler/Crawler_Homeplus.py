@@ -1903,6 +1903,19 @@ class HomeplusCrawler:
             return False
 
         if total_saved <= 0:
+            try:
+                self.monitor_reception_notices(
+                    branch_code=branch_code,
+                    branch_name=branch_name,
+                )
+            except Exception as exc:
+                self.had_errors = True
+                logger.error("HOMEPLUS reception notice monitor failed: %s", exc)
+            if not self.had_errors and self.crawl_complete:
+                logger.info(
+                    "HOMEPLUS crawl completed with 0 saved courses (available courses may be expired during season transition). Skipping stale cleanup."
+                )
+                return True
             logger.error("HOMEPLUS saved 0 courses. Skipping stale cleanup to avoid deactivating valid data.")
             return False
         try:

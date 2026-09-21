@@ -45,6 +45,8 @@ final class CrawlerMonitoringSnapshot {
     final Quality quality;
     final List<Node> nodes;
     final List<SectionError> errors;
+    final List<LogItem> recentLogs;
+    final boolean recentLogsAvailable;
 
     private CrawlerMonitoringSnapshot(
             boolean contractValid,
@@ -59,7 +61,9 @@ final class CrawlerMonitoringSnapshot {
             Providers providers,
             Quality quality,
             List<Node> nodes,
-            List<SectionError> errors
+            List<SectionError> errors,
+            List<LogItem> recentLogs,
+            boolean recentLogsAvailable
     ) {
         this.contractValid = contractValid;
         this.available = available;
@@ -74,6 +78,8 @@ final class CrawlerMonitoringSnapshot {
         this.quality = quality;
         this.nodes = Collections.unmodifiableList(new ArrayList<>(nodes));
         this.errors = Collections.unmodifiableList(new ArrayList<>(errors));
+        this.recentLogs = Collections.unmodifiableList(new ArrayList<>(recentLogs));
+        this.recentLogsAvailable = recentLogsAvailable;
     }
 
     static CrawlerMonitoringSnapshot parse(JSONObject data) {
@@ -114,7 +120,9 @@ final class CrawlerMonitoringSnapshot {
                 parseProviders(root.optJSONObject("providers")),
                 parseQuality(root.optJSONObject("quality"), root.has("quality")),
                 parseNodes(root.optJSONArray("nodes"), topology),
-                parseErrors(root.optJSONArray("errors"))
+                parseErrors(root.optJSONArray("errors")),
+                parseRecentLogs(root.optJSONArray("recent_logs")),
+                root.optBoolean("recent_logs_available", root.has("recent_logs"))
         );
     }
 
@@ -385,27 +393,37 @@ final class CrawlerMonitoringSnapshot {
             JSONArray rows,
             CrawlerTopologyPlacement topology
     ) {
-        Map<String, Node> byRole = new LinkedHashMap<>();
-        if (rows == null || rows.length() != 3 || topology == null || !topology.valid) {
-            return unavailableNodes();
-        }
-        for (int index = 0; index < rows.length(); index++) {
-            JSONObject value = rows.optJSONObject(index);
-            String role = strictString(value, "role", 32).toLowerCase(Locale.ROOT);
-            if (!isNodeRole(role) || byRole.containsKey(role)) {
-                return unavailableNodes();
-            }
-            byRole.put(role, parseNode(value, role, topologyNode(topology, role)));
-        }
-        if (byRole.size() != 3) {
+        if (rows == null || rows.length() < 3 || topology == null || !topology.valid) {
             return unavailableNodes();
         }
         List<Node> result = new ArrayList<>();
-        for (String role : new String[]{"runtime", "target", "control"}) {
-            Node node = byRole.get(role);
-            result.add(node == null ? Node.unavailable(role) : node);
+        boolean hasRuntime = false;
+        boolean hasTarget = false;
+        boolean hasControl = false;
+        for (int index = 0; index < rows.length(); index++) {
+            JSONObject value = rows.optJSONObject(index);
+            String role = strictString(value, "role", 32).toLowerCase(Locale.ROOT);
+            if (!isNodeRole(role)) {
+                return unavailableNodes();
+            }
+            if ("runtime".equals(role)) {
+                if (hasRuntime) return unavailableNodes();
+                hasRuntime = true;
+            } else if ("target".equals(role)) {
+                if (hasTarget) return unavailableNodes();
+                hasTarget = true;
+            } else if ("control".equals(role)) {
+                if (hasControl) return unavailableNodes();
+                hasControl = true;
+            }
+            String expected = topologyNode(topology, role);
+            Node node = parseNode(value, role, expected);
+            result.add(node);
         }
-        return result;
+        if (!hasRuntime || !hasTarget || !hasControl) {
+            return unavailableNodes();
+        }
+        return Collections.unmodifiableList(result);
     }
 
     private static List<Node> unavailableNodes() {
@@ -428,8 +446,21 @@ final class CrawlerMonitoringSnapshot {
         Double diskPercent = optionalPercentage(value, "disk_percent");
         Long logicalCpuCount = optionalPositiveLong(value, "logical_cpu_count", 4096L);
         String error = optionalString(value, "error", 256);
+        Boolean crawlerAvailable = strictBoolean(value, "crawler_available");
+        String crawlerStatus = strictString(value, "crawler_status", 32);
+        Boolean crawlerRunning = strictBoolean(value, "crawler_running");
+        String crawlerCompletedAt = optionalString(value, "crawler_completed_at", 128);
+        String crawlerLastSuccessAt = optionalString(value, "crawler_last_success_at", 128);
+        Double crawlerLastSuccessAgeSeconds = optionalDuration(value, "crawler_last_success_age_seconds");
+        Double crawlerDurationSeconds = optionalDuration(value, "crawler_duration_seconds");
+        Long crawlerProvidersRequested = optionalCount(value, "crawler_providers_requested");
+        Long crawlerProvidersSucceeded = optionalCount(value, "crawler_providers_succeeded");
+        Long crawlerProvidersFailed = optionalCount(value, "crawler_providers_failed");
+        Boolean crawlerTimerActive = strictBoolean(value, "crawler_timer_active");
+        Boolean crawlerServiceActive = strictBoolean(value, "crawler_service_active");
+
         boolean valid = !node.isEmpty()
-                && node.equals(expectedNode)
+                && (expectedNode.isEmpty() || node.equals(expectedNode))
                 && available != null
                 && isNodeStatus(status)
                 && temperatureAvailable != null;
@@ -452,7 +483,19 @@ final class CrawlerMonitoringSnapshot {
                 nodeAvailable ? load1m : null,
                 nodeAvailable ? diskPercent : null,
                 nodeAvailable ? logicalCpuCount : null,
-                error
+                error,
+                valid && Boolean.TRUE.equals(crawlerAvailable),
+                valid ? crawlerStatus : "",
+                valid && Boolean.TRUE.equals(crawlerRunning),
+                valid ? crawlerCompletedAt : "",
+                valid ? crawlerLastSuccessAt : "",
+                valid ? crawlerLastSuccessAgeSeconds : null,
+                valid ? crawlerDurationSeconds : null,
+                valid ? crawlerProvidersRequested : null,
+                valid ? crawlerProvidersSucceeded : null,
+                valid ? crawlerProvidersFailed : null,
+                valid ? crawlerTimerActive : null,
+                valid ? crawlerServiceActive : null
         );
     }
 
@@ -533,7 +576,7 @@ final class CrawlerMonitoringSnapshot {
     }
 
     private static boolean isNodeRole(String value) {
-        return "runtime".equals(value) || "target".equals(value) || "control".equals(value);
+        return "runtime".equals(value) || "target".equals(value) || "control".equals(value) || "worker".equals(value);
     }
 
     private static boolean isNodeStatus(String value) {
@@ -1013,6 +1056,19 @@ final class CrawlerMonitoringSnapshot {
         final Long logicalCpuCount;
         final String error;
 
+        final boolean crawlerAvailable;
+        final String crawlerStatus;
+        final boolean crawlerRunning;
+        final String crawlerCompletedAt;
+        final String crawlerLastSuccessAt;
+        final Double crawlerLastSuccessAgeSeconds;
+        final Double crawlerDurationSeconds;
+        final Long crawlerProvidersRequested;
+        final Long crawlerProvidersSucceeded;
+        final Long crawlerProvidersFailed;
+        final Boolean crawlerTimerActive;
+        final Boolean crawlerServiceActive;
+
         Node(
                 boolean valid,
                 String node,
@@ -1028,6 +1084,42 @@ final class CrawlerMonitoringSnapshot {
                 Long logicalCpuCount,
                 String error
         ) {
+            this(
+                    valid, node, role, available, status,
+                    temperatureCelsius, temperatureAvailable,
+                    cpuPercent, memoryPercent, load1m, diskPercent,
+                    logicalCpuCount, error,
+                    false, "", false, "", "", null, null, null, null, null, null, null
+            );
+        }
+
+        Node(
+                boolean valid,
+                String node,
+                String role,
+                boolean available,
+                String status,
+                Double temperatureCelsius,
+                boolean temperatureAvailable,
+                Double cpuPercent,
+                Double memoryPercent,
+                Double load1m,
+                Double diskPercent,
+                Long logicalCpuCount,
+                String error,
+                boolean crawlerAvailable,
+                String crawlerStatus,
+                boolean crawlerRunning,
+                String crawlerCompletedAt,
+                String crawlerLastSuccessAt,
+                Double crawlerLastSuccessAgeSeconds,
+                Double crawlerDurationSeconds,
+                Long crawlerProvidersRequested,
+                Long crawlerProvidersSucceeded,
+                Long crawlerProvidersFailed,
+                Boolean crawlerTimerActive,
+                Boolean crawlerServiceActive
+        ) {
             this.valid = valid;
             this.node = clean(node);
             this.role = clean(role);
@@ -1041,6 +1133,18 @@ final class CrawlerMonitoringSnapshot {
             this.diskPercent = diskPercent;
             this.logicalCpuCount = logicalCpuCount;
             this.error = clean(error);
+            this.crawlerAvailable = crawlerAvailable;
+            this.crawlerStatus = clean(crawlerStatus);
+            this.crawlerRunning = crawlerRunning;
+            this.crawlerCompletedAt = clean(crawlerCompletedAt);
+            this.crawlerLastSuccessAt = clean(crawlerLastSuccessAt);
+            this.crawlerLastSuccessAgeSeconds = crawlerLastSuccessAgeSeconds;
+            this.crawlerDurationSeconds = crawlerDurationSeconds;
+            this.crawlerProvidersRequested = crawlerProvidersRequested;
+            this.crawlerProvidersSucceeded = crawlerProvidersSucceeded;
+            this.crawlerProvidersFailed = crawlerProvidersFailed;
+            this.crawlerTimerActive = crawlerTimerActive;
+            this.crawlerServiceActive = crawlerServiceActive;
         }
 
         static Node unavailable(String role) {
@@ -1059,6 +1163,99 @@ final class CrawlerMonitoringSnapshot {
                     null,
                     ""
             );
+        }
+    }
+
+    private static List<LogItem> parseRecentLogs(JSONArray array) {
+        if (array == null) {
+            return Collections.emptyList();
+        }
+        List<LogItem> list = new ArrayList<>();
+        int limit = Math.min(array.length(), 30);
+        for (int i = 0; i < limit; i++) {
+            JSONObject obj = array.optJSONObject(i);
+            if (obj == null) continue;
+            long id = obj.optLong("id", 0);
+            String crawlerName = strictString(obj, "crawler_name", 128);
+            String provider = strictString(obj, "provider", 128);
+            String status = strictString(obj, "status", 32);
+            String startedAt = strictString(obj, "started_at", 64);
+            String endedAt = strictString(obj, "ended_at", 64);
+            Double durationSeconds = obj.has("duration_seconds") && !obj.isNull("duration_seconds")
+                    ? obj.optDouble("duration_seconds") : null;
+            Long collectedCount = obj.has("collected_count") && !obj.isNull("collected_count")
+                    ? obj.optLong("collected_count") : null;
+            Long newCount = obj.has("new_count") && !obj.isNull("new_count")
+                    ? obj.optLong("new_count") : null;
+            Long updatedCount = obj.has("updated_count") && !obj.isNull("updated_count")
+                    ? obj.optLong("updated_count") : null;
+            Long skippedCount = obj.has("skipped_count") && !obj.isNull("skipped_count")
+                    ? obj.optLong("skipped_count") : null;
+            String errorType = strictString(obj, "error_type", 128);
+            String errorMessage = strictString(obj, "error_message", 500);
+
+            list.add(new LogItem(
+                    id,
+                    crawlerName,
+                    provider,
+                    status,
+                    startedAt,
+                    endedAt,
+                    durationSeconds,
+                    collectedCount,
+                    newCount,
+                    updatedCount,
+                    skippedCount,
+                    errorType,
+                    errorMessage
+            ));
+        }
+        return Collections.unmodifiableList(list);
+    }
+
+    static final class LogItem {
+        final long id;
+        final String crawlerName;
+        final String provider;
+        final String status;
+        final String startedAt;
+        final String endedAt;
+        final Double durationSeconds;
+        final Long collectedCount;
+        final Long newCount;
+        final Long updatedCount;
+        final Long skippedCount;
+        final String errorType;
+        final String errorMessage;
+
+        LogItem(
+                long id,
+                String crawlerName,
+                String provider,
+                String status,
+                String startedAt,
+                String endedAt,
+                Double durationSeconds,
+                Long collectedCount,
+                Long newCount,
+                Long updatedCount,
+                Long skippedCount,
+                String errorType,
+                String errorMessage
+        ) {
+            this.id = id;
+            this.crawlerName = clean(crawlerName);
+            this.provider = clean(provider);
+            this.status = clean(status);
+            this.startedAt = clean(startedAt);
+            this.endedAt = clean(endedAt);
+            this.durationSeconds = durationSeconds;
+            this.collectedCount = collectedCount;
+            this.newCount = newCount;
+            this.updatedCount = updatedCount;
+            this.skippedCount = skippedCount;
+            this.errorType = clean(errorType);
+            this.errorMessage = clean(errorMessage);
         }
     }
 

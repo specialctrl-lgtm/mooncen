@@ -147,3 +147,115 @@ def crawler_providers(
         "items": items,
         "reasons": [],
     }
+
+
+def _clean_crawler_name(name: str, target_key: str) -> str:
+    if target_key and target_key.strip():
+        return target_key.strip()
+    raw = str(name or "").strip()
+    if not raw:
+        return "Unknown Crawler"
+    match = re.search(r"([A-Za-z0-9_]+)\.py", raw)
+    if match:
+        filename = match.group(1)
+        if filename.startswith("Crawler_"):
+            return filename[len("Crawler_"):]
+        return filename
+    return raw[:48]
+
+
+@router.get("/crawler-logs")
+def crawler_logs(
+    limit: int = Query(default=30, ge=1, le=100),
+    status: str = Query(default="", max_length=32),
+    provider: str = Query(default="", max_length=100),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    where_clauses = []
+    params: dict[str, Any] = {"limit": limit}
+    if status and status.strip():
+        where_clauses.append("status = :status")
+        params["status"] = status.strip().lower()
+    if provider and provider.strip():
+        where_clauses.append("(target_key ILIKE :provider OR crawler_name ILIKE :provider)")
+        params["provider"] = f"%{provider.strip()}%"
+
+    where_sql = ("WHERE " + " AND ".join(where_clauses)) if where_clauses else ""
+
+    query = text(
+        f"""
+        SELECT id,
+               crawler_name,
+               target_key,
+               source_type,
+               status,
+               started_at,
+               ended_at,
+               duration_seconds,
+               collected_count,
+               inserted_count,
+               updated_count,
+               skipped_count,
+               error_type,
+               error_message
+        FROM crawler_run_log
+        {where_sql}
+        ORDER BY id DESC
+        LIMIT :limit
+        """
+    )
+    try:
+        rows = db.execute(query, params).fetchall()
+    except Exception:
+        return {
+            "schema_version": 1,
+            "generated_at": _iso_utc(_utc_now()),
+            "available": False,
+            "total": 0,
+            "limit": limit,
+            "items": [],
+        }
+
+    items = []
+    for row in rows:
+        c_id = int(row[0])
+        c_name = str(row[1] or "")
+        t_key = str(row[2] or "")
+        s_type = str(row[3] or "")
+        c_status = str(row[4] or "unknown")
+        started = row[5]
+        ended = row[6]
+        duration = float(row[7]) if row[7] is not None else None
+        collected = int(row[8] or 0)
+        inserted = int(row[9] or 0)
+        updated = int(row[10] or 0)
+        skipped = int(row[11] or 0)
+        err_type = str(row[12] or "") if row[12] else None
+        err_msg = str(row[13] or "") if row[13] else None
+
+        display_name = _clean_crawler_name(c_name, t_key)
+        items.append({
+            "id": c_id,
+            "crawler_name": display_name,
+            "provider": t_key if t_key else display_name,
+            "source_type": s_type,
+            "status": c_status,
+            "started_at": _iso_utc(started) if started else None,
+            "ended_at": _iso_utc(ended) if ended else None,
+            "duration_seconds": duration,
+            "collected_count": collected,
+            "inserted_count": inserted,
+            "updated_count": updated,
+            "skipped_count": skipped,
+            "error_type": err_type,
+            "error_message": err_msg[:500] if err_msg else None,
+        })
+    return {
+        "schema_version": 1,
+        "generated_at": _iso_utc(_utc_now()),
+        "available": True,
+        "total": len(items),
+        "limit": limit,
+        "items": items,
+    }
+

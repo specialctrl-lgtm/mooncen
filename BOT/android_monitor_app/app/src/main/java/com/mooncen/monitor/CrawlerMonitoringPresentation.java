@@ -100,6 +100,9 @@ final class CrawlerMonitoringPresentation {
         if ("control".equals(role)) {
             return "중앙 제어";
         }
+        if ("worker".equals(role)) {
+            return "워커 노드";
+        }
         return "노드";
     }
 
@@ -121,4 +124,46 @@ final class CrawlerMonitoringPresentation {
         }
         return temperature(node.temperatureCelsius);
     }
+
+    static String nodeCrawlerStatusLabel(CrawlerMonitoringSnapshot.Node node) {
+        if (node == null || !node.valid || !node.crawlerAvailable) {
+            return "미배치";
+        }
+        if (node.crawlerRunning || "running".equals(node.crawlerStatus)) {
+            return "실행 중";
+        }
+        if ("success".equals(node.crawlerStatus)) {
+            return "수집 성공";
+        }
+        if ("partial_success".equals(node.crawlerStatus)) {
+            return "부분 성공";
+        }
+        if ("failed".equals(node.crawlerStatus)) {
+            return "수집 실패";
+        }
+        if ("zero_provider".equals(node.crawlerStatus)) {
+            return "0건 수집";
+        }
+        if ("idle".equals(node.crawlerStatus)) {
+            return "타이머 대기";
+        }
+        return "확인 불가";
+    }
+
+    static String logStatusLabel(String status) {
+        if ("success".equals(status)) {
+            return "성공";
+        }
+        if ("failed".equals(status) || "stopped".equals(status)) {
+            return "실패";
+        }
+        if ("running".equals(status)) {
+            return "실행 중";
+        }
+        if ("skipped".equals(status) || "blocked".equals(status)) {
+            return "건너뜀";
+        }
+        return "알 수 없음";
+    }
 }
+

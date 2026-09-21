@@ -23,6 +23,25 @@ public class CrawlerMonitoringPresentationTest {
         assertEquals("현재 실행", CrawlerMonitoringPresentation.nodeRoleLabel("runtime"));
         assertEquals("목표 워커", CrawlerMonitoringPresentation.nodeRoleLabel("target"));
         assertEquals("중앙 제어", CrawlerMonitoringPresentation.nodeRoleLabel("control"));
+        assertEquals("워커 노드", CrawlerMonitoringPresentation.nodeRoleLabel("worker"));
+        CrawlerMonitoringSnapshot.Node worker = new CrawlerMonitoringSnapshot.Node(
+                true, "gen1crawler", "target", true, "up", null, false,
+                null, null, null, null, null, "",
+                true, "partial_success", false, "", "", null, null, null, null, null, true, false
+        );
+        CrawlerMonitoringSnapshot.Node runningWorker = new CrawlerMonitoringSnapshot.Node(
+                true, "gen1crawler", "target", true, "up", null, false,
+                null, null, null, null, null, "",
+                true, "running", true, "", "", null, null, null, null, null, true, true
+        );
+        CrawlerMonitoringSnapshot.Node unconfigured = new CrawlerMonitoringSnapshot.Node(
+                true, "gen1db", "control", true, "up", null, false,
+                null, null, null, null, null, "",
+                false, "not_configured", false, "", "", null, null, null, null, null, null, null
+        );
+        assertEquals("부분 성공", CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(worker));
+        assertEquals("실행 중", CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(runningWorker));
+        assertEquals("미배치", CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(unconfigured));
     }
 
     @Test

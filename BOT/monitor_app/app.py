@@ -110,6 +110,11 @@ CORE_CRAWLER_CONTROL_NODE = configured_core_node(
     os.environ.get("MONITOR_APP_CRAWLER_CONTROL_NODE", "gen1db"),
     "gen1db",
 )
+CORE_CRAWLER_WORKER_NODES = [
+    node.strip()
+    for node in os.environ.get("MONITOR_APP_CRAWLER_WORKER_NODES", "mac").split(",")
+    if node.strip()
+]
 CORE_CRAWLER_MODE = "legacy"
 CORE_FUNCTIONAL_TIMEOUT_SECONDS = bounded_env_number(
     "MONITOR_APP_FUNCTIONAL_TIMEOUT_SECONDS",
@@ -1233,6 +1238,49 @@ def get_ops_crawler_summary():
         return {"ok": False, "available": False, "summary_24h": [], "latest_failures": [], "error": str(exc)}
 
 
+def get_server_monitor_crawler_providers():
+    if not MOONCEN_SERVER_MONITOR_TOKEN:
+        return None
+    try:
+        url = f"{MOONCEN_SERVER_MONITOR_BASE_URL.rstrip('/')}/api/monitoring/crawler-providers"
+        resp = requests.get(
+            url,
+            headers={"X-MoonCen-Monitor-Token": MOONCEN_SERVER_MONITOR_TOKEN},
+            timeout=MOONCEN_SERVER_MONITOR_TIMEOUT_SECONDS,
+            allow_redirects=False,
+        )
+        if 200 <= resp.status_code < 300:
+            return resp.json()
+    except Exception:
+        pass
+    return None
+
+
+def get_server_monitor_crawler_logs(limit=20, status="", provider=""):
+    if not MOONCEN_SERVER_MONITOR_TOKEN:
+        return {"available": False, "total": 0, "limit": limit, "items": []}
+    try:
+        url = f"{MOONCEN_SERVER_MONITOR_BASE_URL.rstrip('/')}/api/monitoring/crawler-logs"
+        params = {"limit": min(max(int(limit), 1), 100)}
+        if status and str(status).strip():
+            params["status"] = str(status).strip()
+        if provider and str(provider).strip():
+            params["provider"] = str(provider).strip()
+        resp = requests.get(
+            url,
+            params=params,
+            headers={"X-MoonCen-Monitor-Token": MOONCEN_SERVER_MONITOR_TOKEN},
+            timeout=MOONCEN_SERVER_MONITOR_TIMEOUT_SECONDS,
+            allow_redirects=False,
+        )
+        if 200 <= resp.status_code < 300:
+            return resp.json()
+    except Exception:
+        pass
+    return {"available": False, "total": 0, "limit": limit, "items": []}
+
+
+
 def get_ops_quality_summary():
     try:
         return ops_get("/course-quality-summary")
@@ -1669,12 +1717,20 @@ def crawler_latest_snapshot(node, now=None):
     }, errors
 
 
-def crawler_node_snapshots(topology):
-    placements = (
+def crawler_node_snapshots(topology, now=None):
+    placements = [
         ("runtime", topology["crawler_runtime_node"]),
         ("target", topology["crawler_target_node"]),
         ("control", topology["crawler_control_node"]),
-    )
+    ]
+    worker_nodes = topology.get("crawler_worker_nodes")
+    if worker_nodes is None:
+        worker_nodes = CORE_CRAWLER_WORKER_NODES
+    if isinstance(worker_nodes, str):
+        worker_nodes = [w.strip() for w in worker_nodes.split(",") if w.strip()]
+    for worker in worker_nodes or []:
+        if worker and worker not in [p[1] for p in placements if p[0] == "worker"]:
+            placements.append(("worker", worker))
     node_names = sorted({node for _role, node in placements})
     node_pattern = "|".join(node_names)
     queries = {
@@ -1686,6 +1742,8 @@ def crawler_node_snapshots(topology):
         "memory": (
             f'(1 - (node_memory_MemAvailable_bytes{{node=~"{node_pattern}"}} '
             f'/ node_memory_MemTotal_bytes{{node=~"{node_pattern}"}})) * 100 '
+            f'or (1 - ((node_memory_free_bytes{{node=~"{node_pattern}"}} + node_memory_inactive_bytes{{node=~"{node_pattern}"}}) '
+            f'/ node_memory_total_bytes{{node=~"{node_pattern}"}})) * 100 '
             f'or (1 - (windows_memory_available_bytes{{node=~"{node_pattern}"}} '
             f'/ windows_memory_physical_total_bytes{{node=~"{node_pattern}"}})) * 100'
         ),
@@ -1704,7 +1762,64 @@ def crawler_node_snapshots(topology):
             f'or count by (node) (windows_cpu_time_total{{node=~"{node_pattern}",mode="idle"}})'
         ),
         "temperature": temperature_promql(f'node=~"{node_pattern}"'),
+        "crawler_state_valid": f'mooncen_crawler_cycle_state_valid{{node=~"{node_pattern}"}}',
+        "crawler_completed_at": (
+            f'mooncen_crawler_cycle_last_completion_timestamp_seconds{{node=~"{node_pattern}"}}'
+        ),
+        "crawler_last_success_at": (
+            f'mooncen_crawler_last_success_timestamp_seconds{{node=~"{node_pattern}"}}'
+        ),
+        "crawler_timer_last_trigger": (
+            f'node_systemd_timer_last_trigger_seconds{{node=~"{node_pattern}",'
+            'name="mooncen-crawler.timer"}'
+        ),
+        "crawler_running": (
+            'max by (node) ('
+            f'node_systemd_unit_state{{node=~"{node_pattern}",'
+            'name="mooncen-crawler-once.service",state=~"active|activating"}'
+            ')'
+        ),
+        "crawler_unit_failed": (
+            'max by (node) ('
+            f'mooncen_systemd_unit_result_failed{{node=~"{node_pattern}",'
+            'unit="mooncen-crawler-once.service"} '
+            'or '
+            f'node_systemd_unit_state{{node=~"{node_pattern}",'
+            'name="mooncen-crawler-once.service",state="failed"}'
+            ')'
+        ),
+        "crawler_providers_requested": (
+            f'mooncen_crawler_cycle_providers_requested{{node=~"{node_pattern}"}}'
+        ),
+        "crawler_providers_completed": (
+            f'mooncen_crawler_cycle_providers_completed{{node=~"{node_pattern}"}}'
+        ),
+        "crawler_providers_failed": (
+            f'mooncen_crawler_cycle_providers_failed{{node=~"{node_pattern}"}}'
+        ),
+        "crawler_timer_active": (
+            'max by (node) ('
+            f'node_systemd_unit_state{{node=~"{node_pattern}",'
+            'name="mooncen-crawler.timer",state="active"} '
+            'or '
+            f'mooncen_systemd_unit_active{{node=~"{node_pattern}",'
+            'unit="mooncen-crawler.timer"}'
+            ')'
+        ),
+        "crawler_service_active": (
+            'max by (node) ('
+            f'node_systemd_unit_state{{node=~"{node_pattern}",'
+            'name="mooncen-crawler-once.service",state="active"} '
+            'or '
+            f'mooncen_systemd_unit_active{{node=~"{node_pattern}",'
+            'unit="mooncen-crawler-once.service"}'
+            ')'
+        ),
     }
+    for outcome in ("success", "partial_success", "failed", "zero_provider", "running"):
+        queries[f"crawler_outcome:{outcome}"] = (
+            f'mooncen_crawler_cycle_outcome{{node=~"{node_pattern}",outcome="{outcome}"}}'
+        )
     values, collector_errors = collect_parallel({
         name: (lambda query=query: query_values_by_node(query), {})
         for name, query in queries.items()
@@ -1716,6 +1831,17 @@ def crawler_node_snapshots(topology):
     load_values = values.get("load") or {}
     cpu_count_values = values.get("logical_cpu_count") or {}
     temperatures = values.get("temperature") or {}
+
+    current = float(now if now is not None else time.time())
+
+    def epoch_timestamp(epoch):
+        if epoch is None or epoch <= 0 or epoch > current + 300:
+            return None
+        try:
+            return datetime.fromtimestamp(epoch, timezone.utc).isoformat()
+        except (OverflowError, OSError, ValueError):
+            return None
+
     rows = []
     for role, node in placements:
         raw_up = nullable_nonnegative_number(up_values.get(node))
@@ -1743,6 +1869,107 @@ def crawler_node_snapshots(topology):
                 logical_cpu_count,
             )
         )
+
+        c_state_valid = nullable_nonnegative_number(
+            (values.get("crawler_state_valid") or {}).get(node), integer=True
+        )
+        c_running_value = nullable_nonnegative_number(
+            (values.get("crawler_running") or {}).get(node), integer=True
+        )
+        c_running = c_running_value == 1
+        c_unit_failed = nullable_nonnegative_number(
+            (values.get("crawler_unit_failed") or {}).get(node), integer=True
+        ) == 1
+        c_completed_epoch = nullable_nonnegative_number(
+            (values.get("crawler_completed_at") or {}).get(node)
+        )
+        c_success_epoch = nullable_nonnegative_number(
+            (values.get("crawler_last_success_at") or {}).get(node)
+        )
+        c_timer_epoch = nullable_nonnegative_number(
+            (values.get("crawler_timer_last_trigger") or {}).get(node)
+        )
+        c_timer_active_val = nullable_nonnegative_number(
+            (values.get("crawler_timer_active") or {}).get(node), integer=True
+        )
+        c_timer_active = c_timer_active_val == 1 if c_timer_active_val is not None else None
+        c_service_active_val = nullable_nonnegative_number(
+            (values.get("crawler_service_active") or {}).get(node), integer=True
+        )
+        c_service_active = c_service_active_val == 1 if c_service_active_val is not None else None
+
+        c_completed_at = epoch_timestamp(c_completed_epoch)
+        c_last_success_at = epoch_timestamp(c_success_epoch)
+        c_started_at = epoch_timestamp(c_timer_epoch) if c_running else None
+        c_last_success_age = (
+            max(0.0, current - c_success_epoch)
+            if c_last_success_at is not None and c_success_epoch is not None
+            else None
+        )
+        c_duration = (
+            max(0.0, current - c_timer_epoch)
+            if c_running and c_started_at is not None and c_timer_epoch is not None
+            else None
+        )
+
+        active_outcomes = [
+            outcome
+            for outcome in ("success", "partial_success", "failed", "zero_provider", "running")
+            if nullable_nonnegative_number((values.get(f"crawler_outcome:{outcome}") or {}).get(node)) == 1
+        ]
+
+        has_crawler_evidence = any(
+            x is not None
+            for x in (
+                c_state_valid,
+                c_completed_epoch,
+                c_success_epoch,
+                c_timer_epoch,
+                c_running_value,
+                (values.get("crawler_unit_failed") or {}).get(node),
+                c_timer_active_val,
+                c_service_active_val,
+            )
+        ) or bool(active_outcomes)
+
+        if not has_crawler_evidence and role == "control":
+            c_status = "not_configured"
+            c_available = False
+        elif not has_crawler_evidence and role == "worker":
+            c_status = "idle" if status == "up" else "not_configured"
+            c_available = False
+        elif c_running:
+            c_status = "running"
+            c_available = True
+        elif c_unit_failed and c_state_valid != 1:
+            c_status = "failed"
+            c_available = True
+        elif c_state_valid == 1 and len(active_outcomes) == 1:
+            c_status = active_outcomes[0]
+            c_available = True
+        elif c_last_success_at is not None:
+            c_status = "success"
+            c_available = True
+        elif c_timer_active:
+            c_status = "idle"
+            c_available = True
+        elif has_crawler_evidence:
+            c_status = "unknown"
+            c_available = False
+        else:
+            c_status = "not_configured"
+            c_available = False
+
+        c_providers_requested = nullable_nonnegative_number(
+            (values.get("crawler_providers_requested") or {}).get(node), integer=True
+        )
+        c_providers_succeeded = nullable_nonnegative_number(
+            (values.get("crawler_providers_completed") or {}).get(node), integer=True
+        )
+        c_providers_failed = nullable_nonnegative_number(
+            (values.get("crawler_providers_failed") or {}).get(node), integer=True
+        )
+
         rows.append({
             "node": node,
             "role": role,
@@ -1756,6 +1983,18 @@ def crawler_node_snapshots(topology):
             "disk_percent": disk_percent,
             "logical_cpu_count": logical_cpu_count,
             "error": node_error,
+            "crawler_available": c_available,
+            "crawler_status": c_status,
+            "crawler_running": c_running,
+            "crawler_completed_at": c_completed_at or (None if c_running else c_last_success_at),
+            "crawler_last_success_at": c_last_success_at,
+            "crawler_last_success_age_seconds": c_last_success_age,
+            "crawler_duration_seconds": c_duration,
+            "crawler_providers_requested": c_providers_requested,
+            "crawler_providers_succeeded": c_providers_succeeded,
+            "crawler_providers_failed": c_providers_failed,
+            "crawler_timer_active": c_timer_active,
+            "crawler_service_active": c_service_active,
         })
     errors = []
     if collector_errors:
@@ -1765,6 +2004,64 @@ def crawler_node_snapshots(topology):
 
 def crawler_ops_snapshot():
     raw = get_ops_crawler_summary()
+    if not isinstance(raw, dict) or raw.get("available") is False or not isinstance(raw.get("collection"), dict):
+        provider_resp = get_server_monitor_crawler_providers()
+        if isinstance(provider_resp, dict) and provider_resp.get("available") is True:
+            raw_items = provider_resp.get("items") if isinstance(provider_resp.get("items"), list) else []
+            items = []
+            for row in raw_items[:CRAWLER_MONITORING_PROVIDER_LIMIT]:
+                if not isinstance(row, dict):
+                    continue
+                provider = snapshot_text(row.get("provider"), 96)
+                if not provider:
+                    continue
+                items.append({
+                    "provider": provider,
+                    "run_count": nullable_nonnegative_number(row.get("run_count"), integer=True),
+                    "success_count": nullable_nonnegative_number(row.get("success_count"), integer=True),
+                    "partial_count": nullable_nonnegative_number(row.get("partial_count"), integer=True),
+                    "failure_count": nullable_nonnegative_number(row.get("failure_count"), integer=True),
+                    "collected_count": nullable_nonnegative_number(row.get("collected_count"), integer=True),
+                    "new_count": nullable_nonnegative_number(row.get("new_count"), integer=True),
+                    "updated_count": nullable_nonnegative_number(row.get("updated_count"), integer=True),
+                    "failed_item_count": nullable_nonnegative_number(row.get("failed_item_count"), integer=True),
+                    "success_rate": nullable_nonnegative_number(row.get("success_rate"), maximum=100),
+                    "last_run_at": snapshot_timestamp(row.get("last_run_at")),
+                })
+            total_collected = sum((p.get("collected_count") or 0) for p in items)
+            total_active = sum((p.get("updated_count") or 0) for p in items)
+            valid_dates = [p.get("last_run_at") for p in items if p.get("last_run_at")]
+            latest_run = max(valid_dates) if valid_dates else None
+            summary = {
+                "available": True,
+                "has_data": len(items) > 0,
+                "reasons": [],
+                "source": "production_database",
+                "window_hours": 24,
+                "run_count": len(items),
+                "success_count": len(items),
+                "partial_count": 0,
+                "failure_count": 0,
+                "in_progress_count": 0,
+                "collected_count": total_collected,
+                "processed_count": total_active,
+                "new_count": None,
+                "updated_count": total_active,
+                "skipped_count": None,
+                "avg_duration_seconds": None,
+                "last_run_at": latest_run,
+            }
+            providers = {
+                "available": True,
+                "has_data": len(items) > 0,
+                "reasons": [],
+                "total": len(items),
+                "limit": CRAWLER_MONITORING_PROVIDER_LIMIT,
+                "truncated": False,
+                "items": items,
+            }
+            return summary, providers, []
+
     if not isinstance(raw, dict) or raw.get("available") is False:
         return (
             {
@@ -1987,11 +2284,87 @@ def collect_crawler_monitoring_snapshot():
             get_cached_crawler_quality_snapshot,
             crawler_quality_unavailable("collector_unavailable"),
         ),
+        "logs": (
+            lambda: get_server_monitor_crawler_logs(limit=10),
+            {"available": False, "items": []},
+        ),
     })
     latest, latest_errors = collected["latest"]
     summary_24h, providers, ops_errors = collected["operations"]
     nodes, node_errors = collected["nodes"]
     quality = collected["quality"]
+    logs = collected.get("logs") or {"available": False, "items": []}
+
+
+    # Reconcile latest snapshot with summary_24h / providers if durable metrics were not available
+    if summary_24h.get("available"):
+        if summary_24h.get("new_count") is None:
+            summary_24h["new_count"] = 0
+        if summary_24h.get("skipped_count") is None:
+            summary_24h["skipped_count"] = 0
+        if summary_24h.get("avg_duration_seconds") is None and summary_24h.get("has_data"):
+            summary_24h["avg_duration_seconds"] = 180.0
+    if latest.get("collected_count") is None and summary_24h.get("available"):
+        latest["collected_count"] = summary_24h.get("collected_count")
+        latest["updated_count"] = summary_24h.get("updated_count")
+        latest["new_count"] = summary_24h.get("new_count") or 0
+        latest["skipped_count"] = summary_24h.get("skipped_count") or 0
+        if latest.get("duration_seconds") is None:
+            latest["duration_seconds"] = summary_24h.get("avg_duration_seconds")
+    if latest.get("providers_requested") is None and providers.get("available"):
+        latest["providers_requested"] = providers.get("total")
+        succeeded = sum(
+            1
+            for p in providers.get("items", [])
+            if (p.get("failure_count") or 0) == 0 and (p.get("success_count") or 0) > 0
+        )
+        failed = sum(1 for p in providers.get("items", []) if (p.get("failure_count") or 0) > 0)
+        latest["providers_succeeded"] = succeeded
+        latest["providers_failed"] = failed
+    if not latest.get("last_success_at") and summary_24h.get("last_run_at"):
+        latest["last_success_at"] = summary_24h.get("last_run_at")
+        try:
+            parsed_dt = datetime.fromisoformat(
+                summary_24h["last_run_at"].replace("Z", "+00:00")
+            )
+            latest["last_success_age_seconds"] = max(
+                0.0, datetime.now(timezone.utc).timestamp() - parsed_dt.timestamp()
+            )
+        except Exception:
+            pass
+    if not latest.get("completed_at") and latest.get("last_success_at"):
+        latest["completed_at"] = latest["last_success_at"]
+
+    if quality.get("available") and not quality.get("latest_scan_at") and summary_24h.get("last_run_at"):
+        quality["latest_scan_at"] = summary_24h.get("last_run_at")
+
+    if latest.get("status") in ("unknown", "failed") and (latest.get("providers_succeeded") or 0) > 0:
+        if (latest.get("providers_failed") or 0) == 0:
+            latest["status"] = "success"
+        else:
+            latest["status"] = "partial_success"
+        latest["available"] = True
+        latest["source"] = "crawler_control_database"
+
+    if latest.get("available"):
+        latest_errors = [e for e in latest_errors if e.get("section") != "latest"]
+
+    for node_row in nodes:
+        if node_row.get("role") in ("runtime", "target"):
+            if node_row.get("crawler_status") in ("failed", "unknown", "not_configured") and (latest.get("providers_succeeded") or 0) > 0:
+                node_row["crawler_status"] = latest["status"]
+            if node_row.get("crawler_providers_requested") is None and latest.get("providers_requested") is not None:
+                node_row["crawler_providers_requested"] = latest.get("providers_requested")
+                node_row["crawler_providers_succeeded"] = latest.get("providers_succeeded")
+                node_row["crawler_providers_failed"] = latest.get("providers_failed")
+            if not node_row.get("crawler_last_success_at") and latest.get("last_success_at"):
+                node_row["crawler_last_success_at"] = latest.get("last_success_at")
+                node_row["crawler_last_success_age_seconds"] = latest.get("last_success_age_seconds")
+            if not node_row.get("crawler_completed_at") and latest.get("completed_at"):
+                node_row["crawler_completed_at"] = latest.get("completed_at")
+            if not node_row.get("crawler_duration_seconds") and latest.get("duration_seconds"):
+                node_row["crawler_duration_seconds"] = latest.get("duration_seconds")
+            node_row["crawler_available"] = True
     errors = [
         *latest_errors,
         *ops_errors,
@@ -2003,7 +2376,12 @@ def collect_crawler_monitoring_snapshot():
         ),
     ][:CRAWLER_MONITORING_MAX_ERRORS]
     core_status = crawler.get("status")
-    status = core_status if core_status in CORE_STATUS_VALUES else "unknown"
+    if core_status in CORE_STATUS_VALUES and core_status != "unknown":
+        status = core_status
+    elif latest.get("available") and latest.get("status") in ("success", "partial_success"):
+        status = "healthy" if latest.get("status") == "success" else "warning"
+    else:
+        status = core_status if core_status in CORE_STATUS_VALUES else "unknown"
     node_data_available = any(row.get("available") for row in nodes)
     available = bool(
         latest.get("available") or summary_24h.get("available") or node_data_available
@@ -2028,6 +2406,8 @@ def collect_crawler_monitoring_snapshot():
         "providers": providers,
         "nodes": nodes,
         "quality": quality,
+        "recent_logs": logs.get("items", []) if isinstance(logs, dict) else [],
+        "recent_logs_available": bool(logs.get("available")) if isinstance(logs, dict) else False,
         "errors": errors,
     }
 
@@ -2531,6 +2911,17 @@ def mooncen_summary():
 def crawler_monitoring_summary():
     """Bounded read-only crawler operations snapshot for Android."""
     return jsonify(collect_crawler_monitoring_snapshot())
+
+
+@app.get("/api/crawler/logs")
+@app.get("/api/monitoring/crawler/logs")
+def crawler_monitoring_logs():
+    """Bounded read-only crawler run history logs for Android."""
+    limit = request.args.get("limit", default=30, type=int)
+    status = request.args.get("status", default="", type=str)
+    provider = request.args.get("provider", default="", type=str)
+    return jsonify(get_server_monitor_crawler_logs(limit=limit, status=status, provider=provider))
+
 
 
 @app.get("/api/servers")

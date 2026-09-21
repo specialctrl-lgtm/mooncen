@@ -213,3 +213,17 @@ def test_token_configuration_is_read_for_every_request(monkeypatch: pytest.Monke
         "/api/monitoring/crawler-quality",
         headers=_headers(REPLACEMENT_TOKEN),
     ).status_code == 200
+
+
+def test_crawler_logs_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("MOONCEN_SERVER_MONITOR_TOKEN", TOKEN)
+    _allow_database()
+    client = _client()
+
+    response = client.get("/api/monitoring/crawler-logs?limit=5", headers=_headers())
+    assert response.status_code == 200
+    data = response.json()
+    assert "available" in data
+    assert "items" in data
+    assert isinstance(data["items"], list)
+

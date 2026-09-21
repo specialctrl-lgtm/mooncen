@@ -79,6 +79,41 @@ function systemdValue(value: unknown): string {
   return text && text !== 'n/a' ? text : '-';
 }
 
+function inferContentType(provider: string): string {
+  const norm = provider.trim().toUpperCase();
+  if (
+    norm.startsWith('MUNI_') ||
+    norm.includes('_GO_KR') ||
+    norm.includes('_KR_') ||
+    ['RESERV', 'EDUCATION', 'EDU', 'LIFELONG', 'LECTURE', 'LEARNING', 'BAEUM', 'LIBRARY', 'LIB'].some((k) =>
+      norm.includes(k),
+    )
+  ) {
+    return 'education';
+  }
+  if (
+    [
+      'MUSEUM',
+      'SCIENCE',
+      'GUGAK',
+      'ART',
+      'EXPO',
+      'FOREST',
+      'AQUARIUM',
+      'HERITAGE',
+      'PALACE',
+      'MEMORIAL',
+      'BOTANIC',
+      'ZOO',
+      'OBSERVATORY',
+      'EXPERIENCE',
+    ].some((k) => norm.includes(k))
+  ) {
+    return 'experience';
+  }
+  return 'unknown';
+}
+
 export default function CrawlersPage() {
   const session = useOpsSession();
   const queryClient = useQueryClient();
@@ -242,7 +277,7 @@ export default function CrawlersPage() {
     .map((item) => ({
       provider: item.provider,
       crawler_name: item.provider,
-      content_type: 'unknown',
+      content_type: inferContentType(item.provider),
       status: item.state,
       last_run_status: item.state,
       last_run_trigger: 'manual',

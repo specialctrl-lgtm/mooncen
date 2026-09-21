@@ -49,7 +49,7 @@ parse_error_logger = setup_logger('parse_errors', 'logs/parse_errors.log')
 
 EMART_GRAPHQL_ENDPOINT = os.getenv(
     "EMART_GRAPHQL_ENDPOINT",
-    "https://tjcdarnuonge5epm44y2nvckk4.appsync-api.ap-northeast-2.amazonaws.com/graphql",
+    "https://wrihg4edszhmvagptse4t4eggi.appsync-api.ap-northeast-2.amazonaws.com/graphql",
 )
 EMART_GRAPHQL_API_KEY = os.getenv("EMART_GRAPHQL_API_KEY", "").strip()
 EMART_CLOUDFRONT_BASE = os.getenv("EMART_CLOUDFRONT_BASE", "https://d24y2yfxh2iebm.cloudfront.net")
@@ -98,15 +98,24 @@ def _trusted_emart_site_url(value: object) -> str:
 def _trusted_graphql_endpoint(value: object) -> str:
     candidate = safe_external_http_url(value)
     parsed = urlsplit(candidate)
+    trusted_hosts = {
+        "wrihg4edszhmvagptse4t4eggi.appsync-api.ap-northeast-2.amazonaws.com",
+        "tjcdarnuonge5epm44y2nvckk4.appsync-api.ap-northeast-2.amazonaws.com",
+    }
+    is_appsync_host = bool(
+        parsed.hostname in trusted_hosts
+        or (parsed.hostname and re.fullmatch(r"[a-z0-9]{26}\.appsync-api\.ap-northeast-2\.amazonaws\.com", parsed.hostname))
+    )
     if (
         parsed.scheme != "https"
-        or parsed.hostname != "tjcdarnuonge5epm44y2nvckk4.appsync-api.ap-northeast-2.amazonaws.com"
+        or not is_appsync_host
         or parsed.port not in (None, 443)
         or parsed.path != "/graphql"
         or parsed.query
     ):
         return ""
     return candidate
+
 
 
 def target_label_from_age_group(value: object) -> str:
@@ -520,11 +529,13 @@ class EmartCrawler:
         )
         endpoint = endpoint_match.group(1) if endpoint_match else ""
         api_key = key_match.group(1) if key_match else ""
-        if _trusted_graphql_endpoint(endpoint) != _trusted_graphql_endpoint(EMART_GRAPHQL_ENDPOINT):
+        trusted_endpoint = _trusted_graphql_endpoint(endpoint)
+        if not trusted_endpoint:
             raise RuntimeError("EMART frontend published an unapproved GraphQL endpoint")
         if not EMART_PUBLIC_API_KEY.fullmatch(api_key):
             raise RuntimeError("EMART frontend published an invalid GraphQL API key")
 
+        self._graphql_endpoint_cache = trusted_endpoint
         self._graphql_api_key_cache = api_key
         self._graphql_api_key_resolved = True
         logger.info("Loaded public EMART GraphQL configuration from the official frontend.")
@@ -534,7 +545,7 @@ class EmartCrawler:
         api_key = self._resolve_graphql_api_key()
         if not api_key:
             raise RuntimeError("EMART public GraphQL API key is unavailable")
-        endpoint = _trusted_graphql_endpoint(EMART_GRAPHQL_ENDPOINT)
+        endpoint = getattr(self, "_graphql_endpoint_cache", None) or _trusted_graphql_endpoint(EMART_GRAPHQL_ENDPOINT)
         if not endpoint:
             raise RuntimeError("EMART_GRAPHQL_ENDPOINT is not the approved AppSync endpoint")
         filter_data = [{"type": "mainStoreInfo.storeCode", "data": [str(branch_code)]}]

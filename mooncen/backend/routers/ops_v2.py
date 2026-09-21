@@ -10,6 +10,7 @@ import socket
 import time
 from collections import defaultdict
 from datetime import datetime, timezone
+from functools import lru_cache
 from typing import Any, Literal
 from urllib.parse import urlencode
 from uuid import UUID
@@ -53,7 +54,9 @@ from backend.routers.auth import (
     require_ops_viewer,
 )
 from ops_agent.crawler_registry import (
+    PROJECT_ROOT,
     CrawlerProviderRegistryError,
+    _provider_sets,
     resolve_crawler_provider_execution,
     reviewed_crawler_providers,
 )
@@ -1069,6 +1072,95 @@ def service_detail(service_id: UUID, db: Session = Depends(get_db)) -> dict[str,
     return _redact_rows([dict(_with_production_placement(item) or item)])[0]
 
 
+@lru_cache(maxsize=1)
+def _cached_registry_provider_sets() -> tuple[frozenset[str], frozenset[str], frozenset[str]]:
+    try:
+        return _provider_sets(str(PROJECT_ROOT))
+    except Exception:
+        return frozenset(), frozenset(), frozenset()
+
+
+_EXPERIENCE_NAME_KEYWORDS = (
+    "MUSEUM",
+    "SCIENCE",
+    "GUGAK",
+    "ART",
+    "EXPO",
+    "FOREST",
+    "AQUARIUM",
+    "HERITAGE",
+    "PALACE",
+    "MEMORIAL",
+    "BOTANIC",
+    "ZOO",
+    "OBSERVATORY",
+    "EXPERIENCE",
+)
+_EDUCATION_NAME_KEYWORDS = (
+    "MUNI_",
+    "EDU",
+    "LIBRARY",
+    "LIB",
+    "ACADEMY",
+    "LIFELONG",
+    "CENTER",
+    "RESERV",
+    "WELFARE",
+    "LECTURE",
+    "LEARNING",
+    "BAEUM",
+)
+
+
+def resolve_provider_content_type(
+    provider: str | None,
+    raw_content_type: str | None = None,
+    db_content_type: str | None = None,
+    db_service_group: str | None = None,
+) -> str:
+    cleaned_raw = str(raw_content_type or "").strip().lower()
+    if cleaned_raw in {"culture_center", "education", "experience"}:
+        return cleaned_raw
+
+    normalized = str(provider or "").strip().upper()
+    if not normalized or normalized == "UNKNOWN":
+        return "unknown"
+
+    if normalized in CULTURE_CENTER_PROVIDERS:
+        return "culture_center"
+
+    _registered, operational, experience = _cached_registry_provider_sets()
+    if normalized in operational or normalized == "MUNICIPAL_RESERVATION_TARGETS":
+        return "education"
+    if normalized in experience or normalized == "EXPERIENCE_TARGETS":
+        return "experience"
+
+    cleaned_db = str(db_content_type or "").strip().lower()
+    if cleaned_db in {"culture_center", "education", "experience"}:
+        return cleaned_db
+
+    cleaned_sg = str(db_service_group or "").strip()
+    if cleaned_sg in {"체험", "experience"}:
+        return "experience"
+    if cleaned_sg in {"공공강좌", "education"}:
+        return "education"
+    if cleaned_sg in {"문화센터", "culture_center"}:
+        return "culture_center"
+
+    if (
+        normalized.startswith("MUNI_")
+        or "_GO_KR" in normalized
+        or "_KR_" in normalized
+        or any(keyword in normalized for keyword in _EDUCATION_NAME_KEYWORDS)
+    ):
+        return "education"
+
+    if any(keyword in normalized for keyword in _EXPERIENCE_NAME_KEYWORDS):
+        return "experience"
+
+    return "unknown"
+
+
 def _legacy_crawler_rows(
     db: Session,
     fetch_limit: int,
@@ -1120,7 +1212,13 @@ def _legacy_crawler_rows(
             parameters,
         )
     )
-    return _redact_rows(rows)
+    redacted = _redact_rows(rows)
+    for row in redacted:
+        row["content_type"] = resolve_provider_content_type(
+            str(row.get("provider") or row.get("crawler_name") or ""),
+            raw_content_type=row.get("content_type"),
+        )
+    return redacted
 
 
 def _ops_crawler_rows(
@@ -1159,7 +1257,13 @@ def _ops_crawler_rows(
             parameters,
         )
     )
-    return _redact_rows(rows)
+    redacted = _redact_rows(rows)
+    for row in redacted:
+        row["content_type"] = resolve_provider_content_type(
+            str(row.get("provider") or row.get("crawler_name") or ""),
+            raw_content_type=row.get("content_type"),
+        )
+    return redacted
 
 
 def _merge_crawler_rows(
@@ -1828,13 +1932,16 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
         for row in mapped_rows(
             db.execute(
                 text(
-                    """
-                    SELECT provider,
-                           COUNT(*) FILTER (WHERE is_active = true) AS active_count,
-                           MAX(COALESCE(last_seen_at, updated_at, created_at)) AS latest_course_at
-                    FROM courses
-                    WHERE btrim(COALESCE(provider, '')) <> ''
-                    GROUP BY provider
+                    f"""
+                    SELECT c.provider,
+                           COUNT(*) FILTER (WHERE c.is_active = true) AS active_count,
+                           MAX(COALESCE(c.last_seen_at, c.updated_at, c.created_at)) AS latest_course_at,
+                           MODE() WITHIN GROUP (ORDER BY {CONTENT_TYPE_SQL}) FILTER (WHERE {CONTENT_TYPE_SQL} <> 'unknown') AS dominant_content_type,
+                           MODE() WITHIN GROUP (ORDER BY c.service_group) AS dominant_service_group
+                    FROM courses c
+                    LEFT JOIN branches b ON b.id = c.branch_id
+                    WHERE btrim(COALESCE(c.provider, '')) <> ''
+                    GROUP BY c.provider
                     """
                 )
             )
@@ -1842,6 +1949,8 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
             course_stats[str(row["provider"])] = {
                 "active_count": int(row["active_count"] or 0),
                 "latest_course_at": row["latest_course_at"],
+                "dominant_content_type": row["dominant_content_type"],
+                "dominant_service_group": row["dominant_service_group"],
             }
 
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -1880,6 +1989,13 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
         course_latest_at = stats.get("latest_course_at")
         active_courses = stats.get("active_count", 0)
 
+        content_type = resolve_provider_content_type(
+            provider,
+            raw_content_type=latest.get("content_type"),
+            db_content_type=stats.get("dominant_content_type"),
+            db_service_group=stats.get("dominant_service_group"),
+        )
+
         if course_latest_at:
             if not last_run_at or (isinstance(last_run_at, datetime) and course_latest_at > last_run_at):
                 last_run_at = course_latest_at
@@ -1892,7 +2008,7 @@ def crawlers(db: Session = Depends(get_db)) -> dict[str, Any]:
         items.append(
             {
                 "crawler_name": latest.get("crawler_name") or provider,
-                "content_type": latest.get("content_type") or "unknown",
+                "content_type": content_type,
                 "provider": provider,
                 "status": running.get("status") if running else ("idle" if (latest or course_latest_at) else "unknown"),
                 "last_run_status": last_run_status,
@@ -1988,7 +2104,7 @@ def _crawler_run_detail(db: Session, run_id: str) -> dict[str, Any] | None:
         return None
     if not table_exists(db, "ops_crawler_runs"):
         return None
-    return mapped_one(
+    item = mapped_one(
         db.execute(
             text(
                 """
@@ -2012,6 +2128,12 @@ def _crawler_run_detail(db: Session, run_id: str) -> dict[str, Any] | None:
             {"run_id": str(parsed)},
         )
     )
+    if item is not None:
+        item["content_type"] = resolve_provider_content_type(
+            str(item.get("provider") or item.get("crawler_name") or ""),
+            raw_content_type=item.get("content_type"),
+        )
+    return item
 
 
 @router.get("/crawlers/runs/{run_id}")

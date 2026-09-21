@@ -2443,6 +2443,20 @@ def validate_database_schema() -> None:
 
     tables = sorted(required)
     try:
+        if staging_enabled():
+            try:
+                with get_db_cursor() as ddl_cursor:
+                    ddl_cursor.execute(
+                        """
+                        ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT;
+                        CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint
+                            ON courses(provider, source_endpoint)
+                            WHERE source_endpoint IS NOT NULL;
+                        """
+                    )
+            except Exception as ddl_exc:
+                logger.debug("Staging courses DDL ensure: %s", ddl_exc)
+
         with get_db_cursor() as cursor:
             cursor.execute(
                 """
@@ -2630,6 +2644,19 @@ def begin_staging_batch(batch_id: str, providers: list[str]) -> bool:
         return True
     try:
         from DB.db_utils import get_db_cursor
+
+        try:
+            with get_db_cursor() as ddl_cursor:
+                ddl_cursor.execute(
+                    """
+                    ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT;
+                    CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint
+                        ON courses(provider, source_endpoint)
+                        WHERE source_endpoint IS NOT NULL;
+                    """
+                )
+        except Exception as ddl_exc:
+            logger.debug("Staging courses DDL check: %s", ddl_exc)
 
         with get_db_cursor() as cursor:
             cursor.execute(

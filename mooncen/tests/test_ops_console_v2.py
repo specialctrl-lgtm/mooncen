@@ -1252,3 +1252,79 @@ def test_job_stream_poll_uses_a_short_lived_session(monkeypatch):
     assert job is not None and job["status"] == "running"
     assert logs[0]["id"] == 3
     assert session.exited is True
+
+
+def test_resolve_provider_content_type_categorizes_correctly():
+    # Retail culture centers
+    assert ops_v2.resolve_provider_content_type("HOMEPLUS") == "culture_center"
+    assert ops_v2.resolve_provider_content_type("LOTTE") == "culture_center"
+    assert ops_v2.resolve_provider_content_type("EMART") == "culture_center"
+
+    # Aggregate owners
+    assert ops_v2.resolve_provider_content_type("MUNICIPAL_RESERVATION_TARGETS") == "education"
+    assert ops_v2.resolve_provider_content_type("EXPERIENCE_TARGETS") == "experience"
+
+    # Municipal reservation targets
+    assert ops_v2.resolve_provider_content_type("MUNI_SEOCHO_GO_KR_0866A56C") == "education"
+    assert ops_v2.resolve_provider_content_type("SASANG_RESERVATION") == "education"
+    assert ops_v2.resolve_provider_content_type("SUWON_RESERV_EDUCATION") == "education"
+
+    # Experience / Museum targets
+    assert ops_v2.resolve_provider_content_type("NATIONAL_MUSEUM_OF_KOREA") == "experience"
+    assert ops_v2.resolve_provider_content_type("NATIONAL_GUGAK_CENTER") == "experience"
+    assert ops_v2.resolve_provider_content_type("NATIONAL_SCIENCE_MUSEUM") == "experience"
+
+    # DB service group fallback
+    assert ops_v2.resolve_provider_content_type("CUSTOM_PROVIDER", db_service_group="공공강좌") == "education"
+    assert ops_v2.resolve_provider_content_type("CUSTOM_PROVIDER", db_service_group="체험") == "experience"
+    assert ops_v2.resolve_provider_content_type("CUSTOM_PROVIDER", db_service_group="문화센터") == "culture_center"
+
+    # Name heuristics
+    assert ops_v2.resolve_provider_content_type("YONGIN_LIFELONG_LEARNING") == "education"
+    assert ops_v2.resolve_provider_content_type("GWANGJU_ART_MUSEUM") == "experience"
+
+
+def test_crawlers_endpoint_resolves_unknown_from_course_stats(monkeypatch):
+    class FakeResult:
+        def __init__(self, rows):
+            self._rows = rows
+
+        def mappings(self):
+            return self
+
+        def all(self):
+            return self._rows
+
+    class FakeSession:
+        def execute(self, statement, *_args, **_kwargs):
+            sql = " ".join(str(statement).split())
+            if "FROM courses" in sql:
+                return FakeResult([
+                    {
+                        "provider": "NATIONAL_MUSEUM_OF_KOREA",
+                        "active_count": 50,
+                        "latest_course_at": datetime(2026, 8, 1, tzinfo=timezone.utc),
+                        "dominant_content_type": "experience",
+                        "dominant_service_group": "체험",
+                    },
+                    {
+                        "provider": "MUNI_TEST_PROVIDER",
+                        "active_count": 20,
+                        "latest_course_at": datetime(2026, 8, 1, tzinfo=timezone.utc),
+                        "dominant_content_type": "education",
+                        "dominant_service_group": "공공강좌",
+                    },
+                ])
+            return FakeResult([])
+
+    monkeypatch.setattr(ops_v2, "table_exists", lambda _db, _tbl: True)
+    monkeypatch.setattr(ops_v2, "_ops_crawler_rows", lambda _db, _limit, **_kwargs: [])
+    monkeypatch.setattr(ops_v2, "_legacy_crawler_rows", lambda _db, _limit, **_kwargs: [])
+    monkeypatch.setattr(ops_v2, "reviewed_crawler_providers", lambda: frozenset())
+    monkeypatch.setattr(ops_v2, "local_crawler_runtime_enabled", lambda: False)
+
+    res = ops_v2.crawlers(FakeSession())
+    items_by_provider = {item["provider"]: item for item in res["items"]}
+
+    assert items_by_provider["NATIONAL_MUSEUM_OF_KOREA"]["content_type"] == "experience"
+    assert items_by_provider["MUNI_TEST_PROVIDER"]["content_type"] == "education"

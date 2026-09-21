@@ -16,10 +16,10 @@ The legacy online APK used a different certificate. Version 1.8.0 is therefore a
 
 Current signed artifact:
 
-- Artifact: `app/build/outputs/apk/release/mooncen-monitor-1.8.4.apk`
-- Version: `1.8.4` (`versionCode` 13)
-- Size: `90784` bytes
-- APK SHA-256: `0bafe7727598e9b25c6b2ff253f84fd7a61ad37d27973edc821a18c4c44b63ee`
+- Artifact: `app/build/outputs/apk/release/mooncen-monitor-1.8.11.apk`
+- Version: `1.8.11` (`versionCode` 20)
+- Size: `451848` bytes
+- APK SHA-256: `2737a96b5ea1ff0e7bea4b576d9cfa15945b0eb284fe4efa6fd007e76671b30e`
 - Signature: APK Signature Scheme v2 and v3 verified
 
 Public deployment verification completed at `2026-08-12T14:28:03Z`: a fresh

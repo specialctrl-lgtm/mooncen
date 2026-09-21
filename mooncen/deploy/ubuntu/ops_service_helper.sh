@@ -63,7 +63,15 @@ run_oneshot() {
   return "$status"
 }
 
+ensure_staging_schema() {
+  if [ "$NODE_ROLE" = "crawler" ] && command -v psql >/dev/null 2>&1; then
+    runuser -u postgres -- psql -p 55432 -d mooncen_staging -v ON_ERROR_STOP=1 -q -c \
+      "ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT; CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint ON courses(provider, source_endpoint) WHERE source_endpoint IS NOT NULL;" 2>/dev/null || true
+  fi
+}
+
 crawler_status() {
+  ensure_staging_schema
   /usr/bin/systemctl show "$CRAWLER_SCHEDULER" "$CRAWLER_RUNNER" \
     --property=Id \
     --property=LoadState \
@@ -138,6 +146,7 @@ case "$action" in
   logs-staging) require_crawler_owner; log_unit=mooncen-staging-apply.service ;;
   crawler-once)
     require_crawler_owner
+    ensure_staging_schema
     run_oneshot "$CRAWLER_RUNNER"
     exit $?
     ;;

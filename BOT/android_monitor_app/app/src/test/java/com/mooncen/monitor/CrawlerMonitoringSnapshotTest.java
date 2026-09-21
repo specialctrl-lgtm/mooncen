@@ -266,6 +266,50 @@ public class CrawlerMonitoringSnapshotTest {
         assertFalse(missingSnapshot.node("control").valid);
     }
 
+    @Test
+    public void parsesNodeCrawlerCollectionResultsAndStatus() throws Exception {
+        JSONObject value = payload();
+        JSONObject targetNode = value.getJSONArray("nodes").getJSONObject(1);
+        targetNode
+                .put("available", true)
+                .put("status", "up")
+                .put("crawler_available", true)
+                .put("crawler_status", "failed")
+                .put("crawler_running", false)
+                .put("crawler_completed_at", "2026-09-18T01:33:00Z")
+                .put("crawler_last_success_at", "2026-09-17T01:00:00Z")
+                .put("crawler_last_success_age_seconds", 88380.0)
+                .put("crawler_duration_seconds", 12780.0)
+                .put("crawler_providers_requested", 5)
+                .put("crawler_providers_succeeded", 3)
+                .put("crawler_providers_failed", 2)
+                .put("crawler_timer_active", true)
+                .put("crawler_service_active", false);
+
+        CrawlerMonitoringSnapshot snapshot = CrawlerMonitoringSnapshot.parse(value);
+        CrawlerMonitoringSnapshot.Node target = snapshot.node("target");
+
+        assertTrue(target.valid);
+        assertTrue(target.available);
+        assertTrue(target.crawlerAvailable);
+        assertEquals("failed", target.crawlerStatus);
+        assertFalse(target.crawlerRunning);
+        assertEquals("2026-09-18T01:33:00Z", target.crawlerCompletedAt);
+        assertEquals("2026-09-17T01:00:00Z", target.crawlerLastSuccessAt);
+        assertEquals(Double.valueOf(88380.0), target.crawlerLastSuccessAgeSeconds);
+        assertEquals(Double.valueOf(12780.0), target.crawlerDurationSeconds);
+        assertEquals(Long.valueOf(5), target.crawlerProvidersRequested);
+        assertEquals(Long.valueOf(3), target.crawlerProvidersSucceeded);
+        assertEquals(Long.valueOf(2), target.crawlerProvidersFailed);
+        assertEquals(Boolean.TRUE, target.crawlerTimerActive);
+        assertEquals(Boolean.FALSE, target.crawlerServiceActive);
+        assertEquals("수집 실패", CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(target));
+
+        CrawlerMonitoringSnapshot.Node control = snapshot.node("control");
+        assertFalse(control.crawlerAvailable);
+        assertEquals("미배치", CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(control));
+    }
+
     private static JSONObject payload() throws Exception {
         return new JSONObject()
                 .put("schema_version", 1)
@@ -394,6 +438,29 @@ public class CrawlerMonitoringSnapshotTest {
                         "gen1db", "control", true, "up", 5.0, 30.0,
                         0.1, 20.0, 4L, 41.2, true, null
                 ));
+    }
+
+    @Test
+    public void parsesWorkerNodesAlongsideCoreTopologyNodes() throws Exception {
+        JSONObject value = payload();
+        value.getJSONArray("nodes").put(node(
+                "mac", "worker", true, "up", 2.1, 70.0,
+                1.2, 30.0, 8L, null, false, null
+        ).put("crawler_available", true).put("crawler_status", "idle"));
+
+        CrawlerMonitoringSnapshot snapshot = CrawlerMonitoringSnapshot.parse(value);
+
+        assertTrue(snapshot.contractValid);
+        assertEquals(4, snapshot.nodes.size());
+        CrawlerMonitoringSnapshot.Node worker = snapshot.node("worker");
+        assertTrue(worker.valid);
+        assertTrue(worker.available);
+        assertEquals("mac", worker.node);
+        assertEquals("worker", worker.role);
+        assertEquals(Double.valueOf(2.1), worker.cpuPercent);
+        assertEquals(Double.valueOf(70.0), worker.memoryPercent);
+        assertTrue(worker.crawlerAvailable);
+        assertEquals("idle", worker.crawlerStatus);
     }
 
     private static JSONObject node(

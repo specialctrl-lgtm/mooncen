@@ -547,6 +547,78 @@ class MonitorApiTest(unittest.TestCase):
         self.assertIsNone(latest["providers_requested"])
         self.assertGreaterEqual(len(errors), 3)
 
+    def test_crawler_node_snapshots_exposes_per_node_crawler_results_and_status(self):
+        now = 2_000_100.0
+        topology = {
+            "crawler_runtime_node": "cloud",
+            "crawler_target_node": "gen1crawler",
+            "crawler_control_node": "gen1db",
+        }
+
+        def fake_query_values(query):
+            if "up{" in query:
+                return {"cloud": 1, "gen1crawler": 1, "gen1db": 1, "mac": 1}
+            if "mooncen_crawler_cycle_state_valid" in query:
+                return {"cloud": 1}
+            if "mooncen_crawler_cycle_last_completion" in query:
+                return {"cloud": 2_000_000.0, "gen1crawler": 1_995_000.0}
+            if "mooncen_crawler_last_success" in query:
+                return {"cloud": 2_000_000.0}
+            if 'outcome="success"' in query:
+                return {"cloud": 1}
+            if "unit_result_failed" in query or 'state="failed"' in query:
+                return {"gen1crawler": 1}
+            if "providers_requested" in query:
+                return {"cloud": 10, "gen1crawler": 5}
+            if "providers_completed" in query:
+                return {"cloud": 10, "gen1crawler": 3}
+            if "providers_failed" in query:
+                return {"cloud": 0, "gen1crawler": 2}
+            if 'name="mooncen-crawler.timer"' in query or 'unit="mooncen-crawler.timer"' in query:
+                if "timer_last_trigger" in query:
+                    return {"gen1crawler": 1_990_000.0}
+                return {"cloud": 1, "gen1crawler": 1}
+            return {}
+
+        with mock.patch.object(monitor, "query_values_by_node", side_effect=fake_query_values):
+            rows, errors = monitor.crawler_node_snapshots(topology, now=now)
+
+        self.assertEqual([], errors)
+        self.assertEqual(4, len(rows))
+        by_role = {row["role"]: row for row in rows}
+
+        runtime = by_role["runtime"]
+        self.assertEqual("cloud", runtime["node"])
+        self.assertTrue(runtime["crawler_available"])
+        self.assertEqual("success", runtime["crawler_status"])
+        self.assertEqual(10, runtime["crawler_providers_requested"])
+        self.assertEqual(10, runtime["crawler_providers_succeeded"])
+        self.assertEqual(0, runtime["crawler_providers_failed"])
+        self.assertIsNotNone(runtime["crawler_completed_at"])
+        self.assertTrue(runtime["crawler_timer_active"])
+
+        target = by_role["target"]
+        self.assertEqual("gen1crawler", target["node"])
+        self.assertTrue(target["crawler_available"])
+        self.assertEqual("failed", target["crawler_status"])
+        self.assertEqual(5, target["crawler_providers_requested"])
+        self.assertEqual(3, target["crawler_providers_succeeded"])
+        self.assertEqual(2, target["crawler_providers_failed"])
+        self.assertIsNotNone(target["crawler_completed_at"])
+        self.assertTrue(target["crawler_timer_active"])
+
+        control = by_role["control"]
+        self.assertEqual("gen1db", control["node"])
+        self.assertFalse(control["crawler_available"])
+        self.assertEqual("not_configured", control["crawler_status"])
+        self.assertIsNone(control["crawler_providers_requested"])
+        self.assertIsNone(control["crawler_completed_at"])
+
+        worker = by_role["worker"]
+        self.assertEqual("mac", worker["node"])
+        self.assertEqual("idle", worker["crawler_status"])
+
+
     def test_crawler_ops_snapshot_does_not_invent_unavailable_statistics(self):
         with mock.patch.object(
             monitor,
