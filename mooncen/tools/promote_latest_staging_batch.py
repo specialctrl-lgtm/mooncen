@@ -23,6 +23,7 @@ from tools.apply_staging_batch import (
     successful_apply_result,
 )
 from tools.run_pinned_staging_dry_run import BATCH_ID_PATTERN, create_pinned_dry_run
+from tools.sync_crawler_run_logs import sync_crawler_run_logs
 from tools.validate_staging_activation_result import (
     ActivationResultError,
     load_result,
@@ -59,7 +60,8 @@ def _write_apply_result(
     )
     temporary_path = Path(temporary_name)
     try:
-        os.fchmod(descriptor, 0o600)
+        if hasattr(os, "fchmod"):
+            os.fchmod(descriptor, 0o600)
         with os.fdopen(descriptor, "wb") as output:
             descriptor = -1
             completed = run_func(
@@ -112,6 +114,7 @@ def promote_latest_batch(
     connect_func: Callable[[dict[str, Any]], Any] = connect,
     dry_run_func: Callable[..., None] = create_pinned_dry_run,
     run_func: Callable[..., subprocess.CompletedProcess[bytes]] = subprocess.run,
+    sync_logs_func: Callable[..., dict[str, Any]] | None = sync_crawler_run_logs,
 ) -> dict[str, Any]:
     """Dry-run and atomically apply the exact latest complete staging snapshot."""
     _safe_runtime_directory(runtime_directory)
@@ -122,8 +125,16 @@ def promote_latest_batch(
     primary_config = db_config("PRIMARY", os.getenv("PRIMARY_DB_NAME", "mooncen"))
     staging_conn = connect_func(staging_config)
     primary_conn = connect_func(primary_config)
+    log_sync_result: dict[str, Any] = {}
     try:
         staging_conn.set_session(readonly=True, autocommit=False)
+        if sync_logs_func is not None:
+            try:
+                log_sync_result = sync_logs_func(staging_conn, primary_conn)
+            except Exception as exc:
+                if hasattr(primary_conn, "rollback"):
+                    primary_conn.rollback()
+                log_sync_result = {"status": "FAILED", "error": str(exc)}
         batch_id = str(latest_batch_id(staging_conn) or "").strip()
         if not BATCH_ID_PATTERN.fullmatch(batch_id):
             raise ActivationResultError("latest staging batch id is invalid")

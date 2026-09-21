@@ -200,7 +200,7 @@ def crawler_logs(
                error_message
         FROM crawler_run_log
         {where_sql}
-        ORDER BY id DESC
+        ORDER BY started_at DESC, id DESC
         LIMIT :limit
         """
     )
