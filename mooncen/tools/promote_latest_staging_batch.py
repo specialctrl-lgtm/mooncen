@@ -131,9 +131,11 @@ def promote_latest_batch(
         if sync_logs_func is not None:
             try:
                 log_sync_result = sync_logs_func(staging_conn, primary_conn)
+                print(f"[promote_latest_batch] Crawler logs sync: {log_sync_result}", file=sys.stderr)
             except Exception as exc:
                 if hasattr(primary_conn, "rollback"):
                     primary_conn.rollback()
+                print(f"[promote_latest_batch] Crawler logs sync error: {exc}", file=sys.stderr)
                 log_sync_result = {"status": "FAILED", "error": str(exc)}
         batch_id = str(latest_batch_id(staging_conn) or "").strip()
         if not BATCH_ID_PATTERN.fullmatch(batch_id):

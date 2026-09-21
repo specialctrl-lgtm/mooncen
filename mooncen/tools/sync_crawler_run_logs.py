@@ -126,20 +126,20 @@ def sync_crawler_run_logs(
             "upserted": 0,
         }
 
-    try:
-        ensure_unique_index(primary_conn)
-    except Exception as exc:
-        logger.warning("Could not ensure unique index (may lack DDL permissions): %s", exc)
-        if hasattr(primary_conn, "rollback"):
-            primary_conn.rollback()
-
     if not full_sync and since is None:
         latest = latest_primary_log_timestamp(primary_conn)
         if latest is not None:
-            # Look back 2 days to capture any runs that completed or updated recently
-            since = latest - timedelta(days=2)
+            # If primary has not been updated recently (e.g. frozen in August), backfill from August 1
+            threshold = datetime(2026, 9, 1, tzinfo=timezone.utc)
+            latest_tz = latest if getattr(latest, "tzinfo", None) else latest.replace(tzinfo=timezone.utc)
+            if latest_tz < threshold:
+                since = datetime(2026, 8, 1, tzinfo=timezone.utc)
+            else:
+                since = latest - timedelta(days=2)
 
+    print(f"[sync_crawler_run_logs] Querying staging logs with since={since}", file=sys.stderr)
     rows = fetch_staging_logs(staging_conn, since=since)
+    print(f"[sync_crawler_run_logs] Fetched {len(rows)} rows from staging", file=sys.stderr)
     if not rows:
         return {
             "status": "NO_NEW_LOGS",
@@ -152,6 +152,7 @@ def sync_crawler_run_logs(
         execute_batch(cur, UPSERT_SQL, rows, page_size=batch_size)
     if hasattr(primary_conn, "commit"):
         primary_conn.commit()
+    print(f"[sync_crawler_run_logs] Successfully upserted and committed {len(rows)} rows to primary", file=sys.stderr)
 
     return {
         "status": "SUCCESS",

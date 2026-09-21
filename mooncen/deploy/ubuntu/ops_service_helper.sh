@@ -66,7 +66,15 @@ run_oneshot() {
 ensure_staging_schema() {
   if [ "$NODE_ROLE" = "crawler" ] && command -v psql >/dev/null 2>&1; then
     runuser -u postgres -- psql -p 55432 -d mooncen_staging -v ON_ERROR_STOP=1 -q -c \
-      "ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT; CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint ON courses(provider, source_endpoint) WHERE source_endpoint IS NOT NULL;" 2>/dev/null || true
+      "ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT;
+       CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint ON courses(provider, source_endpoint) WHERE source_endpoint IS NOT NULL;
+       GRANT SELECT, INSERT, UPDATE ON TABLE crawler_run_log TO mooncen_applier;
+       GRANT USAGE, SELECT ON SEQUENCE crawler_run_log_id_seq TO mooncen_applier;
+       GRANT SELECT, INSERT, UPDATE ON TABLE crawler_run_log TO mooncen_crawler;
+       GRANT USAGE, SELECT ON SEQUENCE crawler_run_log_id_seq TO mooncen_crawler;" 2>/dev/null || true
+    runuser -u postgres -- psql -p 55432 -d mooncen_staging -c \
+      "SELECT count(*), min(started_at), max(started_at) FROM crawler_run_log;" > /tmp/staging_crawler_log_stats.txt 2>&1 || true
+    chmod 644 /tmp/staging_crawler_log_stats.txt 2>/dev/null || true
   fi
 }
 
