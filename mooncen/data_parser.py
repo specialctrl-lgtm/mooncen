@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Tuple
 DAY_NAMES = ["월", "화", "수", "목", "금", "토", "일"]
 
 NON_TARGET_AGE_PHRASE_RE = re.compile(
-    r"0\s*(?:\uC138|\uC0B4)\s*\uBD80\uD130\s*\uC2DC\uC791(?:\uD558\uB294)?"
+    r"0\s*(?:\uC138|\uC0B4)\s*\uBD80\uD130\s*\uC2DC\uC791(?:\uD558\uB294)?|\d+\s*\uC0B4\s*(?:\uC5B4\uB824\uBCF4\uC774|\uC5B4\uB824\uC9C0)"
 )
 
 
@@ -92,18 +92,19 @@ def _explicit_age_month_range(value: object) -> tuple[Optional[int], Optional[in
         if month_age is not None:
             return month_age, None
 
-    match = re.search(r"\ub9cc?\s*(\d{1,2})\s*\uc138\s*[~-]\s*\uc131\uc778", text)
+    match = re.search(r"\ub9cc?\s*(\d{1,2})\s*(?:\uc138|\uc0b4)\s*[~-]\s*\uc131\uc778", text)
     if match:
         return int(match.group(1)) * 12, None
 
     for pattern, mode in (
         (r"(\d{1,3})\s*\uac1c\uc6d4\s*[~-]\s*(\d{2,4})\s*\ub144\uc0dd", "month_birth"),
-        (r"(\d{1,3})\s*\uac1c\uc6d4\s*[~-]\s*\ub9cc?\s*(\d{1,2})\s*\uc138", "month_year_range"),
-        (r"\ub9cc?\s*(\d{1,2})\s*\uc138\s*[~-]\s*(\d{1,3})\s*\uac1c\uc6d4", "year_month_range"),
+        (r"(\d{1,3})\s*\uac1c\uc6d4\s*[~-]\s*\ub9cc?\s*(\d{1,2})\s*(?:\uc138|\uc0b4)", "month_year_range"),
+        (r"\ub9cc?\s*(\d{1,2})\s*(?:\uc138|\uc0b4)\s*[~-]\s*(\d{1,3})\s*\uac1c\uc6d4", "year_month_range"),
         (r"(\d{1,3})\s*[~-]\s*(\d{1,3})\s*\uac1c\uc6d4", "month_range"),
         (r"(\d{2,4})\s*[~-]\s*(\d{2,4})\s*\ub144\uc0dd", "birth_range"),
-        (r"\ub9cc\s*(\d{1,2})\s*[~-]\s*(\d{1,2})\s*\uc138", "year_range"),
-        (r"(\d{1,2})\s*[~-]\s*(\d{1,2})\s*\uc138", "year_range"),
+        (r"\ub9cc\s*(\d{1,2})\s*[~-]\s*(\d{1,2})\s*(?:\uc138|\uc0b4)", "year_range"),
+        (r"(\d{1,2})\s*(?:\uc138|\uc0b4)\s*[~-]\s*(\d{1,2})\s*(?:\uc138|\uc0b4)", "year_range"),
+        (r"(\d{1,2})\s*[~-]\s*(\d{1,2})\s*(?:\uc138|\uc0b4)", "year_range"),
         (r"\ucd08\ub4f1\s*(\d+)\s*[~-]\s*(\d+)\s*\ud559\ub144", "grade_range"),
     ):
         match = re.search(pattern, text)
@@ -153,16 +154,16 @@ def _explicit_age_month_range(value: object) -> tuple[Optional[int], Optional[in
         month = _birth_year_to_month_age(match.group(1), current_year)
         if month is not None:
             return month, month
-    match = re.search(r"\ub9cc\s*(\d{1,2})\s*\uc138\s*(?:\uc774\uc0c1|\ubd80\ud130)", text)
+    match = re.search(r"\ub9cc\s*(\d{1,2})\s*(?:\uc138|\uc0b4)\s*(?:\uc774\uc0c1|\ubd80\ud130)", text)
     if match:
         return int(match.group(1)) * 12, None
-    match = re.search(r"(\d{1,2})\s*\uc138\s*(?:\uc774\uc0c1|\ubd80\ud130)", text)
+    match = re.search(r"(\d{1,2})\s*(?:\uc138|\uc0b4)\s*(?:\uc774\uc0c1|\ubd80\ud130)", text)
     if match:
         return int(match.group(1)) * 12, None
-    match = re.search(r"(\d{1,2})\s*\uc138\s*(?:\uc774\ud558|\uae4c\uc9c0)", text)
+    match = re.search(r"(\d{1,2})\s*(?:\uc138|\uc0b4)\s*(?:\uc774\ud558|\uae4c\uc9c0)", text)
     if match:
         return 0, int(match.group(1)) * 12 + 11
-    match = re.search(r"(\d{1,2})\s*\uc138", text)
+    match = re.search(r"(\d{1,2})\s*(?:\uc138|\uc0b4)", text)
     if match:
         return _age_year_month_bounds(int(match.group(1)))
     match = re.search(r"\ucd08\ub4f1\s*(\d+)\s*\ud559\ub144", text)
@@ -271,27 +272,27 @@ class TargetParser:
         return None
 
     def _extract_age_range(self, text: str) -> Optional[Tuple[int, int]]:
-        match = re.search(r"(\d+)\s*세\s*[~-]\s*성인", text)
+        match = re.search(r"(\d+)\s*(?:\uc138|\uc0b4)\s*[~-]\s*\uc131\uc778", text)
         if match:
             return int(match.group(1)), 120
 
-        match = re.search(r"(\d+)\s*세\s*[~-]\s*(?:유치(?:원|부)?|미취학)", text)
+        match = re.search(r"(\d+)\s*(?:\uc138|\uc0b4)\s*[~-]\s*(?:유치(?:원|부)?|미취학)", text)
         if match:
             return int(match.group(1)), 7
 
-        match = re.search(r"(\d+)\s*세\s*[~-]\s*(?:초등(?:생|학생)?|아동|어린이)", text)
+        match = re.search(r"(\d+)\s*(?:\uc138|\uc0b4)\s*[~-]\s*(?:초등(?:생|학생)?|아동|어린이)", text)
         if match:
             return int(match.group(1)), 13
 
-        match = re.search(r"(\d+)\s*[~-]\s*(\d+)\s*세", text)
+        match = re.search(r"(\d+)\s*[~-]\s*(\d+)\s*(?:\uc138|\uc0b4)", text)
         if match:
             return int(match.group(1)), int(match.group(2))
 
-        match = re.search(r"(\d+)\s*세\s*이상", text)
+        match = re.search(r"(\d+)\s*(?:\uc138|\uc0b4)\s*이상", text)
         if match:
             return int(match.group(1)), 120
 
-        match = re.search(r"(\d+)\s*세", text)
+        match = re.search(r"(\d+)\s*(?:\uc138|\uc0b4)", text)
         if match:
             age = int(match.group(1))
             return age, age

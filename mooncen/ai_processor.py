@@ -214,7 +214,7 @@ def _explicit_age_range(value: object) -> tuple[Optional[int], Optional[int]]:
 def _has_age_keyword_month(text: str) -> bool:
     return bool(
         re.search(
-            r"(\uac1c\uc6d4|\ub144\uc0dd|\uc138|\ub9cc\s*\d|"
+            r"(\uac1c\uc6d4|\ub144\uc0dd|\uc138|\uc0b4|\ub9cc\s*\d|"
             r"\ucd08\ub4f1|\uc911\ub4f1|\uc911\ud559|\uace0\ub4f1|\uccad\uc18c\ub144|"
             r"\uc601\uc544|\uc720\uc544|\uc544\ub3d9|\uc5b4\ub9b0\uc774|\uc131\uc778|\uc2dc\ub2c8\uc5b4)",
             text,
@@ -252,14 +252,15 @@ def _extract_age_fragment(value: object) -> str:
     text = strip_non_target_age_phrases(str(value or ""))
     patterns = [
         r"\d+\s*\uac1c\uc6d4\s*[~-]\s*\d{2,4}\s*\ub144\uc0dd",
-        r"\d+\s*\uac1c\uc6d4\s*[~-]\s*\ub9cc?\s*\d+\s*\uc138",
-        r"\ub9cc?\s*\d+\s*\uc138\s*[~-]\s*\d+\s*\uac1c\uc6d4",
+        r"\d+\s*\uac1c\uc6d4\s*[~-]\s*\ub9cc?\s*\d+\s*(?:\uc138|\uc0b4)",
+        r"\ub9cc?\s*\d+\s*(?:\uc138|\uc0b4)\s*[~-]\s*\d+\s*\uac1c\uc6d4",
         r"\d{2,4}\s*\ub144\uc0dd\s*[~-]\s*(?:\uc720\uce58(?:\uc6d0|\ubd80)?|\ubbf8\ucde8\ud559|\ucd08\ub4f1|\uc911\ub4f1|\uc911\ud559|\uace0\ub4f1)(?:\s*\d+\s*\ud559\ub144|\s*[A-Z])?",
         r"\d{2,4}\s*\ub144\uc0dd\s*[~-]\s*\ucd08\ub4f1\s*\d+\s*\ud559\ub144",
         r"\d{2,4}\s*[~-]\s*\d{2,4}\s*\ub144\uc0dd",
-        r"\ub9cc\s*\d+\s*[~-]\s*\d+\s*\uc138",
-        r"\d+\s*\uc138\s*(?:\uc774\uc0c1|\uc774\ud558|\ubd80\ud130|\uae4c\uc9c0)",
-        r"\d+\s*\uc138",
+        r"\ub9cc\s*\d+\s*[~-]\s*\d+\s*(?:\uc138|\uc0b4)",
+        r"\d+\s*[~-]\s*\d+\s*(?:\uc138|\uc0b4)",
+        r"\d+\s*(?:\uc138|\uc0b4)\s*(?:\uc774\uc0c1|\uc774\ud558|\ubd80\ud130|\uae4c\uc9c0)",
+        r"\d+\s*(?:\uc138|\uc0b4)",
         r"\d+\s*[~-]\s*\d+\s*\uac1c\uc6d4",
         r"\d+\s*\uac1c\uc6d4\s*(?:\uc774\uc0c1|\uc774\ud558|\ubd80\ud130|\uae4c\uc9c0)?",
         r"\d{2,4}\s*\ub144\uc0dd",
@@ -994,7 +995,9 @@ Goal:
 - target_text: only age or birth-year target text.
 - age_group: normalized age segment.
 - min_age/max_age: age bounds in months, not years. Use Korean age-year math from birth year using current year {current_year}, then multiply by 12.
-- Single year-age targets cover the whole age year: 8 years old => min_age 96 and max_age 107. 8~9 years old => min_age 96 and max_age 119.
+- Single year-age targets cover the whole age year: 8 years old, 8세, or 8살 => min_age 96 and max_age 107. 8~9 years old, 8~9세, or 8~9살 => min_age 96 and max_age 119.
+- CRITICAL distinction: "살" or "세" is a YEAR unit (multiply by 12 for months). "개월" is a MONTH unit. "8살" is 96 months (CHILD), NEVER 8 months! Only "8개월" is 8 months (INFANT).
+- Do not extract non-target descriptive ages such as "5살 어려보이는" or "10살 젊어지는" into target_text; they describe course concepts, not attendee age.
 - Do not extract schedule, date, day, time, fee, material fee, period, branch, or instructor.
 - If a parenthesized phrase contains both age and a non-age note, remove only the age from target_text and keep the non-age note in clean_title.
 - Keep meaningful course subtitles such as "(포인트 안무)" in clean_title.
@@ -1002,15 +1005,19 @@ Goal:
 - If target is written in months, keep the value in months.
 - For "24개월 이상", use min_age 24 and max_age null.
 - For "24~48개월", use min_age 24 and max_age 48.
+- For "8살 이상" or "8세 이상", use min_age 96 and max_age null.
 - For "2020~22년생", use min_age 48 and max_age 72 in {current_year}.
 - If only a broad group is known from category, age_group may be set and min_age/max_age may use the month-based group default.
 - confidence should be 0.8 or higher only when the split is clear.
 - Important: date/time numbers such as 5/26, 05.17, 0517, 10:20 are not ages. Do not put them in target_text or min_age/max_age.
 - Month examples: 24 months or 24개월 => min_age 24. 24~48 months or 24~48개월 => min_age 24, max_age 48. 2020~22 birth-year target in {current_year} => min_age 48, max_age 72.
+- Year examples: 8살 or 8세 => min_age 96, max_age 107. 5~7살 or 5~7세 => min_age 60, max_age 95.
 
 Examples:
 - "K-POP Star G.Den [2020~22년생/일/10:00]" -> clean_title "K-POP Star G.Den", target_text "2020~22년생", age_group "TODDLER", min_age 48, max_age 72
+- "창의 쑥쑥 미술놀이 (8살)" -> clean_title "창의 쑥쑥 미술놀이", target_text "8살", age_group "CHILD", min_age 96, max_age 107
 - "벚꽃 팝콘(24~48개월)*아이만접수" -> clean_title "벚꽃 팝콘 아이만접수", target_text "24~48개월", age_group "TODDLER", min_age 24, max_age 48
+- "5살 어려보이는 동안 메이크업" -> clean_title "5살 어려보이는 동안 메이크업", target_text null, age_group "ADULT", min_age 240, max_age 708
 - "아이돌 댄스 따라잡기(포인트 안무)(2017~21년생)" -> clean_title "아이돌 댄스 따라잡기(포인트 안무)", target_text "2017~21년생", age_group "CHILD", min_age 60, max_age 108
 - "빛과 마술의 콜라보! 라이트 드로잉 매직쇼(24개월 이상,관람 가족 인당접수)" -> clean_title "빛과 마술의 콜라보! 라이트 드로잉 매직쇼 관람 가족 인당접수", target_text "24개월 이상", age_group "TODDLER", min_age 24, max_age null
 
@@ -1140,6 +1147,15 @@ Schema:
         ai_age_is_usable = bool(ai_age_group or ai_min_age is not None or ai_max_age is not None)
         if not _valid_age_range(ai_min_age, ai_max_age):
             ai_age_is_usable = False
+
+        # Safety guard: if target_text specifies '살' or '세' (year unit) but AI produced month values < 24
+        # (e.g. '8살' -> min_age 8 instead of 96), auto-correct by multiplying by 12.
+        if target_text and re.search(r"\b\d{1,2}\s*(?:\uc0b4|\uc138)\b", target_text) and not re.search(r"\d+\s*\uac1c\uc6d4", target_text):
+            if ai_min_age is not None and 1 <= ai_min_age <= 20:
+                ai_min_age *= 12
+            if ai_max_age is not None and 1 <= ai_max_age <= 20:
+                ai_max_age = ai_max_age * 12 + 11
+
         used_ai_age_values = False
 
         if ai_age_is_usable and target_text:
