@@ -1173,9 +1173,33 @@ public class MainActivity extends Activity {
             }
         }
 
+        String providerSummaryValue = "확인 불가";
+        int providerSummaryColor = COLOR_INFO;
+        if (snapshot.providers.available && snapshot.providers.hasData) {
+            long totalCount = snapshot.providers.total != null
+                    ? snapshot.providers.total
+                    : snapshot.providers.items.size();
+            int issueCount = 0;
+            for (CrawlerMonitoringSnapshot.Provider p : snapshot.providers.items) {
+                if ((p.failureCount != null && p.failureCount > 0)
+                        || (p.failedItemCount != null && p.failedItemCount > 0)) {
+                    issueCount++;
+                }
+            }
+            long normalCount = Math.max(0, totalCount - issueCount);
+            if (issueCount > 0) {
+                providerSummaryValue = totalCount + "곳 (정상 " + normalCount + " / 이슈 " + issueCount + ")";
+                providerSummaryColor = COLOR_CRITICAL;
+            } else {
+                providerSummaryValue = totalCount + "곳 (전체 정상)";
+                providerSummaryColor = COLOR_HEALTHY;
+            }
+        }
+
         String[] metricLabels = new String[]{
                 "최근 수집 상태", "최근 소요", "최근 수집", "최근 신규/수정",
-                "24h 실행/성공", "24h 수집", "24h 신규/수정", "24h 평균 소요"
+                "24h 실행/성공", "24h 수집", "24h 신규/수정", "24h 평균 소요",
+                "24h 운영 Provider", "24h 수집 출처"
         };
         String[] metricValues = new String[]{
                 snapshot.latest.available
@@ -1204,6 +1228,10 @@ public class MainActivity extends Activity {
                         : "확인 불가",
                 snapshot.summary24h.available && snapshot.summary24h.hasData
                         ? CrawlerMonitoringPresentation.duration(snapshot.summary24h.averageDurationSeconds)
+                        : "확인 불가",
+                providerSummaryValue,
+                snapshot.summary24h.available && snapshot.summary24h.hasData
+                        ? snapshot.summary24h.source
                         : "확인 불가"
         };
         int[] metricColors = new int[]{
@@ -1215,7 +1243,9 @@ public class MainActivity extends Activity {
                         ? COLOR_WARNING : COLOR_HEALTHY,
                 snapshot.summary24h.available && snapshot.summary24h.collectedCount != null ? COLOR_INFO : COLOR_WARNING,
                 snapshot.summary24h.available && snapshot.summary24h.newCount != null ? COLOR_INFO : COLOR_WARNING,
-                snapshot.summary24h.available && snapshot.summary24h.averageDurationSeconds != null ? COLOR_INFO : COLOR_WARNING
+                snapshot.summary24h.available && snapshot.summary24h.averageDurationSeconds != null ? COLOR_INFO : COLOR_WARNING,
+                providerSummaryColor,
+                COLOR_INFO
         };
 
         content.addView(statusMetricCard(
