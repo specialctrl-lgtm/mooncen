@@ -1052,12 +1052,11 @@ public class MainActivity extends Activity {
                                 ? COLOR_WARNING : COLOR_INFO
                 }
         ));
-        renderCrawlerLatest(snapshot.latest, snapshot.errors);
-        renderCrawlerPerformance(snapshot.summary24h, snapshot.errors);
-        renderCrawlerQuality(snapshot.quality);
+        renderCrawlerSummarySection(snapshot);
+        renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
         renderCrawlerProviders(snapshot.providers, snapshot.errors);
         renderCrawlerNodes(snapshot);
-        renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
+        renderCrawlerQuality(snapshot.quality);
         renderCrawlerMonitoringErrors(snapshot.errors);
     }
 
@@ -1193,118 +1192,80 @@ public class MainActivity extends Activity {
         ));
     }
 
-    private void renderCrawlerLatest(
-            CrawlerMonitoringSnapshot.Latest latest,
-            java.util.List<CrawlerMonitoringSnapshot.SectionError> errors
-    ) {
+    private void renderCrawlerSummarySection(CrawlerMonitoringSnapshot snapshot) {
         content.addView(sectionHeading(
-                "최근 수집",
-                "가장 최근에 확인된 크롤러 cycle 결과입니다."
+                "수집 현황 요약",
+                "최근 수집 주기 결과 및 최근 24시간 누적 성과입니다."
         ));
-        if (!latest.available) {
-            content.addView(statusCard(
-                    "최근 수집 결과",
-                    "확인 불가",
-                    crawlerUnavailableReason(errors, "latest"),
-                    COLOR_WARNING
-            ));
-            return;
-        }
-        content.addView(statusMetricCard(
-                "최근 수집 결과",
-                CrawlerMonitoringPresentation.latestStatusLabel(latest.status),
-                "증거 " + latest.source
-                        + (latest.running ? " · oneshot 실행 중" : " · oneshot 대기")
-                        + (latest.completedAt.isEmpty()
-                        ? "" : " · 완료 " + formatTimestamp(latest.completedAt))
-                        + (latest.lastSuccessAt.isEmpty()
-                        ? "" : "\n마지막 성공 " + formatTimestamp(latest.lastSuccessAt)
-                        + " · " + CrawlerMonitoringPresentation.age(
-                        latest.lastSuccessAgeSeconds
-                ) + " 전"),
-                crawlerLatestStatusColor(latest.status),
-                new String[]{"수집", "신규", "업데이트", "실패 Provider", "성공 Provider", "건너뜀"},
-                new String[]{
-                        CrawlerMonitoringPresentation.count(latest.collectedCount, "건"),
-                        CrawlerMonitoringPresentation.count(latest.newCount, "건"),
-                        CrawlerMonitoringPresentation.count(latest.updatedCount, "건"),
-                        CrawlerMonitoringPresentation.count(latest.providersFailed, "개"),
-                        CrawlerMonitoringPresentation.count(latest.providersSucceeded, "개"),
-                        CrawlerMonitoringPresentation.count(latest.skippedCount, "건")
-                },
-                nullableMetricColors(
-                        latest.collectedCount,
-                        latest.newCount,
-                        latest.updatedCount,
-                        latest.providersFailed,
-                        latest.providersSucceeded,
-                        latest.skippedCount
-                )
-        ));
-    }
 
-    private void renderCrawlerPerformance(
-            CrawlerMonitoringSnapshot.Summary24h summary,
-            java.util.List<CrawlerMonitoringSnapshot.SectionError> errors
-    ) {
-        content.addView(sectionHeading(
-                "24시간 성과",
-                "실행 횟수, 수집·신규·업데이트와 평균 소요 시간입니다."
-        ));
-        if (!summary.available) {
-            content.addView(statusCard(
-                    "24시간 성과",
-                    "확인 불가",
-                    crawlerUnavailableReason(summary.reasons, errors, "summary_24h"),
-                    COLOR_WARNING
+        // 1. Latest Cycle Card
+        if (snapshot.latest.available) {
+            CrawlerMonitoringSnapshot.Latest latest = snapshot.latest;
+            content.addView(statusMetricCard(
+                    "최근 수집 주기",
+                    CrawlerMonitoringPresentation.latestStatusLabel(latest.status),
+                    "증거 " + latest.source
+                            + (latest.running ? " · 수집 실행 중" : " · 대기 중")
+                            + (latest.completedAt.isEmpty()
+                            ? "" : " · 완료 " + formatTimestamp(latest.completedAt))
+                            + (latest.lastSuccessAt.isEmpty()
+                            ? "" : "\n마지막 성공 " + formatTimestamp(latest.lastSuccessAt)
+                            + " · " + CrawlerMonitoringPresentation.age(latest.lastSuccessAgeSeconds) + " 전"),
+                    crawlerLatestStatusColor(latest.status),
+                    new String[]{"수집", "신규", "업데이트", "실패 Provider", "성공 Provider", "건너뜀"},
+                    new String[]{
+                            CrawlerMonitoringPresentation.count(latest.collectedCount, "건"),
+                            CrawlerMonitoringPresentation.count(latest.newCount, "건"),
+                            CrawlerMonitoringPresentation.count(latest.updatedCount, "건"),
+                            CrawlerMonitoringPresentation.count(latest.providersFailed, "개"),
+                            CrawlerMonitoringPresentation.count(latest.providersSucceeded, "개"),
+                            CrawlerMonitoringPresentation.count(latest.skippedCount, "건")
+                    },
+                    nullableMetricColors(
+                            latest.collectedCount,
+                            latest.newCount,
+                            latest.updatedCount,
+                            latest.providersFailed,
+                            latest.providersSucceeded,
+                            latest.skippedCount
+                    )
             ));
-            return;
         }
-        if (!summary.hasData) {
-            content.addView(statusCard(
-                    "24시간 성과",
-                    "데이터 없음",
-                    "집계 원본은 연결됐지만 최근 24시간 실행 증거가 없습니다.",
-                    COLOR_WARNING
+
+        // 2. 24h Summary Card
+        if (snapshot.summary24h.available && snapshot.summary24h.hasData) {
+            CrawlerMonitoringSnapshot.Summary24h summary = snapshot.summary24h;
+            content.addView(statusMetricCard(
+                    "24시간 누적 성과",
+                    summary.failureCount != null && summary.failureCount > 0 ? "실패 있음" : "정상 집계",
+                    "집계 출처 " + summary.source
+                            + (summary.lastRunAt.isEmpty()
+                            ? "" : " · 마지막 실행 " + formatTimestamp(summary.lastRunAt)),
+                    summary.failureCount != null && summary.failureCount > 0
+                            ? COLOR_WARNING : COLOR_HEALTHY,
+                    new String[]{"실행", "성공", "부분 성공", "실패", "수집", "신규", "업데이트", "평균 소요"},
+                    new String[]{
+                            CrawlerMonitoringPresentation.count(summary.runCount, "회"),
+                            CrawlerMonitoringPresentation.count(summary.successCount, "회"),
+                            CrawlerMonitoringPresentation.count(summary.partialCount, "회"),
+                            CrawlerMonitoringPresentation.count(summary.failureCount, "회"),
+                            CrawlerMonitoringPresentation.count(summary.collectedCount, "건"),
+                            CrawlerMonitoringPresentation.count(summary.newCount, "건"),
+                            CrawlerMonitoringPresentation.count(summary.updatedCount, "건"),
+                            CrawlerMonitoringPresentation.duration(summary.averageDurationSeconds)
+                    },
+                    nullableMetricColors(
+                            summary.runCount,
+                            summary.successCount,
+                            summary.partialCount,
+                            summary.failureCount,
+                            summary.collectedCount,
+                            summary.newCount,
+                            summary.updatedCount,
+                            summary.averageDurationSeconds
+                    )
             ));
-            return;
         }
-        content.addView(statusMetricCard(
-                "24시간 성과",
-                summary.failureCount != null && summary.failureCount > 0 ? "실패 있음" : "집계됨",
-                "증거 " + summary.source
-                        + (summary.lastRunAt.isEmpty()
-                        ? "" : " · 마지막 실행 " + formatTimestamp(summary.lastRunAt)),
-                summary.failureCount != null && summary.failureCount > 0
-                        ? COLOR_WARNING : COLOR_HEALTHY,
-                new String[]{"실행", "성공", "부분 성공", "실패", "진행 중", "수집", "처리", "신규", "업데이트", "건너뜀", "평균 시간"},
-                new String[]{
-                        CrawlerMonitoringPresentation.count(summary.runCount, "회"),
-                        CrawlerMonitoringPresentation.count(summary.successCount, "회"),
-                        CrawlerMonitoringPresentation.count(summary.partialCount, "회"),
-                        CrawlerMonitoringPresentation.count(summary.failureCount, "회"),
-                        CrawlerMonitoringPresentation.count(summary.inProgressCount, "회"),
-                        CrawlerMonitoringPresentation.count(summary.collectedCount, "건"),
-                        CrawlerMonitoringPresentation.count(summary.processedCount, "건"),
-                        CrawlerMonitoringPresentation.count(summary.newCount, "건"),
-                        CrawlerMonitoringPresentation.count(summary.updatedCount, "건"),
-                        CrawlerMonitoringPresentation.count(summary.skippedCount, "건"),
-                        CrawlerMonitoringPresentation.duration(summary.averageDurationSeconds)
-                },
-                nullableMetricColors(
-                        summary.runCount,
-                        summary.successCount,
-                        summary.partialCount,
-                        summary.failureCount,
-                        summary.inProgressCount,
-                        summary.collectedCount,
-                        summary.processedCount,
-                        summary.newCount,
-                        summary.updatedCount,
-                        summary.skippedCount,
-                        summary.averageDurationSeconds
-                )
-        ));
     }
 
     private void renderCrawlerProviders(
@@ -1313,7 +1274,7 @@ public class MainActivity extends Activity {
     ) {
         content.addView(sectionHeading(
                 "Provider 성과",
-                "최근 24시간 Provider별 실행과 성공률입니다."
+                "최근 24시간 Provider별 수집 현황입니다. 실패/이슈가 발생한 Provider가 상단에 우선 표시됩니다."
         ));
         if (!providers.available) {
             content.addView(statusCard(
@@ -1333,41 +1294,37 @@ public class MainActivity extends Activity {
             ));
             return;
         }
+
+        java.util.List<CrawlerMonitoringSnapshot.Provider> issueProviders = new java.util.ArrayList<>();
+        java.util.List<CrawlerMonitoringSnapshot.Provider> normalProviders = new java.util.ArrayList<>();
         for (CrawlerMonitoringSnapshot.Provider provider : providers.items) {
-            content.addView(statusMetricCard(
-                    provider.provider,
-                    provider.failureCount != null && provider.failureCount > 0
-                            ? "실패 있음" : "집계됨",
-                    provider.lastRunAt.isEmpty()
-                            ? "마지막 실행 확인 불가"
-                            : "마지막 실행 " + formatTimestamp(provider.lastRunAt),
-                    provider.failureCount != null && provider.failureCount > 0
-                            ? COLOR_WARNING : COLOR_HEALTHY,
-                    new String[]{"실행", "성공", "부분 성공", "실패", "수집", "신규", "업데이트", "항목 실패", "성공률"},
-                    new String[]{
-                            CrawlerMonitoringPresentation.count(provider.runCount, "회"),
-                            CrawlerMonitoringPresentation.count(provider.successCount, "회"),
-                            CrawlerMonitoringPresentation.count(provider.partialCount, "회"),
-                            CrawlerMonitoringPresentation.count(provider.failureCount, "회"),
-                            CrawlerMonitoringPresentation.count(provider.collectedCount, "건"),
-                            CrawlerMonitoringPresentation.count(provider.newCount, "건"),
-                            CrawlerMonitoringPresentation.count(provider.updatedCount, "건"),
-                            CrawlerMonitoringPresentation.count(provider.failedItemCount, "건"),
-                            CrawlerMonitoringPresentation.percentage(provider.successRate)
-                    },
-                    nullableMetricColors(
-                            provider.runCount,
-                            provider.successCount,
-                            provider.partialCount,
-                            provider.failureCount,
-                            provider.collectedCount,
-                            provider.newCount,
-                            provider.updatedCount,
-                            provider.failedItemCount,
-                            provider.successRate
-                    )
-            ));
+            boolean hasIssue = (provider.failureCount != null && provider.failureCount > 0)
+                    || (provider.failedItemCount != null && provider.failedItemCount > 0);
+            if (hasIssue) {
+                issueProviders.add(provider);
+            } else {
+                normalProviders.add(provider);
+            }
         }
+
+        // Render Issue Providers first
+        if (!issueProviders.isEmpty()) {
+            content.addView(statusCard(
+                    "실패/이슈 Provider (" + issueProviders.size() + "곳)",
+                    "확인 필요",
+                    "최근 24시간 수집 실패 또는 항목 오류가 발생한 Provider입니다.",
+                    COLOR_CRITICAL
+            ));
+            for (CrawlerMonitoringSnapshot.Provider provider : issueProviders) {
+                renderProviderCard(provider, true);
+            }
+        }
+
+        // Render Normal Providers
+        for (CrawlerMonitoringSnapshot.Provider provider : normalProviders) {
+            renderProviderCard(provider, false);
+        }
+
         if (providers.truncated) {
             content.addView(statusCard(
                     "Provider 목록",
@@ -1377,6 +1334,45 @@ public class MainActivity extends Activity {
                     COLOR_INFO
             ));
         }
+    }
+
+    private void renderProviderCard(CrawlerMonitoringSnapshot.Provider provider, boolean isIssue) {
+        String badge = (provider.failureCount != null && provider.failureCount > 0)
+                ? "수집 실패 있음"
+                : (provider.failedItemCount != null && provider.failedItemCount > 0)
+                ? "항목 오류 있음"
+                : "정상 집계";
+        int cardColor = isIssue ? COLOR_CRITICAL : COLOR_HEALTHY;
+
+        content.addView(statusMetricCard(
+                provider.provider,
+                badge,
+                provider.lastRunAt.isEmpty()
+                        ? "마지막 실행 확인 불가"
+                        : "마지막 실행 " + formatTimestamp(provider.lastRunAt),
+                cardColor,
+                new String[]{"실행", "성공", "실패", "수집", "신규", "업데이트", "항목 실패", "성공률"},
+                new String[]{
+                        CrawlerMonitoringPresentation.count(provider.runCount, "회"),
+                        CrawlerMonitoringPresentation.count(provider.successCount, "회"),
+                        CrawlerMonitoringPresentation.count(provider.failureCount, "회"),
+                        CrawlerMonitoringPresentation.count(provider.collectedCount, "건"),
+                        CrawlerMonitoringPresentation.count(provider.newCount, "건"),
+                        CrawlerMonitoringPresentation.count(provider.updatedCount, "건"),
+                        CrawlerMonitoringPresentation.count(provider.failedItemCount, "건"),
+                        CrawlerMonitoringPresentation.percentage(provider.successRate)
+                },
+                nullableMetricColors(
+                        provider.runCount,
+                        provider.successCount,
+                        provider.failureCount,
+                        provider.collectedCount,
+                        provider.newCount,
+                        provider.updatedCount,
+                        provider.failedItemCount,
+                        provider.successRate
+                )
+        ));
     }
 
     private void renderCrawlerQuality(CrawlerMonitoringSnapshot.Quality quality) {
@@ -1516,8 +1512,8 @@ public class MainActivity extends Activity {
 
     private void renderCrawlerNodes(CrawlerMonitoringSnapshot snapshot) {
         content.addView(sectionHeading(
-                "크롤러 노드",
-                "현재 실행·목표 워커·중앙 제어·워커 노드의 자원과 수집 상태입니다."
+                "워커 노드 수집 상태",
+                "크롤러 작업이 실행되는 워커 및 제어 노드의 수집 실행 상태입니다. (하드웨어 자원은 서버 탭에서 조회)"
         ));
         for (CrawlerMonitoringSnapshot.Node node : snapshot.nodes) {
             String role = node.role;
@@ -1565,36 +1561,19 @@ public class MainActivity extends Activity {
                         badge,
                         detail.toString(),
                         nodeColor,
-                        new String[]{"수집 상태", "완료 Provider", "실패 Provider", "소요 시간", "CPU", "메모리", "디스크", "온도"},
+                        new String[]{"수집 상태", "완료 Provider", "실패 Provider", "소요 시간"},
                         new String[]{
                                 CrawlerMonitoringPresentation.nodeCrawlerStatusLabel(node),
                                 CrawlerMonitoringPresentation.count(node.crawlerProvidersSucceeded, "개"),
                                 CrawlerMonitoringPresentation.count(node.crawlerProvidersFailed, "개"),
-                                CrawlerMonitoringPresentation.duration(node.crawlerDurationSeconds),
-                                node.available
-                                        ? CrawlerMonitoringPresentation.percentage(node.cpuPercent)
-                                        : "확인 불가",
-                                node.available
-                                        ? CrawlerMonitoringPresentation.percentage(node.memoryPercent)
-                                        : "확인 불가",
-                                node.available
-                                        ? CrawlerMonitoringPresentation.percentage(node.diskPercent)
-                                        : "확인 불가",
-                                node.temperatureAvailable && node.temperatureCelsius != null
-                                        ? CrawlerMonitoringPresentation.temperature(node.temperatureCelsius)
-                                        : "미지원"
+                                CrawlerMonitoringPresentation.duration(node.crawlerDurationSeconds)
                         },
                         new int[]{
                                 nodeColor,
                                 node.crawlerProvidersSucceeded != null ? COLOR_INFO : COLOR_WARNING,
                                 node.crawlerProvidersFailed != null && node.crawlerProvidersFailed > 0
                                         ? COLOR_WARNING : COLOR_HEALTHY,
-                                node.crawlerDurationSeconds != null ? COLOR_INFO : COLOR_WARNING,
-                                node.available && node.cpuPercent != null ? COLOR_INFO : COLOR_WARNING,
-                                node.available && node.memoryPercent != null ? COLOR_INFO : COLOR_WARNING,
-                                node.available && node.diskPercent != null ? COLOR_INFO : COLOR_WARNING,
-                                node.available && node.temperatureAvailable && node.temperatureCelsius != null
-                                        ? COLOR_INFO : COLOR_MUTED
+                                node.crawlerDurationSeconds != null ? COLOR_INFO : COLOR_WARNING
                         }
                 ));
             } else {
@@ -1610,43 +1589,11 @@ public class MainActivity extends Activity {
                 if (!node.error.isEmpty()) {
                     detail += " · " + node.error;
                 }
-                content.addView(statusMetricCard(
+                content.addView(statusCard(
                         node.node,
                         CrawlerMonitoringPresentation.nodeStatusLabel(node),
                         detail,
-                        nodeColor,
-                        new String[]{"CPU", "메모리", "1분 부하", "디스크", "논리 CPU", "온도"},
-                        new String[]{
-                                node.available
-                                        ? CrawlerMonitoringPresentation.percentage(node.cpuPercent)
-                                        : "확인 불가",
-                                node.available
-                                        ? CrawlerMonitoringPresentation.percentage(node.memoryPercent)
-                                        : "확인 불가",
-                                node.available
-                                        ? CrawlerMonitoringPresentation.load(node.load1m)
-                                        : "확인 불가",
-                                node.available
-                                        ? CrawlerMonitoringPresentation.percentage(node.diskPercent)
-                                        : "확인 불가",
-                                node.available
-                                        ? CrawlerMonitoringPresentation.count(
-                                        node.logicalCpuCount,
-                                        "개"
-                                ) : "확인 불가",
-                                node.temperatureAvailable && node.temperatureCelsius != null
-                                        ? CrawlerMonitoringPresentation.temperature(node.temperatureCelsius)
-                                        : "미지원"
-                        },
-                        nullableMetricColors(
-                                node.available ? node.cpuPercent : null,
-                                node.available ? node.memoryPercent : null,
-                                node.available ? node.load1m : null,
-                                node.available ? node.diskPercent : null,
-                                node.available ? node.logicalCpuCount : null,
-                                node.available && node.temperatureAvailable
-                                        ? node.temperatureCelsius : null
-                        )
+                        nodeColor
                 ));
             }
         }
