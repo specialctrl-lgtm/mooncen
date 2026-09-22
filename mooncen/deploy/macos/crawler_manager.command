@@ -19,14 +19,15 @@ while true; do
         echo "  🔴 현재 상태: [중지됨]"
     fi
     echo "=================================================="
-    echo "  [1] 크롤러 시작 (Start)"
+    echo "  [1] 크롤러 시작 (Start, 자동 업데이트 포함)"
     echo "  [2] 크롤러 종료 (Stop)"
-    echo "  [3] 크롤러 재시작 (Restart)"
+    echo "  [3] 크롤러 재시작 (Restart, 최신 버전 재적용)"
     echo "  [4] 실시간 로그 보기 (Logs)"
     echo "  [5] 큐 수집 현황 확인 (Queue Status)"
+    echo "  [6] 최신 코드 수동 업데이트 (Git Pull)"
     echo "  [0] 나가기 (Exit)"
     echo "=================================================="
-    read -rp "원하는 작업 번호를 입력하세요 (0-5): " choice
+    read -rp "원하는 작업 번호를 입력하세요 (0-6): " choice
 
     case "$choice" in
         1)
@@ -77,6 +78,21 @@ while true; do
                 .venv/bin/python tools/crawler_queue_manager.py status
             else
                 python3 tools/crawler_queue_manager.py status
+            fi
+            echo "--------------------------------------------------"
+            echo ""
+            read -rp "계속하려면 Enter를 누르세요..."
+            ;;
+        6)
+            echo ""
+            echo "▶ 최신 소스코드를 원격 저장소에서 업데이트합니다..."
+            echo "--------------------------------------------------"
+            if [ -d ".git" ]; then
+                git fetch origin main --prune
+                git pull --ff-only origin main || git pull origin main
+                echo "✓ 소스코드 업데이트가 완료되었습니다."
+            else
+                echo "⚠ .git 디렉토리를 찾을 수 없습니다."
             fi
             echo "--------------------------------------------------"
             echo ""

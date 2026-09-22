@@ -134,6 +134,65 @@ def get_local_code_version() -> str:
         return "unknown"
 
 
+def check_and_apply_git_update() -> bool:
+    """Fetch origin and pull if new commits exist. Return True if updated."""
+    git_dir = PROJECT_ROOT / ".git"
+    if not git_dir.exists():
+        return False
+    try:
+        # Fetch quietly
+        fetch_res = subprocess.run(
+            ["git", "fetch", "origin", "main", "--quiet"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            timeout=15,
+        )
+        if fetch_res.returncode != 0:
+            return False
+
+        local_rev = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=5,
+        ).stdout.strip()
+        remote_rev = subprocess.run(
+            ["git", "rev-parse", "origin/main"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=5,
+        ).stdout.strip()
+
+        if local_rev and remote_rev and local_rev != remote_rev:
+            logger.info("New Git commit detected (%s -> %s). Pulling updates...", local_rev[:7], remote_rev[:7])
+            pull_res = subprocess.run(
+                ["git", "pull", "--ff-only", "origin", "main"],
+                cwd=str(PROJECT_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            if pull_res.returncode != 0:
+                logger.warning("Fast-forward pull failed, trying standard merge: %s", pull_res.stderr.strip())
+                pull_res = subprocess.run(
+                    ["git", "pull", "origin", "main"],
+                    cwd=str(PROJECT_ROOT),
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+            if pull_res.returncode == 0:
+                logger.info("Codebase successfully updated to %s.", remote_rev[:7])
+                return True
+            else:
+                logger.error("Git pull failed: %s", pull_res.stderr.strip())
+    except Exception as exc:
+        logger.debug("Auto git update check encountered an issue: %s", exc)
+    return False
+
+
 def claim_task(
     conn: Any,
     worker_node: str,
@@ -250,6 +309,8 @@ def worker_loop(
     exit_when_empty: bool = False,
     code_version: str | None = None,
     enforce_version: bool = True,
+    auto_update: bool = True,
+    auto_update_interval: float = 60.0,
 ) -> None:
     """Main worker loop."""
     global RUNNING
@@ -257,18 +318,28 @@ def worker_loop(
     tasks_processed = 0
     version = code_version or get_local_code_version()
     logger.info(
-        "Worker '%s' started (code_version=%s, enforce_version=%s). Polling queue (batch_date=%s)...",
+        "Worker '%s' started (code_version=%s, enforce_version=%s, auto_update=%s). Polling queue (batch_date=%s)...",
         worker_node,
         version,
         enforce_version,
+        auto_update,
         batch_date or date.today(),
     )
+    last_update_check = time.time()
 
     try:
         while RUNNING:
             if max_tasks and tasks_processed >= max_tasks:
                 logger.info("Reached maximum requested task limit (%d). Exiting.", max_tasks)
                 break
+
+            # If auto-update is enabled, periodically check for new Git commits
+            now = time.time()
+            if auto_update and (now - last_update_check >= auto_update_interval):
+                last_update_check = now
+                if check_and_apply_git_update():
+                    logger.info("New release downloaded. Restarting worker to load updated code...")
+                    break
 
             task = claim_task(
                 conn,
@@ -342,6 +413,19 @@ def main():
     parser.add_argument("--max-tasks", type=int, default=None, help="Stop after processing N tasks")
     parser.add_argument("--dry-run", action="store_true", help="Simulate crawl execution without running actual scripts")
     parser.add_argument("--exit-when-empty", action="store_true", help="Exit when no pending tasks remain")
+    parser.add_argument(
+        "--no-auto-update",
+        dest="auto_update",
+        action="store_false",
+        default=True,
+        help="Disable automatic Git repository polling and self-restart on update",
+    )
+    parser.add_argument(
+        "--auto-update-interval",
+        type=float,
+        default=60.0,
+        help="Interval in seconds between Git remote version checks (default: 60s)",
+    )
 
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(name)s] %(message)s")
@@ -360,6 +444,8 @@ def main():
         exit_when_empty=args.exit_when_empty,
         code_version=args.code_version,
         enforce_version=args.enforce_version,
+        auto_update=args.auto_update,
+        auto_update_interval=args.auto_update_interval,
     )
 
 
