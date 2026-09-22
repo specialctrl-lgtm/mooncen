@@ -245,6 +245,7 @@ def crawler_logs(
             "duration_seconds": duration,
             "collected_count": collected,
             "inserted_count": inserted,
+            "new_count": inserted,
             "updated_count": updated,
             "skipped_count": skipped,
             "error_type": err_type,
