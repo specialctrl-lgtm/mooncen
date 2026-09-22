@@ -181,22 +181,44 @@ def mark_stale_courses(
     source_filter = "AND source_endpoint = %(source_endpoint)s" if source_endpoint else ""
 
     def execute(active_cursor: Any) -> int:
-        active_cursor.execute(
-            f"""
-            UPDATE courses
-            SET is_active = FALSE,
-                status = 'CLOSED',
-                removed_at = COALESCE(removed_at, CURRENT_TIMESTAMP),
-                updated_at = CURRENT_TIMESTAMP
-            WHERE provider = %(provider)s
-              AND is_active = TRUE
-              AND last_seen_at < %(cutoff)s
-              {branch_filter}
-              {source_filter}
-            """,
-            params,
-        )
-        return active_cursor.rowcount
+        # For large providers (e.g. EMART with 20k+ courses), a single UPDATE causes
+        # statement_timeout due to table triggers and lock contention.
+        # We raise local statement_timeout and update in batches.
+        try:
+            active_cursor.execute("SET LOCAL statement_timeout = '120s';")
+        except Exception:
+            pass
+
+        total_updated = 0
+        batch_size = 1000
+        while True:
+            active_cursor.execute(
+                f"""
+                WITH candidates AS (
+                    SELECT id
+                    FROM courses
+                    WHERE provider = %(provider)s
+                      AND is_active = TRUE
+                      AND last_seen_at < %(cutoff)s
+                      {branch_filter}
+                      {source_filter}
+                    LIMIT {batch_size}
+                )
+                UPDATE courses c
+                SET is_active = FALSE,
+                    status = 'CLOSED',
+                    removed_at = COALESCE(c.removed_at, CURRENT_TIMESTAMP),
+                    updated_at = CURRENT_TIMESTAMP
+                FROM candidates
+                WHERE c.id = candidates.id;
+                """,
+                params,
+            )
+            count = active_cursor.rowcount
+            total_updated += count
+            if count < batch_size:
+                break
+        return total_updated
 
     if cursor is not None:
         return execute(cursor)

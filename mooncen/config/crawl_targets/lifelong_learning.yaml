@@ -11531,7 +11531,7 @@ targets:
   operator_type: 지자체/공공기관
   source_group: lifelong_learning
   collection_type: static_html
-  crawler_status: ready
+  crawler_status: deprecated
   priority: 2
   url: https://www.yangju.go.kr/lll/selectEduLctreWebList.do?key=1838&lllKind=1
   source: ops_console_url_update
@@ -11541,11 +11541,13 @@ targets:
     score: 0.0
     grade: NO_DATA
     parser: yangju_lifelong_detail
-    error_kind: no_current_data:no_current_courses
+    error_kind: http_404_not_found:site_migrated_to_gseek
+  crawler_notes:
+  - Official Yangju lifelong learning portal moved to G-SEEK (yangju.gseek.kr); old URL returns 404.
   target_id: 84c4a6113972e0d2
-  updated_at: '2026-06-07T23:14:57'
+  updated_at: '2026-09-22T14:13:00+09:00'
   manual_action: update
-  manual_updated_at: '2026-06-07T23:14:57'
+  manual_updated_at: '2026-09-22T14:13:00+09:00'
 - provider: MUNI_WWW_YANGSAN_GO_KR_059D4DD1
   name: 양산시 평생학습 전체 교육강좌
   branch: 양산시 평생학습

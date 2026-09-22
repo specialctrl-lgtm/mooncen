@@ -54,12 +54,16 @@ _SCIPORT_HOST = "www.sciport.or.kr"
 _INJE_LIFELONG_HOST = "lifelong.inje.go.kr"
 _GWANGJU_CULTURAL_FOUNDATION_HOST = "www.gjcf.or.kr"
 _DONGMYEONG_CULTURE_HOST = "dmgj.kr"
+_SEONGDONG_HOST = "www.sd.go.kr"
+_SEONGDONG_APEX_HOST = "sd.go.kr"
 _SECTIGO_DV_R36_MISSING_INTERMEDIATE_HOSTS = frozenset(
     {
         _SCIPORT_HOST,
         _INJE_LIFELONG_HOST,
         _GWANGJU_CULTURAL_FOUNDATION_HOST,
         _DONGMYEONG_CULTURE_HOST,
+        _SEONGDONG_HOST,
+        _SEONGDONG_APEX_HOST,
     }
 )
 _GBMG_HOST = "www.gbmg.go.kr"

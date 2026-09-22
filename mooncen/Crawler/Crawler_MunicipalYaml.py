@@ -58436,8 +58436,9 @@ def collect_from_url(
         return collect_daegu_national_science(target, timeout=timeout, max_pages=max_pages)
     if target.provider == "GWACHEON_NATIONAL_SCIENCE_MUSEUM":
         return collect_gwacheon_scipia(target, timeout=timeout, max_pages=max_pages)
-    if parsed_target_url.netloc.endswith("gwangju.go.kr") and parsed_target_url.path.endswith(
-        "/reserve/bookingList.do"
+    if parsed_target_url.netloc.endswith("gwangju.go.kr") and (
+        parsed_target_url.path.endswith("/reserve/bookingList.do")
+        or parsed_target_url.path.startswith("/reserve/")
     ):
         return collect_gwangju_booking(target, timeout=timeout, max_pages=max_pages)
     if target.provider == "MUNI_WWW_PC_GO_KR_B11A1ACA" or (

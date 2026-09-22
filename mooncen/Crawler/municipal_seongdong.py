@@ -85,6 +85,9 @@ NATIVE_EDUCATION_CATEGORIES = frozenset(
         "진로/진학",
         "국어/논술",
         "문화",
+        "안전",
+        "독서",
+        "수학/과학",
     }
 )
 
@@ -99,14 +102,14 @@ _DATE_RE = re.compile(
     r"(?<!\d)(20\d{2})\s*[.\-/]\s*(\d{1,2})\s*[.\-/]\s*(\d{1,2})(?!\d)"
 )
 _NON_COURSE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("test_record", re.compile(r"^\W*(?:점검|테스트)\d*\W*$")),
+    ("test_record", re.compile(r"^\W*(?:점검|테스트)\d*\W*$|(?:^|[\W_])(?:점검|테스트)(?:[\W_]|$)")),
     ("notice", re.compile(r"공지(?:사항)?|(?:^|[\[（(])안내(?:문)?(?:[\]）)]|$)")),
     ("event", re.compile(r"행사")),
     ("counselling", re.compile(r"상담")),
     ("recruitment", re.compile(r"모집|서포터즈")),
     (
         "facility",
-        re.compile(r"대관|사물함|공간\s*이용|시설\s*(?:이용|예약)|장소\s*예약"),
+        re.compile(r"대관|사물함|신발장|공간\s*이용|시설\s*(?:이용|예약)|장소\s*예약"),
     ),
 )
 
@@ -461,7 +464,9 @@ def _allowed_public_url(value: Any) -> bool:
 
 
 def _default_session_factory() -> requests.Session:
-    current = requests.Session()
+    from utils.outbound_http import SafeSession
+
+    current = SafeSession()
     current.headers.update(
         {
             "User-Agent": (
@@ -942,8 +947,9 @@ def _sports_education_detail(
         ("강좌명", "운영센터", "교육기간", "시간/요일", "강습장소"),
         label,
     )
-    if _title_text(pairs["강좌명"]) != _title_text(item["title"]):
-        raise ValueError(f"{label} title mismatch")
+    reason = _non_course_reason(item["title"])
+    if reason:
+        return None, reason
     detail_period = _date_pair(pairs["교육기간"])
     if detail_period != (item["start"], item["end"]):
         # FMCS reuses a class code for the next monthly product after the
@@ -956,10 +962,13 @@ def _sports_education_detail(
             and _clean(item.get("status")) in {"접수마감", "운영중", "폐강", "종료"}
         ):
             return None, "stale_reused_public_detail"
+        if detail_period is None:
+            reason = _non_course_reason(pairs.get("강좌명")) or _non_course_reason(pairs.get("교육대상")) or _non_course_reason(pairs.get("강습장소"))
+            if reason:
+                return None, reason
+            if _clean(item.get("status")) in {"접수마감", "운영중", "폐강", "종료"}:
+                return None, "empty_period_closed"
         raise ValueError(f"{label} programme dates mismatch")
-    reason = _non_course_reason(item["title"])
-    if reason:
-        return None, reason
     _required_pairs(pairs, ("교육대상",), label)
     application_ranges = _range_pairs(pairs.get("수강신청 상태"))
     application_state = _clean(pairs.get("수강신청 상태"))
