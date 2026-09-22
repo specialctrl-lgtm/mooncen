@@ -89,6 +89,8 @@ public class MainActivity extends Activity {
     private long lastCoreRefreshCompletedAt;
     private long lastHandledCoreObservationSequence;
     private boolean lastCoreUnavailable;
+    private boolean crawlerNormalProvidersExpanded = false;
+    private boolean crawlerLogsExpanded = false;
 
     private final Runnable autoRefreshRunnable = new Runnable() {
         @Override
@@ -1006,55 +1008,9 @@ public class MainActivity extends Activity {
 
     private void renderCrawlerTab(JSONObject data) {
         CrawlerMonitoringSnapshot snapshot = CrawlerMonitoringSnapshot.parse(data);
-        String topStatus = snapshot.contractValid
-                ? CrawlerMonitoringPresentation.overallStatusLabel(snapshot.status)
-                : getString(R.string.crawler_monitoring_unavailable);
-        int topColor = snapshot.contractValid ? statusColor(snapshot.status) : COLOR_WARNING;
-        String topDetail = !snapshot.contractValid
-                ? "크롤러 모니터링 응답 형식을 확인할 수 없습니다."
-                : snapshot.complete
-                ? "최근 수집, 24시간 성과, Provider와 노드 증거가 모두 연결됐습니다."
-                : snapshot.partial
-                ? getString(R.string.crawler_monitoring_partial)
-                : "사용 가능한 크롤러 수집 증거가 없습니다.";
-        content.addView(statusMetricCard(
-                "크롤러 수집 상태",
-                topStatus,
-                topDetail,
-                topColor,
-                new String[]{"최근 상태", "최근 완료", "Provider", "소요 시간"},
-                new String[]{
-                        snapshot.latest.available
-                                ? CrawlerMonitoringPresentation.latestStatusLabel(
-                                snapshot.latest.status
-                        ) : "확인 불가",
-                        !snapshot.latest.available || snapshot.latest.completedAt.isEmpty()
-                                ? "확인 불가" : formatTimestamp(snapshot.latest.completedAt),
-                        CrawlerMonitoringPresentation.count(
-                                snapshot.latest.available
-                                        ? snapshot.latest.providersRequested : null,
-                                "개"
-                        ),
-                        CrawlerMonitoringPresentation.duration(
-                                snapshot.latest.available
-                                        ? snapshot.latest.durationSeconds : null
-                        )
-                },
-                new int[]{
-                        crawlerLatestStatusColor(
-                                snapshot.latest.available ? snapshot.latest.status : "unknown"
-                        ),
-                        !snapshot.latest.available || snapshot.latest.completedAt.isEmpty()
-                                ? COLOR_WARNING : COLOR_INFO,
-                        !snapshot.latest.available || snapshot.latest.providersRequested == null
-                                ? COLOR_WARNING : COLOR_INFO,
-                        !snapshot.latest.available || snapshot.latest.durationSeconds == null
-                                ? COLOR_WARNING : COLOR_INFO
-                }
-        ));
-        renderCrawlerSummarySection(snapshot);
-        renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
+        renderCrawlerUnifiedSummary(snapshot);
         renderCrawlerProviders(snapshot.providers, snapshot.errors);
+        renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
         renderCrawlerNodes(snapshot);
         renderCrawlerQuality(snapshot.quality);
         renderCrawlerMonitoringErrors(snapshot.errors);
@@ -1192,80 +1148,85 @@ public class MainActivity extends Activity {
         ));
     }
 
-    private void renderCrawlerSummarySection(CrawlerMonitoringSnapshot snapshot) {
-        content.addView(sectionHeading(
-                "수집 현황 요약",
-                "최근 수집 주기 결과 및 최근 24시간 누적 성과입니다."
-        ));
+    private void renderCrawlerUnifiedSummary(CrawlerMonitoringSnapshot snapshot) {
+        String topStatus = snapshot.contractValid
+                ? CrawlerMonitoringPresentation.overallStatusLabel(snapshot.status)
+                : getString(R.string.crawler_monitoring_unavailable);
+        int topColor = snapshot.contractValid ? statusColor(snapshot.status) : COLOR_WARNING;
 
-        // 1. Latest Cycle Card
+        StringBuilder detailSb = new StringBuilder();
         if (snapshot.latest.available) {
-            CrawlerMonitoringSnapshot.Latest latest = snapshot.latest;
-            content.addView(statusMetricCard(
-                    "최근 수집 주기",
-                    CrawlerMonitoringPresentation.latestStatusLabel(latest.status),
-                    "증거 " + latest.source
-                            + (latest.running ? " · 수집 실행 중" : " · 대기 중")
-                            + (latest.completedAt.isEmpty()
-                            ? "" : " · 완료 " + formatTimestamp(latest.completedAt))
-                            + (latest.lastSuccessAt.isEmpty()
-                            ? "" : "\n마지막 성공 " + formatTimestamp(latest.lastSuccessAt)
-                            + " · " + CrawlerMonitoringPresentation.age(latest.lastSuccessAgeSeconds) + " 전"),
-                    crawlerLatestStatusColor(latest.status),
-                    new String[]{"수집", "신규", "업데이트", "실패 Provider", "성공 Provider", "건너뜀"},
-                    new String[]{
-                            CrawlerMonitoringPresentation.count(latest.collectedCount, "건"),
-                            CrawlerMonitoringPresentation.count(latest.newCount, "건"),
-                            CrawlerMonitoringPresentation.count(latest.updatedCount, "건"),
-                            CrawlerMonitoringPresentation.count(latest.providersFailed, "개"),
-                            CrawlerMonitoringPresentation.count(latest.providersSucceeded, "개"),
-                            CrawlerMonitoringPresentation.count(latest.skippedCount, "건")
-                    },
-                    nullableMetricColors(
-                            latest.collectedCount,
-                            latest.newCount,
-                            latest.updatedCount,
-                            latest.providersFailed,
-                            latest.providersSucceeded,
-                            latest.skippedCount
-                    )
-            ));
+            detailSb.append("최근 수집: ").append(snapshot.latest.running ? "실행 중" : "대기 중");
+            if (!snapshot.latest.completedAt.isEmpty()) {
+                detailSb.append(" · 완료 ").append(formatTimestamp(snapshot.latest.completedAt));
+            }
+            if (!snapshot.latest.lastSuccessAt.isEmpty() && snapshot.latest.lastSuccessAgeSeconds != null) {
+                detailSb.append("\n마지막 성공 ").append(formatTimestamp(snapshot.latest.lastSuccessAt))
+                        .append(" (").append(CrawlerMonitoringPresentation.age(snapshot.latest.lastSuccessAgeSeconds)).append(" 전)");
+            }
+        }
+        if (snapshot.summary24h.available && snapshot.summary24h.hasData) {
+            if (detailSb.length() > 0) detailSb.append("\n");
+            detailSb.append("24시간 누적 집계 출처 ").append(snapshot.summary24h.source);
+            if (snapshot.summary24h.failureCount != null && snapshot.summary24h.failureCount > 0) {
+                detailSb.append(" · 실패 ").append(snapshot.summary24h.failureCount).append("회 발생");
+            }
         }
 
-        // 2. 24h Summary Card
-        if (snapshot.summary24h.available && snapshot.summary24h.hasData) {
-            CrawlerMonitoringSnapshot.Summary24h summary = snapshot.summary24h;
-            content.addView(statusMetricCard(
-                    "24시간 누적 성과",
-                    summary.failureCount != null && summary.failureCount > 0 ? "실패 있음" : "정상 집계",
-                    "집계 출처 " + summary.source
-                            + (summary.lastRunAt.isEmpty()
-                            ? "" : " · 마지막 실행 " + formatTimestamp(summary.lastRunAt)),
-                    summary.failureCount != null && summary.failureCount > 0
-                            ? COLOR_WARNING : COLOR_HEALTHY,
-                    new String[]{"실행", "성공", "부분 성공", "실패", "수집", "신규", "업데이트", "평균 소요"},
-                    new String[]{
-                            CrawlerMonitoringPresentation.count(summary.runCount, "회"),
-                            CrawlerMonitoringPresentation.count(summary.successCount, "회"),
-                            CrawlerMonitoringPresentation.count(summary.partialCount, "회"),
-                            CrawlerMonitoringPresentation.count(summary.failureCount, "회"),
-                            CrawlerMonitoringPresentation.count(summary.collectedCount, "건"),
-                            CrawlerMonitoringPresentation.count(summary.newCount, "건"),
-                            CrawlerMonitoringPresentation.count(summary.updatedCount, "건"),
-                            CrawlerMonitoringPresentation.duration(summary.averageDurationSeconds)
-                    },
-                    nullableMetricColors(
-                            summary.runCount,
-                            summary.successCount,
-                            summary.partialCount,
-                            summary.failureCount,
-                            summary.collectedCount,
-                            summary.newCount,
-                            summary.updatedCount,
-                            summary.averageDurationSeconds
-                    )
-            ));
-        }
+        String[] metricLabels = new String[]{
+                "최근 수집 상태", "최근 소요", "최근 수집", "최근 신규/수정",
+                "24h 실행/성공", "24h 수집", "24h 신규/수정", "24h 평균 소요"
+        };
+        String[] metricValues = new String[]{
+                snapshot.latest.available
+                        ? CrawlerMonitoringPresentation.latestStatusLabel(snapshot.latest.status)
+                        : "확인 불가",
+                snapshot.latest.available
+                        ? CrawlerMonitoringPresentation.duration(snapshot.latest.durationSeconds)
+                        : "확인 불가",
+                snapshot.latest.available
+                        ? CrawlerMonitoringPresentation.count(snapshot.latest.collectedCount, "건")
+                        : "확인 불가",
+                snapshot.latest.available
+                        ? (CrawlerMonitoringPresentation.count(snapshot.latest.newCount, "") + "/"
+                        + CrawlerMonitoringPresentation.count(snapshot.latest.updatedCount, "건"))
+                        : "확인 불가",
+                snapshot.summary24h.available && snapshot.summary24h.hasData
+                        ? (CrawlerMonitoringPresentation.count(snapshot.summary24h.runCount, "") + "/"
+                        + CrawlerMonitoringPresentation.count(snapshot.summary24h.successCount, "회"))
+                        : "확인 불가",
+                snapshot.summary24h.available && snapshot.summary24h.hasData
+                        ? CrawlerMonitoringPresentation.count(snapshot.summary24h.collectedCount, "건")
+                        : "확인 불가",
+                snapshot.summary24h.available && snapshot.summary24h.hasData
+                        ? (CrawlerMonitoringPresentation.count(snapshot.summary24h.newCount, "") + "/"
+                        + CrawlerMonitoringPresentation.count(snapshot.summary24h.updatedCount, "건"))
+                        : "확인 불가",
+                snapshot.summary24h.available && snapshot.summary24h.hasData
+                        ? CrawlerMonitoringPresentation.duration(snapshot.summary24h.averageDurationSeconds)
+                        : "확인 불가"
+        };
+        int[] metricColors = new int[]{
+                crawlerLatestStatusColor(snapshot.latest.available ? snapshot.latest.status : "unknown"),
+                snapshot.latest.available && snapshot.latest.durationSeconds != null ? COLOR_INFO : COLOR_WARNING,
+                snapshot.latest.available && snapshot.latest.collectedCount != null ? COLOR_INFO : COLOR_WARNING,
+                snapshot.latest.available && snapshot.latest.newCount != null ? COLOR_INFO : COLOR_WARNING,
+                snapshot.summary24h.available && snapshot.summary24h.failureCount != null && snapshot.summary24h.failureCount > 0
+                        ? COLOR_WARNING : COLOR_HEALTHY,
+                snapshot.summary24h.available && snapshot.summary24h.collectedCount != null ? COLOR_INFO : COLOR_WARNING,
+                snapshot.summary24h.available && snapshot.summary24h.newCount != null ? COLOR_INFO : COLOR_WARNING,
+                snapshot.summary24h.available && snapshot.summary24h.averageDurationSeconds != null ? COLOR_INFO : COLOR_WARNING
+        };
+
+        content.addView(statusMetricCard(
+                "크롤러 수집 현황",
+                topStatus,
+                detailSb.length() > 0 ? detailSb.toString() : "사용 가능한 크롤러 수집 증거가 없습니다.",
+                topColor,
+                metricLabels,
+                metricValues,
+                metricColors
+        ));
     }
 
     private void renderCrawlerProviders(
@@ -1307,7 +1268,7 @@ public class MainActivity extends Activity {
             }
         }
 
-        // Render Issue Providers first
+        // 1. Issue Providers first
         if (!issueProviders.isEmpty()) {
             content.addView(statusCard(
                     "실패/이슈 Provider (" + issueProviders.size() + "곳)",
@@ -1320,9 +1281,50 @@ public class MainActivity extends Activity {
             }
         }
 
-        // Render Normal Providers
-        for (CrawlerMonitoringSnapshot.Provider provider : normalProviders) {
-            renderProviderCard(provider, false);
+        // 2. Normal Providers Collapsible Section
+        if (!normalProviders.isEmpty()) {
+            LinearLayout normalHeader = new LinearLayout(this);
+            normalHeader.setOrientation(LinearLayout.HORIZONTAL);
+            normalHeader.setGravity(Gravity.CENTER_VERTICAL);
+            normalHeader.setPadding(dp(14), dp(12), dp(14), dp(12));
+            normalHeader.setBackground(roundedBackground(COLOR_SURFACE, COLOR_BORDER, 12));
+            normalHeader.setClickable(true);
+            normalHeader.setFocusable(true);
+
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            headerParams.setMargins(0, 0, 0, dp(8));
+            normalHeader.setLayoutParams(headerParams);
+
+            TextView titleView = new TextView(this);
+            titleView.setText("정상 Provider (" + normalProviders.size() + "곳)");
+            titleView.setTextColor(COLOR_TEXT);
+            titleView.setTextSize(14);
+            titleView.setTypeface(Typeface.DEFAULT_BOLD);
+            normalHeader.addView(titleView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+            TextView badgeView = statusBadge(crawlerNormalProvidersExpanded ? "접기 ▲" : "목록 보기 ▼", COLOR_HEALTHY);
+            normalHeader.addView(badgeView);
+
+            content.addView(normalHeader);
+
+            LinearLayout normalContainer = new LinearLayout(this);
+            normalContainer.setOrientation(LinearLayout.VERTICAL);
+            normalContainer.setVisibility(crawlerNormalProvidersExpanded ? View.VISIBLE : View.GONE);
+
+            for (CrawlerMonitoringSnapshot.Provider provider : normalProviders) {
+                normalContainer.addView(createCompactProviderRow(provider));
+            }
+
+            normalHeader.setOnClickListener(v -> {
+                crawlerNormalProvidersExpanded = !crawlerNormalProvidersExpanded;
+                normalContainer.setVisibility(crawlerNormalProvidersExpanded ? View.VISIBLE : View.GONE);
+                badgeView.setText(crawlerNormalProvidersExpanded ? "접기 ▲" : "목록 보기 ▼");
+            });
+
+            content.addView(normalContainer);
         }
 
         if (providers.truncated) {
@@ -1334,6 +1336,41 @@ public class MainActivity extends Activity {
                     COLOR_INFO
             ));
         }
+    }
+
+    private View createCompactProviderRow(CrawlerMonitoringSnapshot.Provider provider) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(12), dp(9), dp(12), dp(9));
+        row.setBackground(roundedBackground(COLOR_SURFACE, COLOR_BORDER, 10));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 0, 0, dp(6));
+        row.setLayoutParams(params);
+
+        TextView nameView = new TextView(this);
+        nameView.setText(provider.provider);
+        nameView.setTextSize(13);
+        nameView.setTypeface(Typeface.DEFAULT_BOLD);
+        nameView.setTextColor(COLOR_TEXT);
+        nameView.setSingleLine(true);
+        nameView.setEllipsize(TextUtils.TruncateAt.END);
+        row.addView(nameView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+        TextView statsView = new TextView(this);
+        String stats = CrawlerMonitoringPresentation.count(provider.runCount, "회") + " · "
+                + CrawlerMonitoringPresentation.count(provider.collectedCount, "건")
+                + (provider.successRate != null ? " (" + CrawlerMonitoringPresentation.percentage(provider.successRate) + ")" : "");
+        statsView.setText(stats);
+        statsView.setTextSize(12);
+        statsView.setTextColor(COLOR_MUTED);
+        row.addView(statsView);
+
+        return row;
     }
 
     private void renderProviderCard(CrawlerMonitoringSnapshot.Provider provider, boolean isIssue) {
@@ -1647,8 +1684,45 @@ public class MainActivity extends Activity {
             return;
         }
 
-        for (CrawlerMonitoringSnapshot.LogItem log : logs) {
-            content.addView(createCrawlerLogCard(log));
+        final int initialLimit = 3;
+        int displayCount = crawlerLogsExpanded ? logs.size() : Math.min(logs.size(), initialLimit);
+
+        for (int i = 0; i < displayCount; i++) {
+            content.addView(createCrawlerLogCard(logs.get(i)));
+        }
+
+        if (logs.size() > initialLimit) {
+            LinearLayout toggleCard = new LinearLayout(this);
+            toggleCard.setOrientation(LinearLayout.HORIZONTAL);
+            toggleCard.setGravity(Gravity.CENTER);
+            toggleCard.setPadding(dp(14), dp(11), dp(14), dp(11));
+            toggleCard.setBackground(roundedBackground(COLOR_SURFACE, COLOR_BORDER, 12));
+            toggleCard.setClickable(true);
+            toggleCard.setFocusable(true);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 0, 0, dp(10));
+            toggleCard.setLayoutParams(params);
+
+            TextView toggleText = new TextView(this);
+            String label = crawlerLogsExpanded
+                    ? "로그 접기 (최근 3건만 보기) ▲"
+                    : "이전 로그 더보기 (" + (logs.size() - initialLimit) + "건 더 있음) ▼";
+            toggleText.setText(label);
+            toggleText.setTextColor(COLOR_ACCENT);
+            toggleText.setTextSize(13);
+            toggleText.setTypeface(Typeface.DEFAULT_BOLD);
+            toggleCard.addView(toggleText);
+
+            toggleCard.setOnClickListener(v -> {
+                crawlerLogsExpanded = !crawlerLogsExpanded;
+                refresh(false);
+            });
+
+            content.addView(toggleCard);
         }
     }
 
