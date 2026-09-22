@@ -44,3 +44,7 @@ Thumbs.db
 # Misc sensitive files
 credentials.json
 service-account*.json
+ 
+# Android downloads / local artifacts
+BOT/android_downloads/
+
