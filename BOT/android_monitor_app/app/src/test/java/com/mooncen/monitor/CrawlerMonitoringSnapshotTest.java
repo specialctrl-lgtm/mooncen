@@ -463,6 +463,44 @@ public class CrawlerMonitoringSnapshotTest {
         assertEquals("idle", worker.crawlerStatus);
     }
 
+    @Test
+    public void parsesQueueSummarySection() throws Exception {
+        JSONObject value = payload();
+        JSONObject qObj = new JSONObject()
+                .put("available", true)
+                .put("batch_date", "2026-09-28")
+                .put("total", 42)
+                .put("by_status", new JSONObject()
+                        .put("running", 2)
+                        .put("pending", 38)
+                        .put("completed", 2)
+                        .put("failed", 0))
+                .put("by_worker", new JSONObject()
+                        .put("gen1crawler", new JSONObject().put("running", 1).put("completed", 1))
+                        .put("mac", new JSONObject().put("running", 1).put("completed", 1)))
+                .put("active_tasks", new JSONArray()
+                        .put(new JSONObject()
+                                .put("provider", "galleria")
+                                .put("worker", "gen1crawler")
+                                .put("started_at", "2026-09-28T12:00:00Z")
+                                .put("attempt_count", 1)));
+        value.put("queue_summary", qObj);
+
+        CrawlerMonitoringSnapshot snapshot = CrawlerMonitoringSnapshot.parse(value);
+        assertTrue(snapshot.queueSummary.available);
+        assertEquals("2026-09-28", snapshot.queueSummary.batchDate);
+        assertEquals(42, snapshot.queueSummary.total);
+        assertEquals(2, snapshot.queueSummary.running);
+        assertEquals(38, snapshot.queueSummary.pending);
+        assertEquals(2, snapshot.queueSummary.completed);
+        assertEquals(0, snapshot.queueSummary.failed);
+        assertEquals(1, snapshot.queueSummary.activeTasks.size());
+        assertEquals("galleria", snapshot.queueSummary.activeTasks.get(0).provider);
+        assertEquals("gen1crawler", snapshot.queueSummary.activeTasks.get(0).worker);
+        assertTrue(snapshot.queueSummary.byWorker.containsKey("gen1crawler"));
+        assertTrue(snapshot.queueSummary.byWorker.containsKey("mac"));
+    }
+
     private static JSONObject node(
             String name,
             String role,

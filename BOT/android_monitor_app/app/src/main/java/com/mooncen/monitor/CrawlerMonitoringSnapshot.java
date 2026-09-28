@@ -47,6 +47,7 @@ final class CrawlerMonitoringSnapshot {
     final List<SectionError> errors;
     final List<LogItem> recentLogs;
     final boolean recentLogsAvailable;
+    final QueueSummary queueSummary;
 
     private CrawlerMonitoringSnapshot(
             boolean contractValid,
@@ -63,7 +64,8 @@ final class CrawlerMonitoringSnapshot {
             List<Node> nodes,
             List<SectionError> errors,
             List<LogItem> recentLogs,
-            boolean recentLogsAvailable
+            boolean recentLogsAvailable,
+            QueueSummary queueSummary
     ) {
         this.contractValid = contractValid;
         this.available = available;
@@ -80,6 +82,7 @@ final class CrawlerMonitoringSnapshot {
         this.errors = Collections.unmodifiableList(new ArrayList<>(errors));
         this.recentLogs = Collections.unmodifiableList(new ArrayList<>(recentLogs));
         this.recentLogsAvailable = recentLogsAvailable;
+        this.queueSummary = queueSummary != null ? queueSummary : QueueSummary.unavailable();
     }
 
     static CrawlerMonitoringSnapshot parse(JSONObject data) {
@@ -122,7 +125,8 @@ final class CrawlerMonitoringSnapshot {
                 parseNodes(root.optJSONArray("nodes"), topology),
                 parseErrors(root.optJSONArray("errors")),
                 parseRecentLogs(root.optJSONArray("recent_logs")),
-                root.optBoolean("recent_logs_available", root.has("recent_logs"))
+                root.optBoolean("recent_logs_available", root.has("recent_logs")),
+                parseQueueSummary(root.optJSONObject("queue_summary"))
         );
     }
 
@@ -1267,5 +1271,121 @@ final class CrawlerMonitoringSnapshot {
             this.section = clean(section);
             this.code = clean(code);
         }
+    }
+
+    static final class ActiveTask {
+        final String provider;
+        final String worker;
+        final String startedAt;
+        final int attemptCount;
+
+        ActiveTask(String provider, String worker, String startedAt, int attemptCount) {
+            this.provider = clean(provider);
+            this.worker = clean(worker);
+            this.startedAt = clean(startedAt);
+            this.attemptCount = attemptCount;
+        }
+    }
+
+    static final class QueueSummary {
+        final boolean available;
+        final String batchDate;
+        final long total;
+        final long pending;
+        final long running;
+        final long completed;
+        final long failed;
+        final Map<String, Map<String, Long>> byWorker;
+        final List<ActiveTask> activeTasks;
+
+        QueueSummary(
+                boolean available,
+                String batchDate,
+                long total,
+                long pending,
+                long running,
+                long completed,
+                long failed,
+                Map<String, Map<String, Long>> byWorker,
+                List<ActiveTask> activeTasks
+        ) {
+            this.available = available;
+            this.batchDate = clean(batchDate);
+            this.total = total;
+            this.pending = pending;
+            this.running = running;
+            this.completed = completed;
+            this.failed = failed;
+            this.byWorker = byWorker != null ? Collections.unmodifiableMap(byWorker) : Collections.emptyMap();
+            this.activeTasks = activeTasks != null ? Collections.unmodifiableList(activeTasks) : Collections.emptyList();
+        }
+
+        static QueueSummary unavailable() {
+            return new QueueSummary(false, "", 0, 0, 0, 0, 0, Collections.emptyMap(), Collections.emptyList());
+        }
+    }
+
+    private static QueueSummary parseQueueSummary(JSONObject value) {
+        if (value == null) {
+            return QueueSummary.unavailable();
+        }
+        boolean available = value.optBoolean("available", false);
+        String batchDate = strictString(value, "batch_date", 32);
+        long total = value.optLong("total", 0);
+        JSONObject byStatus = value.optJSONObject("by_status");
+        long pending = 0;
+        long running = 0;
+        long completed = 0;
+        long failed = 0;
+        if (byStatus != null) {
+            pending = byStatus.optLong("pending", 0);
+            running = byStatus.optLong("running", 0);
+            completed = byStatus.optLong("completed", 0);
+            failed = byStatus.optLong("failed", 0);
+        }
+        Map<String, Map<String, Long>> byWorker = new LinkedHashMap<>();
+        JSONObject byWorkerObj = value.optJSONObject("by_worker");
+        if (byWorkerObj != null) {
+            java.util.Iterator<String> keys = byWorkerObj.keys();
+            while (keys.hasNext()) {
+                String worker = keys.next();
+                JSONObject countsObj = byWorkerObj.optJSONObject(worker);
+                Map<String, Long> statusMap = new LinkedHashMap<>();
+                if (countsObj != null) {
+                    java.util.Iterator<String> stKeys = countsObj.keys();
+                    while (stKeys.hasNext()) {
+                        String st = stKeys.next();
+                        statusMap.put(st, countsObj.optLong(st, 0));
+                    }
+                }
+                byWorker.put(worker, statusMap);
+            }
+        }
+        List<ActiveTask> activeTasks = new ArrayList<>();
+        JSONArray activeArr = value.optJSONArray("active_tasks");
+        if (activeArr != null) {
+            for (int i = 0; i < activeArr.length(); i++) {
+                JSONObject tObj = activeArr.optJSONObject(i);
+                if (tObj != null) {
+                    activeTasks.add(new ActiveTask(
+                            strictString(tObj, "provider", 128),
+                            strictString(tObj, "worker", 64),
+                            strictString(tObj, "started_at", 64),
+                            tObj.optInt("attempt_count", 1)
+                    ));
+                }
+            }
+        }
+        return new QueueSummary(
+                available,
+                batchDate,
+                total,
+                pending,
+                running,
+                completed,
+                failed,
+                byWorker,
+                activeTasks
+        );
     }
 }

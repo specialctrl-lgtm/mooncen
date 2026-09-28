@@ -1280,6 +1280,24 @@ def get_server_monitor_crawler_logs(limit=20, status="", provider=""):
     return {"available": False, "total": 0, "limit": limit, "items": []}
 
 
+def get_server_monitor_crawler_queue():
+    if not MOONCEN_SERVER_MONITOR_TOKEN:
+        return {"available": False, "total": 0, "by_status": {}, "by_worker": {}, "active_tasks": []}
+    try:
+        url = f"{MOONCEN_SERVER_MONITOR_BASE_URL.rstrip('/')}/api/monitoring/crawler-queue"
+        resp = requests.get(
+            url,
+            headers={"X-MoonCen-Monitor-Token": MOONCEN_SERVER_MONITOR_TOKEN},
+            timeout=MOONCEN_SERVER_MONITOR_TIMEOUT_SECONDS,
+            allow_redirects=False,
+        )
+        if 200 <= resp.status_code < 300:
+            return resp.json()
+    except Exception:
+        pass
+    return {"available": False, "total": 0, "by_status": {}, "by_worker": {}, "active_tasks": []}
+
+
 
 def get_ops_quality_summary():
     try:
@@ -2288,12 +2306,17 @@ def collect_crawler_monitoring_snapshot():
             lambda: get_server_monitor_crawler_logs(limit=10),
             {"available": False, "items": []},
         ),
+        "queue": (
+            get_server_monitor_crawler_queue,
+            {"available": False, "total": 0, "by_status": {}, "by_worker": {}, "active_tasks": []},
+        ),
     })
     latest, latest_errors = collected["latest"]
     summary_24h, providers, ops_errors = collected["operations"]
     nodes, node_errors = collected["nodes"]
     quality = collected["quality"]
     logs = collected.get("logs") or {"available": False, "items": []}
+    queue_summary = collected.get("queue") or {"available": False, "total": 0, "by_status": {}, "by_worker": {}, "active_tasks": []}
 
 
     # Reconcile latest snapshot with summary_24h / providers if durable metrics were not available
@@ -2408,6 +2431,7 @@ def collect_crawler_monitoring_snapshot():
         "quality": quality,
         "recent_logs": logs.get("items", []) if isinstance(logs, dict) else [],
         "recent_logs_available": bool(logs.get("available")) if isinstance(logs, dict) else False,
+        "queue_summary": queue_summary,
         "errors": errors,
     }
 

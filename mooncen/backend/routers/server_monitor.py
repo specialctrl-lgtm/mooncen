@@ -260,3 +260,82 @@ def crawler_logs(
         "items": items,
     }
 
+
+@router.get("/crawler-queue")
+def crawler_queue(db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Return task queue summary statistics (pending, running, completed, failed, and by-worker breakdown)."""
+    try:
+        status_query = text(
+            """
+            SELECT status, count(*) as count
+            FROM crawler_task_queue
+            WHERE batch_date = CURRENT_DATE
+            GROUP BY status
+            """
+        )
+        status_rows = db.execute(status_query).fetchall()
+        by_status = {row[0]: int(row[1]) for row in status_rows}
+        total = sum(by_status.values())
+
+        worker_query = text(
+            """
+            SELECT COALESCE(worker_node, 'unassigned') as worker, status, count(*) as count
+            FROM crawler_task_queue
+            WHERE batch_date = CURRENT_DATE
+            GROUP BY worker_node, status
+            ORDER BY count DESC
+            """
+        )
+        worker_rows = db.execute(worker_query).fetchall()
+        by_worker: dict[str, dict[str, int]] = {}
+        for row in worker_rows:
+            w = str(row[0])
+            st = str(row[1])
+            cnt = int(row[2])
+            if w not in by_worker:
+                by_worker[w] = {}
+            by_worker[w][st] = cnt
+
+        # Also get currently running tasks if any
+        running_query = text(
+            """
+            SELECT provider_code, worker_node, started_at, attempt_count
+            FROM crawler_task_queue
+            WHERE batch_date = CURRENT_DATE AND status = 'running'
+            ORDER BY started_at ASC
+            LIMIT 10
+            """
+        )
+        running_rows = db.execute(running_query).fetchall()
+        active_tasks = [
+            {
+                "provider": str(r[0]),
+                "worker": str(r[1] or "unassigned"),
+                "started_at": _iso_utc(r[2]) if r[2] else None,
+                "attempt_count": int(r[3] or 1),
+            }
+            for r in running_rows
+        ]
+
+        return {
+            "schema_version": 1,
+            "generated_at": _iso_utc(_utc_now()),
+            "available": True,
+            "batch_date": _iso_utc(_utc_now())[:10],
+            "total": total,
+            "by_status": by_status,
+            "by_worker": by_worker,
+            "active_tasks": active_tasks,
+        }
+    except Exception as exc:
+        return {
+            "schema_version": 1,
+            "generated_at": _iso_utc(_utc_now()),
+            "available": False,
+            "error": str(exc),
+            "total": 0,
+            "by_status": {},
+            "by_worker": {},
+            "active_tasks": [],
+        }
+

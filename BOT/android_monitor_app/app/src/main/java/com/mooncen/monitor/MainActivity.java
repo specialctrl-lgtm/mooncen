@@ -35,6 +35,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -1008,10 +1009,11 @@ public class MainActivity extends Activity {
 
     private void renderCrawlerTab(JSONObject data) {
         CrawlerMonitoringSnapshot snapshot = CrawlerMonitoringSnapshot.parse(data);
+        renderCrawlerTaskQueue(snapshot.queueSummary);
+        renderCrawlerNodes(snapshot);
         renderCrawlerUnifiedSummary(snapshot);
         renderCrawlerProviders(snapshot.providers, snapshot.errors);
         renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
-        renderCrawlerNodes(snapshot);
         renderCrawlerQuality(snapshot.quality);
         renderCrawlerMonitoringErrors(snapshot.errors);
     }
@@ -1144,6 +1146,103 @@ public class MainActivity extends Activity {
                         COLOR_INFO,
                         placementColor,
                         placementColor
+                }
+        ));
+    }
+
+    private void renderCrawlerTaskQueue(CrawlerMonitoringSnapshot.QueueSummary queue) {
+        content.addView(sectionHeading(
+                "분산 크롤러 작업 큐 (Queue)",
+                "중앙 스테이징 DB의 crawler_task_queue 실시간 작업 분배 및 진행 현황입니다."
+        ));
+
+        if (queue == null || !queue.available) {
+            content.addView(statusCard(
+                    "분산 크롤러 작업 큐",
+                    "연결 대기",
+                    "중앙 분산 작업 큐 응답이 없거나 아직 배치 작업이 생성되지 않았습니다.",
+                    COLOR_INFO
+            ));
+            return;
+        }
+
+        String batchDate = queue.batchDate.isEmpty() ? "당일" : queue.batchDate;
+        long total = queue.total;
+        long done = queue.completed;
+        long running = queue.running;
+        long pending = queue.pending;
+        long failed = queue.failed;
+
+        String queueBadge;
+        int queueColor;
+        if (total == 0) {
+            queueBadge = "대기 (작업 없음)";
+            queueColor = COLOR_INFO;
+        } else if (running > 0) {
+            queueBadge = "수집 진행 중 (" + running + "건 가동)";
+            queueColor = COLOR_INFO;
+        } else if (failed > 0 && pending == 0) {
+            queueBadge = "완료 (실패 " + failed + "건)";
+            queueColor = COLOR_CRITICAL;
+        } else if (pending == 0 && done > 0) {
+            queueBadge = "당일 수집 완료 (" + done + "건)";
+            queueColor = COLOR_HEALTHY;
+        } else {
+            queueBadge = "수집 대기 중";
+            queueColor = COLOR_WARNING;
+        }
+
+        StringBuilder detailSb = new StringBuilder();
+        detailSb.append("배치 기준일: ").append(batchDate);
+        if (total > 0) {
+            double progressPercent = (done * 100.0) / total;
+            detailSb.append(" · 진행률: ").append(String.format(Locale.KOREA, "%.1f%%", progressPercent));
+        }
+
+        // Active Tasks Details
+        if (!queue.activeTasks.isEmpty()) {
+            detailSb.append("\n현재 작업 중: ");
+            for (int i = 0; i < queue.activeTasks.size(); i++) {
+                CrawlerMonitoringSnapshot.ActiveTask task = queue.activeTasks.get(i);
+                if (i > 0) detailSb.append(", ");
+                detailSb.append(task.provider).append(" (").append(task.worker).append(")");
+            }
+        }
+
+        // Worker Distribution Details
+        if (!queue.byWorker.isEmpty()) {
+            detailSb.append("\n워커별 할당: ");
+            boolean firstW = true;
+            for (Map.Entry<String, Map<String, Long>> entry : queue.byWorker.entrySet()) {
+                if (!firstW) detailSb.append(" | ");
+                String workerName = entry.getKey();
+                Map<String, Long> stMap = entry.getValue();
+                long wRunning = stMap.containsKey("running") ? stMap.get("running") : 0;
+                long wDone = stMap.containsKey("completed") ? stMap.get("completed") : 0;
+                detailSb.append(workerName).append(" (실행 ").append(wRunning).append("/완료 ").append(wDone).append(")");
+                firstW = false;
+            }
+        }
+
+        content.addView(statusMetricCard(
+                "작업 큐 현황 (" + batchDate + ")",
+                queueBadge,
+                detailSb.toString(),
+                queueColor,
+                new String[]{"전체 작업", "진행 중", "수집 대기", "수집 완료", "실패"},
+                new String[]{
+                        total + "건",
+                        running + "건",
+                        pending + "건",
+                        done + "건",
+                        failed + "건"
+                },
+                new int[]{
+                        COLOR_INFO,
+                        running > 0 ? COLOR_INFO : COLOR_MUTED,
+                        pending > 0 ? COLOR_WARNING : COLOR_MUTED,
+                        done > 0 ? COLOR_HEALTHY : COLOR_MUTED,
+                        failed > 0 ? COLOR_CRITICAL : COLOR_HEALTHY
                 }
         ));
     }
@@ -1605,8 +1704,23 @@ public class MainActivity extends Activity {
                 if (node.crawlerTimerActive != null) {
                     detail.append(node.crawlerTimerActive ? " · 타이머 활성" : " · 타이머 대기 없음");
                 }
-                if (node.crawlerRunning) {
-                    detail.append(" · 수집 실행 중");
+
+                // Check if queue has an active running task on this node
+                String activeProviderOnNode = null;
+                if (snapshot.queueSummary != null && snapshot.queueSummary.activeTasks != null) {
+                    for (CrawlerMonitoringSnapshot.ActiveTask at : snapshot.queueSummary.activeTasks) {
+                        if (node.node.equalsIgnoreCase(at.worker)) {
+                            activeProviderOnNode = at.provider;
+                            break;
+                        }
+                    }
+                }
+
+                if (node.crawlerRunning || activeProviderOnNode != null) {
+                    detail.append(" · 수집 가동 중");
+                    if (activeProviderOnNode != null) {
+                        detail.append(" (").append(activeProviderOnNode).append(")");
+                    }
                 }
                 if (!node.crawlerCompletedAt.isEmpty()) {
                     detail.append("\n최근 완료 ").append(formatTimestamp(node.crawlerCompletedAt));
