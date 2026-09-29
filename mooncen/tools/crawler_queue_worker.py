@@ -283,6 +283,7 @@ def run_crawler_subprocess(provider_code: str, dry_run: bool = False) -> tuple[i
     logger.info("Executing crawler: %s", " ".join(cmd))
     env = os.environ.copy()
     env["PYTHONUNBUFFERED"] = "1"
+    env["CRAWL_PROVIDER_LOCK"] = "1"
 
     process = subprocess.Popen(
         cmd,

@@ -48,6 +48,8 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 LOG_DIR = os.path.abspath(os.getenv("CRAWLER_LOG_DIR", os.path.join(PROJECT_ROOT, "logs")))
 PID_FILE = os.path.join(LOG_DIR, "crawler_worker.pid")
 WORKER_LOCK_FILE = os.path.join(LOG_DIR, "crawler_worker.lock")
+ACTIVE_LOCK_FILE = WORKER_LOCK_FILE
+ACTIVE_PID_FILE = PID_FILE
 PROGRESS_FILE = os.path.join(LOG_DIR, "crawler_progress.json")
 CYCLE_STATE_FILE = os.path.join(LOG_DIR, "crawler_cycle_state.json")
 WORKER_LOCK_HANDLE = None
@@ -746,12 +748,12 @@ def is_process_running(pid: int) -> bool:
     return True
 
 
-def read_pid_file() -> Optional[int]:
-    if not os.path.exists(PID_FILE):
+def read_pid_file(pid_path: str = PID_FILE) -> Optional[int]:
+    if not os.path.exists(pid_path):
         return None
 
     try:
-        with open(PID_FILE, "r", encoding="utf-8") as pid_file:
+        with open(pid_path, "r", encoding="utf-8") as pid_file:
             return int(pid_file.read().strip())
     except (OSError, ValueError):
         return None
@@ -777,11 +779,11 @@ def _lock_operation_may_be_contention(exc: OSError) -> bool:
     return exc.errno in contention_errnos
 
 
-def _confirmed_lock_holder_pid() -> Optional[int]:
+def _confirmed_lock_holder_pid(pid_path: str = PID_FILE) -> Optional[int]:
     # The lock owner publishes its PID immediately after flock/locking. Give
     # that bounded critical section time to finish before declaring corruption.
     for attempt in range(6):
-        existing_pid = read_pid_file()
+        existing_pid = read_pid_file(pid_path)
         if existing_pid is not None and is_process_running(existing_pid):
             return existing_pid
         if attempt < 5:
@@ -789,8 +791,8 @@ def _confirmed_lock_holder_pid() -> Optional[int]:
     return None
 
 
-def acquire_worker_lock() -> str:
-    global WORKER_LOCK_HANDLE
+def acquire_worker_lock(lock_suffix: str = "") -> str:
+    global WORKER_LOCK_HANDLE, ACTIVE_LOCK_FILE, ACTIVE_PID_FILE
     if WORKER_LOCK_HANDLE is not None:
         return WORKER_LOCK_ACQUIRED
     try:
@@ -803,8 +805,16 @@ def acquire_worker_lock() -> str:
         )
         return WORKER_LOCK_ERROR
 
+    if lock_suffix:
+        clean_suffix = re.sub(r"[^A-Za-z0-9_.-]", "_", lock_suffix.strip())
+        target_lock_file = os.path.join(LOG_DIR, f"crawler_worker_{clean_suffix}.lock")
+        target_pid_file = os.path.join(LOG_DIR, f"crawler_worker_{clean_suffix}.pid")
+    else:
+        target_lock_file = WORKER_LOCK_FILE
+        target_pid_file = PID_FILE
+
     try:
-        lock_file = open(WORKER_LOCK_FILE, "a+", encoding="utf-8")
+        lock_file = open(target_lock_file, "a+", encoding="utf-8")
         lock_file.seek(0, os.SEEK_END)
         if lock_file.tell() == 0:
             lock_file.write(" ")
@@ -829,25 +839,29 @@ def acquire_worker_lock() -> str:
             lock_file.close()
         except OSError:
             pass
-        existing_pid = _confirmed_lock_holder_pid() if _lock_operation_may_be_contention(exc) else None
+        existing_pid = _confirmed_lock_holder_pid(target_pid_file) if _lock_operation_may_be_contention(exc) else None
         if existing_pid is not None:
             logger.warning(
-                "Crawler worker lock contention confirmed. pid=%s error_type=%s errno=%s",
+                "Crawler worker lock contention confirmed. target=%s pid=%s error_type=%s errno=%s",
+                os.path.basename(target_lock_file),
                 existing_pid,
                 type(exc).__name__,
                 exc.errno,
             )
             return WORKER_LOCK_CONTENDED
         logger.error(
-            "Crawler worker lock acquisition failed. operation=lock error_type=%s errno=%s active_pid=none",
+            "Crawler worker lock acquisition failed. target=%s operation=lock error_type=%s errno=%s active_pid=none",
+            os.path.basename(target_lock_file),
             type(exc).__name__,
             exc.errno,
         )
         return WORKER_LOCK_ERROR
 
     WORKER_LOCK_HANDLE = lock_file
+    ACTIVE_LOCK_FILE = target_lock_file
+    ACTIVE_PID_FILE = target_pid_file
     try:
-        with open(PID_FILE, "w", encoding="utf-8") as pid_file:
+        with open(target_pid_file, "w", encoding="utf-8") as pid_file:
             pid_file.write(str(os.getpid()))
             pid_file.flush()
             os.fsync(pid_file.fileno())
@@ -859,19 +873,19 @@ def acquire_worker_lock() -> str:
         )
         release_worker_lock()
         return WORKER_LOCK_ERROR
-    logger.info("Worker lock acquired. PID=%s", os.getpid())
+    logger.info("Worker lock acquired. lock=%s PID=%s", os.path.basename(target_lock_file), os.getpid())
     return WORKER_LOCK_ACQUIRED
 
 
 def release_worker_lock() -> None:
-    global WORKER_LOCK_HANDLE
+    global WORKER_LOCK_HANDLE, ACTIVE_PID_FILE
     lock_file = WORKER_LOCK_HANDLE
     if lock_file is None:
         return
     try:
         try:
-            if read_pid_file() == os.getpid():
-                os.remove(PID_FILE)
+            if read_pid_file(ACTIVE_PID_FILE) == os.getpid():
+                os.remove(ACTIVE_PID_FILE)
         except FileNotFoundError:
             pass
         if os.name == "nt":
@@ -883,7 +897,7 @@ def release_worker_lock() -> None:
             import fcntl
 
             fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
-        logger.info("Worker lock released.")
+        logger.info("Worker lock released: %s", os.path.basename(ACTIVE_LOCK_FILE))
     except OSError as exc:
         logger.warning("Failed to release worker lock: %s", type(exc).__name__)
     finally:
@@ -2443,20 +2457,6 @@ def validate_database_schema() -> None:
 
     tables = sorted(required)
     try:
-        if staging_enabled():
-            try:
-                with get_db_cursor() as ddl_cursor:
-                    ddl_cursor.execute(
-                        """
-                        ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT;
-                        CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint
-                            ON courses(provider, source_endpoint)
-                            WHERE source_endpoint IS NOT NULL;
-                        """
-                    )
-            except Exception as ddl_exc:
-                logger.debug("Staging courses DDL ensure: %s", ddl_exc)
-
         with get_db_cursor() as cursor:
             cursor.execute(
                 """
@@ -2481,6 +2481,20 @@ def validate_database_schema() -> None:
             columns_by_table: dict[str, set[str]] = {}
             for row in cursor.fetchall():
                 columns_by_table.setdefault(row["table_name"], set()).add(row["column_name"])
+
+        if staging_enabled() and "source_endpoint" not in columns_by_table.get("courses", set()):
+            try:
+                with get_db_cursor() as ddl_cursor:
+                    ddl_cursor.execute(
+                        """
+                        ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT;
+                        CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint
+                            ON courses(provider, source_endpoint)
+                            WHERE source_endpoint IS NOT NULL;
+                        """
+                    )
+            except Exception as ddl_exc:
+                logger.debug("Staging courses DDL ensure: %s", ddl_exc)
     except Exception as exc:
         config = {key: value for key, value in get_db_config().items() if key != "password"}
         logger.critical("Crawler DB schema preflight failed to connect. config=%s error=%s", config, exc)
@@ -2645,19 +2659,6 @@ def begin_staging_batch(batch_id: str, providers: list[str]) -> bool:
     try:
         from DB.db_utils import get_db_cursor
 
-        try:
-            with get_db_cursor() as ddl_cursor:
-                ddl_cursor.execute(
-                    """
-                    ALTER TABLE courses ADD COLUMN IF NOT EXISTS source_endpoint TEXT;
-                    CREATE INDEX IF NOT EXISTS idx_courses_provider_source_endpoint
-                        ON courses(provider, source_endpoint)
-                        WHERE source_endpoint IS NOT NULL;
-                    """
-                )
-        except Exception as ddl_exc:
-            logger.debug("Staging courses DDL check: %s", ddl_exc)
-
         with get_db_cursor() as cursor:
             cursor.execute(
                 """
@@ -2810,11 +2811,16 @@ def run_worker(
         raise ValueError("ignore_worker_lock is forbidden in staging write mode")
     if distributed_batch_id and (not once or len(providers) != 1):
         raise ValueError("a distributed crawler task must be a one-shot single-provider run")
+    lock_suffix = ""
+    use_provider_lock = os.getenv("CRAWL_PROVIDER_LOCK", "").strip().lower() in {"1", "true", "yes", "on"}
+    if len(providers) == 1 and (once or use_provider_lock):
+        lock_suffix = providers[0]
+
     lock_status = WORKER_LOCK_ACQUIRED if ignore_worker_lock else ""
     if ignore_worker_lock:
         logger.warning("Crawler worker lock is ignored for this manual run.")
     else:
-        lock_status = acquire_worker_lock()
+        lock_status = acquire_worker_lock(lock_suffix=lock_suffix)
 
     if lock_status == WORKER_LOCK_CONTENDED:
         return CRAWLER_LOCK_CONTENTION_EXIT_CODE

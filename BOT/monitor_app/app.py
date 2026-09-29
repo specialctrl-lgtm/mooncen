@@ -112,7 +112,7 @@ CORE_CRAWLER_CONTROL_NODE = configured_core_node(
 )
 CORE_CRAWLER_WORKER_NODES = [
     node.strip()
-    for node in os.environ.get("MONITOR_APP_CRAWLER_WORKER_NODES", "mac").split(",")
+    for node in os.environ.get("MONITOR_APP_CRAWLER_WORKER_NODES", "gen1crawler,mac").split(",")
     if node.strip()
 ]
 CORE_CRAWLER_MODE = "legacy"
