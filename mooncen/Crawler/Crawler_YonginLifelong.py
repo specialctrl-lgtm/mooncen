@@ -283,7 +283,7 @@ def run(save_db: bool = False, max_pages: int = 10, limit: Optional[int] = None)
     if save_db and all_courses:
         with get_db_cursor() as cursor:
             saved_cnt = save_courses(all_courses, cursor)
-            stale_cnt = mark_stale_courses(PROVIDER, crawl_started_at)
+            stale_cnt = mark_stale_courses(PROVIDER, crawl_started_at, cursor=cursor)
             print(f"provider=YONGIN_LIFELONG_LEARNING saved={saved_cnt} stale_marked={stale_cnt}")
             return 0 if saved_cnt > 0 else 1
     elif all_courses:
