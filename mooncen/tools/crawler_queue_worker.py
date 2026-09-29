@@ -206,9 +206,12 @@ def claim_task(
 
     version_clause = ""
     params: list[Any] = [worker_node, version, target_date]
-    if enforce_version and version and version != "unknown":
-        version_clause = "AND (required_code_version IS NULL OR required_code_version = %s)"
-        params.append(version)
+    if enforce_version:
+        if version and version != "unknown":
+            version_clause = "AND (required_code_version IS NULL OR required_code_version = %s)"
+            params.append(version)
+        else:
+            version_clause = "AND required_code_version IS NULL"
 
     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
         cursor.execute(
