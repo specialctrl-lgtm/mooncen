@@ -809,6 +809,7 @@ def save_db(rows: list[dict[str, Any]]) -> int:
                     description = EXCLUDED.description,
                     image_url = EXCLUDED.image_url,
                     is_active = TRUE,
+                    removed_at = NULL,
                     last_seen_at = now()
                 """,
                 {

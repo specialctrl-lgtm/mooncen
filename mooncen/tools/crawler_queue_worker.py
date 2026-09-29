@@ -279,6 +279,8 @@ def run_crawler_subprocess(provider_code: str, dry_run: bool = False) -> tuple[i
         provider_code,
         "--once",
         "--ignore-active-window",
+        "--skip-category-backfill",
+        "--skip-coordinate-backfill",
     ]
     logger.info("Executing crawler: %s", " ".join(cmd))
     env = os.environ.copy()

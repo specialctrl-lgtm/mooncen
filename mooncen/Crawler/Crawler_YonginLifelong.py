@@ -234,6 +234,7 @@ def save_courses(courses: List[Dict[str, Any]], cursor) -> int:
                 target_min_age = EXCLUDED.target_min_age,
                 target_max_age = EXCLUDED.target_max_age,
                 is_active = TRUE,
+                removed_at = NULL,
                 last_seen_at = CURRENT_TIMESTAMP,
                 updated_at = CURRENT_TIMESTAMP
             RETURNING id;
