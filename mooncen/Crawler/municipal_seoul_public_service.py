@@ -542,7 +542,7 @@ def _list_row(
         raise SeoulPublicServiceContractError(
             "list card must be exactly internal-detail or external-only"
         )
-    title_node = item.select_one("h4.tit1")
+    title_node = item.select_one("h3.tit1, h4.tit1, .tit1")
     title = _clean(title_node.get_text(" ", strip=True) if title_node else "")
     if not title:
         raise SeoulPublicServiceContractError("list card lacks title")
@@ -827,7 +827,7 @@ def _detail_row(
         raise SeoulPublicServiceContractError(
             f"{service_id}: detail identity/category mismatch"
         )
-    title_node = soup.select_one("div.dt_top_box h4.dt_tit1 span.tit")
+    title_node = soup.select_one("div.dt_top_box h3.dt_tit1 span.tit, div.dt_top_box h4.dt_tit1 span.tit, div.dt_top_box .dt_tit1 span.tit")
     detail_title = _clean(title_node.get_text(" ", strip=True) if title_node else "")
     if not detail_title or _normalized(detail_title) != _normalized(
         listed.get("title")

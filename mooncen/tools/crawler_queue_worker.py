@@ -380,9 +380,10 @@ def worker_loop(
             try:
                 exit_code, output_tail = run_crawler_subprocess(provider, dry_run=dry_run)
                 duration = time.time() - start_time
-                if exit_code == 0:
-                    logger.info("Task %d (%s) COMPLETED in %.1fs", task_id, provider, duration)
-                    complete_task(conn, task_id, status="completed", exit_code=0)
+                if exit_code in (0, 3):
+                    status_label = "COMPLETED" if exit_code == 0 else "PARTIAL_SUCCESS (COMPLETED)"
+                    logger.info("Task %d (%s) %s in %.1fs (exit_code=%d)", task_id, provider, status_label, duration, exit_code)
+                    complete_task(conn, task_id, status="completed", exit_code=exit_code)
                 else:
                     logger.error("Task %d (%s) FAILED with code %d in %.1fs. Output tail:\n%s", task_id, provider, exit_code, duration, output_tail)
                     complete_task(conn, task_id, status="failed", exit_code=exit_code, error_message=output_tail)
