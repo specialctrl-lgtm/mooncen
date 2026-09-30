@@ -49891,6 +49891,8 @@ def collect_suwon_learning_courses(
         "reservation_discovery_links": sum(1 for row in rows if clean_text(row.get("application_url"))),
         "pagination_detected": pagination_detected,
         "recursion_depth": 0,
+        "no_current_data": not rows,
+        "no_current_reason": "official suwon learning course list is empty" if not rows else "",
     }
     return dedupe_rows(rows), "suwon_learning_webzin_list+detail", meta
 
