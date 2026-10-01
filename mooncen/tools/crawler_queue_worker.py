@@ -103,47 +103,70 @@ class HeartbeatUpdater(threading.Thread):
                 logger.warning("Heartbeat failed for task %d: %s", self.task_id, exc)
 
 
+def find_git_dir(start_path: Path) -> Path | None:
+    """Find the enclosing .git directory by walking up from start_path."""
+    cur = start_path.resolve()
+    for _ in range(5):
+        if (cur / ".git").is_dir():
+            return cur
+        if cur.parent == cur:
+            break
+        cur = cur.parent
+    return None
+
+
 def get_local_code_version() -> str:
     """Return local crawler code version (git commit, release env, or env var)."""
     env_ver = os.getenv("CRAWLER_CODE_VERSION") or os.getenv("OPS_CRAWLER_CODE_VERSION")
     if env_ver and env_ver.strip():
         return env_ver.strip()
 
-    release_env = PROJECT_ROOT / "release.env"
-    if release_env.exists():
+    candidate_files = [
+        PROJECT_ROOT / ".gen1crawler-release.env",
+        PROJECT_ROOT.parent / ".gen1crawler-release.env",
+        PROJECT_ROOT / "release.env",
+        PROJECT_ROOT.parent / "release.env",
+    ]
+    for rel_file in candidate_files:
+        if rel_file.exists():
+            try:
+                for line in rel_file.read_text(encoding="utf-8").splitlines():
+                    for prefix in ("DEPLOY_COMMIT=", "CODE_VERSION="):
+                        if line.startswith(prefix):
+                            val = line.split("=", 1)[1].strip().strip('"').strip("'")
+                            if val:
+                                return val[:7]
+            except Exception:
+                pass
+
+    git_root = find_git_dir(PROJECT_ROOT)
+    if git_root:
         try:
-            for line in release_env.read_text(encoding="utf-8").splitlines():
-                if line.startswith("CODE_VERSION="):
-                    val = line.split("=", 1)[1].strip().strip('"').strip("'")
-                    if val:
-                        return val
+            import subprocess
+            res = subprocess.run(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=str(git_root),
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            return res.stdout.strip()
         except Exception:
             pass
 
-    try:
-        import subprocess
-        res = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=str(PROJECT_ROOT),
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return res.stdout.strip()
-    except Exception:
-        return "unknown"
+    return "unknown"
 
 
 def check_and_apply_git_update() -> bool:
     """Fetch origin and pull if new commits exist. Return True if updated."""
-    git_dir = PROJECT_ROOT / ".git"
-    if not git_dir.exists():
+    git_root = find_git_dir(PROJECT_ROOT)
+    if not git_root:
         return False
     try:
         # Fetch quietly
         fetch_res = subprocess.run(
             ["git", "fetch", "origin", "main", "--quiet"],
-            cwd=str(PROJECT_ROOT),
+            cwd=str(git_root),
             capture_output=True,
             timeout=15,
         )
@@ -152,14 +175,14 @@ def check_and_apply_git_update() -> bool:
 
         local_rev = subprocess.run(
             ["git", "rev-parse", "HEAD"],
-            cwd=str(PROJECT_ROOT),
+            cwd=str(git_root),
             capture_output=True,
             text=True,
             timeout=5,
         ).stdout.strip()
         remote_rev = subprocess.run(
             ["git", "rev-parse", "origin/main"],
-            cwd=str(PROJECT_ROOT),
+            cwd=str(git_root),
             capture_output=True,
             text=True,
             timeout=5,
@@ -169,7 +192,7 @@ def check_and_apply_git_update() -> bool:
             logger.info("New Git commit detected (%s -> %s). Pulling updates...", local_rev[:7], remote_rev[:7])
             pull_res = subprocess.run(
                 ["git", "pull", "--ff-only", "origin", "main"],
-                cwd=str(PROJECT_ROOT),
+                cwd=str(git_root),
                 capture_output=True,
                 text=True,
                 timeout=30,
@@ -178,7 +201,7 @@ def check_and_apply_git_update() -> bool:
                 logger.warning("Fast-forward pull failed, trying standard merge: %s", pull_res.stderr.strip())
                 pull_res = subprocess.run(
                     ["git", "pull", "origin", "main"],
-                    cwd=str(PROJECT_ROOT),
+                    cwd=str(git_root),
                     capture_output=True,
                     text=True,
                     timeout=30,
@@ -191,6 +214,7 @@ def check_and_apply_git_update() -> bool:
     except Exception as exc:
         logger.debug("Auto git update check encountered an issue: %s", exc)
     return False
+
 
 
 def claim_task(
