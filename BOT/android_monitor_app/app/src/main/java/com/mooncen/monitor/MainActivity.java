@@ -1009,9 +1009,9 @@ public class MainActivity extends Activity {
 
     private void renderCrawlerTab(JSONObject data) {
         CrawlerMonitoringSnapshot snapshot = CrawlerMonitoringSnapshot.parse(data);
+        renderCrawlerUnifiedSummary(snapshot);
         renderCrawlerTaskQueue(snapshot.queueSummary);
         renderCrawlerNodes(snapshot);
-        renderCrawlerUnifiedSummary(snapshot);
         renderCrawlerProviders(snapshot.providers, snapshot.errors);
         renderCrawlerRecentLogs(snapshot.recentLogs, snapshot.recentLogsAvailable);
         renderCrawlerQuality(snapshot.quality);
@@ -1765,7 +1765,17 @@ public class MainActivity extends Activity {
                 if ("control".equals(role)) {
                     detail += " (중앙 제어/DB) · 크롤러 미배치";
                 } else if ("worker".equals(role)) {
-                    detail += " · 크롤러 대기";
+                    detail += " (분산 워커)";
+                    Map<String, Long> wStats = (snapshot.queueSummary != null && snapshot.queueSummary.byWorker != null)
+                            ? snapshot.queueSummary.byWorker.get(node.node) : null;
+                    if (wStats != null && !wStats.isEmpty()) {
+                        long wDone = wStats.containsKey("completed") ? wStats.get("completed") : 0;
+                        long wFail = wStats.containsKey("failed") ? wStats.get("failed") : 0;
+                        long wRun = wStats.containsKey("running") ? wStats.get("running") : 0;
+                        detail += " · 대기 중 (완료 " + wDone + "건 / 실패 " + wFail + "건 / 가동 " + wRun + "건)";
+                    } else {
+                        detail += " · 크롤러 대기";
+                    }
                 }
                 if (!node.error.isEmpty()) {
                     detail += " · " + node.error;

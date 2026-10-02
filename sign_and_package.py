@@ -29,7 +29,7 @@ def main():
     app_release_dir = os.path.join(repo_root, r"BOT\android_monitor_app\app\build\outputs\apk\release")
     unsigned_apk = os.path.join(app_release_dir, "app-release-unsigned.apk")
     aligned_apk = os.path.join(app_release_dir, "app-release-aligned.apk")
-    signed_apk = os.path.join(app_release_dir, "mooncen-monitor-1.8.19.apk")
+    signed_apk = os.path.join(app_release_dir, "mooncen-monitor-1.8.20.apk")
 
     build_tools = r"C:\Users\gen1w\AppData\Local\Android\Sdk\build-tools\35.0.0"
     zipalign_exe = os.path.join(build_tools, "zipalign.exe")
@@ -93,7 +93,7 @@ def main():
 
     # Copy to android_downloads
     downloads_dir = os.path.join(repo_root, r"BOT\android_downloads")
-    versioned_apk = os.path.join(downloads_dir, "mooncen-monitor-1.8.19.apk")
+    versioned_apk = os.path.join(downloads_dir, "mooncen-monitor-1.8.20.apk")
     main_apk = os.path.join(downloads_dir, "mooncen-monitor.apk")
     shutil.copy2(signed_apk, versioned_apk)
     shutil.copy2(signed_apk, main_apk)
@@ -105,8 +105,8 @@ def main():
     latest_data = {
         "schema_version": 1,
         "application_id": "com.mooncen.monitor",
-        "version_code": 28,
-        "version_name": "1.8.19",
+        "version_code": 29,
+        "version_name": "1.8.20",
         "min_sdk": 26,
         "apk_url": "https://mon.binary.kr/android/mooncen-monitor.apk",
         "download_url": "https://mon.binary.kr/android/mooncen-monitor.apk",
@@ -115,7 +115,7 @@ def main():
         "size_bytes": size_bytes,
         "published_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "signer_sha256": "c9f655472d1ff4ead58be4e6bb2203bca1bd603cf8cc646798ead038c7cd58ee",
-        "notes": "분산 크롤러 락 격리 및 mac/gen1crawler 워커 노드 모니터링 연동 최적화"
+        "notes": "크롤러 탭 상단 배치 재구성 및 mac 분산 워커 상태 표시 최적화"
     }
     with open(latest_json_path, "w", encoding="utf-8") as f:
         json.dump(latest_data, f, ensure_ascii=False, indent=2)

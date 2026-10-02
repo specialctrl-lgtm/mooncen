@@ -1747,7 +1747,7 @@ def crawler_node_snapshots(topology, now=None):
     if isinstance(worker_nodes, str):
         worker_nodes = [w.strip() for w in worker_nodes.split(",") if w.strip()]
     for worker in worker_nodes or []:
-        if worker and worker not in [p[1] for p in placements if p[0] == "worker"]:
+        if worker and worker not in [p[1] for p in placements]:
             placements.append(("worker", worker))
     node_names = sorted({node for _role, node in placements})
     node_pattern = "|".join(node_names)
@@ -2388,6 +2388,40 @@ def collect_crawler_monitoring_snapshot():
             if not node_row.get("crawler_duration_seconds") and latest.get("duration_seconds"):
                 node_row["crawler_duration_seconds"] = latest.get("duration_seconds")
             node_row["crawler_available"] = True
+        elif node_row.get("role") == "worker":
+            # Worker node reconciliation using queue execution stats
+            node_name = node_row.get("node")
+            by_worker = queue_summary.get("by_worker") or {}
+            worker_stats = by_worker.get(node_name)
+            if not worker_stats and node_name:
+                for k, v in by_worker.items():
+                    if k.lower() == node_name.lower():
+                        worker_stats = v
+                        break
+            active_tasks = queue_summary.get("active_tasks") or []
+            has_active_task = any(
+                isinstance(t, dict) and (t.get("worker") or "").lower() == (node_name or "").lower()
+                for t in active_tasks
+            )
+            if worker_stats or has_active_task:
+                completed = (worker_stats or {}).get("completed") or 0
+                failed = (worker_stats or {}).get("failed") or 0
+                running = (worker_stats or {}).get("running") or (1 if has_active_task else 0)
+                node_row["crawler_available"] = True
+                if has_active_task or running > 0:
+                    node_row["crawler_status"] = "running"
+                    node_row["crawler_running"] = True
+                elif completed > 0 and failed == 0:
+                    node_row["crawler_status"] = "success"
+                elif completed > 0 and failed > 0:
+                    node_row["crawler_status"] = "partial_success"
+                elif failed > 0:
+                    node_row["crawler_status"] = "failed"
+                else:
+                    node_row["crawler_status"] = "idle"
+                node_row["crawler_providers_requested"] = completed + failed + running
+                node_row["crawler_providers_succeeded"] = completed
+                node_row["crawler_providers_failed"] = failed
     errors = [
         *latest_errors,
         *ops_errors,
