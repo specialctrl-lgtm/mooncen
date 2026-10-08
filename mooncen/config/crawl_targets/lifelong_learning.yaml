@@ -332,7 +332,8 @@ targets:
   parser_assigned: nowon_lifelong_all_programs+detail
   crawler_notes:
   - 2026-07-18 공식 전체 검색은 1,253개·314페이지를 선언하며 페이지당 4개와 고유 edcPrgmid를 제공한다.
-  - 모든 상세의 교육 종료일을 확인해 지난 강좌만 제외하고, 실제 신청 제어가 있는 접수중·대기 강좌만 내부 약관 또는 공식 외부 신청 URL을 저장한다.
+  - 모든 상세의 교육 종료일을 확인해 지난 강좌만 제외하고, 실제 신청 제어가 있는 접수중·대기 강좌만 내부 약관 또는 공식 외부 신청 URL을
+    저장한다.
   - 과거 /lll 단일 상세 URL은 폐기된 비정규 경로이며 현재 /nwll 전체 강좌가 canonical 소유자다.
 - provider: MUNI_EDU_EUNPYEONG_GO_KR_DA5DB65F
   name: 서울특별시 은평구 평생교육 전체 강좌
@@ -355,7 +356,8 @@ targets:
   full_snapshot_required: true
   parser_assigned: eunpyeong_learning_all_states_current+detail
   crawler_notes:
-  - E(예정)·B(모집)·C(마감/진행) 상태를 모두 순회하고, 범위 초과 요청에서 마지막 페이지가 반복되는 공식 동작을 고유 EP_IDX·EM_IDX 페이지 서명으로 확인한 뒤 종료한다.
+  - E(예정)·B(모집)·C(마감/진행) 상태를 모두 순회하고, 범위 초과 요청에서 마지막 페이지가 반복되는 공식 동작을 고유 EP_IDX·EM_IDX
+    페이지 서명으로 확인한 뒤 종료한다.
   - 2026-07-18 실사이트 전체 범위는 E 16개·B 42개·C 291개이며 학습 종료일 기준 현재·향후 강좌는 각각 16개·15개·30개다.
   - M2_IDX=28445와 38993은 이 전체 메뉴에 포함된 하위 분류이므로 별도 provider로 중복 수집하지 않는다.
 - provider: MUNI_WWW_EPLEARNING_OR_KR_E230FB67
@@ -400,11 +402,14 @@ targets:
   municipality_code: '4831000000'
   municipality_full_name: 경상남도 거제시
   crawler_notes:
-  - '2026-06-29: Added from user request. Page title is 참여마당 > 교육프로그램 and returns a current list page.'
-  - '2026-08-05: Generic navigation dry-run returned 공연장 운영 시간 as one OPEN course after traversing adjacent 공연장 이용 links; this is a facility-use
-    false positive, not an education/experience application record.'
-  - Official education-program ledger currently has 45 historical records and no course whose operation period remains current on 2026-08-05.
-    Keep fail-closed until an exact list/detail collector replaces the generic crawler.
+  - '2026-06-29: Added from user request. Page title is 참여마당 > 교육프로그램 and returns
+    a current list page.'
+  - '2026-08-05: Generic navigation dry-run returned 공연장 운영 시간 as one OPEN course
+    after traversing adjacent 공연장 이용 links; this is a facility-use false positive,
+    not an education/experience application record.'
+  - Official education-program ledger currently has 45 historical records and no course
+    whose operation period remains current on 2026-08-05. Keep fail-closed until an
+    exact list/detail collector replaces the generic crawler.
 - provider: ANYANG_LIFELONG_LEARNING
   name: 안양시 전체 교육강좌
   branch: 안양시
@@ -615,7 +620,8 @@ targets:
   crawler_notes:
   - 공식 접수중·대기·교육중 상태 원장을 합산해 현재·향후 86건을 수집하며 전체 이력 1,749건은 품질 대조값으로만 확인한다.
   - 10개 데이터 페이지와 빈 11페이지, 첫·마지막 페이지 재검증을 모두 통과해야만 원자적 스냅샷을 게시한다.
-  - 내부 공개 상세 72건은 GET으로 전수 확인하고 외부 강좌 링크 14건은 주소만 보존한다. 신청·로그인·신청자·결제·첨부·PII 경로는 호출하지 않는다.
+  - 내부 공개 상세 72건은 GET으로 전수 확인하고 외부 강좌 링크 14건은 주소만 보존한다. 신청·로그인·신청자·결제·첨부·PII 경로는 호출하지
+    않는다.
 - provider: MUNI_CN_SEOCHEON_GO_KR_096AAB21
   name: 서천군 평생학습포털 전체 교육강좌
   branch: 서천군 평생학습포털
@@ -646,7 +652,8 @@ targets:
   detail_limit: 100
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 서천군 평생학습포털의 전체 강좌 원장은 강좌별 접수상태와 lctrSn 신청 identity를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 서천군 평생학습포털의 전체 강좌 원장은 강좌별 접수상태와 lctrSn 신청 identity를 직접 소유하는
+    공공 교육강좌 원장이다.
   classification_evidence_url: https://www.seocheon.go.kr/prog/lctr/life/sub03_01/list.do
   ownership_scope: seocheon_gun_complete_lifelong_course_ledger
   covered_municipalities:
@@ -712,8 +719,10 @@ targets:
     canonical_url_sha256: 3e6144da2613d793493025a7d037c5744ffafe497914c1872e71caa9d36edea2
     provider_decision: retain_existing_provider_on_migrated_canonical_owner_and_replace_generic_dispatch
   crawler_notes:
-  - 기존 cn.seocheon.go.kr provider identity를 유지하고 실제 www.seocheon.go.kr 전체 강좌 원장 1,316건·264페이지와 265페이지의 정확한 빈 sentinel을 완주한다.
-  - 현재·향후 34건의 공개 상세와 공식 교육기관 6곳을 검증하며 신청·로그인·신청자·첨부·다운로드 endpoint와 연락처·강사·자유본문을 호출하거나 저장하지 않는다.
+  - 기존 cn.seocheon.go.kr provider identity를 유지하고 실제 www.seocheon.go.kr 전체 강좌 원장 1,316건·264페이지와
+    265페이지의 정확한 빈 sentinel을 완주한다.
+  - 현재·향후 34건의 공개 상세와 공식 교육기관 6곳을 검증하며 신청·로그인·신청자·첨부·다운로드 endpoint와 연락처·강사·자유본문을 호출하거나
+    저장하지 않는다.
 - provider: MUNI_DOKSEODANG_SD_GO_KR_7CF6E0CB
   name: 성동구평생학습관
   branch: 성동구평생학습관
@@ -735,7 +744,8 @@ targets:
     parser: sd_booking_edu_list_detail
     error_kind: duplicate_of:MUNI_DOKSEODANG_SD_GO_KR_A8C20229
   crawler_notes:
-  - '2026-06-29: Verified dokseodang.sd.go.kr product URL resolves through the Seongdong booking education collector; 40 rows with required fields.'
+  - '2026-06-29: Verified dokseodang.sd.go.kr product URL resolves through the Seongdong
+    booking education collector; 40 rows with required fields.'
 - provider: MUNI_DOKSEODANG_SD_GO_KR_A8C20229
   name: 성동구 신속예약 전체 교육·강좌
   branch: 성동구 신속예약
@@ -781,8 +791,10 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - '2026-07-19: 공식 No 40→1과 5페이지를 대조하고 현재·향후 22건의 상세 운영기관을 모두 평생학습관으로 검증했다.'
-  - '2026-08-05: 공식 교육 1,624건·181페이지를 완주하고 현재·향후 공개 상세 1,317건을 모두 검증해 교육 1,286건을 분류 잠금했다.'
-  - sports·ccic는 공개 상세의 강좌 계약을 검증해 포함하고 상담·모집·시설형·점검 레코드·재사용된 stale 상세는 제외한다. 신청·로그인·신청자·첨부·다운로드 endpoint는 호출하지 않는다.
+  - '2026-08-05: 공식 교육 1,624건·181페이지를 완주하고 현재·향후 공개 상세 1,317건을 모두 검증해 교육 1,286건을 분류
+    잠금했다.'
+  - sports·ccic는 공개 상세의 강좌 계약을 검증해 포함하고 상담·모집·시설형·점검 레코드·재사용된 stale 상세는 제외한다. 신청·로그인·신청자·첨부·다운로드
+    endpoint는 호출하지 않는다.
 - provider: MUNI_EDUCITY_GEOCHANG_GO_KR_3187BF2A
   name: 거창군 평생교육 전체 강좌
   branch: 거창군 평생교육
@@ -880,7 +892,8 @@ targets:
     guide_candidate_id: MUNI_IR_C88685AE6190
     provider_decision: retain_incumbent_and_retarget_from_guide_to_complete_official_ledger
   crawler_notes:
-  - 전체 758행·152페이지와 153페이지 빈 sentinel을 완주하고 6개 중복 원천행을 lc identity로 제거한 뒤 2026-07-28 현재·향후 40건의 공개 상세를 검증한다.
+  - 전체 758행·152페이지와 153페이지 빈 sentinel을 완주하고 6개 중복 원천행을 lc identity로 제거한 뒤 2026-07-28
+    현재·향후 40건의 공개 상세를 검증한다.
   - 신청·로그인·신청자 명단·첨부·다운로드·PII endpoint는 호출하지 않고 상세의 공식 기관명 6곳만 지점으로 보존한다.
   target_id: 41c496f48635834d
   updated_at: '2026-06-07T23:06:17'
@@ -1172,7 +1185,8 @@ targets:
       time: 74
     duplicate_count: 0
     snapshot_complete: true
-  notes: 2026-07-28 Sectigo 누락 중간인증서와 library.sokcho.go.kr 전용 SECLEVEL=1 context를 적용하되 CA·hostname 검증을 유지해 strict TLS 수집을 복구했다.
+  notes: 2026-07-28 Sectigo 누락 중간인증서와 library.sokcho.go.kr 전용 SECLEVEL=1 context를
+    적용하되 CA·hostname 검증을 유지해 strict TLS 수집을 복구했다.
   crawler_notes:
   - 평생교육문화센터 주간·야간·특별 3분할과 시립·어린이영어도서관, 속초교육도서관·교육문화관을 지점별로 전수 수집한다.
   - 신청 연습용 강좌 1건은 총계·페이지 완전성에는 포함해 검증하지만 실제 교육 결과에서는 제외한다. 시설·체험·견학·공지는 별도 범위다.
@@ -1344,7 +1358,8 @@ targets:
     details_complete: true
     snapshot_complete: true
   crawler_notes:
-  - 공식 Program21~Program27 고정 7개 목록의 선언 63건과 각 마지막 다음 빈 sentinel을 검증한 뒤 상세 63/63을 대조한다.
+  - 공식 Program21~Program27 고정 7개 목록의 선언 63건과 각 마지막 다음 빈 sentinel을 검증한 뒤 상세 63/63을
+    대조한다.
   - 교육 종료일이 지나지 않은 12건만 저장하며 현재 강좌는 모두 덕진구 주소 근거로 귀속되고 완산구 0건을 그대로 보존한다.
   - 연락처·강사명·첨부파일명·자유서술은 저장하지 않고 course-bound do=sinform 신청 제어만 신청 URL로 인정한다.
 - provider: MUNI_E_JEONJU_GO_KR_0E0825AA
@@ -1538,7 +1553,8 @@ targets:
     canonical_source_total: 4029
     exact_subset: true
   crawler_notes:
-  - key=11 searchGroupNo=1의 1,384개 ID는 key=63 전체 기관 4,029개 ID의 완전 부분집합이며 현재·향후 101건도 모두 canonical에 포함된다.
+  - key=11 searchGroupNo=1의 1,384개 ID는 key=63 전체 기관 4,029개 ID의 완전 부분집합이며 현재·향후 101건도
+    모두 canonical에 포함된다.
 - provider: MUNI_GURI_GSEEK_KR_2E5F409F
   name: 구리시 GSEEK 전체 교육강좌
   branch: 구리시 GSEEK
@@ -1628,7 +1644,8 @@ targets:
   source: municipal_course_candidate_results
   origin: collected
   blocked_reason: non_course_notice_board
-  notes: Administrative civil-service/public notice board; recent rows are 검정고시/통학구역/공모 notices, not course applications.
+  notes: Administrative civil-service/public notice board; recent rows are 검정고시/통학구역/공모
+    notices, not course applications.
   last_quality:
     collected: 0
     score: 0.0
@@ -1649,7 +1666,8 @@ targets:
   source: municipal_course_candidate_results
   origin: collected
   blocked_reason: non_course_notice_board
-  notes: Administrative civil-service/public notice board; recent rows are school consolidation/public notice items, not course applications.
+  notes: Administrative civil-service/public notice board; recent rows are school
+    consolidation/public notice items, not course applications.
   last_quality:
     collected: 0
     score: 0.0
@@ -1670,7 +1688,8 @@ targets:
   source: municipal_course_candidate_results
   origin: collected
   blocked_reason: non_course_notice_board
-  notes: Administrative hiring/public notice board; recent rows are 방과후 도우미/기간제교사 채용 notices, not course applications.
+  notes: Administrative hiring/public notice board; recent rows are 방과후 도우미/기간제교사
+    채용 notices, not course applications.
   last_quality:
     collected: 0
     score: 0.0
@@ -1773,9 +1792,12 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - 평생학습관 777건·주민자치센터 1,582건·골목틈새학교 64건의 전체 보관 원장 2,423건·244페이지를 clamp·경계 재검사까지 완주하고 aggregate 총계와 일치시킨다.
-  - 접수 중 필터를 사용하지 않고 교육 종료일로 현재성을 판정해 상세 178건을 검증하며, identity·제목이 결박된 연습용 1건만 제외해 14개 지점 177건을 반환한다.
-  - 목록/상세 OPEN↔WAITING 실시간 전환 1건은 상세를 권위값으로 사용하고 CLOSED 양쪽 신청기간 공란 2건만 좁게 허용하며, 그 외 드리프트와 PII는 원자적으로 차단한다.
+  - 평생학습관 777건·주민자치센터 1,582건·골목틈새학교 64건의 전체 보관 원장 2,423건·244페이지를 clamp·경계 재검사까지 완주하고
+    aggregate 총계와 일치시킨다.
+  - 접수 중 필터를 사용하지 않고 교육 종료일로 현재성을 판정해 상세 178건을 검증하며, identity·제목이 결박된 연습용 1건만 제외해
+    14개 지점 177건을 반환한다.
+  - 목록/상세 OPEN↔WAITING 실시간 전환 1건은 상세를 권위값으로 사용하고 CLOSED 양쪽 신청기간 공란 2건만 좁게 허용하며, 그
+    외 드리프트와 PII는 원자적으로 차단한다.
 - provider: MUNI_GYLLE_GYEYANG_GO_KR_5F2FE039
   name: 계양구 평생학습포털 인트로
   branch: 인천광역시 계양구
@@ -1928,7 +1950,8 @@ targets:
   detail_limit: 1500
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 남양주시 주민자치센터의 edc_prgm_no 전체 JSON 원장은 교육기관·교육기간·접수상태와 공개 상세 identity를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 남양주시 주민자치센터의 edc_prgm_no 전체 JSON 원장은 교육기관·교육기간·접수상태와 공개 상세
+    identity를 직접 소유하는 공공 교육강좌 원장이다.
   classification_evidence_url: https://jumin.nyj.go.kr/web/edc/program/list
   ownership_scope: namyangju_jumin_complete_edc_prgm_no_course_ledger
   covered_municipalities:
@@ -2026,9 +2049,11 @@ targets:
     grade: A
     parser: anyang_learning_search_table
     error_kind: ''
-  notes: canonical collector retains CA and hostname verification while enabling OpenSSL legacy-server-connect compatibility.
+  notes: canonical collector retains CA and hostname verification while enabling OpenSSL
+    legacy-server-connect compatibility.
   crawler_notes:
-  - '2026-06-29: Root/guide URLs are normalized to /ay_network/Lecture_Search/list.asp. Parser paginates Page=N and fills fee/target/venue fallbacks.'
+  - '2026-06-29: Root/guide URLs are normalized to /ay_network/Lecture_Search/list.asp.
+    Parser paginates Page=N and fills fee/target/venue fallbacks.'
 - provider: MUNI_LEARNING_ANYANG_GO_KR_6C3182FE
   name: 안양시 평생학습원
   branch: 안양시 평생학습원
@@ -2072,7 +2097,8 @@ targets:
     error_kind: ''
   duplicate_of: ANYANG_LIFELONG_LEARNING
   crawler_notes:
-  - '2026-06-29: Receipt-list page is duplicate of Anyang integrated lecture search data.'
+  - '2026-06-29: Receipt-list page is duplicate of Anyang integrated lecture search
+    data.'
 - provider: MUNI_LEARNING_SUWON_GO_KR_3AF2DB76
   name: 수원시 글로벌 평생학습관
   branch: 경기도 수원시 권선구
@@ -2087,11 +2113,12 @@ targets:
   source: municipal_course_candidate_results
   origin: collected
   last_quality:
-    collected: 10
-    score: 56.5
-    grade: C
-    parser: card+detail
+    collected: 50
+    score: 100.0
+    grade: A
+    parser: suwon_learning_webzin_list+detail
     error_kind: ''
+    checked_at: '2026-10-08T02:36:09.104518+00:00'
 - provider: MUNI_LEARNING_SUWON_GO_KR_402954DA
   name: 수원시 글로벌 평생학습관
   branch: 경기도 수원시
@@ -2144,11 +2171,12 @@ targets:
   source: municipal_course_candidate_results
   origin: collected
   last_quality:
-    collected: 10
-    score: 56.5
-    grade: C
-    parser: card+detail
+    collected: 50
+    score: 100.0
+    grade: A
+    parser: suwon_learning_webzin_list+detail
     error_kind: ''
+    checked_at: '2026-10-08T02:36:09.104518+00:00'
 - provider: MUNI_LIFELONG_INJE_GO_KR_8A322659
   name: 평생학습 Inje
   branch: 평생학습 Inje
@@ -2405,7 +2433,8 @@ targets:
   manual_action: update
   manual_updated_at: '2026-06-07T23:05:21'
   crawler_notes:
-  - 2026-07-21 공식 9개 교육 메뉴 210개 ID와 SEARCH·REGULAR 집계 별칭을 전수 대조했다. 현재·향후 원천 160건 중 모집 공고 1건을 제외한 교육 159건의 상세를 모두 검증했다.
+  - 2026-07-21 공식 9개 교육 메뉴 210개 ID와 SEARCH·REGULAR 집계 별칭을 전수 대조했다. 현재·향후 원천 160건 중
+    모집 공고 1건을 제외한 교육 159건의 상세를 모두 검증했다.
   - 기존 B72 전민센터 63건과 D555 특별강좌 17건은 정본 합집합의 완전한 부분집합이므로 별도 실행하지 않는다.
 - provider: MUNI_LIFETIMEEDU_POHANG_GO_KR_67F22341
   name: 포항시 평생학습원
@@ -2663,7 +2692,8 @@ targets:
   crawler_notes:
   - 평생학습 4개·통합예약 교육 7개 원장 10,482건을 874개 데이터 페이지와 원천별 sentinel·안정성 재검사로 완주한다.
   - 현재·향후 2,308건의 상세를 전수 결합하고 공식 교차 원천 복제 48건만 제거해 최종 2,260건을 보존한다.
-  - 숫자형 평생학습 복제, 이중 HTML entity 제목, 목록 마감·상세 접수·정원 충족 시차는 정확한 identity와 제한 조건에서만 수용하며 조건이 달라지면 전체 스냅샷을 실패시킨다.
+  - 숫자형 평생학습 복제, 이중 HTML entity 제목, 목록 마감·상세 접수·정원 충족 시차는 정확한 identity와 제한 조건에서만 수용하며
+    조건이 달라지면 전체 스냅샷을 실패시킨다.
   - 도로명·기관·공식 장소 근거로 안산시 506·상록구 961·단원구 793건과 공식 지점 55개를 검증한다.
   target_id: 9fecbc2450faa76d
   updated_at: '2026-06-08T00:54:41'
@@ -3052,7 +3082,8 @@ targets:
     full_snapshot_validated: true
   crawler_notes:
   - 공식 ILMS 4,938건·10페이지와 11페이지 빈 sentinel, 기관 73곳 및 숨은 테스트 기관 1곳을 전수 검증한다.
-  - 현재 교육 717건에서 광명문화원 공식 36카드를 authoritative rollover로 대조하고 낡은 mirror 32건과 도서관 tombstone 24건을 제외해 664건을 저장한다.
+  - 현재 교육 717건에서 광명문화원 공식 36카드를 authoritative rollover로 대조하고 낡은 mirror 32건과 도서관 tombstone
+    24건을 제외해 664건을 저장한다.
   - 시설 14건·공연 6건·체험 4건·개발 2건은 현재 교육 결과에서 분리하고 공식 지점 39곳을 보존한다.
   - 상세 688건과 신청 제어 88건은 공개 형태만 검증하며 신청·첨부·PII endpoint는 호출하거나 저장하지 않는다.
 - provider: MUNI_LLL_GUNSAN_GO_KR_0202DBAC
@@ -3242,7 +3273,8 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - 6개 평생학습센터 13,758건·평생학습관 890건·구 통합예약 교육 1건을 고정 fan-out하여 선언 페이지·sentinel·경계를 모두 검증한다.
+  - 6개 평생학습센터 13,758건·평생학습관 890건·구 통합예약 교육 1건을 고정 fan-out하여 선언 페이지·sentinel·경계를 모두
+    검증한다.
   - 현재 상세 412건에서 폐강 15건과 identity·제목이 결박된 연습용 1건만 제외해 7개 지점 396건을 반환한다.
   - 신청 제어 8건만 공개 identity와 결박해 보존하고 신청서·신청자 결과·강사·연락처·첨부·지도·자유서술·PII는 읽거나 저장하지 않는다.
   target_id: 077008bfdba506a1
@@ -3362,7 +3394,8 @@ targets:
     grade: A
     parser: yongin_lifelong_regular_card+detail_post
     error_kind: ''
-  notes: 2026-07-10 canonical YONGIN_LIFELONG_LEARNING covers the same regular-course path; disabled to remove the curl/TLS-bypass execution path.
+  notes: 2026-07-10 canonical YONGIN_LIFELONG_LEARNING covers the same regular-course
+    path; disabled to remove the curl/TLS-bypass execution path.
 - provider: MUNI_LLL_YONGIN_GO_KR_6CCD566D
   name: 용인시 평생학습관
   branch: 용인시 평생학습관
@@ -3384,7 +3417,8 @@ targets:
     grade: A
     parser: yongin_lifelong_regular_card+detail_post
     error_kind: duplicate_of:YONGIN_LIFELONG_LEARNING
-  notes: 2026-07-10 root URL is covered by canonical YONGIN_LIFELONG_LEARNING and is non-executable.
+  notes: 2026-07-10 root URL is covered by canonical YONGIN_LIFELONG_LEARNING and
+    is non-executable.
 - provider: MUNI_LLL_YONGIN_GO_KR_7CF8FFA6
   name: 용인시 평생학습관
   branch: 용인시 평생학습관
@@ -3749,7 +3783,8 @@ targets:
     grade: A
     parser: sjecampus_consent_list
     error_kind: ''
-  notes: 2026-07-10 HTTPS resolves to the Cafe24 service-expiration page; plaintext target execution is disabled.
+  notes: 2026-07-10 HTTPS resolves to the Cafe24 service-expiration page; plaintext
+    target execution is disabled.
 - provider: MUNI_SLL_SEOUL_GO_KR_529FCCEC
   name: 서울특별시 금천구
   branch: 서울특별시 금천구
@@ -4335,8 +4370,10 @@ targets:
     canonical_candidate_id: MUNI_IR_752857C970F3
     provider_decision: reuse_incumbent_and_keep_C3F54364_duplicate
   crawler_notes:
-  - wait·ing·end 세 JSON 분할의 전체 252개 identity와 즉시 다음 빈 sentinel을 완주하고 첫·끝·sentinel을 재검증한다.
-  - 공식 end 표시 237건과 실제 236건의 안정적인 1건 원천 오차만 허용하며 현재 16건의 상세·신청 제어를 검증하되 신청·회원·첨부 endpoint는 호출하지 않는다.
+  - wait·ing·end 세 JSON 분할의 전체 252개 identity와 즉시 다음 빈 sentinel을 완주하고 첫·끝·sentinel을
+    재검증한다.
+  - 공식 end 표시 237건과 실제 236건의 안정적인 1건 원천 오차만 허용하며 현재 16건의 상세·신청 제어를 검증하되 신청·회원·첨부 endpoint는
+    호출하지 않는다.
   - 마감 분기의 정원마감 상태를 구분하고 선착순 상세에서는 생략되는 추첨예정일을 조건부 필드로 검증한다.
   target_id: 659cda692d5fcb6f
   updated_at: '2026-06-07T23:59:29'
@@ -4413,7 +4450,8 @@ targets:
     parser: duplicate_url
     error_kind: duplicate_url
   crawler_notes:
-  - programIdx 2142 단일 상세는 북구 전체 교육 원장 MUNI_WWW_BSBUKGU_GO_KR_E60701D6에 포함되므로 중복 실행하지 않는다.
+  - programIdx 2142 단일 상세는 북구 전체 교육 원장 MUNI_WWW_BSBUKGU_GO_KR_E60701D6에 포함되므로 중복 실행하지
+    않는다.
 - provider: MUNI_WWW_BSBUKGU_GO_KR_2BDDF955
   name: 부산북구 통합예약 홈페이지에 오신것을 환영합니다.
   branch: 부산광역시 북구
@@ -4438,7 +4476,8 @@ targets:
     parser: duplicate_url
     error_kind: duplicate_url
   crawler_notes:
-  - 도서관 부분 원장 4,345건은 북구 전체 교육 원장 MUNI_WWW_BSBUKGU_GO_KR_E60701D6이 실제 223페이지까지 완전 수집하므로 중복 실행하지 않는다.
+  - 도서관 부분 원장 4,345건은 북구 전체 교육 원장 MUNI_WWW_BSBUKGU_GO_KR_E60701D6이 실제 223페이지까지 완전
+    수집하므로 중복 실행하지 않는다.
 - provider: MUNI_WWW_BSDONGGU_GO_KR_32321CF0
   name: 부산광역시 동구청
   branch: 부산광역시 동구
@@ -4598,7 +4637,8 @@ targets:
     detail_pages: 36
     snapshot_complete: true
   crawler_notes:
-  - 중구청 교육 게시판 1,540건 193페이지와 부산시 통합예약의 중구 주민센터 분기 23건 3페이지를 각각 완주하고 빈 sentinel 및 첫·끝 경계를 재검증한다.
+  - 중구청 교육 게시판 1,540건 193페이지와 부산시 통합예약의 중구 주민센터 분기 23건 3페이지를 각각 완주하고 빈 sentinel 및
+    첫·끝 경계를 재검증한다.
   - 현재·미래 36건의 안전한 상세만 읽으며 신청자 입력 화면과 개인정보 필드는 요청하거나 저장하지 않는다.
   - 부산평생학습플랫폼 OFFICE_00002681의 동일 강좌 50건은 이 전용 소유자와 중복되어 공유 수집기에서 제외한다.
 - provider: MUNI_WWW_BSSEOGU_GO_KR_5970CA9E
@@ -4683,9 +4723,11 @@ targets:
       busan_city_resident_autonomy: 20
     snapshot_complete: true
   crawler_notes:
-  - 서구 평생학습 1,805건, 여성센터 114건, 다행복교육 1건, 작은도서관 1건, 부산시 주민자치 20건의 다섯 원장 총 1,941건을 원자적으로 완주한다.
+  - 서구 평생학습 1,805건, 여성센터 114건, 다행복교육 1건, 작은도서관 1건, 부산시 주민자치 20건의 다섯 원장 총 1,941건을 원자적으로
+    완주한다.
   - 현재·미래 54건의 상세만 읽고 여성센터 신청자 표, 강사·전화·자유서술·첨부 및 로그인·신청자 페이지는 요청하거나 저장하지 않는다.
-  - 부산평생학습 OFFICE_00002641 20건은 같은 el_code의 부분집합이므로 공유 수집기에서 제외하고, identity 없는 디지털교육 불완전 archive도 제외한다.
+  - 부산평생학습 OFFICE_00002641 20건은 같은 el_code의 부분집합이므로 공유 수집기에서 제외하고, identity 없는 디지털교육
+    불완전 archive도 제외한다.
 - provider: MUNI_WWW_BUAN_GO_KR_8AA2A8DE
   name: 부안군 평생교육(부안군평생학습관)
   branch: 전라북도 부안군
@@ -4784,7 +4826,8 @@ targets:
       CLOSED: 136
   crawler_notes:
   - 등록돼 있던 일반 안내 URL을 실제 977건을 소유하는 부산진구 통합예약 전체 교육 원장으로 교체했다.
-  - 부산평생학습 OFFICE_00002710의 977건은 구청 idx와 전부 동일해 중복 제외하고 native 강좌는 0건임을 두 차례 전수 census로 확인했다.
+  - 부산평생학습 OFFICE_00002710의 977건은 구청 idx와 전부 동일해 중복 제외하고 native 강좌는 0건임을 두 차례 전수 census로
+    확인했다.
   - 부산시 주민자치 부산진구 분기를 같은 원자 스냅샷에 포함하며 현재·미래 235건의 상세를 모두 검증한다.
   - 구청 상세에 요금이 생략된 강좌는 정확히 같은 idx를 소유한 부산평생학습 공식 중복 목록의 재료비를 이관하고 근거를 보존한다.
   - 신청자·계정·신청서·첨부 및 자유서술 개인정보 경로는 요청하지 않는다.
@@ -5058,7 +5101,8 @@ targets:
     grade: C
     parser: generic_card+generic_table
     error_kind: ''
-  notes: 2026-07-10 HTTPS redirects back to plaintext HTTP; execution is disabled until the origin supports TLS.
+  notes: 2026-07-10 HTTPS redirects back to plaintext HTTP; execution is disabled
+    until the origin supports TLS.
 - provider: MUNI_WWW_CHEONGJU_GO_KR_AB0C903B
   name: 청주시청
   branch: 충청북도 청주시 흥덕구
@@ -5157,7 +5201,8 @@ targets:
   crawler_notes:
   - 공식 reservYn=Y 7열 원장은 현재 1건이며 1페이지 1건·2페이지 구조적 empty와 양쪽 경계 재검증을 총 4개 목록 요청으로 완주한다.
   - 공개 상세 1건에서 공식 지점 청양군평생학습관과 주소 충청남도 청양군 청양읍 문화예술로 150, 신청 제어를 identity에 결박한다.
-  - 신청서와 신청자 목록 endpoint는 호출하지 않고 문의전화·담당자·자유서술은 저장하지 않는다. 공지게시판과 어린이백제체험관·박물관 단체예약은 별도 범위다.
+  - 신청서와 신청자 목록 endpoint는 호출하지 않고 문의전화·담당자·자유서술은 저장하지 않는다. 공지게시판과 어린이백제체험관·박물관 단체예약은
+    별도 범위다.
   target_id: 97453b835ac3811d
   updated_at: '2026-06-07T22:37:22'
   manual_action: update
@@ -5365,7 +5410,8 @@ targets:
   municipality_full_name: 충청남도 당진시
   full_snapshot_required: true
   ownership_scope: dangjin_official_citizen_information_education_exact_list_and_details
-  notes: 2026-07-28 공식 5개 목록 페이지 47건과 즉시 빈 6페이지를 교차검증했다. 모든 교육 종료일이 2026-05-29 이전이어서 현재·향후 강좌는 0건이며 실패가 아닌 정상 no_current_data 상태다.
+  notes: 2026-07-28 공식 5개 목록 페이지 47건과 즉시 빈 6페이지를 교차검증했다. 모든 교육 종료일이 2026-05-29 이전이어서
+    현재·향후 강좌는 0건이며 실패가 아닌 정상 no_current_data 상태다.
   last_quality:
     collected: 0
     score: 0.0
@@ -5492,10 +5538,14 @@ targets:
   crawler_notes:
   - key=1529는 평생교육·자치회관·구민정보화교육·여성복지관 등을 합친 공식 전체프로그램 목록이다.
   - 접수예정(TBCCPT)·접수중(ACCPT)·대기자접수(WRCPT)를 상태별 전 페이지 수집하고 접수마감(DRCPT)은 제외한다.
-  - 2026-07-18 기준 전체 240건 중 현재 대상 34건, 접수마감 제외 206건이며 상세·주소·공식 신청 endpoint 34건을 전수 검증했다.
-  - 선언 건수·페이지·순번·상태·고유 lctreRcritKey·상세 필수 필드·정원·신청 endpoint가 불완전하면 저장과 stale 처리를 차단한다.
-  - '2026-07-18: MUNI_WWW_L4D_OR_KR_E872B04C is a separate library/DFMC scope. The reviewed paid-list candidate exposes only a generic downstream
-    reservation link and no per-course official stable ID or application endpoint, so it is not claimed by this canonical target.'
+  - 2026-07-18 기준 전체 240건 중 현재 대상 34건, 접수마감 제외 206건이며 상세·주소·공식 신청 endpoint 34건을 전수
+    검증했다.
+  - 선언 건수·페이지·순번·상태·고유 lctreRcritKey·상세 필수 필드·정원·신청 endpoint가 불완전하면 저장과 stale 처리를
+    차단한다.
+  - '2026-07-18: MUNI_WWW_L4D_OR_KR_E872B04C is a separate library/DFMC scope. The
+    reviewed paid-list candidate exposes only a generic downstream reservation link
+    and no per-course official stable ID or application endpoint, so it is not claimed
+    by this canonical target.'
 - provider: MUNI_WWW_DH_GO_KR_1197E1BB
   name: 동해시 평생학습관
   branch: 동해시 평생학습관
@@ -5519,7 +5569,8 @@ targets:
     parser: dh_lifelong_table+detail
     error_kind: ''
     saved: 0
-  notes: 2026-07-10 current strict-TLS probe failed during handshake; insecure fallback is disabled.
+  notes: 2026-07-10 current strict-TLS probe failed during handshake; insecure fallback
+    is disabled.
 - provider: MUNI_WWW_DJJUNGGU_GO_KR_04616D4D
   name: 대전광역시 중구청
   branch: 대전광역시 중구
@@ -5617,7 +5668,8 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - 공식 kr·lll·health·hyo sitemap을 검사해 평생학습 217건과 정보화교육 30건의 두 독립 교육 원천만 fanout한다.
-  - lecReserve는 로그인 기반 신청확인 alias이며 단독 강좌 원천이 아니다. 대전 OK예약 중구 381건과 제목·기간을 전수 대조한 결과 중복은 0건이다.
+  - lecReserve는 로그인 기반 신청확인 alias이며 단독 강좌 원천이 아니다. 대전 OK예약 중구 381건과 제목·기간을 전수 대조한
+    결과 중복은 0건이다.
   - 정원 마감 뒤 후보를 받는 대기 신청중 강좌는 WAITING으로 보존하고 강좌 identity에 결합된 대기신청 제어만 허용한다.
 - provider: MUNI_WWW_DONGGU_GO_KR_9A7A5E6F
   name: 대전광역시 동구 전체 교육강좌
@@ -5936,10 +5988,13 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - 공식 교육 원장 1,650건·165페이지와 166페이지 exact final-page clamp, 첫·끝 경계 재검사를 완주하고 교육 종료일 기준 현재 315건의 공개 상세를 검증한다.
+  - 공식 교육 원장 1,650건·165페이지와 166페이지 exact final-page clamp, 첫·끝 경계 재검사를 완주하고 교육 종료일
+    기준 현재 315건의 공개 상세를 검증한다.
   - 현재 공식 교육기관 25종과 장소 77종을 원문 지점명으로 보존하며, source identity와 현재 의미 중복은 모두 0건이어야 한다.
-  - 과거 역전 접수기간 16건·현재 접수기간 없음 6건·목록 일정 줄임 9건은 identity와 원문 fingerprint에 결박하고 신청 제어·테스트/안내 행은 0건만 허용한다.
-  - 인천시 통합예약·군립도서관 3지점·강화군 행복센터·시설관리공단·교육지원청·박물관 등 별도 owner는 합치지 않으며 문의전화·설명·첨부·자유서술·PII는 저장하지 않는다.
+  - 과거 역전 접수기간 16건·현재 접수기간 없음 6건·목록 일정 줄임 9건은 identity와 원문 fingerprint에 결박하고 신청 제어·테스트/안내
+    행은 0건만 허용한다.
+  - 인천시 통합예약·군립도서관 3지점·강화군 행복센터·시설관리공단·교육지원청·박물관 등 별도 owner는 합치지 않으며 문의전화·설명·첨부·자유서술·PII는
+    저장하지 않는다.
 - provider: MUNI_WWW_GANGJIN_GO_KR_501E7E4B
   name: 강진군 평생학습·디지털 전체 교육 강좌
   branch: 전남광주통합특별시 강진군
@@ -6252,7 +6307,8 @@ targets:
     women_candidate_id: MUNI_IR_788C48C5538C
     provider_decision: retain_incumbent_for_two_disjoint_program_and_women_ledgers
   crawler_notes:
-  - 평생학습 프로그램 105건과 여성회관 110건은 eduNo 교집합이 없으며 현재·향후 25+55건을 같은 기존 provider가 중복 없이 수집한다.
+  - 평생학습 프로그램 105건과 여성회관 110건은 eduNo 교집합이 없으며 현재·향후 25+55건을 같은 기존 provider가 중복 없이
+    수집한다.
   - 평생학습관 5건·공식 배움터 20곳 각 1건·경산시 여성회관 55건의 원장 지점명을 그대로 보존한다.
   target_id: 311a9e798b027fd8
   updated_at: '2026-06-09T00:00:00+09:00'
@@ -6308,7 +6364,8 @@ targets:
   detail_limit: 600
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 과천시 통합예약의 평생학습 JSON 원장은 강좌별 stageIdx·programIdx·extraYn과 접수상태를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 과천시 통합예약의 평생학습 JSON 원장은 강좌별 stageIdx·programIdx·extraYn과
+    접수상태를 직접 소유하는 공공 교육강좌 원장이다.
   classification_evidence_url: https://www.gccity.go.kr/reservation/gcedu/edu/app/list.do?mId=0103010000
   ownership_scope: gwacheon_complete_lifelong_json_course_ledger
   covered_municipalities:
@@ -6407,7 +6464,8 @@ targets:
   municipality_full_name: 경상북도 김천시
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 김천시평생교육원의 정기·수시·사회적배려·여성대학·핵심인문학 5개 공식 교육 원장을 하나의 공공강좌 소유자로 수집한다.
+  classification_reason: 김천시평생교육원의 정기·수시·사회적배려·여성대학·핵심인문학 5개 공식 교육 원장을 하나의 공공강좌 소유자로
+    수집한다.
   classification_evidence_url: https://www.gc.go.kr/welfare/page/10023/10016.tc
   covered_municipalities:
   - code: '4715000000'
@@ -6580,10 +6638,14 @@ targets:
     snapshot_complete: true
     atomic_union_complete: true
   crawler_notes:
-  - 기장군 원장 1,690건·169페이지와 170페이지 빈 sentinel, 부산평생학습 OFFICE_00002631 1,687건, 부산시 주민자치 기장 분기를 원자적으로 완주한다.
-  - 공유 플랫폼은 기본 8 MiB 응답 제한 안에서 pageUnit 900·950을 각각 두 번 조회하고, 두 독립 합집합의 1,687개 의미 ID·순서·서명이 일치해야만 완전 원장으로 승인한다.
-  - 공유 플랫폼 external idx 1,686건은 제목과 감사된 역전 기간 정규화까지 기장군 원장과 정확히 일치해 제외하고 native 테스트 1건도 title-bound 비운영 기록으로 제외한다.
-  - 로컬 현재 12건 중 title-bound 신청 연습 2건을 제외한 유효 교육 10건의 공개 상세만 검증하며 신청 폼·계정·신청자·강사·연락처·정원·첨부·자유서술·PII는 읽거나 저장하지 않는다.
+  - 기장군 원장 1,690건·169페이지와 170페이지 빈 sentinel, 부산평생학습 OFFICE_00002631 1,687건, 부산시 주민자치
+    기장 분기를 원자적으로 완주한다.
+  - 공유 플랫폼은 기본 8 MiB 응답 제한 안에서 pageUnit 900·950을 각각 두 번 조회하고, 두 독립 합집합의 1,687개 의미
+    ID·순서·서명이 일치해야만 완전 원장으로 승인한다.
+  - 공유 플랫폼 external idx 1,686건은 제목과 감사된 역전 기간 정규화까지 기장군 원장과 정확히 일치해 제외하고 native 테스트
+    1건도 title-bound 비운영 기록으로 제외한다.
+  - 로컬 현재 12건 중 title-bound 신청 연습 2건을 제외한 유효 교육 10건의 공개 상세만 검증하며 신청 폼·계정·신청자·강사·연락처·정원·첨부·자유서술·PII는
+    읽거나 저장하지 않는다.
 - provider: MUNI_WWW_GIMHAE_GO_KR_48CF9E63
   name: 김해시 공공예약 전체 교육강좌
   branch: 김해시 공공예약
@@ -6709,7 +6771,8 @@ targets:
     canonical_candidate_id: MUNI_IR_C6744719E98F
     provider_decision: retain_incumbent_and_retarget_discovery_alias_to_complete_cssno_ledger
   crawler_notes:
-  - 기존 공공예약 provider를 실제 cssno 원장으로 retarget하고 426건·48페이지, 49페이지 final clamp, 현재·향후 상세 426건을 모두 검증해야 저장한다.
+  - 기존 공공예약 provider를 실제 cssno 원장으로 retarget하고 426건·48페이지, 49페이지 final clamp, 현재·향후
+    상세 426건을 모두 검증해야 저장한다.
   - 공개 상세의 이용문의 기관 38종을 공식 지점으로 보존하고 신청·로그인·첨부·다운로드·이미지·전화·PII endpoint는 호출하지 않는다.
   - 온라인 예약 제어 49건과 전화·방문 전용 오프라인 안내 1건을 구분하며 변동 신청 인원은 상세의 최신 값을 저장한다.
 - provider: MUNI_WWW_GIMHAE_GO_KR_8FB5FCC3
@@ -6796,7 +6859,8 @@ targets:
     grade: A
     parser: gangneung_lifelong_current_year+detail
     error_kind: ''
-  notes: 2026-07-18 searchYyyy 현재연도 전체 페이지와 상세를 수집하고 폐강·폐강대기·종료 강좌를 제외한다. lctreNo를 고유키로 사용하며 기관은 branch, 실제 장소는 venue로 보존한다.
+  notes: 2026-07-18 searchYyyy 현재연도 전체 페이지와 상세를 수집하고 폐강·폐강대기·종료 강좌를 제외한다. lctreNo를
+    고유키로 사용하며 기관은 branch, 실제 장소는 venue로 보존한다.
 - provider: MUNI_WWW_GOESAN_GO_KR_63D030F9
   name: 괴산군평생학습관
   branch: 충청북도 괴산군
@@ -6887,8 +6951,10 @@ targets:
     pii_payload_persisted: false
     snapshot_complete: true
   crawler_notes:
-  - 평생학습프로그램 121건·21개 데이터 페이지와 순천대 고흥첨단교육센터 28건·5개 데이터 페이지를 각각 빈 sentinel·첫 페이지 재검증까지 전수 순회한다.
-  - 현재·향후 14건 상세를 모두 대조하고 동일 과정에 결박된 공개 신청 제어 2건만 저장한다. HTTP·무슬래시 후보는 같은 owner 별칭으로 중복 실행하지 않는다.
+  - 평생학습프로그램 121건·21개 데이터 페이지와 순천대 고흥첨단교육센터 28건·5개 데이터 페이지를 각각 빈 sentinel·첫 페이지 재검증까지
+    전수 순회한다.
+  - 현재·향후 14건 상세를 모두 대조하고 동일 과정에 결박된 공개 신청 제어 2건만 저장한다. HTTP·무슬래시 후보는 같은 owner 별칭으로
+    중복 실행하지 않는다.
 - provider: MUNI_WWW_GOKMG_OR_KR_58036A89
   name: 곡성교육포털 전체 교육강좌
   branch: 전남광주통합특별시 곡성군
@@ -7252,8 +7318,10 @@ targets:
     no_current_data: false
     checked_at: '2026-07-18T00:00:00+09:00'
   crawler_notes:
-  - '2026-08-05: 공식 CL_02 체험·견학 전역 원장은 현재 접수예정 1건·접수중 6건·접수마감 5건을 선언하며, 공식 구·동 필터 값이 비어 있어 구별 가상 요청 없이 고양시 범위로 수집한다.'
-  - CL_01 교육은 기존 3개 구 분할과 전역 합집합 대조를 유지하고, CL_02는 목록의 체험 일시 표기와 상세 ID·제목·체험·견학 상위 분류가 모두 일치한 행만 체험으로 잠근다.
+  - '2026-08-05: 공식 CL_02 체험·견학 전역 원장은 현재 접수예정 1건·접수중 6건·접수마감 5건을 선언하며, 공식 구·동 필터
+    값이 비어 있어 구별 가상 요청 없이 고양시 범위로 수집한다.'
+  - CL_01 교육은 기존 3개 구 분할과 전역 합집합 대조를 유지하고, CL_02는 목록의 체험 일시 표기와 상세 ID·제목·체험·견학 상위
+    분류가 모두 일치한 행만 체험으로 잠근다.
   target_id: 20ec6137938451ea
   updated_at: '2026-06-07T23:13:27'
   manual_action: update
@@ -7299,7 +7367,8 @@ targets:
   url: https://www.gp.go.kr/ha/contents.do?key=350&educationZoneNo=5
   source: municipal_course_candidate_results
   origin: collected
-  notes: 2026-07-18 확인 결과 2025-08-12 기준 주간 프로그램 안내표만 있으며 강좌별 모집·운영기간, 접수상태, 상세 또는 신청 URL이 없어 예약/활성 강좌로 수집할 수 없음.
+  notes: 2026-07-18 확인 결과 2025-08-12 기준 주간 프로그램 안내표만 있으며 강좌별 모집·운영기간, 접수상태, 상세 또는
+    신청 URL이 없어 예약/활성 강좌로 수집할 수 없음.
   last_quality:
     collected: 10
     score: 53.8
@@ -7723,7 +7792,8 @@ targets:
       decision: excluded_single_expired_special_grant_detail
   crawler_notes:
   - 통합예약 199건과 평생학습 327건을 각각 빈 경계와 안정성 재검사까지 완주한다.
-  - 현재 후보 324건 중 기능시험 2건은 상세 요청 전에 제외하고, 상세 322건에서 폐강 5건과 통합예약 기능시험 1건을 제외해 316건을 반환한다.
+  - 현재 후보 324건 중 기능시험 2건은 상세 요청 전에 제외하고, 상세 322건에서 폐강 5건과 통합예약 기능시험 1건을 제외해 316건을
+    반환한다.
   - 대상·요금·날짜·장소·분야·시간 필드는 316건 모두 검증하며 공식 시간이 비어 있으면 시간 별도 안내로 보존한다.
   - 공식 8개 지점명을 원문대로 보존하며 북천체육시설처럼 원장에 주소가 없는 경우 임의 주소를 만들지 않는다.
   target_id: 90de6781c137117e
@@ -8028,7 +8098,8 @@ targets:
     parser: duplicate
     error_kind: javascript_aggregate_shell_without_independent_course_ledger
   crawler_notes:
-  - 자체 강좌 원장 없이 네 개 실제 교육 경로를 집계하는 shell이며 최신·가능 분할도 canonical 현재 집합의 부분집합이므로 별도 실행하지 않는다.
+  - 자체 강좌 원장 없이 네 개 실제 교육 경로를 집계하는 shell이며 최신·가능 분할도 canonical 현재 집합의 부분집합이므로 별도 실행하지
+    않는다.
 - provider: MUNI_WWW_HAMAN_GO_KR_CF8A83B7
   name: 함안군 평생교육원 소개 안내
   branch: 함안군 평생교육
@@ -8131,7 +8202,8 @@ targets:
   detail_limit: 650
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 하남시 GSEEK tenant의 G000013 강좌 identity·교육기간·접수상태를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 하남시 GSEEK tenant의 G000013 강좌 identity·교육기간·접수상태를 직접 소유하는
+    공공 교육강좌 원장이다.
   classification_evidence_url: https://hanam.gseek.kr/user/course/offline/list
   ownership_scope: hanam_gseek_G000013_complete_offline_course_ledger
   separate_owner_urls:
@@ -8257,7 +8329,8 @@ targets:
   detail_limit: 650
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 하남교육재단의 프로그램 identity·운영기간·신청기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_reason: 하남교육재단의 프로그램 identity·운영기간·신청기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌
+    원장이다.
   classification_evidence_url: https://www.hdream.or.kr/experience-program/program
   ownership_scope: hanam_education_foundation_hdream_current_program_ledger
   covered_municipalities:
@@ -8501,7 +8574,8 @@ targets:
   crawler_notes:
   - 공식 평생학습 원장 1,701건을 142페이지 끝까지 읽고 빈 143페이지와 첫·마지막·sentinel 경계를 직렬 재검증한다.
   - 종료일 기준 현재·향후 25건의 상세와 주소를 전수 검증하며 공식 사업 지점 50플러스 스쿨·평생학습카페·홍성군평생학습관을 보존한다.
-  - 통합예약 평생학습 경로는 동일 ID 원장의 exact replica로 제외하고 농업·문화체험·보건·정보화·주민자치·공간대관은 별도 owner로 유지한다.
+  - 통합예약 평생학습 경로는 동일 ID 원장의 exact replica로 제외하고 농업·문화체험·보건·정보화·주민자치·공간대관은 별도 owner로
+    유지한다.
   - eduNo 383의 2019년 역전 접수기간은 정확한 identity·날짜 조합만 역사 오류로 격리하고 보정하거나 현재 결과로 반환하지 않는다.
 - provider: MUNI_WWW_HSG_GO_KR_7452F27B
   name: 횡성군 통합예약 전체 교육·체험 원장
@@ -8805,7 +8879,8 @@ targets:
   detail_limit: 500
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 이천시 교육포털의 부서·읍면동 강좌 identity·교육기간·정원·접수상태를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 이천시 교육포털의 부서·읍면동 강좌 identity·교육기간·정원·접수상태를 직접 소유하는 공공 교육강좌
+    원장이다.
   classification_evidence_url: https://www.icheon.go.kr/edu/eduLctr/lecture/list.do?mid=0101000000
   ownership_scope: icheon_city_all_department_and_district_education_ledger
   covered_municipalities:
@@ -8865,7 +8940,8 @@ targets:
   detail_limit: 500
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 이천 GSEEK tenant의 G000009 강좌 identity·교육기간·정원·접수상태를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 이천 GSEEK tenant의 G000009 강좌 identity·교육기간·정원·접수상태를 직접 소유하는
+    공공 교육강좌 원장이다.
   classification_evidence_url: https://icheon.gseek.kr/user/course/offline/list
   ownership_scope: icheon_gseek_G000009_complete_offline_course_ledger
   covered_municipalities:
@@ -8948,7 +9024,8 @@ targets:
     current_source_count: 30
     duplicate_identity_count: 90
     snapshot_complete: true
-  notes: 동일 통합예약 backend의 LIFE_EDU 90건(현재 30건) 부분집합으로 canonical EDUCATION 원장 294건에 모두 포함되어 별도 실행하지 않는다.
+  notes: 동일 통합예약 backend의 LIFE_EDU 90건(현재 30건) 부분집합으로 canonical EDUCATION 원장 294건에
+    모두 포함되어 별도 실행하지 않는다.
 - provider: MUNI_WWW_IMSIL_GO_KR_D29DB99C
   name: 임실군청 교육정책 안내 게시물 iframe
   branch: 전북특별자치도 임실군
@@ -9116,7 +9193,8 @@ targets:
     error_kind: upstream_http_404
     checked_at: '2026-07-22'
     no_current_data: false
-    configured_collection_error: 공식 루트는 HTTP 200 빈 본문이며 /lecture 무필터·3개 분기와 /lec_view 상세가 모두 HTTP 404를 반환함
+    configured_collection_error: 공식 루트는 HTTP 200 빈 본문이며 /lecture 무필터·3개 분기와 /lec_view
+      상세가 모두 HTTP 404를 반환함
     cached_source_total: 95
     cached_partition_totals:
       LifeEdu: 35
@@ -9125,7 +9203,8 @@ targets:
     snapshot_complete: false
   crawler_notes:
   - 기존 LifeEdu 한 분기만 저장하지 않고 정상 응답 시 LifeEdu·InfoEdu·OnlineEdu 전체를 무필터로 수집한다.
-  - 공개 색인 95건과 세 분기 합계 35+17+43을 교차 검증하며, 현재 공식 서버 404로 부분 저장을 금지하고 원천 복구 시 전체 스냅샷만 허용한다.
+  - 공개 색인 95건과 세 분기 합계 35+17+43을 교차 검증하며, 현재 공식 서버 404로 부분 저장을 금지하고 원천 복구 시 전체 스냅샷만
+    허용한다.
 - provider: MUNI_WWW_JINAN_GO_KR_3DF1AE69
   name: 진안군 평생학습관 전체 교육강좌
   branch: 전북특별자치도 진안군
@@ -9147,7 +9226,8 @@ targets:
   municipality_full_name: 전북특별자치도 진안군
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 진안군 평생학습관의 평생학습기관·주민자치센터·유관기관·전북시민대학 4개 공식 교육 분기를 하나의 완전한 공공강좌 소유자로 수집한다.
+  classification_reason: 진안군 평생학습관의 평생학습기관·주민자치센터·유관기관·전북시민대학 4개 공식 교육 분기를 하나의 완전한
+    공공강좌 소유자로 수집한다.
   classification_evidence_url: https://www.jinan.go.kr/edu/board/list.jinan?boardId=BBS_0000018&menuCd=DOM_000000502003000000&paging=ok
   covered_municipalities:
   - code: '5272000000'
@@ -9228,7 +9308,8 @@ targets:
       decision: excluded_separate_education_office_library_owner
   crawler_notes:
   - 공식 4개 분기 947건·97페이지를 각 직후 마지막 페이지 clamp 및 현재 행이 있는 경계 페이지 재검사까지 완주한다.
-  - 현재·향후 103건 중 상세 표 92건을 전수 결합하고 공식 서버가 빈 상세를 반환하는 감사 고정 ID 11건에만 목록 allowlist fallback을 허용한다.
+  - 현재·향후 103건 중 상세 표 92건을 전수 결합하고 공식 서버가 빈 상세를 반환하는 감사 고정 ID 11건에만 목록 allowlist fallback을
+    허용한다.
   - 온라인 신청 제어 2건은 identity만 검증하고 인원 probe·신청 폼·강사·연락처·첨부·자유본문·PII는 호출하거나 저장하지 않는다.
 - provider: MUNI_WWW_JINCHEON_GO_KR_1CD1E7D2
   name: 진천군평생학습관 백곡면 필터 강좌
@@ -9302,7 +9383,8 @@ targets:
     pii_payload_persisted: false
     snapshot_complete: true
   crawler_notes:
-  - 공식 목록 11건의 2개 데이터 페이지와 3페이지 빈 sentinel, 첫·끝 페이지 재검사를 완료하며 현재·향후 0건을 정상 완전 스냅샷으로 판정한다.
+  - 공식 목록 11건의 2개 데이터 페이지와 3페이지 빈 sentinel, 첫·끝 페이지 재검사를 완료하며 현재·향후 0건을 정상 완전 스냅샷으로
+    판정한다.
   - 동일 11건을 재게시하는 평생학습 landing은 같은 owner alias이고 관광·안전체험·농업교육·군립도서관은 별도 owner다.
   - 신청자 확인 m=10 화면은 PII 경계이므로 조회하지 않고 현재 강좌가 생길 때만 공개 상세와 동일 identity 신청 제어를 검증한다.
 - provider: MUNI_WWW_JINDO_GO_KR_21B9A5BD
@@ -9644,7 +9726,8 @@ targets:
   municipality_full_name: 전북특별자치도 무주군
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 무주군 평생교육원의 신청 원장·정규 운영계획·모두배움터 세 공식 원장을 하나의 완전한 공공강좌 소유자로 수집한다.
+  classification_reason: 무주군 평생교육원의 신청 원장·정규 운영계획·모두배움터 세 공식 원장을 하나의 완전한 공공강좌 소유자로
+    수집한다.
   classification_evidence_url: https://www.muju.go.kr/lifelongedu/main/edusat/list.do
   covered_municipalities:
   - code: '5273000000'
@@ -9725,8 +9808,10 @@ targets:
     - url: https://library.muju.go.kr/main/edusat/list.do?sh_ct_idx=4
       decision: excluded_separate_county_library_application_owner
   crawler_notes:
-  - 신청 원장 125건·25페이지와 정규계획 14건·모두배움터 22건을 완주해 raw 161건에서 공식 미러 12건만 제거한 149개 identity를 보존한다.
-  - 2026-07-23 현재·향후 18건은 신청 원장 8·정규계획 비중복 1·모두배움터 9건이며 모두배움터의 6개 읍면·공식 운영장소를 원문대로 유지한다.
+  - 신청 원장 125건·25페이지와 정규계획 14건·모두배움터 22건을 완주해 raw 161건에서 공식 미러 12건만 제거한 149개 identity를
+    보존한다.
+  - 2026-07-23 현재·향후 18건은 신청 원장 8·정규계획 비중복 1·모두배움터 9건이며 모두배움터의 6개 읍면·공식 운영장소를 원문대로
+    유지한다.
   - 공식 날짜 이상 4건과 정규계획 날짜 drift 2건만 좁은 근거로 보정하고 신청·인증·개인목록·첨부·PII endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_NAJU_GO_KR_D8842639
   name: 나주시 평생학습 외부기관 부분 목록
@@ -10088,10 +10173,14 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - 주민교육 공식 원장 31건·4페이지와 5페이지 exact final-page clamp, 첫·끝 경계 재검사를 완주하고 교육 종료일 기준 현재 12건의 공개 상세를 검증한다.
-  - 현재 행은 영흥면 12건이며 접수마감·교육중 원문 상태를 CLOSED로 보존하고, 공식 교육기관 필터 8종과 source identity·현재 의미 중복 0건을 강제한다.
-  - lecseq=98의 원문 일정 오기 '월요일 16:00 ~ 210:00'는 identity·제목·지점에 결박해 원문만 보존하며 임의 보정하지 않는다.
-  - 누락된 TLS 중간 인증서는 옹진군 호스트에만 감사된 인증서를 보완해 정상 검증하고, 상세의 자유서술·입금·환불·첨부·문의전화 6개 값은 읽거나 저장하지 않는다.
+  - 주민교육 공식 원장 31건·4페이지와 5페이지 exact final-page clamp, 첫·끝 경계 재검사를 완주하고 교육 종료일 기준 현재
+    12건의 공개 상세를 검증한다.
+  - 현재 행은 영흥면 12건이며 접수마감·교육중 원문 상태를 CLOSED로 보존하고, 공식 교육기관 필터 8종과 source identity·현재
+    의미 중복 0건을 강제한다.
+  - lecseq=98의 원문 일정 오기 '월요일 16:00 ~ 210:00'는 identity·제목·지점에 결박해 원문만 보존하며 임의 보정하지
+    않는다.
+  - 누락된 TLS 중간 인증서는 옹진군 호스트에만 감사된 인증서를 보완해 정상 검증하고, 상세의 자유서술·입금·환불·첨부·문의전화 6개 값은 읽거나
+    저장하지 않는다.
 - provider: MUNI_WWW_ONGJIN_GO_KR_9B7F8E38
   name: 옹진군 온라인 평생학습 안내
   branch: 인천광역시 옹진군
@@ -10282,10 +10371,14 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - CSRF로 보호된 6개 상태 전체 12,651건을 분할 계수하고 활성 54개 데이터 페이지, 상태별 빈 sentinel 4회와 첫·끝 경계 재검증 8회로 완전성을 증명한다.
-  - 활성 525건 중 날짜 없는 과거 DLV 강사목록 259건을 열지 않고 제외하며, LFT 266건에서 종료 2건을 제외한 현재·향후 264건의 공개 상세를 전수 검증한다.
-  - 현재 지점은 공식 기관명 27종이며 SCHEDULED 4·OPEN 33·WAITING 15·CLOSED 212다. 신청 제어 48건은 상세 identity에 결박하고 실제 신청 endpoint는 호출하지 않는다.
-  - 강사·문의·준비물·공지·첨부·신청조건 값은 읽지 않으며, 2202년으로 잘못 표시된 LT00013792 상세는 종료된 목록 identity에 결박해 감사 예외 1건으로만 계수하고 공개하지 않는다.
+  - CSRF로 보호된 6개 상태 전체 12,651건을 분할 계수하고 활성 54개 데이터 페이지, 상태별 빈 sentinel 4회와 첫·끝 경계
+    재검증 8회로 완전성을 증명한다.
+  - 활성 525건 중 날짜 없는 과거 DLV 강사목록 259건을 열지 않고 제외하며, LFT 266건에서 종료 2건을 제외한 현재·향후 264건의
+    공개 상세를 전수 검증한다.
+  - 현재 지점은 공식 기관명 27종이며 SCHEDULED 4·OPEN 33·WAITING 15·CLOSED 212다. 신청 제어 48건은 상세
+    identity에 결박하고 실제 신청 endpoint는 호출하지 않는다.
+  - 강사·문의·준비물·공지·첨부·신청조건 값은 읽지 않으며, 2202년으로 잘못 표시된 LT00013792 상세는 종료된 목록 identity에
+    결박해 감사 예외 1건으로만 계수하고 공개하지 않는다.
 - provider: MUNI_WWW_PYEONGTAEK_GO_KR_54DAD706
   name: 신청방법
   branch: 신청방법
@@ -10544,7 +10637,8 @@ targets:
     provider_decision: retain_incumbent_and_collect_complete_integrated_education_ledger
   crawler_notes:
   - 전체 237건·30페이지와 31페이지 빈 sentinel을 확인하고 12개 시설 분할의 정확한 합집합 및 현재·향후 상세 43건을 연속 검증한다.
-  - 종료일이 없는 상시운영 과거 11건은 current 고정 집합에서 분리하며 신청·첨부·PII endpoint와 form submit은 호출하지 않는다.
+  - 종료일이 없는 상시운영 과거 11건은 current 고정 집합에서 분리하며 신청·첨부·PII endpoint와 form submit은 호출하지
+    않는다.
   target_id: 168583d62c1965af
   updated_at: '2026-06-07T23:12:20'
   manual_action: update
@@ -10794,7 +10888,8 @@ targets:
     pii_payload_persisted: false
     snapshot_complete: true
   crawler_notes:
-  - 2026-07-21 공식 평생학습 4개 메뉴와 5개 도서관의 2,903건을 전수 수집하고 현재·향후 213건의 상세를 검증했다. 교육 205건만 반환하고 체험 5건·공연 3건은 교육 범주에서 분리했다.
+  - 2026-07-21 공식 평생학습 4개 메뉴와 5개 도서관의 2,903건을 전수 수집하고 현재·향후 213건의 상세를 검증했다. 교육 205건만
+    반환하고 체험 5건·공연 3건은 교육 범주에서 분리했다.
   - 2026-08-05부터 분리된 체험 5건도 체험·견학/체험으로 반환하고 공연만 제외한다. 위 last_quality 수치는 변경 전 검증 이력이다.
   - 기존 특강·월평·둔산 provider는 정본 fanout의 부분집합이므로 별도 실행하지 않는다.
 - provider: MUNI_WWW_SEONGNAM_GO_KR_0E334C73
@@ -10947,7 +11042,8 @@ targets:
   detail_limit: 400
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 시흥교육캠퍼스 쏙의 시흥 지역·G000002 원장은 강좌별 subject/cycle identity, 교육기관, 기간과 접수 상태를 직접 소유하는 공공 교육강좌 원장이다.
+  classification_reason: 시흥교육캠퍼스 쏙의 시흥 지역·G000002 원장은 강좌별 subject/cycle identity,
+    교육기관, 기간과 접수 상태를 직접 소유하는 공공 교육강좌 원장이다.
   classification_evidence_url: https://siheung.gseek.kr/user/course/offline/list
   ownership_scope: siheung_gseek_g000002_complete_offline_course_ledger
   covered_municipalities:
@@ -11002,7 +11098,8 @@ targets:
   - 시흥 전용 GSEEK 전체 1,788건·199개 데이터 범위와 정확한 빈 sentinel 및 첫·끝 범위 재검사를 통과해야 저장한다.
   - 현재·향후 311건 중 명시적 테스트 1건을 제외한 310건의 공개 상세와 공식 기관 23곳·장소 103곳을 검증한다.
   - GYEONGGI_GSEEK 광역 원장에서는 G000002를 제외해 동일 현재 identity 311건을 중복 저장하지 않는다.
-  - 기존 시청 예약 표는 2024년 659번에서 멈춘 archive이며 contents 후보는 채용·모집정보로 이동하므로 canonical로 실행하지 않는다.
+  - 기존 시청 예약 표는 2024년 659번에서 멈춘 archive이며 contents 후보는 채용·모집정보로 이동하므로 canonical로 실행하지
+    않는다.
   - 시흥도시공사 FMCS는 현재 241건의 별도 owner로 확인되어 이 provider에 병합하지 않고 별도 검증한다.
 - provider: MUNI_WWW_SUNCHEON_GO_KR_EA7E4FCA
   name: 순천시
@@ -11102,9 +11199,12 @@ targets:
     privacy_violations: 0
     snapshot_complete: true
   crawler_notes:
-  - 2026-07-22 수영구 BBS_0000152 전체 1,730건·193페이지, 부산평생학습 OFFICE_00002661 108건, 부산시 주민자치 35건을 하나의 원자 스냅샷으로 완주했다.
-  - 플랫폼 external dataSid 100건은 구청 원장의 정확한 중복으로 제외하고 native 8건은 유지해 고유 1,773건 중 현재·미래 117건의 상세를 검증했다.
-  - 기존 평생학습 홈과 MUNI_WWW_SUYEONG_GO_KR_4A5037DF 안내 페이지는 정본 별칭이다. 신청 폼·계정·신청자·첨부·자유서술·개인정보는 읽거나 저장하지 않는다.
+  - 2026-07-22 수영구 BBS_0000152 전체 1,730건·193페이지, 부산평생학습 OFFICE_00002661 108건, 부산시
+    주민자치 35건을 하나의 원자 스냅샷으로 완주했다.
+  - 플랫폼 external dataSid 100건은 구청 원장의 정확한 중복으로 제외하고 native 8건은 유지해 고유 1,773건 중 현재·미래
+    117건의 상세를 검증했다.
+  - 기존 평생학습 홈과 MUNI_WWW_SUYEONG_GO_KR_4A5037DF 안내 페이지는 정본 별칭이다. 신청 폼·계정·신청자·첨부·자유서술·개인정보는
+    읽거나 저장하지 않는다.
 - provider: MUNI_WWW_SUYEONG_GO_KR_4A5037DF
   name: 수영구평생학습관 안내 페이지
   branch: 부산광역시 수영구
@@ -11172,7 +11272,8 @@ targets:
     detail_pages: 73
     snapshot_complete: true
   crawler_notes:
-  - 공식 전체 교육 원장 2,343건을 pageUnit 100의 24개 데이터 페이지와 25페이지 빈 sentinel까지 완주하고 첫·끝 페이지를 재검증한다.
+  - 공식 전체 교육 원장 2,343건을 pageUnit 100의 24개 데이터 페이지와 25페이지 빈 sentinel까지 완주하고 첫·끝 페이지를
+    재검증한다.
   - 현재·미래 73건 전체의 상세를 확인하고 실제 운영기관 19개 분기로 귀속하며, 신청자 입력 화면과 개인정보는 수집하지 않는다.
 - provider: MUNI_WWW_TONGYEONG_GO_KR_DC5CDBF8
   name: 통영시 평생학습 전체 교육강좌
@@ -11359,7 +11460,8 @@ targets:
     duplicate_alias_provider: MUNI_WWW_ULLEUNG_GO_KR_283223C7
     provider_decision: preserve_1846_incumbent_and_deactivate_1845_alias
   crawler_notes:
-  - 115건·12페이지와 13페이지 빈 sentinel을 완주하고 첫·끝·sentinel을 재검증한 뒤 현재·향후 12건의 상세를 identity로 대조한다.
+  - 115건·12페이지와 13페이지 빈 sentinel을 완주하고 첫·끝·sentinel을 재검증한 뒤 현재·향후 12건의 상세를 identity로
+    대조한다.
   - 문화체육과·관광문화체육실·미래전략추진단·농업기술센터를 공식 원장 지점명으로 유지하며 신청·첨부·PII endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_ULSANNAMGU_GO_KR_8750CCDD
   name: 울산광역시 남구청
@@ -11518,7 +11620,8 @@ targets:
     provider_decision: retain_incumbent_complete_ledger_and_disable_redirect_home_alias
   crawler_notes:
   - 공식 전체 597건·75페이지와 76페이지 정확한 빈 sentinel, 첫·끝·sentinel 재검사를 모두 통과해야 저장한다.
-  - 현재·향후 378건의 공개 상세와 공식 운영기관 21곳을 검증하며 신청·로그인·마이페이지·첨부·다운로드·신청자·PII endpoint는 호출하지 않는다.
+  - 현재·향후 378건의 공개 상세와 공식 운영기관 21곳을 검증하며 신청·로그인·마이페이지·첨부·다운로드·신청자·PII endpoint는 호출하지
+    않는다.
   target_id: 1f9e2639484a6c81
   updated_at: '2026-06-09T00:00:00+09:00'
   manual_action: update
@@ -11531,23 +11634,22 @@ targets:
   operator_type: 지자체/공공기관
   source_group: lifelong_learning
   collection_type: static_html
-  crawler_status: deprecated
+  crawler_status: duplicate_url:MUNI_WWW_YANGJU_GO_KR_E168EB3A
+  duplicate_of: MUNI_WWW_YANGJU_GO_KR_E168EB3A
   priority: 2
-  url: https://www.yangju.go.kr/lll/selectEduLctreWebList.do?key=1838&lllKind=1
+  url: https://www.yangju.go.kr/yeyak/selectEduLctreWebList.do?key=2148
   source: ops_console_url_update
   origin: manual
   last_quality:
     collected: 0
     score: 0.0
     grade: NO_DATA
-    parser: yangju_lifelong_detail
-    error_kind: http_404_not_found:site_migrated_to_gseek
-  crawler_notes:
-  - Official Yangju lifelong learning portal moved to G-SEEK (yangju.gseek.kr); old URL returns 404.
+    parser: duplicate_of:MUNI_WWW_YANGJU_GO_KR_E168EB3A
+    error_kind: duplicate_of:MUNI_WWW_YANGJU_GO_KR_E168EB3A
   target_id: 84c4a6113972e0d2
-  updated_at: '2026-09-22T14:13:00+09:00'
+  updated_at: '2026-06-07T23:14:57'
   manual_action: update
-  manual_updated_at: '2026-09-22T14:13:00+09:00'
+  manual_updated_at: '2026-06-07T23:14:57'
 - provider: MUNI_WWW_YANGSAN_GO_KR_059D4DD1
   name: 양산시 평생학습 전체 교육강좌
   branch: 양산시 평생학습
@@ -11618,7 +11720,8 @@ targets:
     canonical_candidate_id: MUNI_IR_D922439A72A1
     provider_decision: retain_incumbent_and_collect_both_disjoint_lifelong_partitions
   crawler_notes:
-  - eduType=1 평생학습관 200건과 eduType=6 행복학습센터 70건을 각각 전수하고 바로 다음 빈 sentinel 및 첫·끝 재검증을 통과해야 저장한다.
+  - eduType=1 평생학습관 200건과 eduType=6 행복학습센터 70건을 각각 전수하고 바로 다음 빈 sentinel 및 첫·끝 재검증을
+    통과해야 저장한다.
   - 현재·향후 상세 13건의 공식 센터명을 보존하며 신청·로그인·첨부·PII endpoint와 민감 자유문은 저장하지 않는다.
 - provider: MUNI_WWW_YANGSAN_GO_KR_DBBB1885
   name: 양산시 통합예약 전체 교육강좌
@@ -11714,8 +11817,10 @@ targets:
     canonical_candidate_id: MUNI_IR_FC2DE5C5D225
     provider_decision: retain_incumbent_and_retarget_navigation_home_to_complete_lecture_ledger
   crawler_notes:
-  - 기존 booking/main.do 탐색 provider를 576건 전체 교육 목록으로 retarget하고 58페이지·59페이지 빈 sentinel·첫·끝 재검증을 모두 통과해야 저장한다.
-  - 2026-07-28 현재·향후 102건 중 원문과 상세가 함께 역전된 752·754 두 건만 정확한 원문 결박으로 제외하고, 접수전 21건과 접수마감·교육중 79건의 상세·공식 기관을 보존한다.
+  - 기존 booking/main.do 탐색 provider를 576건 전체 교육 목록으로 retarget하고 58페이지·59페이지 빈 sentinel·첫·끝
+    재검증을 모두 통과해야 저장한다.
+  - 2026-07-28 현재·향후 102건 중 원문과 상세가 함께 역전된 752·754 두 건만 정확한 원문 결박으로 제외하고, 접수전 21건과
+    접수마감·교육중 79건의 상세·공식 기관을 보존한다.
   - 대상·요금·날짜·장소·분야·시간은 100/100이며 신청·로그인·첨부·다운로드·PII endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_YANGYANG_GO_KR_45EF0349
   name: 양양군평생학습관
@@ -11739,9 +11844,10 @@ targets:
     error_kind: duplicate_url
   blocked_reason: duplicate_of:MUNI_EDU_YANGYANG_GO_KR_06A9551C
   crawler_notes:
-  - '2026-06-17: www.yangyang.go.kr/gw/portal is a generic municipal portal; generic crawl collected public-info/menu links instead of lifelong
-    course rows.'
-  - '2026-06-17: Yangyang lifelong courses are covered by MUNI_EDU_YANGYANG_GO_KR_06A9551C at https://edu.yangyang.go.kr/lecture/class_list.php.'
+  - '2026-06-17: www.yangyang.go.kr/gw/portal is a generic municipal portal; generic
+    crawl collected public-info/menu links instead of lifelong course rows.'
+  - '2026-06-17: Yangyang lifelong courses are covered by MUNI_EDU_YANGYANG_GO_KR_06A9551C
+    at https://edu.yangyang.go.kr/lecture/class_list.php.'
 - provider: MUNI_WWW_YC_GO_KR_54558363
   name: 영천시 교육문화센터 현재·예정 강좌
   branch: 영천시 교육문화센터
@@ -11784,9 +11890,11 @@ targets:
     semantic_duplicate_count: 0
     snapshot_complete: true
   crawler_notes:
-  - '2026-07-19 전용 파서 실측: 화면 표시 1,115건/112페이지 전체와 113페이지 종료 sentinel을 순회해 실제 고유 idx 195건을 확인했다.'
+  - '2026-07-19 전용 파서 실측: 화면 표시 1,115건/112페이지 전체와 113페이지 종료 sentinel을 순회해 실제 고유 idx
+    195건을 확인했다.'
   - 종료 141건을 제외한 현재·예정 54건의 상세 54/54, 공식 분류·지점 10개, ID·URL·의미 중복 0건을 검증했다.
-  - 서버의 과대 표시 건수는 행 수 단정에 사용하지 않고 연속된 비어 있지 않은 페이지와 전체 광고 페이지 및 종료 sentinel로 완전성을 증명한다.
+  - 서버의 과대 표시 건수는 행 수 단정에 사용하지 않고 연속된 비어 있지 않은 페이지와 전체 광고 페이지 및 종료 sentinel로 완전성을
+    증명한다.
   - 페이지 또는 상세 요청이 끝내 실패하면 부분 행을 저장하지 않으며, 완전 스냅샷에만 provider 범위 stale 정리를 허용한다.
   target_id: ab26f4b5c34c61d3
   updated_at: '2026-06-08T00:40:11'
@@ -11852,7 +11960,8 @@ targets:
   crawler_notes:
   - 2026-08-05 cloud에서 공식 통합교육 원장 13건·2페이지와 마지막 페이지 clamp, 첫·끝 경계를 재검증했다.
   - 현재·향후 상세 13건의 identity·분류·기간·상태·접수방식을 전수 대조했으며 4건의 온라인 신청 제어를 확인했다.
-  - 접수방식이 비어 있는 정상 강좌와 공식 장소가 비어 있는 정보화교육은 오탐 차단하지 않고, 후자는 물리 장소를 추정하지 않는 영동군 정보화교육 분기로 보존한다.
+  - 접수방식이 비어 있는 정상 강좌와 공식 장소가 비어 있는 정보화교육은 오탐 차단하지 않고, 후자는 물리 장소를 추정하지 않는 영동군 정보화교육
+    분기로 보존한다.
   - 도서관·평생학습 원장은 별도 HTTPS owner로 정상 승격되어 현재 11건을 독립 수집한다.
 - provider: MUNI_WWW_YD21_GO_KR_12C12550
   name: 영동군청
@@ -11874,7 +11983,8 @@ targets:
     grade: A
     parser: yd21_education_cards
     error_kind: ''
-  notes: 2026-07-10 current strict-TLS probe failed during handshake; insecure fallback is disabled.
+  notes: 2026-07-10 current strict-TLS probe failed during handshake; insecure fallback
+    is disabled.
 - provider: MUNI_WWW_YD21_GO_KR_7C7BAFEE
   name: 영동군청
   branch: 영동군청
@@ -11942,8 +12052,10 @@ targets:
     error_kind: duplicate_url
   blocked_reason: duplicate_of:MUNI_WWW_YEONGDO_GO_KR_33400564
   crawler_notes:
-  - '2026-06-17: hll/01419/01420.web is a lifelong-learning notice board and now returns no structured course rows.'
-  - '2026-06-17: Current Yeongdo course reservations are covered by MUNI_WWW_YEONGDO_GO_KR_33400564 at https://www.yeongdo.go.kr/reserve/01785/01791.web.'
+  - '2026-06-17: hll/01419/01420.web is a lifelong-learning notice board and now returns
+    no structured course rows.'
+  - '2026-06-17: Current Yeongdo course reservations are covered by MUNI_WWW_YEONGDO_GO_KR_33400564
+    at https://www.yeongdo.go.kr/reserve/01785/01791.web.'
 - provider: MUNI_WWW_YEONJE_GO_KR_73BA35A2
   name: 부산광역시 연제구 전체 교육 원장
   branch: 부산광역시 연제구
@@ -12020,9 +12132,12 @@ targets:
     privacy_violations: 0
     snapshot_complete: true
   crawler_notes:
-  - 2026-07-22 연제구 정본 415건·42페이지, 부산평생학습 4개 office 605건, 부산시 주민자치 39건을 하나의 원자 스냅샷으로 완주했다.
-  - 플랫폼 external lecIdx 366건과 list-only 49건은 연제구 정본의 정확한 중복으로 제외하고 native 190건은 유지해 고유 644건 중 현재·미래 132건 상세를 검증했다.
-  - 기존 contents.do와 HTTP 메인, canonical 후보 provider MUNI_WWW_YEONJE_GO_KR_6CA2C4DE는 동일 정본의 별칭이다. yjccc 생활문화센터는 별도 시설 소유자이며 개인정보·신청 폼은 읽지 않는다.
+  - 2026-07-22 연제구 정본 415건·42페이지, 부산평생학습 4개 office 605건, 부산시 주민자치 39건을 하나의 원자 스냅샷으로
+    완주했다.
+  - 플랫폼 external lecIdx 366건과 list-only 49건은 연제구 정본의 정확한 중복으로 제외하고 native 190건은 유지해
+    고유 644건 중 현재·미래 132건 상세를 검증했다.
+  - 기존 contents.do와 HTTP 메인, canonical 후보 provider MUNI_WWW_YEONJE_GO_KR_6CA2C4DE는
+    동일 정본의 별칭이다. yjccc 생활문화센터는 별도 시설 소유자이며 개인정보·신청 폼은 읽지 않는다.
 - provider: MUNI_WWW_YEONSU_GO_KR_AFBFF9A3
   name: 인천광역시 연수구 평생교육센터
   branch: 인천광역시 연수구
@@ -12109,7 +12224,8 @@ targets:
   crawler_notes:
   - 전년도와 금년~2099 시작분 합계 3,959건·330페이지를 각각 빈 sentinel 및 첫·끝 경계 재검사까지 완주한다.
   - 현재 상세 후보 583건 중 identity·목록/상세 제목·기간·지점을 모두 결박한 공식 역전기간 5건만 제외해 19개 지점 578건을 반환한다.
-  - 목록 대기접수중·상세 신청마감인 44578은 상세 정원 16/16 및 신청 제어 0개를 확인해 상세 마감 상태를 우선하고 두 원문 상태를 모두 보존한다.
+  - 목록 대기접수중·상세 신청마감인 44578은 상세 정원 16/16 및 신청 제어 0개를 확인해 상세 마감 상태를 우선하고 두 원문 상태를 모두
+    보존한다.
   - 신청 제어는 identity가 결박된 공개 링크만 보존하고 신청서·신청자·연락처·강사·설명·첨부·결제·환불·PII 값은 읽거나 저장하지 않는다.
 - provider: MUNI_WWW_YEOSU_GO_KR_37E703DC
   name: 여수시 평생교육
@@ -12356,7 +12472,8 @@ targets:
   manual_updated_at: '2026-06-07T23:46:30'
   crawler_notes:
   - 필터 없는 lesson 목록이 평생학습관·동네배움터 등 하위 목록의 동일 lesseqn을 모두 포함하는 공식 통합 원본이다.
-  - 모집예정(E0820100)과 모집중(E0820110)을 POST 상태 필터로 전 페이지 수집하며, 목록 번호로 선언 총건수와 16건 단위 페이지를 검증한다.
+  - 모집예정(E0820100)과 모집중(E0820110)을 POST 상태 필터로 전 페이지 수집하며, 목록 번호로 선언 총건수와 16건 단위 페이지를
+    검증한다.
   - 2026-07-18 기준 모집예정 28건(2페이지), 모집중 5건(1페이지), 상세 33건과 신청 화면 33건을 검증했다.
   - 목록·상세 상태, 고유 lesseqn, 상세 필수 필드 또는 신청 제어가 불완전하면 저장과 stale 처리를 차단한다.
 - provider: MUNI_YEOJU_GSEEK_KR_1034027F
@@ -12456,9 +12573,11 @@ targets:
     parent_aggregate_exclusion_field: d_co_sprvsn_id
     parent_aggregate_exclusion_value: G000005
   crawler_notes:
-  - 여주시 지역코드 4167000000·공동주관 G000005 원장 253건을 29개 범위와 직후 빈 sentinel, 첫·마지막 범위 재검증으로 완주한다.
+  - 여주시 지역코드 4167000000·공동주관 G000005 원장 253건을 29개 범위와 직후 빈 sentinel, 첫·마지막 범위 재검증으로
+    완주한다.
   - 종료일 기준 현재·향후 60건의 상세를 전수 검증하고 공식 지점명 여주시평생학습관과 원문 장소 25종을 보존한다.
-  - 중앙 GSEEK에서는 동일한 G000005 253건만 제외한다. G000001 평생배움대학 7건과 여주시립도서관 360건은 별도 owner로 유지하며 신청 endpoint는 호출하지 않는다.
+  - 중앙 GSEEK에서는 동일한 G000005 253건만 제외한다. G000001 평생배움대학 7건과 여주시립도서관 360건은 별도 owner로
+    유지하며 신청 endpoint는 호출하지 않는다.
 - provider: MUNI_YEOJU_GSEEK_KR_6335EC49
   name: 여주시평생학습포털 공지게시판 별칭
   branch: 경기도 여주시
@@ -12665,7 +12784,8 @@ targets:
     sido: 경기도
     sigungu: 수원시 영통구
     full_name: 경기도 수원시 영통구
-  notes: 접수중·접수준비 공식 범위 전체와 답사·체험(q_categoryCode=81) 부분원장을 대조해 교육·체험을 행 단위로 분류한다. 종료된 원본 12건의 접수기간 역전 결함은 현재 스냅샷과 분리해 계수한다.
+  notes: 접수중·접수준비 공식 범위 전체와 답사·체험(q_categoryCode=81) 부분원장을 대조해 교육·체험을 행 단위로 분류한다.
+    종료된 원본 12건의 접수기간 역전 결함은 현재 스냅샷과 분리해 계수한다.
   last_quality:
     collected: 166
     saved: 0
@@ -12840,7 +12960,8 @@ targets:
   crawler_notes:
   - 기존 review 후보 cmsid=16558은 현재 대관예약이며, 공식 교육·강좌 canonical URL은 cmsid=16554이다.
   - 기존 cmsid=16554 집계 화면은 총 290개를 선언하지만 고유 상세 ID가 219개뿐이므로 직접 snapshot 원천으로 사용하지 않는다.
-  - 2026-07-19 공식 정보화교육 59건·8페이지와 AI내편중구 336건을 대조하고 상세 후보 241건 전체에서 현재·향후 교육 135건을 검증했다.
+  - 2026-07-19 공식 정보화교육 59건·8페이지와 AI내편중구 336건을 대조하고 상세 후보 241건 전체에서 현재·향후 교육 135건을
+    검증했다.
 - provider: MUNI_LIFETIMEEDU_POHANG_GO_KR_4D8BE3DA
   name: 포항시 평생학습원 전체 교육강좌
   branch: 경상북도 포항시 및 남구·북구

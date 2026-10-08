@@ -189,7 +189,8 @@ targets:
   crawler_notes:
   - 은평종합스포츠타운(EFMC01)과 은평청여울수영장(EFMC02)의 공식 최상위 category를 모두 순회하며 search_type=R만 수집한다.
   - 2026-07-18 현재 접수 중 R 행은 0개이며, 종료 E 약 416개는 실제 운영기간이 불명확하므로 활성 교육으로 저장하지 않는다.
-  - 현재 0건도 회사·분류 fanout이 완전할 때만 no_current_data 성공으로 처리하며 미래 R 행은 고유 comcd·class_cd와 type=R 상세를 검증한다.
+  - 현재 0건도 회사·분류 fanout이 완전할 때만 no_current_data 성공으로 처리하며 미래 R 행은 고유 comcd·class_cd와
+    type=R 상세를 검증한다.
 - provider: BUSAN_RESERVATION
   name: 부산광역시 통합예약
   branch: 부산광역시 통합예약
@@ -245,7 +246,8 @@ targets:
   crawler_notes:
   - 체험/견학 예약은 yeyak.daegu.go.kr 공개 JSON API로 수집한다.
   - 교육/강좌 API는 NetFUNNEL 브라우저 게이트가 있어 서버 직접 호출은 차단된다.
-  - 2026-06-17 04시대 확인 시 yeyak.daegu.go.kr 전체가 2026-06-16 22:00 ~ 2026-06-17 08:00 시스템 점검 페이지를 반환한다.
+  - 2026-06-17 04시대 확인 시 yeyak.daegu.go.kr 전체가 2026-06-16 22:00 ~ 2026-06-17 08:00
+    시스템 점검 페이지를 반환한다.
   target_id: f47e90c828dd6542
   updated_at: '2026-06-05T16:47:10'
   manual_action: update
@@ -260,7 +262,7 @@ targets:
   service_group: 공공강좌
   service_group_policy: locked
   collection_type: daejeon_ok_education_two_leaves+five_regions+global_reconcile+empty_sentinels+stable_recheck+current_ajax_detail
-  crawler_status: ready
+  crawler_status: blocked
   priority: 1
   url: https://www.daejeon.go.kr/okr2019/eduRsvtList.do?menuSeq=8100&ntatcDelYn=Y&boardUseYn=N&menuUseYn=N
   source: municipal_integrated_reservation_manual_verification
@@ -341,7 +343,7 @@ targets:
   ops_scopes:
   - experience
   collection_type: daejeon_ok_experience_one_leaf+five_regions+global_reconcile+empty_sentinels+stable_recheck+current_ajax_detail+persistent_worker_pool
-  crawler_status: ready
+  crawler_status: blocked
   priority: 1
   url: https://www.daejeon.go.kr/okr2019/expRsvtList.do?menuSeq=8201&ntatcDelYn=Y&boardUseYn=N&menuUseYn=N
   source: municipal_integrated_reservation_live_audit
@@ -785,9 +787,11 @@ targets:
     sigungu: 중랑구
     full_name: 서울특별시 중랑구
   crawler_notes:
-  - '2026-08-05: Official POST T000 ledger audited with R403/R402, global plus all 25 Seoul district filters, complete pagination, empty sentinel,
-    stable recheck and safe public detail.'
-  - Application, login, applicant, payment, contact, attachment and free-text endpoints/fields are excluded.
+  - '2026-08-05: Official POST T000 ledger audited with R403/R402, global plus all
+    25 Seoul district filters, complete pagination, empty sentinel, stable recheck
+    and safe public detail.'
+  - Application, login, applicant, payment, contact, attachment and free-text endpoints/fields
+    are excluded.
   target_id: 32ff3bf9b37b5268
   updated_at: '2026-08-05T18:00:00+09:00'
   manual_action: update
@@ -915,9 +919,11 @@ targets:
     sigungu: 중랑구
     full_name: 서울특별시 중랑구
   crawler_notes:
-  - '2026-08-05: Official POST T200 ledger audited with R403/R402, global plus all 25 Seoul district filters, complete pagination, empty sentinel,
-    stable recheck and safe public detail.'
-  - Application, login, applicant, payment, contact, attachment and free-text endpoints/fields are excluded.
+  - '2026-08-05: Official POST T200 ledger audited with R403/R402, global plus all
+    25 Seoul district filters, complete pagination, empty sentinel, stable recheck
+    and safe public detail.'
+  - Application, login, applicant, payment, contact, attachment and free-text endpoints/fields
+    are excluded.
   target_id: 6e0bb3900cca4e54
   updated_at: '2026-08-05T18:00:00+09:00'
   manual_action: update
@@ -1196,8 +1202,10 @@ targets:
     full_snapshot_validated: true
   crawler_notes:
   - 공식 기관 35개 중 구·군 전용 소유자와 대학·외부기관 34개를 제외하고 부산광역시 직속 OFFICE_00002731만 소유한다.
-  - 중구·서구·영도구·남구·동구·동래구·부산진구·북구·사하구·강서구·해운대구·금정구·사상구·연제구·수영구·기장군 분기는 각각 검증된 전용 owner가 원자적으로 수집한다.
-  - 직속 원장 1건·1페이지와 빈 sentinel·안정성 재검사를 4요청으로 완주했으며 현재 행은 0건이라 정상 no-current 스냅샷으로 기록한다.
+  - 중구·서구·영도구·남구·동구·동래구·부산진구·북구·사하구·강서구·해운대구·금정구·사상구·연제구·수영구·기장군 분기는 각각 검증된 전용 owner가
+    원자적으로 수집한다.
+  - 직속 원장 1건·1페이지와 빈 sentinel·안정성 재검사를 4요청으로 완주했으며 현재 행은 0건이라 정상 no-current 스냅샷으로
+    기록한다.
 - provider: MUNI_RESERVE_ANSAN_GO_KR_02253999
   name: 안산시 통합예약 체험·견학
   branch: 안산시 통합예약
@@ -1269,8 +1277,10 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - 공식 실내체험 208건·실외체험 43건·견학 83건의 35개 데이터 페이지와 각 빈 sentinel을 완주하고 첫·마지막·sentinel을 재검사한다.
-  - 2026-08-05 기준 활동 종료일이 지나지 않은 41건의 공개 상세 41/41을 검증하며 종료된 접수중 배지 1건은 이상 수치로만 기록하고 반환하지 않는다.
+  - 공식 실내체험 208건·실외체험 43건·견학 83건의 35개 데이터 페이지와 각 빈 sentinel을 완주하고 첫·마지막·sentinel을
+    재검사한다.
+  - 2026-08-05 기준 활동 종료일이 지나지 않은 41건의 공개 상세 41/41을 검증하며 종료된 접수중 배지 1건은 이상 수치로만 기록하고
+    반환하지 않는다.
   - 공개 상세 주소가 상록구 또는 단원구를 명시한 경우에만 귀속해 상록구 12건·단원구 29건이며, 구가 불명확하면 전체 스냅샷을 실패시킨다.
   - 달력·회차·신청·로그인·회원·신청자·개인정보·첨부·다운로드 경로는 호출하지 않고 공개 목록/상세 GET만 사용한다.
 - provider: MUNI_RESERVE_ANSAN_GO_KR_5D6B8309
@@ -1413,11 +1423,12 @@ targets:
   origin: collected
   region: 부산광역시
   last_quality:
-    collected: 10
-    score: 58.0
-    grade: C
-    parser: card+detail
+    collected: 4
+    score: 100.0
+    grade: A
+    parser: busan_reserve_list+detail
     error_kind: ''
+    checked_at: '2026-10-08T02:36:09.104518+00:00'
 - provider: MUNI_RESERVE_BUSAN_GO_KR_B5B9B420
   name: 부산광역시 통합예약
   branch: 부산광역시 강서구
@@ -1433,11 +1444,12 @@ targets:
   origin: collected
   region: 부산광역시
   last_quality:
-    collected: 10
-    score: 58.0
-    grade: C
-    parser: card+detail
+    collected: 1
+    score: 100.0
+    grade: A
+    parser: busan_reserve_list+detail
     error_kind: ''
+    checked_at: '2026-10-08T02:36:09.104518+00:00'
 - provider: MUNI_WWW_BSSEOGU_GO_KR_E6B6EB32
   name: 부산광역시 서구청
   branch: 부산광역시 서구
@@ -1538,7 +1550,8 @@ targets:
       decision: excluded_child_playground_facility_information
   crawler_notes:
   - 활성 교육 메뉴 평생학습·옹기종기문화센터·예술회관·미디어센터의 공식 원천 79건을 범위별 경계와 지점 분기로 완주한다.
-  - 현재 후보 12건의 상세를 전수 확인하고 공식 포스터와 충돌한 종료일 1건 및 개별 강좌와 중복된 종합 안내를 정확한 identity로 격리해 9건만 반환한다.
+  - 현재 후보 12건의 상세를 전수 확인하고 공식 포스터와 충돌한 종료일 1건 및 개별 강좌와 중복된 종합 안내를 정확한 identity로 격리해
+    9건만 반환한다.
   - 현재 9건은 모두 공식 지점 부안미디어센터이며 HTML 신청 제어가 없어 INFO_ONLY로 저장하고 이메일·전화·이미지 본문은 저장하지 않는다.
 - provider: MUNI_WWW_CHUNGJU_GO_KR_7EE8620A
   name: 충주시 통합예약 읍면동 주민자치센터강좌
@@ -1747,7 +1760,8 @@ targets:
   origin: collected
   region: 경기도
   blocked_reason: retired_archive_no_current_data
-  notes: 공식 전체 1,773건을 감사했으나 현재·향후 0건이고 최신 교육 종료일이 2024-12-11인 동결 아카이브다. 현재 정본은 김포 브랜드 GSEEK로 이전됐다.
+  notes: 공식 전체 1,773건을 감사했으나 현재·향후 0건이고 최신 교육 종료일이 2024-12-11인 동결 아카이브다. 현재 정본은 김포
+    브랜드 GSEEK로 이전됐다.
   last_quality:
     collected: 0
     score: 100.0
@@ -1809,7 +1823,8 @@ targets:
     parser: gangneung_unity_education_state_filters+detail
     error_kind: ''
   crawler_notes:
-  - URORST01~06 상태를 각각 끝 페이지까지 순회하고 59개 비종료 프로그램 상세를 수집한다. progrmNo를 고유키로 사용하며 운영기관은 branch, 실제 장소는 venue로 보존한다.
+  - URORST01~06 상태를 각각 끝 페이지까지 순회하고 59개 비종료 프로그램 상세를 수집한다. progrmNo를 고유키로 사용하며 운영기관은
+    branch, 실제 장소는 venue로 보존한다.
 - provider: MUNI_WWW_GURI_GO_KR_8B69DE2C
   name: 구리시 통합예약포털
   branch: 경기도 구리시
@@ -1896,9 +1911,11 @@ targets:
     semantic_duplicate_count: 0
     snapshot_complete: true
   crawler_notes:
-  - 2026-07-19 공식 내부 교육 소스 17개의 368건과 전체 페이지·sentinel 51회를 완주하고 현재·향후 상세 277/277을 검증했다.
+  - 2026-07-19 공식 내부 교육 소스 17개의 368건과 전체 페이지·sentinel 51회를 완주하고 현재·향후 상세 277/277을
+    검증했다.
   - 상세가 명시적으로 테스트용임을 확인한 1건만 제외하고 276건을 반환한다.
-  - 강좌 2046의 공식 시작일 2026-07-01과 잘못된 종료일 2025-09-30 지문이 정확히 유지될 때만 종료 연도를 2026으로 제한 보정하며 원문이 달라지면 실패한다.
+  - 강좌 2046의 공식 시작일 2026-07-01과 잘못된 종료일 2025-09-30 지문이 정확히 유지될 때만 종료 연도를 2026으로 제한
+    보정하며 원문이 달라지면 실패한다.
 - provider: MUNI_WWW_GWANGJU_GO_KR_82EF77CD
   name: 광주광역시 통합예약 교육강좌
   branch: 광주광역시청
@@ -1949,7 +1966,8 @@ targets:
   municipality_full_name: 전북특별자치도 장수군
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 장수군 통합예약의 교육강좌 GJRE 전체 원장을 공식 교육시설 분기와 함께 하나의 완전한 공공강좌 소유자로 수집한다.
+  classification_reason: 장수군 통합예약의 교육강좌 GJRE 전체 원장을 공식 교육시설 분기와 함께 하나의 완전한 공공강좌 소유자로
+    수집한다.
   classification_evidence_url: https://www.jangsu.go.kr/reserve/index.jangsu?menuCd=DOM_000000503001000000
   covered_municipalities:
   - code: '5274000000'
@@ -2016,7 +2034,8 @@ targets:
   crawler_notes:
   - 공식 교육 원장 613건·62페이지와 63페이지의 정확한 마지막 페이지 clamp를 완주하고 첫·끝·overflow 경계를 재검증한다.
   - 2026-07-23 현재·향후 15건의 상세를 전수 결합해 여성문화센터 9·청소년문화의집 5·농업기술센터 1건의 공식 지점을 보존한다.
-  - 신청 제어 4건은 강좌 identity에만 결합하고 신청·예약확인·첨부·강사·담당자·연락처·자유본문·PII endpoint는 호출하거나 저장하지 않는다.
+  - 신청 제어 4건은 강좌 identity에만 결합하고 신청·예약확인·첨부·강사·담당자·연락처·자유본문·PII endpoint는 호출하거나 저장하지
+    않는다.
 - provider: MUNI_WWW_JINJU_GO_KR_5DF28B13
   name: 경상남도 진주시
   branch: 경상남도 진주시
@@ -2206,7 +2225,8 @@ targets:
   ownership_scope: official_namwon_integrated_current_future_education
   crawler_notes:
   - 시민참여교육·평생학습관·공연/강좌의 강좌 태그를 한 정본으로 수집하며 기존 3개 교육 URL은 ownership alias로만 보존한다.
-  - 체험·견학 2개 sibling target은 같은 provider의 별도 범위이므로 direct provider 실행에서 함께 성공해야 stale 정리를 허용한다.
+  - 체험·견학 2개 sibling target은 같은 provider의 별도 범위이므로 direct provider 실행에서 함께 성공해야 stale
+    정리를 허용한다.
 - provider: MUNI_WWW_NAMWON_GO_KR_37D4EA88
   name: 남원시립김병종미술관 견학
   branch: 남원시립김병종미술관
@@ -2334,10 +2354,14 @@ targets:
     attachment_endpoints_called: 0
     snapshot_complete: true
   crawler_notes:
-  - 공식 체험·견학 원장 17건을 8·8·1건의 3개 데이터 페이지와 정확히 빈 4페이지까지 전수 확인하고 12개 시설 파티션의 합집합과 첫·끝·sentinel 경계를 재검증한다.
-  - 2026-08-05 기준 종료일이 남은 cyclNo 100609 한 건의 공개 상세만 수집하고, 상시운영 시설 안내 8건과 종료 8건은 원장 합계에만 포함해 반환하지 않는다.
-  - cyclNo 170·165의 접수중 badge와 예약불가 control 불일치 및 cyclNo 263의 역전된 과거 운영기간은 정확한 ID와 공개 구조에만 한정한 감사를 거쳐 제외한다.
-  - 신청 control은 cyclNo·rcptNo 결합만 검증하며 로그인·신청·본인인증·신청자·첨부·다운로드·연락처·자유서술 endpoint는 호출하지 않는다.
+  - 공식 체험·견학 원장 17건을 8·8·1건의 3개 데이터 페이지와 정확히 빈 4페이지까지 전수 확인하고 12개 시설 파티션의 합집합과 첫·끝·sentinel
+    경계를 재검증한다.
+  - 2026-08-05 기준 종료일이 남은 cyclNo 100609 한 건의 공개 상세만 수집하고, 상시운영 시설 안내 8건과 종료 8건은 원장
+    합계에만 포함해 반환하지 않는다.
+  - cyclNo 170·165의 접수중 badge와 예약불가 control 불일치 및 cyclNo 263의 역전된 과거 운영기간은 정확한 ID와
+    공개 구조에만 한정한 감사를 거쳐 제외한다.
+  - 신청 control은 cyclNo·rcptNo 결합만 검증하며 로그인·신청·본인인증·신청자·첨부·다운로드·연락처·자유서술 endpoint는
+    호출하지 않는다.
   - 교육 canonical provider MUNI_WWW_SANGJU_GO_KR_A813366C와 별도 체험 원장으로 유지한다.
 - provider: MUNI_WWW_SANGJU_GO_KR_AEA6F278
   name: 상주시 통합예약 중복 별칭
@@ -2364,7 +2388,8 @@ targets:
     parser: duplicate
     error_kind: exact_navigation_alias_of_complete_integrated_owner
   crawler_notes:
-  - 같은 통합예약 교육 원장을 여는 pretty-route 별칭이며 cyclNo 전체 집합이 canonical owner와 동일하므로 별도 실행하지 않는다.
+  - 같은 통합예약 교육 원장을 여는 pretty-route 별칭이며 cyclNo 전체 집합이 canonical owner와 동일하므로 별도 실행하지
+    않는다.
   target_id: dad1d0e1fd84879d
   updated_at: '2026-06-07T22:38:12'
   manual_action: update
@@ -2493,8 +2518,10 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - 공식 문화·체험의 체험·캠프 원장 43건을 6개 데이터 페이지까지 전수 확인하고 정확히 빈 7페이지와 첫 페이지 ID 순서를 재검증한다.
-  - 2026-08-05 기준 종료일이 남은 4건의 공개 상세만 수집하며, 명시적 테스트 셸 RESR_000000000010989 한 건은 원장 합계에는 포함하되 프로그램에서는 제외한다.
-  - 공개 상세의 resrId·유형·기간·정원·장소와 신청 제어 존재만 확인하고 로그인·신청·신청자·본인인증·취소·나의예약 endpoint는 호출하지 않는다.
+  - 2026-08-05 기준 종료일이 남은 4건의 공개 상세만 수집하며, 명시적 테스트 셸 RESR_000000000010989 한 건은 원장
+    합계에는 포함하되 프로그램에서는 제외한다.
+  - 공개 상세의 resrId·유형·기간·정원·장소와 신청 제어 존재만 확인하고 로그인·신청·신청자·본인인증·취소·나의예약 endpoint는 호출하지
+    않는다.
   - 교육 canonical owner와 체험 provider를 분리해 Ops Console에서 의왕시 교육과 체험 수집 범위를 각각 집계한다.
 - provider: MUNI_WWW_UIWANG_GO_KR_F89FBD11
   name: 의왕시 통합예약시스템
@@ -2624,7 +2651,8 @@ targets:
   crawler_notes:
   - 공식 교육·강좌 이력 2,360건을 PageSize=100으로 24페이지 완전 순회하고 진행 종료일이 오늘 이후인 현재·향후 강좌만 저장한다.
   - 2026-07-19 실사이트 현재 범위는 160건이며 도봉구청 외부 연계 70건과 통합예약 자체 상세 90건이다.
-  - 외부 연계 70건은 8개 공식 상세를 공유하므로 연계 레코드 ID로 강좌를 구분하고, 교육포털 A/G 하위 수집기는 이 전체 owner의 중복으로 제외한다.
+  - 외부 연계 70건은 8개 공식 상세를 공유하므로 연계 레코드 ID로 강좌를 구분하고, 교육포털 A/G 하위 수집기는 이 전체 owner의 중복으로
+    제외한다.
 - provider: MUNI_YEYAK_DOBONGSISEOL_OR_KR_0A2D506D
   name: 도봉구시설관리공단
   branch: 서울특별시 도봉구
@@ -2874,7 +2902,8 @@ targets:
     parser: wonju_home_redirect_duplicate_excluded
     error_kind: duplicate_url:MUNI_WWW_WONJU_GO_KR_56B0C690
   crawler_notes:
-  - 루트는 /www/main.do로 이동하는 탐색 shell이며 전체 교육 identity는 canonical 원주시 통합예약 provider에서만 수집한다.
+  - 루트는 /www/main.do로 이동하는 탐색 shell이며 전체 교육 identity는 canonical 원주시 통합예약 provider에서만
+    수집한다.
 - provider: SASANG_RESERVATION
   name: 부산광역시 사상구 전체 교육 원장
   branch: 부산광역시 사상구
@@ -2932,8 +2961,10 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - 사상구 교육 원장 35건, 부산평생학습 OFFICE_00002633 159건, 부산시 주민자치 사상구 분기 27건을 원자적으로 완주한다.
-  - 공유 플랫폼의 구청 couIdx 중복 50건을 정확히 제외하고 native LEARNING 109건을 포함해 고유 원천 171건 중 현재·미래 122건을 반환한다.
-  - 신청 가능한 구청 교육 24건만 identity-bound 신청 URL을 내보내며 신청 폼·계정·신청자·연락처·강사·첨부·자유서술은 요청하거나 저장하지 않는다.
+  - 공유 플랫폼의 구청 couIdx 중복 50건을 정확히 제외하고 native LEARNING 109건을 포함해 고유 원천 171건 중 현재·미래
+    122건을 반환한다.
+  - 신청 가능한 구청 교육 24건만 identity-bound 신청 URL을 내보내며 신청 폼·계정·신청자·연락처·강사·첨부·자유서술은 요청하거나
+    저장하지 않는다.
   - 동일 URL provider MUNI_WWW_SASANG_GO_KR_103B0ECE는 이 정본 provider의 명시적 중복으로 유지한다.
   updated_at: '2026-07-22'
 - provider: SEJONG_LIFELONG_EDU
@@ -3053,8 +3084,10 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - 공식 10개 시설의 전체 행과 각 pg 초과 요청의 동일 fingerprint를 대조해 무페이지 목록 완전성을 검증한다.
-  - 현재·향후 444건의 공개 상세를 모두 대조해 대상·요금·날짜·장소·분야·시간을 채우고, 접수중·대기자접수 41건에서만 같은 host·강좌 결합 신청 제어를 허용한다.
-  - 수영 강좌 상세가 목록 시간 뒤에 덧붙이는 주말·공휴일 운영시간 64건은 제한된 형식으로 검증해 원문 증빙에 보존하며 연락처와 신청자 정보는 저장하지 않는다.
+  - 현재·향후 444건의 공개 상세를 모두 대조해 대상·요금·날짜·장소·분야·시간을 채우고, 접수중·대기자접수 41건에서만 같은 host·강좌
+    결합 신청 제어를 허용한다.
+  - 수영 강좌 상세가 목록 시간 뒤에 덧붙이는 주말·공휴일 운영시간 64건은 제한된 형식으로 검증해 원문 증빙에 보존하며 연락처와 신청자 정보는
+    저장하지 않는다.
   - 북구 평생학습 페이지는 동일 B0001007/lecId 소유권 alias이고 울주군 시설공단은 별도 소유자다.
 - provider: GYEYANG_LIFELONG
   name: 계양구 평생학습포털
@@ -3448,7 +3481,8 @@ targets:
     full_name: 세종특별자치시
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 프로그램 신청 원장의 교육·체험 회차만 행 단위로 잠그고 위원회·동아리 구성원 모집·홍보·설문·시설 이용은 제외한다.
+  classification_reason: 공식 프로그램 신청 원장의 교육·체험 회차만 행 단위로 잠그고 위원회·동아리 구성원 모집·홍보·설문·시설
+    이용은 제외한다.
   ownership_scope: sejong_nurida_public_current_future_youth_education_and_experience
   excluded_scope: committee_club_membership_promotion_survey_facility_use_application_login_applicant_attachment_download_and_pii_routes
   max_pages: 40
@@ -3522,8 +3556,10 @@ targets:
     attachment_endpoint_requests: 0
     pii_endpoint_requests: 0
   crawler_notes:
-  - '2026-08-05: 공식 현재·향후 overlap 필터 102건·11페이지, 12페이지 빈 sentinel, 첫·끝 경계와 공개 상세 102/102를 검증했다.'
-  - 실제 교육 42건과 체험 26건만 반환하고 위원회·동아리 구성원 모집 29건, 포상제·기획단·방과후 등록·홍보·설문·시설 이용 등 5건을 근거별로 제외한다.
+  - '2026-08-05: 공식 현재·향후 overlap 필터 102건·11페이지, 12페이지 빈 sentinel, 첫·끝 경계와 공개 상세 102/102를
+    검증했다.'
+  - 실제 교육 42건과 체험 26건만 반환하고 위원회·동아리 구성원 모집 29건, 포상제·기획단·방과후 등록·홍보·설문·시설 이용 등 5건을 근거별로
+    제외한다.
   - 원천 2007:1의 종료일 오기는 같은 상세의 단일 교육일 2026-08-08과 시작일이 일치할 때만 종료 시각을 같은 날로 제한 보정한다.
   - 신청 제어는 회차 identity만 검증하며 신청 폼·로그인·신청자·첨부·다운로드·문의처·개인정보 endpoint를 호출하거나 저장하지 않는다.
 - provider: MUNI_WWW_JINJU_GO_KR_AC4F2628
@@ -3600,9 +3636,11 @@ targets:
     details_complete: true
     snapshot_complete: true
   crawler_notes:
-  - 공식 교육 메뉴의 내부 12개 전체강좌 leaf에서 2,225건·228개 data page와 각 빈 sentinel·1페이지 재검증을 모두 완주해야 저장한다.
+  - 공식 교육 메뉴의 내부 12개 전체강좌 leaf에서 2,225건·228개 data page와 각 빈 sentinel·1페이지 재검증을 모두
+    완주해야 저장한다.
   - 교육 종료일이 지나지 않은 143건의 상세을 전부 검증하고 실제 course-bound 신청 제어가 있는 110건에만 신청 URL을 제공한다.
-  - 장난감은행 놀이교실과 외부 도서관·전시관은 이 교육 canonical에서 제외하며 기존 childcare·농업·정보화 부분 대상은 별도 실행하지 않는다.
+  - 장난감은행 놀이교실과 외부 도서관·전시관은 이 교육 canonical에서 제외하며 기존 childcare·농업·정보화 부분 대상은 별도 실행하지
+    않는다.
 - provider: MUNI_TICKET_CHEONGJU_GO_KR_72C8D1D9
   name: 청주시 통합예약 전체 교육·강좌
   branch: 충청북도 청주시 및 4개 구
@@ -3664,7 +3702,8 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - 공식 교육·강좌 전체 목록 452건·57페이지와 빈 58페이지를 완주하고 종료일이 지나지 않은 433건의 공개 상세를 전수 대조한다.
-  - 2026-08-05 현재 기존 청주시 평생학습 provider의 현재 134건과 정규화 제목 교집합은 0건이며 source ID namespace도 서로 달라 별도 소유한다.
+  - 2026-08-05 현재 기존 청주시 평생학습 provider의 현재 134건과 정규화 제목 교집합은 0건이며 source ID namespace도
+    서로 달라 별도 소유한다.
   - 공지사항·게시판은 exact 목록 카드가 아니므로 수집하지 않고 신청 동의·로그인·인증 endpoint는 호출하지 않는다.
 - provider: MUNI_TICKET_CHEONGJU_GO_KR_72C8D1D9
   name: 청주시 통합예약 전체 관광·체험
@@ -3796,7 +3835,8 @@ targets:
     details_complete: true
     snapshot_complete: true
   crawler_notes:
-  - 공식 수강 메뉴 중 비회원 공개 legacy 목록 3개를 전 페이지 완주하고 마지막 clamp·첫 페이지 재검증 후 현재·향후 60건의 상세를 전수 대조한다.
+  - 공식 수강 메뉴 중 비회원 공개 legacy 목록 3개를 전 페이지 완주하고 마지막 clamp·첫 페이지 재검증 후 현재·향후 60건의 상세를
+    전수 대조한다.
   - 나머지 8개 센터는 회원전용 SSO 목록이므로 로그인·인증·신청자 endpoint를 호출하지 않으며, 공지·대관 메뉴도 수집하지 않는다.
   - 인천시 예약 포털에는 외부기관 링크로만 등재되어 있고 기존 시·구 목록에는 같은 강좌가 없어 인천시설공단을 별도 owner로 유지한다.
 - provider: MUNI_RESERVE_INSISEOL_OR_KR_EC4B7776
@@ -3863,8 +3903,10 @@ targets:
     details_complete: true
     snapshot_complete: true
   crawler_notes:
-  - 공식 체험 메뉴의 4개 공개 목록 11건을 전수 수집하고 pgno=2의 링크 노이즈를 제거한 동일 페이지 반복·첫 페이지 재검증·전체 상세를 대조한다.
-  - 공개 일정 이동 제어가 있는 송도·청라 5건만 직접 예약 가능으로 표시하고, 씨사이드 4건은 공식 비활성 제어를 보존하며 어린이 4D 2건은 상설전시관 선예약 조건으로 표시한다.
+  - 공식 체험 메뉴의 4개 공개 목록 11건을 전수 수집하고 pgno=2의 링크 노이즈를 제거한 동일 페이지 반복·첫 페이지 재검증·전체 상세를
+    대조한다.
+  - 공개 일정 이동 제어가 있는 송도·청라 5건만 직접 예약 가능으로 표시하고, 씨사이드 4건은 공식 비활성 제어를 보존하며 어린이 4D 2건은
+    상설전시관 선예약 조건으로 표시한다.
   - 일정·신청·마이페이지·로그인·인증 endpoint는 호출하지 않고, 시설별 공식 근거로 영종구·연수구·계양구·서해구를 행 단위 고정한다.
 - provider: MUNI_DOKSEODANG_SD_GO_KR_A8C20229
   name: 성동구 신속예약 전체 체험·견학
@@ -3978,7 +4020,8 @@ targets:
     semantic_duplicate_count: 0
     snapshot_complete: true
   crawler_notes:
-  - '2026-08-05: 공식 원장 103건·11페이지와 12페이지의 정확한 마지막 페이지 clamp를 검증하고 접수중 15건의 공개 상세를 전수 대조했다.'
+  - '2026-08-05: 공식 원장 103건·11페이지와 12페이지의 정확한 마지막 페이지 clamp를 검증하고 접수중 15건의 공개 상세를
+    전수 대조했다.'
   - 날짜 선택·신청·로그인·첨부·신청자·개인정보 endpoint는 호출하지 않으며 공개 목록과 공개 프로그램 상세만 GET한다.
 - provider: MUNI_WWW_GURI_GO_KR_E0C65498
   name: 구리시 통합예약 11개 기관 체험·견학
@@ -4050,7 +4093,8 @@ targets:
     semantic_duplicate_count: 0
     snapshot_complete: true
   crawler_notes:
-  - '2026-08-05: 공식 11개 기관 원장 37건·12페이지와 각 원장의 빈 post-last sentinel을 완주하고 현재·향후 공개 캘린더 상세 37건을 전수 대조했다.'
+  - '2026-08-05: 공식 11개 기관 원장 37건·12페이지와 각 원장의 빈 post-last sentinel을 완주하고 현재·향후 공개
+    캘린더 상세 37건을 전수 대조했다.'
   - 예약·로그인·첨부·신청자·개인정보 endpoint는 호출하지 않으며 공개 목록과 공개 캘린더 상세만 GET한다.
 - provider: MUNI_YEYAK_HSCITY_GO_KR_2DFD650A
   name: 화성특례시 통합예약 견학·관람 및 체험·캠프
@@ -4152,7 +4196,8 @@ targets:
     current_identity_sha256: ab0cfdcb15a19893c44d9f2c1742fb0c745af76e018399deec1cf90e998f06c6
     snapshot_complete: true
   crawler_notes:
-  - '2026-08-05: 견학/관람 123건·13페이지와 체험/캠프 119건·12페이지를 완주하고 각각 14·13페이지의 빈 sentinel과 첫·끝 경계를 재검증했다.'
+  - '2026-08-05: 견학/관람 123건·13페이지와 체험/캠프 119건·12페이지를 완주하고 각각 14·13페이지의 빈 sentinel과
+    첫·끝 경계를 재검증했다.'
   - 현재 신청·접수예정 63건의 공개 상세 63/63에서 identity·제목·기관·상태·기간과 2026년 4개 구 공식 카카오 주소를 대조했다.
   - 신청·로그인·첨부·신청자·개인정보 endpoint는 호출하지 않으며 축제/행사·공연/전시·공지·시설 디렉터리는 소유 범위에서 제외한다.
 - provider: MUNI_YEYAK_WONJU_GO_KR_602E7F89
@@ -4234,9 +4279,11 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 전체 8건·1페이지, 정확한 2페이지 빈 sentinel, 공식 5개 운영기관 분기 합계 8건을 대조하고 현재·향후 7건의 공개 상세를 전수 검증했다.'
+  - '2026-08-05: 공식 전체 8건·1페이지, 정확한 2페이지 빈 sentinel, 공식 5개 운영기관 분기 합계 8건을 대조하고 현재·향후
+    7건의 공개 상세를 전수 검증했다.'
   - 운영기간이 신청일 기준 60일까지인 공식 상시 견학 1건은 접수중 상태와 ID가 일치할 때만 보존한다.
-  - 신청 달력 제어 14개는 프로그램 ID만 검증해 링크로 기록하고 달력·신청·로그인·신청자·첨부·다운로드·개인정보 endpoint는 호출하지 않는다.
+  - 신청 달력 제어 14개는 프로그램 ID만 검증해 링크로 기록하고 달력·신청·로그인·신청자·첨부·다운로드·개인정보 endpoint는 호출하지
+    않는다.
 - provider: MUNI_WWW_YANGSAN_GO_KR_42320610
   candidate_id: MUNI_IR_5001B8D1B22A
   name: 양산시 통합예약 체험·견학 전체 일정
@@ -4266,7 +4313,8 @@ targets:
   detail_limit: 30
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 통합예약 체험·견학 메뉴의 11개 내부 프로그램을 매 실행 대조하고 실제 공개 체험·견학 9개 일정만 수집한다.
+  classification_reason: 공식 통합예약 체험·견학 메뉴의 11개 내부 프로그램을 매 실행 대조하고 실제 공개 체험·견학 9개 일정만
+    수집한다.
   classification_evidence_url: https://www.yangsan.go.kr/booking/main.do
   ownership_scope: yangsan_integrated_booking_internal_ia_tour_experience_partitions
   ownership_aliases:
@@ -4316,7 +4364,8 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 체험·견학 내비게이션의 내부 프로그램 11개를 대조하고 자원봉사 모집 1개와 중단된 일회성 인형극 1개를 제외한 실제 체험 9개에서 현재·향후 날짜 254건을 검증했다.'
+  - '2026-08-05: 공식 체험·견학 내비게이션의 내부 프로그램 11개를 대조하고 자원봉사 모집 1개와 중단된 일회성 인형극 1개를 제외한
+    실제 체험 9개에서 현재·향후 날짜 254건을 검증했다.'
   - 신청 가능일 메타데이터와 익명 월별 합계만 수집하며 28개 월 파티션 및 각 프로그램의 첫·끝 월을 재검증한다.
   - 신청자 이름·기관명이 포함된 일별 API와 신청·로그인·이력·첨부 endpoint는 호출하지 않는다.
 - provider: SEOSAN_WELFARE_TOTAL_RESERVATION
@@ -4402,7 +4451,8 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 체험·견학 메뉴의 시립도서관·어린이도서관·도시안전통합센터 3개 파티션에서 7건과 각 즉시 빈 2페이지 sentinel을 검증했다.'
+  - '2026-08-05: 공식 체험·견학 메뉴의 시립도서관·어린이도서관·도시안전통합센터 3개 파티션에서 7건과 각 즉시 빈 2페이지 sentinel을
+    검증했다.'
   - 어린이도서관 파티션에 섞인 스튜디오 대관 2건을 제외하고 실제 체험·견학 5건 중 현재·향후 3건의 공개 상세를 검증했다.
   - 로그인·신청·신청자·첨부·달력 동작·개인정보 endpoint는 호출하지 않고 전화번호는 검증 후 폐기한다.
 - provider: MUNI_WWW_YEONGJU_GO_KR_773329F7
@@ -4502,7 +4552,8 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 실내놀이터 단체·개인 2개 달력 파티션에서 현재·향후 111회차를 확인하고 2027년 12월 경계와 2028년 1월 빈 sentinel을 재검증했다.'
+  - '2026-08-05: 실내놀이터 단체·개인 2개 달력 파티션에서 현재·향후 111회차를 확인하고 2027년 12월 경계와 2028년 1월
+    빈 sentinel을 재검증했다.'
   - 예약가능 98회차의 본인확인 래퍼와 날짜·시간·정원 결합만 검증했으며 cmd=4 신청 경로는 호출하지 않았다.
   - 가흥안뜰물놀이장은 2026년 6월 22일~7월 24일 종료 계절 서비스라 이 provider 소유 범위에서 제외한다.
   - 로그인·본인확인·신청·신청자·회원·일자상세·첨부·다운로드·개인정보 endpoint는 호출하지 않는다.
@@ -4605,7 +4656,8 @@ targets:
   crawler_notes:
   - '2026-08-05: 공식 체험/견학 메뉴의 족욕체험·한방체험 2개 달력에서 원장 104회차, 종료 6회차, 현재·향후 98회차를 확인했다.'
   - 두 달력 모두 2026년 10월 정확한 빈 달 sentinel과 현재·마지막 비어 있지 않은 달·sentinel 경계를 재검증한다.
-  - 날짜별 신청 control은 존재 여부와 날짜 identity만 검증하고 신청·로그인·본인확인·신청자·첨부·다운로드·개인정보 endpoint는 호출하지 않는다.
+  - 날짜별 신청 control은 존재 여부와 날짜 identity만 검증하고 신청·로그인·본인확인·신청자·첨부·다운로드·개인정보 endpoint는
+    호출하지 않는다.
   - 안전한 직접 신청 URL이 없으므로 공개 상태가 예약가능이어도 reservation_available은 false로 유지한다.
 - provider: MUNI_RESERV_BUCHEON_GO_KR_DADCF414
   candidate_id: MUNI_IR_592B0CBFA587
@@ -4703,7 +4755,8 @@ targets:
   crawler_notes:
   - '2026-08-05: 공식 관람·체험 원장 19건을 16+3으로 확인하고 즉시 다음 3페이지의 빈 sentinel을 재검증했다.'
   - 전체 19건의 공개 상세와 프로그램 선택 registry, 예약 POST control identity를 검증했지만 제출하지 않았다.
-  - 신청·로그인·단체·회원·신청자·첨부·다운로드·개인정보 endpoint는 호출하지 않으며 직접 신청 URL이 없어 reservation_available은 false이다.
+  - 신청·로그인·단체·회원·신청자·첨부·다운로드·개인정보 endpoint는 호출하지 않으며 직접 신청 URL이 없어 reservation_available은
+    false이다.
 - provider: MUNI_WWW_CHUNGJU_GO_KR_BDA0BB78
   candidate_id: MUNI_IR_F8399F5468C7
   name: 충주시 통합예약 여성문화회관 전체 교육·체험
@@ -4734,7 +4787,8 @@ targets:
   detail_limit: 20
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 여성문화회관 원장 18건의 제목별 공식 교육·체험 의미를 감사 시점의 정확 매핑으로 잠그고 알 수 없는 신규 제목은 실패 처리한다.
+  classification_reason: 여성문화회관 원장 18건의 제목별 공식 교육·체험 의미를 감사 시점의 정확 매핑으로 잠그고 알 수 없는
+    신규 제목은 실패 처리한다.
   classification_evidence_url: https://www.chungju.go.kr/rev/reserve/451
   ownership_scope: chungju_rev_451_womens_culture_mixed_current_future
   ownership_disjoint_from:
@@ -4774,9 +4828,11 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 여성문화회관 원장 18건과 2페이지 정확한 빈 sentinel을 확인하고 현재·향후 9건의 공개 상세 9건을 전수 검증했다.'
+  - '2026-08-05: 공식 여성문화회관 원장 18건과 2페이지 정확한 빈 sentinel을 확인하고 현재·향후 9건의 공개 상세 9건을 전수
+    검증했다.'
   - 현재·향후 9건은 제목별 정확 분류로 교육 7건·체험 2건이며, 알 수 없는 신규 제목은 추정하지 않고 전체 snapshot을 실패 처리한다.
-  - 로그인 안내형 신청·신청확인 제어와 첨부 제어는 구조만 검증하고 해당 endpoint는 호출하지 않으며 application_url과 개인정보를 저장하지 않는다.
+  - 로그인 안내형 신청·신청확인 제어와 첨부 제어는 구조만 검증하고 해당 endpoint는 호출하지 않으며 application_url과 개인정보를
+    저장하지 않는다.
 - provider: MUNI_BOEUN_PLAYPASS_CO_KR_69657ED8
   candidate_id: MUNI_IR_5843C7492BB3
   name: 보은군청소년센터 Play.Pass 전체 교육·체험 프로그램
@@ -4807,7 +4863,8 @@ targets:
   detail_limit: 60
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 청소년센터 프로그램 원장에서 직업체험·만들기 팝업은 체험, 하반기 정규과정은 교육으로 잠그고 축제 및 제주 현장 프로그램은 제외한다.
+  classification_reason: 공식 청소년센터 프로그램 원장에서 직업체험·만들기 팝업은 체험, 하반기 정규과정은 교육으로 잠그고 축제
+    및 제주 현장 프로그램은 제외한다.
   classification_evidence_url: https://boeun.playpass.co.kr/program/list
   ownership_evidence_url: https://www.boeun.go.kr/youth/index.do
   ownership_scope: boeun_youth_center_playpass_complete_programme_ledger
@@ -4871,8 +4928,10 @@ targets:
     source_identity_hash: 7f8ea708c30dfd3ffba83933b7663bc534117a5f97a950c672c9e3f6c05ae3b2
     output_identity_hash: f0e40d50d2cd0c48e09c34d75352dbfb9c5e88619440721ae7d6ad03dce3fc44
   crawler_notes:
-  - '2026-08-05: 보은군청소년센터가 직접 연결한 Play.Pass 공식 원장 39건을 12+12+12+3 페이지와 빈 5페이지 sentinel, 첫·끝·sentinel 재검증으로 완주했다.'
-  - 공개 상세와 회차 JSON을 39/39 검증해 보은 현장 체험 18건과 정규 교육 19건을 반환하며, 축제 1건과 실제 장소가 제주인 1건은 coverage에서 제외한다.
+  - '2026-08-05: 보은군청소년센터가 직접 연결한 Play.Pass 공식 원장 39건을 12+12+12+3 페이지와 빈 5페이지 sentinel,
+    첫·끝·sentinel 재검증으로 완주했다.'
+  - 공개 상세와 회차 JSON을 39/39 검증해 보은 현장 체험 18건과 정규 교육 19건을 반환하며, 축제 1건과 실제 장소가 제주인 1건은
+    coverage에서 제외한다.
   - 신청·로그인·인증·회원·신청자·질문답변·파일·첨부·다운로드 endpoint는 호출하지 않고 공개 응답의 담당자·강사 필드는 저장하지 않는다.
 - provider: MUNI_WWW_JP_GO_KR_8A39DB83
   candidate_id: MUNI_IR_402917A23300
@@ -4903,7 +4962,8 @@ targets:
   detail_limit: 500
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 안내가 이론·시청각 교육과 40분 자전거 주행 실습으로 구성된 체험형 교통안전교육으로 명시하므로 체험으로 잠근다.
+  classification_reason: 공식 안내가 이론·시청각 교육과 40분 자전거 주행 실습으로 구성된 체험형 교통안전교육으로 명시하므로
+    체험으로 잠근다.
   classification_evidence_url: https://www.jp.go.kr/kor/sub05_03_09_01.do
   ownership_evidence_url: https://www.jp.go.kr/kor/sub05_03_09_01.do
   ownership_scope: jeungpyeong_bicycle_park_current_year_march_december_complete_experience_slots
@@ -4963,9 +5023,12 @@ targets:
     source_identity_hash: 171db54f17c8709f8e37bfc6701748fbf0c8be6d3b57c2778f94bfc4d6dbfb2f
     output_identity_hash: e20fa182b32a9ba79b9f2198187bec62c6d44b1ef8aee197b8e27817b5f358a1
   crawler_notes:
-  - '2026-08-05: 공식 3~12월 운영 경계에 따라 8~12월 153일 전체, 다음 해 1월 비운영 sentinel, 안내·달력 shell·시간 원장·첫달·끝달·sentinel 재검증을 완료했다.'
-  - 기준일 이후 평일 슬롯 206건은 예약가능 73건·마감 11건·향후예정 122건이며, 기준일 이전 4일과 주말 42일·명시 휴관 4일은 프로그램 identity에서 제외한다.
-  - 예약가능 건도 application_url은 공식 달력 landing만 제공하며 신청서 write·예약조회·로그인·인증·회원·신청자·파일·첨부·다운로드 endpoint는 호출하지 않는다.
+  - '2026-08-05: 공식 3~12월 운영 경계에 따라 8~12월 153일 전체, 다음 해 1월 비운영 sentinel, 안내·달력 shell·시간
+    원장·첫달·끝달·sentinel 재검증을 완료했다.'
+  - 기준일 이후 평일 슬롯 206건은 예약가능 73건·마감 11건·향후예정 122건이며, 기준일 이전 4일과 주말 42일·명시 휴관 4일은 프로그램
+    identity에서 제외한다.
+  - 예약가능 건도 application_url은 공식 달력 landing만 제공하며 신청서 write·예약조회·로그인·인증·회원·신청자·파일·첨부·다운로드
+    endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_HONGSEONG_GO_KR_44482E32
   candidate_id: MUNI_IR_3335E549E98D
   name: 홍성군 이응노의 집 현재·향후 미술 체험
@@ -4995,7 +5058,8 @@ targets:
   detail_limit: 10
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 이응노의 집 교육신청 원장 중 제목·프로그램 내용이 만들기·제작·실습 등 직접 수행을 명시하고 고정 장소와 현재·향후 운영기간이 상세에서 일치하는 행만 체험으로 잠근다.
+  classification_reason: 이응노의 집 교육신청 원장 중 제목·프로그램 내용이 만들기·제작·실습 등 직접 수행을 명시하고 고정 장소와
+    현재·향후 운영기간이 상세에서 일치하는 행만 체험으로 잠근다.
   classification_evidence_url: https://www.hongseong.go.kr/prog/educate/02/yeyak/sub01_05/list.do
   ownership_scope: hongseong_lee_ung_no_house_current_future_hands_on_experiences
   ownership_disjoint_from:
@@ -5070,9 +5134,12 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 원장 115건을 10건씩 11페이지와 마지막 5건, 직후 빈 13페이지 sentinel, 첫·끝·sentinel 재검증으로 완주했다.'
-  - 현재·향후 3건의 공개 상세를 모두 검증해 201번 OPEN과 189번 CLOSED를 반환하고, 제목은 8월 22일 단일 회차지만 구조화 운영기간은 10월 22일까지인 200번은 날짜 anomaly로 격리한다.
-  - 신청하기 control은 상세 HTML에서 identity만 검증하며 application_url은 저장하지 않고 신청·로그인·회원·신청자·본인확인·첨부·다운로드·개인정보 endpoint는 호출하지 않는다.
+  - '2026-08-05: 공식 원장 115건을 10건씩 11페이지와 마지막 5건, 직후 빈 13페이지 sentinel, 첫·끝·sentinel
+    재검증으로 완주했다.'
+  - 현재·향후 3건의 공개 상세를 모두 검증해 201번 OPEN과 189번 CLOSED를 반환하고, 제목은 8월 22일 단일 회차지만 구조화 운영기간은
+    10월 22일까지인 200번은 날짜 anomaly로 격리한다.
+  - 신청하기 control은 상세 HTML에서 identity만 검증하며 application_url은 저장하지 않고 신청·로그인·회원·신청자·본인확인·첨부·다운로드·개인정보
+    endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_CHEONGYANG_GO_KR_4308166C
   candidate_id: MUNI_IR_8B34537DE697
   name: 청양군 백제문화체험박물관 실제 교육·체험 회차
@@ -5102,7 +5169,8 @@ targets:
   detail_limit: 10
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 교육·체험 전용 원장에서 공개 상세가 직접 만들기 활동, 실제 운영일·시간, 고정 운영장소를 함께 증명하는 현재·향후 회차만 체험으로 잠그며 시스템용 가상 대기일은 격리한다.
+  classification_reason: 공식 교육·체험 전용 원장에서 공개 상세가 직접 만들기 활동, 실제 운영일·시간, 고정 운영장소를 함께
+    증명하는 현재·향후 회차만 체험으로 잠그며 시스템용 가상 대기일은 격리한다.
   classification_evidence_url: https://www.cheongyang.go.kr/prog/experCate/museum/sub04_02/list.do
   ownership_scope: cheongyang_baekje_culture_experience_museum_current_future_sessions
   ownership_disjoint_from:
@@ -5170,8 +5238,10 @@ targets:
     full_snapshot_validated: true
   crawler_notes:
   - '2026-08-05: 공식 선언 8건을 5+3 두 페이지와 직후 빈 3페이지 sentinel, 첫·끝·sentinel 재검증으로 완주했다.'
-  - 현재·향후 3건의 공개 상세를 모두 검증했으나 42번은 공식 상세가 운영일을 대기접수용 임의 가상 일정이라고 명시하므로 격리하고, 실제 8월 8일 10~12시·14~16시 회차 2건만 반환한다.
-  - 달력의 신청 및 신청자보기 control은 identity만 관찰하고 application_url은 저장하지 않으며 신청·신청자·로그인·회원·본인확인·파일·첨부·다운로드·개인정보 endpoint는 호출하지 않는다.
+  - 현재·향후 3건의 공개 상세를 모두 검증했으나 42번은 공식 상세가 운영일을 대기접수용 임의 가상 일정이라고 명시하므로 격리하고, 실제 8월
+    8일 10~12시·14~16시 회차 2건만 반환한다.
+  - 달력의 신청 및 신청자보기 control은 identity만 관찰하고 application_url은 저장하지 않으며 신청·신청자·로그인·회원·본인확인·파일·첨부·다운로드·개인정보
+    endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_BRCN_GO_KR_4C580A38
   candidate_id: MUNI_IR_9A45E8615C8B
   name: 보령목재문화체험장 현재·상시 목공 체험
@@ -5202,7 +5272,8 @@ targets:
   detail_limit: 30
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 보령시 공식 예약안내가 연결한 목재문화체험장 원장에서 공개 상세의 프로그램 소개가 직접 만들기·제작·목공 체험을 증명하고 목록과 상세 운영정보가 일치하는 현재·상시 항목만 체험으로 잠근다.
+  classification_reason: 보령시 공식 예약안내가 연결한 목재문화체험장 원장에서 공개 상세의 프로그램 소개가 직접 만들기·제작·목공
+    체험을 증명하고 목록과 상세 운영정보가 일치하는 현재·상시 항목만 체험으로 잠근다.
   classification_evidence_url: https://www.brcn.go.kr/woodedu/sub04_02.do
   ownership_scope: boryeong_wood_culture_center_current_or_ongoing_hands_on_experience_ledger
   ownership_disjoint_from:
@@ -5259,9 +5330,12 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 보령시 예약안내의 K-GUIDE 공개 원장에서 선언 23건·직접 카드 23건·고유 ID 23개·g_magic registry 23개·상세 slide 23개가 일치함을 확인했다.'
-  - 전체 목록을 상세 검증 뒤 다시 GET하여 23개 identity와 제목·분류·상태·운영기간·시간·요금이 안정적인지 재검증하며, 각 slide는 같은 위치의 목록 운영기간·시간·요금과 결합한다.
-  - 318-57과 318-59 주소 충돌 때문에 address는 공란이고 상세의 체험실 venue_name만 저장하며, 예약가능 표시는 false로 고정한다.
+  - '2026-08-05: 공식 보령시 예약안내의 K-GUIDE 공개 원장에서 선언 23건·직접 카드 23건·고유 ID 23개·g_magic registry
+    23개·상세 slide 23개가 일치함을 확인했다.'
+  - 전체 목록을 상세 검증 뒤 다시 GET하여 23개 identity와 제목·분류·상태·운영기간·시간·요금이 안정적인지 재검증하며, 각 slide는
+    같은 위치의 목록 운영기간·시간·요금과 결합한다.
+  - 318-57과 318-59 주소 충돌 때문에 address는 공란이고 상세의 체험실 venue_name만 저장하며, 예약가능 표시는 false로
+    고정한다.
   - 달력·회차·잔여·신청·로그인·회원·신청자·본인확인·파일·첨부·다운로드·개인정보 endpoint는 호출하지 않는다.
 - provider: MUNI_WWW_GB_GO_KR_26B3732E
   candidate_id: MUNI_IR_CCA28172C30A
@@ -5292,8 +5366,9 @@ targets:
   detail_limit: 120
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 경상북도 산림자원개발원 공식 유아숲체험 월별 달력은 3~11월 운영, 월별 만들기·자연놀이 활동, 만 4~6세 대상, 2시간 프로그램을 명시하고 날짜별 예약 상태와 포항시 북구 경상북도수목원 고정 장소를 함께
-    공개하므로 현재·향후 날짜만 체험으로 고정한다.
+  classification_reason: 경상북도 산림자원개발원 공식 유아숲체험 월별 달력은 3~11월 운영, 월별 만들기·자연놀이 활동, 만
+    4~6세 대상, 2시간 프로그램을 명시하고 날짜별 예약 상태와 포항시 북구 경상북도수목원 고정 장소를 함께 공개하므로 현재·향후 날짜만 체험으로
+    고정한다.
   classification_evidence_url: https://www.gb.go.kr/Main/forest/page.do?mnu_uid=16262
   ownership_scope: gyeongbuk_forest_resources_infant_forest_current_year_march_november_dated_experiences_at_pohang_bukgu_arboretum
   ownership_disjoint_from:
@@ -5372,9 +5447,12 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 GET 달력의 8~11월과 의미상 종료 경계인 12월을 수집하고 첫·마지막·종료 경계를 재검증해 84개 날짜 identity와 OPEN 81/CLOSED 3 상태를 확인했다.'
-  - 12월 달력은 공통 예약 control을 렌더링하지만 공식 프로그램 표와 운영기간이 3~11월로 끝나므로 체험 데이터가 아닌 generic shell로 제외한다.
-  - 예약·확인 JavaScript와 POST form은 이미 받은 HTML에서 identity·상태 증거로만 검사하며 제출하거나 노출하지 않고 로그인·인증·회원·신청자·개인정보·파일·첨부·다운로드 endpoint도 호출하지 않는다.
+  - '2026-08-05: 공식 GET 달력의 8~11월과 의미상 종료 경계인 12월을 수집하고 첫·마지막·종료 경계를 재검증해 84개 날짜 identity와
+    OPEN 81/CLOSED 3 상태를 확인했다.'
+  - 12월 달력은 공통 예약 control을 렌더링하지만 공식 프로그램 표와 운영기간이 3~11월로 끝나므로 체험 데이터가 아닌 generic
+    shell로 제외한다.
+  - 예약·확인 JavaScript와 POST form은 이미 받은 HTML에서 identity·상태 증거로만 검사하며 제출하거나 노출하지 않고
+    로그인·인증·회원·신청자·개인정보·파일·첨부·다운로드 endpoint도 호출하지 않는다.
 - provider: MUNI_WWW_GEUMSAN_GO_KR_E2508DF6
   candidate_id: MUNI_IR_3A0D9D3DC53D
   name: 금산군 청소년수련관 현재·향후 특강 체험
@@ -5404,11 +5482,12 @@ targets:
   detail_limit: 5
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 금산군 청소년수련관 공식 전체 원장에서 운영종료일이 기준일 이후이고 접수중·대기접수이며, 문화예술·동일 고정 운영주체/장소·1일 특강·제목의 만들기 또는 DIY와 공개 상세의 여름특강 프로그램 문맥이 모두 일치하는
-    행만 체험으로 잠근다.
+  classification_reason: 금산군 청소년수련관 공식 전체 원장에서 운영종료일이 기준일 이후이고 접수중·대기접수이며, 문화예술·동일
+    고정 운영주체/장소·1일 특강·제목의 만들기 또는 DIY와 공개 상세의 여름특강 프로그램 문맥이 모두 일치하는 행만 체험으로 잠근다.
   classification_evidence_url: https://www.geumsan.go.kr/youthcenter/html/sub02/0202.html
   ownership_scope: geumsan_youth_training_center_active_current_future_hands_on_specials
-  ownership_partition_note: 금산 평생학습 전체 교육 provider와 원천 identity가 겹치지만 이 target은 엄격한 체험 service-family 5건만 별도 분류한다.
+  ownership_partition_note: 금산 평생학습 전체 교육 provider와 원천 identity가 겹치지만 이 target은 엄격한
+    체험 service-family 5건만 별도 분류한다.
   excluded_scope: closed_or_scheduled_non_active_rows_non_hands_on_education_tests_notices_events_performances_sports_rentals_application_login_auth_member_applicant_identity_file_attachment_download_post_and_pii_routes
   covered_municipalities:
   - code: '4471000000'
@@ -5485,8 +5564,9 @@ targets:
     snapshot_complete: true
     full_snapshot_validated: true
   crawler_notes:
-  - '2026-08-05: 공식 과거 원장 185건을 1~18페이지 각 10건과 19페이지 5건으로 완주하고, 빈 sentinel을 제공하지 않는 20페이지가 19페이지로 clamp됨을 observed page·identity 순서·전체 row signature로
-    확인했다.'
-  - 1·19·20페이지를 다시 GET해 경계를 재검증했으며, 운영종료일 기준 현재·향후 23건 중 활성 1일 특강 제목과 상세 설명이 직접 체험 계약을 함께 충족한 5건의 공개 상세만 조회했다.
-  - 상세의 mode=W 강좌신청 control은 같은 프로그램 identity인지 HTML에서만 확인하고 application_url은 공란으로 유지했으며 신청·로그인·인증·회원·신청자·본인확인·파일·첨부·다운로드·POST·개인정보 endpoint는
-    호출하지 않았다.
+  - '2026-08-05: 공식 과거 원장 185건을 1~18페이지 각 10건과 19페이지 5건으로 완주하고, 빈 sentinel을 제공하지 않는
+    20페이지가 19페이지로 clamp됨을 observed page·identity 순서·전체 row signature로 확인했다.'
+  - 1·19·20페이지를 다시 GET해 경계를 재검증했으며, 운영종료일 기준 현재·향후 23건 중 활성 1일 특강 제목과 상세 설명이 직접 체험
+    계약을 함께 충족한 5건의 공개 상세만 조회했다.
+  - 상세의 mode=W 강좌신청 control은 같은 프로그램 identity인지 HTML에서만 확인하고 application_url은 공란으로
+    유지했으며 신청·로그인·인증·회원·신청자·본인확인·파일·첨부·다운로드·POST·개인정보 endpoint는 호출하지 않았다.

@@ -184,7 +184,8 @@ targets:
     provider_decision: retain_incumbent_and_expand_to_five_complete_disjoint_catalogues
   crawler_notes:
   - 기존 복지관 provider를 유지하면서 평생학습관·정보화교육·종합사회복지관·여성센터·복합문학관의 1,762개 전체 원장을 전수한다.
-  - 서버의 last+1 clamp 계약과 첫·끝·clamp 재검증, 현재 상세 76건 및 공식 `함안군민` 대상 필터의 현재 identity 76건 일치를 모두 통과해야 저장하며 per-target 제한 및 부분 저장을 사용하지 않는다.
+  - 서버의 last+1 clamp 계약과 첫·끝·clamp 재검증, 현재 상세 76건 및 공식 `함안군민` 대상 필터의 현재 identity 76건
+    일치를 모두 통과해야 저장하며 per-target 제한 및 부분 저장을 사용하지 않는다.
   - 신청·로그인·신청자·첨부·다운로드·PII endpoint와 상세의 강사·자유문·첨부값은 호출하거나 저장하지 않는다.
 - provider: HAMYANG_WELFARE_OFFICIAL_COURSE
   name: 함양군 종합사회복지관 교육신청/수강신청
@@ -323,7 +324,8 @@ targets:
     navigation_candidate_id: MUNI_IR_B588388CAD68
     provider_decision: reuse_incumbent_provider_and_replace_overlapping_legacy_partitions
   crawler_notes:
-  - 기존 종합사회복지관 단일 분할 provider를 유지하되 key=2의 80건 전체 교육 원장으로 교체해 신규·중복 provider를 만들지 않는다.
+  - 기존 종합사회복지관 단일 분할 provider를 유지하되 key=2의 80건 전체 교육 원장으로 교체해 신규·중복 provider를 만들지
+    않는다.
   - 첫·끝·바로 다음 빈 페이지와 현재·향후 상세 80건을 연속 검증하고 신청·로그인·첨부·다운로드·PII endpoint는 호출하지 않는다.
 - provider: YEONGTONG_WELFARE_ONLINE_COURSE
   name: 영통종합사회복지관 온라인수강신청
@@ -381,11 +383,12 @@ targets:
   origin: collected
   region: 부산광역시
   last_quality:
-    collected: 10
-    score: 57.5
-    grade: C
-    parser: card+detail
+    collected: 50
+    score: 100.0
+    grade: A
+    parser: generic_card+generic_table
     error_kind: ''
+    checked_at: '2026-10-08T02:36:09.104518+00:00'
 - provider: NONSAN_WELFARE_LIFELONG_COURSE
   name: 논산시 평생학습 구형 무기관필터 목록(교육 원장 제외)
   branch: 논산시 평생학습관 종합사회복지관 강좌

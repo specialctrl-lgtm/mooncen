@@ -1124,8 +1124,20 @@ def collect_ptlib_courses(
             status = _status(reception or item["status"])
             capacity_match = re.search(r"([\d,]+\s*/\s*[\d,]+)", reception)
             row = _base_row(target, "lecture", identity, pairs["문화행사명"], raw_url)
+            desc_parts = []
+            if pairs.get("강사명"):
+                desc_parts.append(f"강사: {pairs['강사명']}")
+            if pairs.get("장소"):
+                desc_parts.append(f"장소: {pairs['장소']}")
+            if pairs.get("대상"):
+                desc_parts.append(f"대상: {pairs['대상']}")
+            if pairs.get("기타사항"):
+                desc_parts.append(pairs["기타사항"])
+            description = " / ".join(desc_parts)
             row.update(
                 {
+                    "description": description,
+                    "instructor": pairs.get("강사명", ""),
                     "branch": expected_branch,
                     "branch_code": code,
                     "branch_url": PTLIB_URL,

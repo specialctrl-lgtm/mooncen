@@ -1,11 +1,11 @@
 version: 1
-generated_at: '2026-09-16T12:08:38+00:00'
+generated_at: '2026-10-08T02:22:09+00:00'
 source_file: config/crawl_targets
 summary:
-  providers: 188
-  source_targets: 217
-  enabled_providers: 168
-  enabled_targets: 197
+  providers: 187
+  source_targets: 216
+  enabled_providers: 166
+  enabled_targets: 194
   by_source:
     municipal_course_candidate_results: 87
     municipal_integrated_reservation_audit: 2
@@ -17,7 +17,7 @@ summary:
     official_jne_integrated_library: 2
     official_rda_agricultural_science_museum_reservation_center: 1
     ops_console_url_add: 1
-    ops_console_url_update: 32
+    ops_console_url_update: 31
     welfare_course_targets: 8
     manual_user_request: 1
     municipal_course_candidate_results_sugang_sports: 4
@@ -27,14 +27,14 @@ summary:
     user_requested: 20
   by_priority:
     1: 28
-    2: 153
+    2: 152
     3: 4
     4: 2
     5: 1
   by_status:
-    blocked: 11
+    blocked: 12
     partial: 32
-    ready: 145
+    ready: 143
 targets:
 - index: 1
   provider: MUNI_EDU_ICJG_GO_KR_3C098A20
@@ -205,14 +205,14 @@ targets:
   - '1200'
   - --detail-limit
   - '1000'
-  status: ready
-  target_status: ready
-  enabled: true
-  disabled_reason: ''
+  status: blocked
+  target_status: blocked
+  enabled: false
+  disabled_reason: blocked
   target_count: 2
-  enabled_target_count: 2
+  enabled_target_count: 0
   target_statuses:
-  - ready
+  - blocked
 - index: 8
   provider: INCHEON_RESERVATION
   name: 인천광역시 온라인통합예약 전체 강좌·교육
@@ -1266,12 +1266,17 @@ targets:
   priority: 2
   url: https://reserve.busan.go.kr/lctre/view?resveGroupSn=112&progrmSn=24717
   crawler: Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_506834D2.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_506834D2.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_RESERVE_BUSAN_GO_KR_506834D2.py --save-db --per-target-limit 50 --allow-partial-save --max-depth
+    2 --detail-limit 20
   arguments:
   - --save-db
   - --per-target-limit
   - '50'
   - --allow-partial-save
+  - --max-depth
+  - '2'
+  - --detail-limit
+  - '20'
   status: ready
   target_status: ready
   enabled: true
@@ -2733,12 +2738,17 @@ targets:
   priority: 2
   url: https://www.ijongno.co.kr/www/128?document_category_srl=5
   crawler: Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_4B285EA8.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_4B285EA8.py --save-db --per-target-limit 50 --allow-partial-save
+  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_IJONGNO_CO_KR_4B285EA8.py --save-db --per-target-limit 50 --allow-partial-save --max-depth
+    2 --detail-limit 20
   arguments:
   - --save-db
   - --per-target-limit
   - '50'
   - --allow-partial-save
+  - --max-depth
+  - '2'
+  - --detail-limit
+  - '20'
   status: ready
   target_status: ready
   enabled: true
@@ -3567,27 +3577,6 @@ targets:
   target_statuses:
   - ready
 - index: 151
-  provider: MUNI_WWW_YANGJU_GO_KR_1A2AECAC
-  name: 경기도 양주시
-  source: ops_console_url_update
-  priority: 2
-  url: https://www.yangju.go.kr/lll/selectEduLctreWebList.do?key=1838&lllKind=1
-  crawler: Crawler/generated_yaml/MUNI_WWW_YANGJU_GO_KR_1A2AECAC.py
-  command: python -X utf8 Crawler/generated_yaml/MUNI_WWW_YANGJU_GO_KR_1A2AECAC.py --save-db --per-target-limit 50 --allow-partial-save
-  arguments:
-  - --save-db
-  - --per-target-limit
-  - '50'
-  - --allow-partial-save
-  status: ready
-  target_status: ready
-  enabled: true
-  disabled_reason: ''
-  target_count: 1
-  enabled_target_count: 1
-  target_statuses:
-  - ready
-- index: 152
   provider: NATIONAL_HANGEUL_MUSEUM
   name: 국립한글박물관
   source: ops_console_url_update
@@ -3613,7 +3602,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 153
+- index: 152
   provider: NATIONAL_INTANGIBLE_HERITAGE_CENTER
   name: 국립무형유산원
   source: ops_console_url_update
@@ -3639,7 +3628,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 154
+- index: 153
   provider: NATIONAL_LIGHTHOUSE_MUSEUM
   name: 국립등대박물관
   source: ops_console_url_update
@@ -3665,7 +3654,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 155
+- index: 154
   provider: ESHARE_PUBLIC_COURSE
   name: 공유누리 교육/강좌
   source: public_course_targets
@@ -3691,7 +3680,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 156
+- index: 155
   provider: GYEONGGI_GSEEK
   name: 경기도 평생학습포털 GSEEK
   source: public_course_targets
@@ -3712,7 +3701,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 157
+- index: 156
   provider: MUNI_WWW_BUK_DAEGU_KR_RESERVATION
   name: 대구 북구 통합예약
   source: public_course_targets
@@ -3733,7 +3722,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 158
+- index: 157
   provider: SEJONG_LIFELONG_EDU
   name: 세종특별자치시교육청 평생교육원
   source: public_course_targets
@@ -3754,7 +3743,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 159
+- index: 158
   provider: SEOUL_LIFELONG_LEARNING
   name: 서울시 평생학습포털
   source: public_course_targets
@@ -3775,7 +3764,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 160
+- index: 159
   provider: ULSAN_EDU_BOOKING
   name: 울산광역시교육청 통합예약
   source: public_course_targets
@@ -3801,7 +3790,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 161
+- index: 160
   provider: NATIONAL_MAP_MUSEUM
   name: 국립지도박물관
   source: user_requested
@@ -3827,7 +3816,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 162
+- index: 161
   provider: SUWON_LIBRARY_MA
   name: 수원시도서관 선경 독서문화프로그램
   source: user_requested
@@ -3853,7 +3842,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 163
+- index: 162
   provider: SUWON_LIBRARY_MB
   name: 수원시도서관 중앙 독서문화프로그램
   source: user_requested
@@ -3879,7 +3868,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 164
+- index: 163
   provider: SUWON_LIBRARY_MD
   name: 수원시도서관 슬기샘 독서문화프로그램
   source: user_requested
@@ -3905,7 +3894,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 165
+- index: 164
   provider: SUWON_LIBRARY_ME
   name: 수원시도서관 바른샘 독서문화프로그램
   source: user_requested
@@ -3931,7 +3920,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 166
+- index: 165
   provider: SUWON_LIBRARY_MF
   name: 수원시도서관 지혜샘 독서문화프로그램
   source: user_requested
@@ -3957,7 +3946,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 167
+- index: 166
   provider: SUWON_LIBRARY_MG
   name: 수원시도서관 서수원 독서문화프로그램
   source: user_requested
@@ -3983,7 +3972,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 168
+- index: 167
   provider: SUWON_LIBRARY_MH
   name: 수원시도서관 북수원 독서문화프로그램
   source: user_requested
@@ -4009,7 +3998,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 169
+- index: 168
   provider: SUWON_LIBRARY_MI
   name: 수원시도서관 태장마루 독서문화프로그램
   source: user_requested
@@ -4035,7 +4024,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 170
+- index: 169
   provider: SUWON_LIBRARY_MT
   name: 수원시도서관 대추골 독서문화프로그램
   source: user_requested
@@ -4061,7 +4050,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 171
+- index: 170
   provider: SUWON_LIBRARY_MU
   name: 수원시도서관 한림 독서문화프로그램
   source: user_requested
@@ -4087,7 +4076,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 172
+- index: 171
   provider: SUWON_LIBRARY_MV
   name: 수원시도서관 창룡 독서문화프로그램
   source: user_requested
@@ -4113,7 +4102,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 173
+- index: 172
   provider: SUWON_LIBRARY_MW
   name: 수원시도서관 버드내 독서문화프로그램
   source: user_requested
@@ -4139,7 +4128,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 174
+- index: 173
   provider: SUWON_LIBRARY_MX
   name: 수원시도서관 광교홍재 독서문화프로그램
   source: user_requested
@@ -4165,7 +4154,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 175
+- index: 174
   provider: SUWON_LIBRARY_MY
   name: 수원시도서관 호매실 독서문화프로그램
   source: user_requested
@@ -4191,7 +4180,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 176
+- index: 175
   provider: SUWON_LIBRARY_MZ
   name: 수원시도서관 일월 독서문화프로그램
   source: user_requested
@@ -4217,7 +4206,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 177
+- index: 176
   provider: SUWON_LIBRARY_SB
   name: 수원시도서관 화서다산 독서문화프로그램
   source: user_requested
@@ -4243,7 +4232,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 178
+- index: 177
   provider: SUWON_LIBRARY_SC
   name: 수원시도서관 광교푸른숲 독서문화프로그램
   source: user_requested
@@ -4269,7 +4258,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 179
+- index: 178
   provider: SUWON_LIBRARY_SD
   name: 수원시도서관 매여울 독서문화프로그램
   source: user_requested
@@ -4295,7 +4284,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 180
+- index: 179
   provider: SUWON_LIBRARY_SE
   name: 수원시도서관 망포글빛 독서문화프로그램
   source: user_requested
@@ -4321,7 +4310,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 181
+- index: 180
   provider: ICHEON_WORKER_WELFARE
   name: 이천시 노동자 복지관 평생학습 프로그램
   source: welfare_course_targets
@@ -4347,7 +4336,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 182
+- index: 181
   provider: NATIONAL_GUGAK_CENTER
   name: 국립국악원
   source: national_institution_course_search_targets
@@ -4373,7 +4362,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 183
+- index: 182
   provider: NATIONAL_RAILROAD_MUSEUM
   name: 철도박물관
   source: national_institution_course_search_targets
@@ -4399,7 +4388,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 184
+- index: 183
   provider: GIMHAE_DONGBU_SENIOR_NOTICE
   name: 김해시동부노인종합복지관 수강신청 안내
   source: welfare_course_targets
@@ -4425,7 +4414,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 185
+- index: 184
   provider: SASANG_SENIOR_CLASS_DIRECTORY
   name: 부산 사상구 노인교실/사회복지관 부설 프로그램 현황
   source: welfare_course_targets
@@ -4446,7 +4435,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - partial
-- index: 186
+- index: 185
   provider: SAHA_SOCIAL_WELFARE_DIRECTORY
   name: 부산 사하구 작은도서관 강좌
   source: welfare_course_targets
@@ -4472,7 +4461,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 187
+- index: 186
   provider: SUNCHEON_SENIOR_WELFARE_NOTICE
   name: 순천시 3개 노인복지관 프로그램
   source: welfare_course_targets
@@ -4498,7 +4487,7 @@ targets:
   enabled_target_count: 1
   target_statuses:
   - ready
-- index: 188
+- index: 187
   provider: SIMIN_WELFARE_FACILITY_SEED
   name: 시민종합사회복지관 시설/강당 신청 seed
   source: welfare_course_targets

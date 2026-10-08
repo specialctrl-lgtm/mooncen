@@ -391,6 +391,26 @@ GENERATED_PROVIDER_ARGUMENT_OVERRIDES = {
         "--detail-limit",
         "200",
     ),
+    "MUNI_WWW_IJONGNO_CO_KR_4B285EA8": (
+        "--save-db",
+        "--per-target-limit",
+        "50",
+        "--allow-partial-save",
+        "--max-depth",
+        "2",
+        "--detail-limit",
+        "20",
+    ),
+    "MUNI_RESERVE_BUSAN_GO_KR_506834D2": (
+        "--save-db",
+        "--per-target-limit",
+        "50",
+        "--allow-partial-save",
+        "--max-depth",
+        "2",
+        "--detail-limit",
+        "20",
+    ),
     "MUNI_WWW_GONGJU_GO_KR_7CBA2D38": (
         "--save-db",
         "--mark-stale",
@@ -4161,8 +4181,16 @@ def _collect_single_target(
             )
         target_max_pages = max_pages
         target_detail_limit = detail_limit
+        target_max_depth = max_depth
         override_args = GENERATED_PROVIDER_ARGUMENT_OVERRIDES.get(target.provider)
         if override_args:
+            if "--max-depth" in override_args:
+                idx = override_args.index("--max-depth")
+                if idx + 1 < len(override_args):
+                    try:
+                        target_max_depth = max(target_max_depth, int(override_args[idx + 1]))
+                    except (ValueError, TypeError):
+                        pass
             if "--max-pages" in override_args:
                 idx = override_args.index("--max-pages")
                 if idx + 1 < len(override_args):
@@ -4179,7 +4207,7 @@ def _collect_single_target(
                         pass
 
         logical_request_limit = (
-            max(1, target_max_pages) + max(0, target_detail_limit) + max(0, max_depth) * 5 + 10
+            max(1, target_max_pages) + max(0, target_detail_limit) + max(0, target_max_depth) * 5 + 10
         )
         request_limit = min(
             MAX_REQUESTS_PER_TARGET,
@@ -4189,7 +4217,7 @@ def _collect_single_target(
             rows, parser, meta = collect_from_url(
                 collect_target,
                 timeout=timeout,
-                max_depth=max_depth,
+                max_depth=target_max_depth,
                 max_pages=target_max_pages,
                 detail_limit=target_detail_limit,
             )
@@ -4273,9 +4301,9 @@ def _collect_single_target(
             raise ValueError(
                 f"collector exceeded detail_limit ({report.detail_pages}>{target_detail_limit})"
             )
-        if report.recursion_depth > max_depth:
+        if report.recursion_depth > target_max_depth:
             raise ValueError(
-                f"collector exceeded max_depth ({report.recursion_depth}>{max_depth})"
+                f"collector exceeded max_depth ({report.recursion_depth}>{target_max_depth})"
             )
         report.success = bool(rows) or report.no_current_data
     except Exception as exc:

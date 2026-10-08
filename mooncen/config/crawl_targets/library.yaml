@@ -88,7 +88,8 @@ targets:
     parser: duplicate_of:MUNI_BSLIB_JNE_GO_KR_34227E33
     error_kind: duplicate_of:MUNI_BSLIB_JNE_GO_KR_34227E33
   crawler_notes:
-  - 담양 소유자가 아니며 보성 canonical https://bslib.jne.go.kr/lecture.es?mid=a80402000000 하나만 실행한다.
+  - 담양 소유자가 아니며 보성 canonical https://bslib.jne.go.kr/lecture.es?mid=a80402000000 하나만
+    실행한다.
 - provider: MUNI_DYLIB_JNE_GO_KR_1412DDEF
   name: 전남광주통합특별시교육청담양도서관 전체 교육 강좌
   branch: 전남광주통합특별시교육청담양도서관
@@ -222,7 +223,8 @@ targets:
     parser: jne_library_lecture_table
     error_kind: ''
   crawler_notes:
-  - '2026-06-29: Existing jne_library_lecture_table parser verified after SSL retry fallback. Added venue_name branch fallback.'
+  - '2026-06-29: Existing jne_library_lecture_table parser verified after SSL retry
+    fallback. Added venue_name branch fallback.'
 - provider: MUNI_GRLIB_JNE_GO_KR_E6838F98
   name: 전남광주통합특별시교육청구례도서관 평생교육 수강 신청
   branch: 전남광주통합특별시교육청구례도서관
@@ -331,7 +333,8 @@ targets:
     grade: A
     parser: jne_library_lecture_table
     error_kind: ''
-  notes: 2026-07-14 corrected to the official course-registration menu and verified HTTPS with a host-scoped TLS 1.2 AES256-GCM-SHA384 compatibility profile; certificate-chain
+  notes: 2026-07-14 corrected to the official course-registration menu and verified
+    HTTPS with a host-scoped TLS 1.2 AES256-GCM-SHA384 compatibility profile; certificate-chain
     and hostname verification remain enabled.
 - provider: MUNI_HNLIB_JNE_GO_KR_3E3E5BCA
   name: 전남광주통합특별시교육청해남도서관
@@ -501,7 +504,8 @@ targets:
     municipal_exact_title_overlap: 0
   crawler_notes:
   - zero-based page=0~5의 51건과 page=6 정확한 빈 sentinel, 첫·끝·sentinel 재검사를 모두 통과해야 저장한다.
-  - 현재 9건 상세를 전수한 뒤 수강신청 연습 identity 8648 한 건을 제외하며 신청·로그인·등록확인·첨부·PII endpoint는 호출하지 않는다.
+  - 현재 9건 상세를 전수한 뒤 수강신청 연습 identity 8648 한 건을 제외하며 신청·로그인·등록확인·첨부·PII endpoint는 호출하지
+    않는다.
   - 정원과 대기 정원이 모두 찬 강좌만 생략된 상태 버튼을 신청마감으로 판정하며 접수·대기 버튼은 목록과 상세 identity를 대조한다.
 - provider: MUNI_LIB_GWE_GO_KR_8D8033C9
   name: 화천교육도서관
@@ -864,7 +868,8 @@ targets:
     full_name: 세종특별자치시
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 독서문화 프로그램 신청 원장의 신청기간·운영기간·모집인원을 갖춘 강좌 행만 현재 운영종료일과 공개 상세로 대조한다.
+  classification_reason: 공식 독서문화 프로그램 신청 원장의 신청기간·운영기간·모집인원을 갖춘 강좌 행만 현재 운영종료일과 공개
+    상세로 대조한다.
   ownership_scope: sejong_city_library_edusat_54_current_and_future_reading_culture_education
   excluded_scope: notices_navigation_application_registration_lookup_login_attachment_download_images_free_text_and_pii_routes
   max_pages: 20
@@ -890,7 +895,8 @@ targets:
       세종시립도서관: 4
     snapshot_complete: true
   crawler_notes:
-  - 공식 강좌 원장 278건·14페이지와 마지막 페이지 반복 sentinel, 첫·끝 경계를 재검증하고 운영 종료일이 남은 4건의 상세를 모두 대조한다.
+  - 공식 강좌 원장 278건·14페이지와 마지막 페이지 반복 sentinel, 첫·끝 경계를 재검증하고 운영 종료일이 남은 4건의 상세를 모두
+    대조한다.
   - 신청중 1건뿐 아니라 신청이 끝났어도 교육이 진행 중이거나 예정된 3건을 포함하며, 공지·메뉴·빈 강좌 행은 구조적으로 제외한다.
   - 신청 제어는 강좌 identity만 확인하고 신청·등록확인·로그인·첨부·다운로드·이미지·신청자 개인정보 경로는 호출하지 않는다.
 - provider: MUNI_SEJONG_NL_GO_KR_7F55E25D
@@ -921,7 +927,8 @@ targets:
     full_name: 세종특별자치시
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 공식 교육신청 원장의 과정명·교육기간·신청기간·모집현황을 갖춘 프로그램 행만 교육 종료일과 공개 상세로 대조한다.
+  classification_reason: 공식 교육신청 원장의 과정명·교육기간·신청기간·모집현황을 갖춘 프로그램 행만 교육 종료일과 공개 상세로
+    대조한다.
   ownership_scope: national_sejong_library_pro043_current_and_future_special_program_education
   excluded_scope: notices_navigation_application_login_member_library_attachment_download_images_free_text_and_pii_routes
   max_pages: 30
@@ -948,7 +955,8 @@ targets:
       국립세종도서관: 1
     snapshot_complete: true
   crawler_notes:
-  - 공식 교육신청 원장 188건·19페이지와 20페이지 빈 sentinel, 첫·끝 경계를 재검증하고 교육 종료일이 남은 프로그램의 공개 상세를 모두 대조한다.
+  - 공식 교육신청 원장 188건·19페이지와 20페이지 빈 sentinel, 첫·끝 경계를 재검증하고 교육 종료일이 남은 프로그램의 공개 상세를
+    모두 대조한다.
   - 화면의 페이지 분모 10은 전체 페이지 수가 아닌 현재 pagination 묶음이므로 선언 총건수와 페이지당 10건으로 19페이지를 계산한다.
   - 신청 제어는 강좌 identity와 공개 상태만 확인하고 신청·로그인·회원·내서재·첨부·다운로드·이미지·신청자 개인정보 경로는 호출하지 않는다.
 - provider: MUNI_USBL_BUKGU_ULSAN_KR_A68023CB
@@ -1046,7 +1054,8 @@ targets:
   detail_limit: 50
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 영덕도서관 평생교육 5건을 어린이·성인, 4개 대상그룹, 7개 접수상태 분할의 합집합으로 검증하여 하나의 완전한 공공강좌 owner로 수집한다.
+  classification_reason: 영덕도서관 평생교육 5건을 어린이·성인, 4개 대상그룹, 7개 접수상태 분할의 합집합으로 검증하여 하나의
+    완전한 공공강좌 owner로 수집한다.
   classification_evidence_url: https://www.gbelib.kr/yd/module/teach/index.do?menu_idx=173&searchCate1=18
   covered_municipalities:
   - code: '4777000000'
@@ -1110,14 +1119,16 @@ targets:
   origin: collected
   region: 경기도
   last_quality:
-    collected: 32
-    score: 66.7
+    collected: 50
+    score: 100.0
     grade: A
-    parser: ptlib_lecture_list
+    parser: ptlib_complete_catalogue+empty_sentinel+current_details
     error_kind: ''
+    checked_at: '2026-10-08T02:36:09.104518+00:00'
   crawler_notes:
   - manageCd 도서관 선택값을 순환하면서 lectureList.do를 수집한다.
-  - fnDetail lectureIdx를 lectureDetail.do 상세 URL로 변환해 모집기간, 교육기간, 시간, 장소, 대상, 정원을 보강한다.
+  - fnDetail lectureIdx를 lectureDetail.do 상세 URL로 변환해 모집기간, 교육기간, 시간, 장소, 대상, 정원을
+    보강한다.
   - 교육기간이 지난 강좌는 제외한다.
   - 상세 페이지에 수강료와 강좌 소개 본문이 없어 fee와 description은 비어 있을 수 있다.
 - provider: MUNI_WWW_SEOGU_GO_KR_A27782FE
@@ -1171,7 +1182,8 @@ targets:
     error_kind: ''
   service_group: 공공강좌
   crawler_notes:
-  - '2026-06-29: Corrected provider as Dunsan Library and switched from a single detail page to the course list URL.'
+  - '2026-06-29: Corrected provider as Dunsan Library and switched from a single detail
+    page to the course list URL.'
 - provider: MUNI_WWW_YEONGDO_GO_KR_33400564
   name: 부산광역시 영도구 전체 교육 원장
   branch: 부산광역시 영도구
@@ -1234,7 +1246,8 @@ targets:
     snapshot_complete: true
   crawler_notes:
   - 영도구 정본 2,306건 231페이지, 부산평생학습 OFFICE_00002680 884건, 부산시 주민자치 8건의 세 원장을 원자적으로 완주한다.
-  - 공유 플랫폼 external 818건은 정본 idx와 전부 동일해 억제하고, 독립 LEARNING identity 현재 40건만 전용 소유자에 포함한다.
+  - 공유 플랫폼 external 818건은 정본 idx와 전부 동일해 억제하고, 독립 LEARNING identity 현재 40건만 전용 소유자에
+    포함한다.
   - 현재·미래 93건의 안전한 상세만 읽으며 신청서·예약이력·첨부·강사·연락처·자유서술·신청자 개인정보는 요청하거나 저장하지 않는다.
 - provider: MUNI_WWW_YJLIB_GO_KR_ED9BCD30
   name: 여주시립도서관
@@ -1575,7 +1588,8 @@ targets:
   detail_limit: 650
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 하남시립도서관 8개관의 강좌 identity·교육기간·접수기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_reason: 하남시립도서관 8개관의 강좌 identity·교육기간·접수기간·정원·접수상태를 직접 소유하는 독립 공공
+    교육강좌 원장이다.
   classification_evidence_url: https://www.hanamlib.go.kr/silib/selectWebEdcLctreList.do?key=163
   ownership_scope: hanam_public_library_eight_branch_current_lecture_ledgers
   covered_municipalities:
@@ -1634,7 +1648,8 @@ targets:
   detail_limit: 500
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 이천시립도서관 6개관의 강좌 identity·교육기간·접수기간·정원·접수상태를 직접 소유하는 독립 공공 교육강좌 원장이다.
+  classification_reason: 이천시립도서관 6개관의 강좌 identity·교육기간·접수기간·정원·접수상태를 직접 소유하는 독립 공공
+    교육강좌 원장이다.
   classification_evidence_url: https://www.icheonlib.go.kr/education/list
   ownership_scope: icheon_public_library_six_branch_complete_education_ledger
   covered_municipalities:
@@ -1722,7 +1737,8 @@ targets:
   detail_limit: 500
   full_snapshot_required: true
   classification_locked: true
-  classification_reason: 고양시 18개 공공도서관의 강의 기간, 접수 기간, 대상, 장소, 수강료, 상태를 직접 소유하는 공식 통합 강좌 원장이다.
+  classification_reason: 고양시 18개 공공도서관의 강의 기간, 접수 기간, 대상, 장소, 수강료, 상태를 직접 소유하는 공식
+    통합 강좌 원장이다.
   ownership_scope: goyang_public_library_eighteen_branch_complete_lecture_ledger
   covered_municipalities:
   - code: '4128100000'
