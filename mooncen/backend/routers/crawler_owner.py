@@ -42,9 +42,10 @@ _OUTPUT_LIMIT = 8_192
 
 @dataclass(frozen=True)
 class _OwnerControl:
-    ssh: str
     target: DeployTarget
-    identity: Path | None
+    is_local: bool = False
+    ssh: str | None = None
+    identity: Path | None = None
 
 
 class CrawlerOwnerRunRequest(BaseModel):
@@ -92,9 +93,15 @@ def _owner_control() -> _OwnerControl:
     placement = topology.primary_for("crawler")
     _default, targets = load_deploy_targets()
     target = targets.get(placement.node)
+    if target is None:
+        raise RuntimeError("reviewed crawler-owner target is unavailable")
+    
+    # When crawler runs on the active local node (cloud)
+    if placement.node == "cloud" or target.name == "cloud":
+        return _OwnerControl(target=target, is_local=True)
+
     if (
-        target is None
-        or topology.crawler_mode != "legacy"
+        topology.crawler_mode != "legacy"
         or target.name != "gen1crawler"
         or target.server != placement.service_host
         or target.user != "sgm"
@@ -106,10 +113,12 @@ def _owner_control() -> _OwnerControl:
     ssh = shutil.which("ssh")
     if not ssh:
         raise RuntimeError("OpenSSH client is unavailable")
-    return _OwnerControl(ssh=ssh, target=target, identity=_resolve_identity(target.identity_file))
+    return _OwnerControl(target=target, is_local=False, ssh=ssh, identity=_resolve_identity(target.identity_file))
 
 
 def _ssh_command(control: _OwnerControl, remote_arguments: tuple[str, ...]) -> list[str]:
+    if control.ssh is None:
+        raise RuntimeError("SSH client is not configured for crawler owner")
     command = [
         control.ssh,
         "-o",
@@ -184,9 +193,10 @@ def _parse_summary(output: str) -> dict[str, Any] | None:
 
 
 def _remote_status(control: _OwnerControl) -> dict[str, Any]:
+    cmd = list(_STATUS_ARGUMENTS) if control.is_local else _ssh_command(control, _STATUS_ARGUMENTS)
     try:
         completed = subprocess.run(
-            _ssh_command(control, _STATUS_ARGUMENTS),
+            cmd,
             stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
@@ -199,7 +209,7 @@ def _remote_status(control: _OwnerControl) -> dict[str, Any]:
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise RuntimeError("crawler-owner status connection failed") from exc
     if completed.returncode != 0:
-        detail = _bounded_output(completed.stderr) or "SSH status command failed"
+        detail = _bounded_output(completed.stderr) or "Status command failed"
         raise RuntimeError(detail)
     units = _parse_status(completed.stdout)
     timer = units.get("mooncen-crawler.timer")
@@ -232,10 +242,11 @@ def _launch_dispatch(control: _OwnerControl) -> dict[str, Any]:
         _dispatch_finished_at = None
         _dispatch_exit_code = None
         _dispatch_error = None
+    cmd = list(_RUN_ARGUMENTS) if control.is_local else _ssh_command(control, _RUN_ARGUMENTS)
     try:
         try:
             completed = subprocess.run(
-                _ssh_command(control, _RUN_ARGUMENTS),
+                cmd,
                 stdin=subprocess.DEVNULL,
                 capture_output=True,
                 text=True,
@@ -275,7 +286,7 @@ def crawler_owner_status() -> dict[str, Any]:
     except RuntimeError as exc:
         return {
             "available": False,
-            "owner": "gen1crawler",
+            "owner": "cloud",
             "reason": str(exc)[:500],
             "dispatch": _dispatch_snapshot(),
         }

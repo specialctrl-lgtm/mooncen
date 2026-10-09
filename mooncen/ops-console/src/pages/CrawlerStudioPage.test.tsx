@@ -239,7 +239,7 @@ describe('CrawlerStudioPage', () => {
     expect(screen.getByLabelText('Provider')).toHaveValue('UNREVIEWED');
     expect(mockedOpsApi).toHaveBeenCalledWith('/crawlers/runs?limit=100&provider=UNREVIEWED');
     expect(screen.getByRole('option', { name: 'UNREVIEWED · 등록되지 않음' })).toBeDisabled();
-    expect(screen.getByText(/gen1crawler의 검토된 전체 실행 경로/)).toBeInTheDocument();
+    expect(screen.getByText(/검토된 운영 전체 실행 경로/)).toBeInTheDocument();
     expect(mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawler-studio/drafts' && init?.method === 'POST')).toBeUndefined();
     expect(mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawlers/run' && init?.method === 'POST')).toBeUndefined();
   });
@@ -374,7 +374,7 @@ describe('CrawlerStudioPage', () => {
 
     expect(await screen.findByRole('option', { name: /HOMEPLUS · culture_center/ })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'dry_run 등록' })).not.toBeInTheDocument();
-    expect(screen.getByText(/gen1crawler의 검토된 전체 실행 경로/)).toBeInTheDocument();
+    expect(screen.getByText(/검토된 운영 전체 실행 경로/)).toBeInTheDocument();
     expect(mockedOpsApi.mock.calls.find(([path, init]) => path === '/crawlers/run' && init?.method === 'POST')).toBeUndefined();
   });
 

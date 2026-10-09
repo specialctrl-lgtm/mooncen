@@ -879,7 +879,7 @@ export default function CrawlerStudioPage() {
 
       <section className="panel">
         <header className="section-header">
-          <div><h2>실행 정책</h2><small>크롤러 실행은 gen1crawler의 검토된 전체 실행 경로에서만 수행합니다.</small></div>
+          <div><h2>실행 정책</h2><small>크롤러 실행은 검토된 운영 전체 실행 경로(mooncen-crawler)에서만 수행합니다.</small></div>
         </header>
       </section>
 

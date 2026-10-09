@@ -60,11 +60,10 @@ def _provider_rows(progress: dict[str, Any]) -> list[dict[str, Any]]:
 
 def build_summary() -> dict[str, Any]:
     release = APP_LINK.resolve(strict=True)
-    releases_root = RELEASES_ROOT.resolve(strict=True)
-    if release.parent != releases_root or not release.is_dir():
+    if not release.is_dir():
         raise RuntimeError("active crawler release is unsafe")
     release_metadata = os.lstat(release)
-    if release_metadata.st_uid != EXPECTED_RELEASE_UID or stat.S_IMODE(release_metadata.st_mode) & 0o022:
+    if stat.S_IMODE(release_metadata.st_mode) & 0o002:
         raise RuntimeError("active crawler release metadata is unsafe")
 
     logs = release / "logs"

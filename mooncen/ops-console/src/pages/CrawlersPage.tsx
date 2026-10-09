@@ -272,6 +272,7 @@ export default function CrawlersPage() {
     };
   });
   const databaseProviderNames = new Set(databaseItems.map((item) => item.provider));
+  const ownerName = ownerStatus.data?.host || ownerStatus.data?.owner || '운영 서버';
   const liveOnlyItems: CrawlerSummary[] = [...liveProviders.values()]
     .filter((item) => !databaseProviderNames.has(item.provider))
     .map((item) => ({
@@ -286,7 +287,7 @@ export default function CrawlersPage() {
       consecutive_failures: item.state === 'failed' || item.state === 'stopped' ? 1 : 0,
       collected_count: item.total || 0,
       can_run: false,
-      run_blocked_reason: '운영 DB에 아직 반영되지 않은 gen1crawler 실행 Provider입니다.',
+      run_blocked_reason: `운영 DB에 아직 반영되지 않은 ${ownerName} 실행 Provider입니다.`,
       runtime_error: item.error_message || item.error_type || null,
       runtime_exit_code: item.exit_code ?? null,
     }));
@@ -357,7 +358,7 @@ export default function CrawlersPage() {
                   || ['active', 'activating', 'reloading'].includes(String(ownerStatus.data?.run?.ActiveState || ''))
                   || runAllMutation.isPending
                 }
-                title={ownerStatus.data?.available === false ? ownerStatus.data.reason : 'gen1crawler에서 모든 Provider를 1회 실행합니다.'}
+                title={ownerStatus.data?.available === false ? ownerStatus.data.reason : `${ownerName}에서 모든 Provider를 1회 실행합니다.`}
                 onClick={() => {
                   if (confirmProductionRunAll()) runAllMutation.mutate();
                 }}
@@ -377,7 +378,7 @@ export default function CrawlersPage() {
         <header className="section-header">
           <div>
             <h2>운영 전체 실행</h2>
-            <small>gen1crawler systemd의 실제 예약과 one-shot 실행 상태를 직접 조회합니다.</small>
+            <small>{ownerName} systemd의 실제 예약과 one-shot 실행 상태를 직접 조회합니다.</small>
           </div>
           <button
             className="button subtle"
@@ -391,7 +392,7 @@ export default function CrawlersPage() {
         <QueryState loading={ownerStatus.isLoading} error={ownerStatus.error} />
         {runAcceptedAt && (
           <p className="form-note" role="status">
-            gen1crawler가 전체 실행 요청을 접수했습니다: {formatDate(runAcceptedAt)}
+            {ownerName}가 전체 실행 요청을 접수했습니다: {formatDate(runAcceptedAt)}
           </p>
         )}
         {ownerStatus.data && (
@@ -423,7 +424,7 @@ export default function CrawlersPage() {
               }}
             />
             <p className="form-note">
-              gen1crawler는 상위 스케줄러 잡(Job) 단위로 실행을 관리하며, 하위 통합 타겟(통합예약·체험)을 통해 운영 DB의 374개 프로바이더 전체를 수집·적재합니다.
+              {ownerName}는 상위 스케줄러 잡(Job) 단위로 실행을 관리하며, 하위 통합 타겟(통합예약·체험)을 통해 운영 DB의 374개 프로바이더 전체를 수집·적재합니다.
             </p>
           </>
         )}
@@ -432,7 +433,7 @@ export default function CrawlersPage() {
         <header className="section-header">
           <div>
             <h2>{requestedProvider ? `${requestedProvider} 크롤러` : '크롤러 목록'}</h2>
-            <small>Provider 실행 상태는 gen1crawler 실시간 진행 정보이며, 활성 데이터 수는 마지막 운영 DB 승격 상태입니다.</small>
+            <small>Provider 실행 상태는 {ownerName} 실시간 진행 정보이며, 활성 데이터 수는 마지막 운영 DB 승격 상태입니다.</small>
           </div>
         </header>
         <div className="filter-row">
