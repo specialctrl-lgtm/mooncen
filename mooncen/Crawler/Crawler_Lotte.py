@@ -1296,32 +1296,36 @@ class LotteCrawler:
     def apply_lotte_reception_notice(self, notice: Dict) -> int:
         if notice.get("status") != "PARSED" or not notice.get("branch_code"):
             return 0
-        with get_db_cursor() as cursor:
-            cursor.execute(
-                """
-                UPDATE courses AS course
-                SET apply_start = %(apply_start)s,
-                    apply_end = %(apply_end)s,
-                    apply_period_raw = %(apply_period_raw)s,
-                    updated_at = CURRENT_TIMESTAMP
-                FROM branches AS branch
-                WHERE course.branch_id = branch.id
-                  AND course.provider = 'LOTTE'
-                  AND branch.provider = 'LOTTE'
-                  AND branch.branch_code = %(branch_code)s
-                  AND course.is_active IS TRUE
-                  AND COALESCE(course.end_date, course.start_date) >= %(class_start)s
-                  AND COALESCE(course.start_date, course.end_date) <= %(class_end)s
-                  AND (
-                      course.apply_start IS DISTINCT FROM %(apply_start)s
-                      OR course.apply_end IS DISTINCT FROM %(apply_end)s
-                      OR course.apply_period_raw IS DISTINCT FROM %(apply_period_raw)s
-                  )
-                RETURNING course.id
-                """,
-                notice,
-            )
-            return len(cursor.fetchall())
+        try:
+            with get_db_cursor() as cursor:
+                cursor.execute(
+                    """
+                    UPDATE courses AS course
+                    SET apply_start = %(apply_start)s,
+                        apply_end = %(apply_end)s,
+                        apply_period_raw = %(apply_period_raw)s,
+                        updated_at = CURRENT_TIMESTAMP
+                    FROM branches AS branch
+                    WHERE course.branch_id = branch.id
+                      AND course.provider = 'LOTTE'
+                      AND branch.provider = 'LOTTE'
+                      AND branch.branch_code = %(branch_code)s
+                      AND course.is_active IS TRUE
+                      AND COALESCE(course.end_date, course.start_date) >= %(class_start)s
+                      AND COALESCE(course.start_date, course.end_date) <= %(class_end)s
+                      AND (
+                          course.apply_start IS DISTINCT FROM %(apply_start)s
+                          OR course.apply_end IS DISTINCT FROM %(apply_end)s
+                          OR course.apply_period_raw IS DISTINCT FROM %(apply_period_raw)s
+                      )
+                    RETURNING course.id
+                    """,
+                    notice,
+                )
+                return len(cursor.fetchall())
+        except Exception as exc:
+            logger.warning("Failed to apply reception notice for branch %s: %s", notice.get("branch_code"), exc)
+            return 0
 
     def monitor_reception_notices(self, branches: List[Dict]) -> Dict[str, int]:
         summary = {
@@ -1990,6 +1994,12 @@ class LotteCrawler:
                 'provider': 'LOTTE',
                 'provider_course_id': provider_course_id,
                 'branch_code': brch_cd,
+                'collection_category': '문화센터',
+                'domain_category': '문화센터',
+                'source_group': 'culture_center',
+                'operator_type': '민간/유통',
+                'service_group': '문화센터',
+                'collection_type': 'ajax_api',
                 'title': title,
                 'instructor': instructor,
                 'target': target,
@@ -2069,6 +2079,14 @@ class LotteCrawler:
     def save_course(self, course_data: Dict, branch_id: str) -> bool:
         """강좌 정보를 DB에 저장 (파싱 포함)"""
         try:
+            course_data.setdefault('collection_category', '문화센터')
+            course_data.setdefault('domain_category', '문화센터')
+            course_data.setdefault('source_group', 'culture_center')
+            course_data.setdefault('operator_type', '민간/유통')
+            course_data.setdefault('service_group', '문화센터')
+            course_data.setdefault('collection_type', 'ajax_api')
+            if not course_data.get('branch') and course_data.get('branch_name'):
+                course_data['branch'] = course_data['branch_name']
             sanitize_course_payload(course_data)
             course_data['branch_id'] = branch_id
             course_data.setdefault('apply_start', None)
@@ -2620,8 +2638,7 @@ class LotteCrawler:
                 try:
                     self.monitor_reception_notices(reception_branch_targets)
                 except Exception as exc:
-                    self.had_errors = True
-                    logger.error("LOTTE reception notice monitor failed: %s", exc)
+                    logger.warning("LOTTE reception notice monitor failed (non-fatal): %s", exc)
             full_scope = bool(
                 limit is None
                 and not test_mode
