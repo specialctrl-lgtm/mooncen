@@ -37,18 +37,18 @@ def test_active_cloud_owns_the_production_web_backend_and_database() -> None:
     assert topology.primary_for("database").service_host == "cloud"
 
 
-def test_cloud_owns_database_and_gen1crawler_owns_legacy_crawling() -> None:
+def test_cloud_owns_database_and_crawler_services() -> None:
     database = production_service_placements("database", ROOT)
     crawler = production_service_placements("crawler", ROOT)
 
     assert [(placement.node, placement.role) for placement in database] == [("cloud", "primary")]
     assert [(placement.node, placement.role) for placement in crawler] == [
-        ("gen1crawler", "primary")
+        ("cloud", "primary")
     ]
-    assert load_production_topology(ROOT).primary_for("crawler").service_host == "gen1crawler"
+    assert load_production_topology(ROOT).primary_for("crawler").service_host == "cloud"
 
 
-def test_gen1db_owns_crawler_control_and_isolated_staging_database() -> None:
+def test_cloud_owns_crawler_control_and_staging_database() -> None:
     topology = load_production_topology(ROOT)
     production_database = topology.primary_for("database")
     staging_database = topology.primary_for("staging_database")
@@ -59,14 +59,14 @@ def test_gen1db_owns_crawler_control_and_isolated_staging_database() -> None:
         "cloud",
     )
     assert (staging_database.node, staging_database.service_host) == (
-        "gen1db",
-        "gen1db",
+        "cloud",
+        "cloud",
     )
     assert (crawler_control.node, crawler_control.service_host) == (
-        "gen1db",
-        "gen1db",
+        "cloud",
+        "cloud",
     )
-    assert staging_database.node != production_database.node
+    assert staging_database.node == crawler_control.node
 
 
 def test_production_crawler_mode_remains_explicitly_legacy_until_cutover() -> None:
@@ -85,31 +85,31 @@ def test_reviewed_distributed_worker_fleet_is_explicit_and_disabled() -> None:
             topology.crawler_workers.values(),
             key=lambda item: item.rollout_order,
         )
-    ] == ["wtr-linux", "gen1crawler"]
-    wtr = topology.crawler_worker_for("wtr-linux")
-    assert wtr.topology_node == "wtr-linux"
-    assert wtr.dns_host == "wtr-linux"
-    assert wtr.kernel_hostname == "sgm-standard-pc-i440fx-piix-1996"
-    assert (wtr.canary, wtr.rollout_order, wtr.enabled) == (True, 1, False)
-    assert (wtr.concurrency, wtr.memory_high, wtr.memory_max, wtr.cpu_quota) == (
-        1,
+    ] == ["cloud", "wtr-linux"]
+    cloud_worker = topology.crawler_worker_for("cloud")
+    assert cloud_worker.topology_node == "cloud"
+    assert cloud_worker.dns_host == "cloud"
+    assert cloud_worker.kernel_hostname == "mooncen"
+    assert (cloud_worker.canary, cloud_worker.rollout_order, cloud_worker.enabled) == (True, 1, False)
+    assert (cloud_worker.concurrency, cloud_worker.memory_high, cloud_worker.memory_max, cloud_worker.cpu_quota) == (
+        4,
         "4G",
-        "6G",
-        "300%",
+        "8G",
+        "400%",
     )
-    gen1crawler = topology.crawler_worker_for("gen1crawler")
-    assert gen1crawler.kernel_hostname == "gen1crawler"
-    assert (gen1crawler.canary, gen1crawler.rollout_order, gen1crawler.enabled) == (
+    wtr = topology.crawler_worker_for("wtr-linux")
+    assert wtr.kernel_hostname == "sgm-standard-pc-i440fx-piix-1996"
+    assert (wtr.canary, wtr.rollout_order, wtr.enabled) == (
         False,
         2,
         False,
     )
     assert (
-        gen1crawler.concurrency,
-        gen1crawler.memory_high,
-        gen1crawler.memory_max,
-        gen1crawler.cpu_quota,
-    ) == (1, "2G", "4G", "200%")
+        wtr.concurrency,
+        wtr.memory_high,
+        wtr.memory_max,
+        wtr.cpu_quota,
+    ) == (1, "4G", "6G", "300%")
 
 
 def test_public_payload_contains_only_dns_names_and_reviewed_placement_data() -> None:
@@ -119,27 +119,17 @@ def test_public_payload_contains_only_dns_names_and_reviewed_placement_data() ->
     assert payload["active_node"] == "cloud"
     assert payload["crawler_mode"] == "legacy"
     assert payload["nodes"]["cloud"] == {"dns_host": "cloud", "active": True}
-    assert payload["nodes"]["gen1crawler"] == {
-        "dns_host": "gen1crawler",
-        "active": False,
-    }
-    assert payload["nodes"]["gen1db"] == {
-        "dns_host": "gen1db",
-        "active": False,
-    }
     assert payload["nodes"]["wtr-linux"] == {
         "dns_host": "wtr-linux",
         "active": False,
     }
     assert set(payload["nodes"]) == {
         "cloud",
-        "gen1crawler",
-        "gen1db",
         "wtr-linux",
     }
     assert [worker["worker_key"] for worker in payload["crawler_workers"]] == [
+        "cloud",
         "wtr-linux",
-        "gen1crawler",
     ]
     assert all(worker["enabled"] is False for worker in payload["crawler_workers"])
     assert not re.search(r"(?<!\d)(?:\d{1,3}\.){3}\d{1,3}(?!\d)", encoded)
@@ -203,7 +193,7 @@ def test_public_payload_contains_only_dns_names_and_reviewed_placement_data() ->
         ),
         (
             lambda payload: payload["crawlerWorkers"][0]["resourceLimits"].update(
-                {"memoryHigh": "6G"}
+                {"memoryHigh": "8G"}
             ),
             "MemoryHigh must be below MemoryMax",
         ),
@@ -212,24 +202,12 @@ def test_public_payload_contains_only_dns_names_and_reviewed_placement_data() ->
             "missing a required service",
         ),
         (
-            lambda payload: payload["services"]["crawler_control"][0].update(
-                {"node": "cloud"}
-            ),
-            "crawler_control primary must not be on activeNode",
-        ),
-        (
-            lambda payload: payload["services"]["staging_database"][0].update(
-                {"node": "cloud"}
-            ),
-            "staging_database primary must not be on activeNode",
-        ),
-        (
             lambda payload: (
                 payload["nodes"].update(
-                    {"gen1staging": {"dnsHost": "gen1staging"}}
+                    {"other-node": {"dnsHost": "other-node"}}
                 ),
                 payload["services"]["staging_database"][0].update(
-                    {"node": "gen1staging"}
+                    {"node": "other-node"}
                 ),
             ),
             "staging_database primary must be co-located with crawler_control primary",

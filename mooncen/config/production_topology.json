@@ -7,45 +7,39 @@
     "cloud": {
       "dnsHost": "cloud"
     },
-    "gen1crawler": {
-      "dnsHost": "gen1crawler"
-    },
-    "gen1db": {
-      "dnsHost": "gen1db"
-    },
     "wtr-linux": {
       "dnsHost": "wtr-linux"
     }
   },
   "crawlerWorkers": [
     {
+      "workerKey": "cloud",
+      "topologyNode": "cloud",
+      "dnsHost": "cloud",
+      "kernelHostname": "mooncen",
+      "canary": true,
+      "rolloutOrder": 1,
+      "enabled": false,
+      "resourceLimits": {
+        "concurrency": 4,
+        "memoryHigh": "4G",
+        "memoryMax": "8G",
+        "cpuQuota": "400%"
+      }
+    },
+    {
       "workerKey": "wtr-linux",
       "topologyNode": "wtr-linux",
       "dnsHost": "wtr-linux",
       "kernelHostname": "sgm-standard-pc-i440fx-piix-1996",
-      "canary": true,
-      "rolloutOrder": 1,
+      "canary": false,
+      "rolloutOrder": 2,
       "enabled": false,
       "resourceLimits": {
         "concurrency": 1,
         "memoryHigh": "4G",
         "memoryMax": "6G",
         "cpuQuota": "300%"
-      }
-    },
-    {
-      "workerKey": "gen1crawler",
-      "topologyNode": "gen1crawler",
-      "dnsHost": "gen1crawler",
-      "kernelHostname": "gen1crawler",
-      "canary": false,
-      "rolloutOrder": 2,
-      "enabled": false,
-      "resourceLimits": {
-        "concurrency": 1,
-        "memoryHigh": "2G",
-        "memoryMax": "4G",
-        "cpuQuota": "200%"
       }
     }
   ],
@@ -70,19 +64,19 @@
     ],
     "staging_database": [
       {
-        "node": "gen1db",
+        "node": "cloud",
         "role": "primary"
       }
     ],
     "crawler_control": [
       {
-        "node": "gen1db",
+        "node": "cloud",
         "role": "primary"
       }
     ],
     "crawler": [
       {
-        "node": "gen1crawler",
+        "node": "cloud",
         "role": "primary"
       }
     ]

@@ -773,6 +773,10 @@ function Resolve-NodeExecutable {
     if ($null -ne $command) {
         return $command.Source
     }
+    $programFilesNode = Join-Path ${env:ProgramFiles} "nodejs\node.exe"
+    if (Test-Path -LiteralPath $programFilesNode -PathType Leaf) {
+        return $programFilesNode
+    }
     $wingetPackages = Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Packages"
     $candidates = @(
         Get-ChildItem -LiteralPath $wingetPackages -Directory -ErrorAction SilentlyContinue |
@@ -1400,7 +1404,7 @@ function Start-OpsConsole {
     else {
         Write-Host "API:         http://127.0.0.1:8001/health"
     }
-    Write-Host "Crawler execution: gen1crawler direct owner path only"
+    Write-Host "Crawler execution: cloud direct owner path only"
 }
 
 function Refresh-OpsControl {
@@ -1471,7 +1475,7 @@ function Refresh-OpsControl {
         throw
     }
 
-    Write-Host "Ops control plane refreshed. Crawler execution remains on gen1crawler."
+    Write-Host "Ops control plane refreshed. Crawler execution remains on cloud."
     Write-Host "Ops Console: http://127.0.0.1:5175/"
     Write-Host "API:         http://127.0.0.1:8001/health"
 }

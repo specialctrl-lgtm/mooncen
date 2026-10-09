@@ -958,7 +958,7 @@ def test_ops_api_maps_active_production_web_and_database_to_cloud(
     assert mapped["service_host"] == "localhost"
 
 
-def test_ops_api_maps_crawler_to_reviewed_gen1crawler_owner() -> None:
+def test_ops_api_maps_crawler_to_reviewed_cloud_owner() -> None:
     mapped = ops_v2._with_production_placement(
         {
             "environment": "development",
@@ -969,13 +969,13 @@ def test_ops_api_maps_crawler_to_reviewed_gen1crawler_owner() -> None:
     )
 
     assert mapped is not None
-    assert mapped["topology_node"] == "gen1crawler"
-    assert mapped["topology_host"] == "gen1crawler"
+    assert mapped["topology_node"] == "cloud"
+    assert mapped["topology_host"] == "cloud"
     assert mapped["topology_role"] == "primary"
     assert mapped["service_host"] == "gen1win"
     assert mapped["reporter_hostname"] == "observed-crawler-host"
-    assert mapped["configured_owner_node"] == "gen1crawler"
-    assert mapped["configured_owner_host"] == "gen1crawler"
+    assert mapped["configured_owner_node"] == "cloud"
+    assert mapped["configured_owner_host"] == "cloud"
     assert mapped["configured_owner_role"] == "primary"
     assert mapped["observed_runtime_host"] is None
     assert mapped["runtime_host_verified"] is False
@@ -1015,7 +1015,7 @@ def test_registered_component_keeps_agent_reporter_out_of_runtime_host(monkeypat
     assert mapped["service_host"] == "crawler-endpoint"
     assert mapped["reporter_hostname"] == "actual-worker"
     assert mapped["observed_runtime_host"] is None
-    assert mapped["configured_owner_host"] == "gen1crawler"
+    assert mapped["configured_owner_host"] == "cloud"
     assert mapped["runtime_host_verified"] is False
 
 
@@ -1030,7 +1030,7 @@ def test_ops_api_accepts_only_explicit_runtime_host_evidence() -> None:
     )
 
     assert mapped is not None
-    assert mapped["configured_owner_host"] == "gen1crawler"
+    assert mapped["configured_owner_host"] == "cloud"
     assert mapped["service_host"] == "status-endpoint"
     assert mapped["reporter_hostname"] == "status-reporter"
     assert mapped["observed_runtime_host"] == "proven-executor"
@@ -1038,7 +1038,7 @@ def test_ops_api_accepts_only_explicit_runtime_host_evidence() -> None:
     assert mapped["runtime_host_evidence_source"] == "explicit_observed_runtime_host"
 
 
-def test_ops_crawler_fallback_keeps_reviewed_gen1crawler_owner(monkeypatch) -> None:
+def test_ops_crawler_fallback_keeps_reviewed_cloud_owner(monkeypatch) -> None:
     monkeypatch.setattr(
         ops_v2,
         "_registered_component",
@@ -1049,11 +1049,11 @@ def test_ops_crawler_fallback_keeps_reviewed_gen1crawler_owner(monkeypatch) -> N
     mapped = ops_v2._crawler_component(object())
 
     assert mapped["status"] == "unknown"
-    assert mapped["topology_node"] == "gen1crawler"
-    assert mapped["topology_host"] == "gen1crawler"
+    assert mapped["topology_node"] == "cloud"
+    assert mapped["topology_host"] == "cloud"
     assert mapped["topology_role"] == "primary"
-    assert mapped["configured_owner_node"] == "gen1crawler"
-    assert mapped["configured_owner_host"] == "gen1crawler"
+    assert mapped["configured_owner_node"] == "cloud"
+    assert mapped["configured_owner_host"] == "cloud"
     assert mapped["configured_owner_role"] == "primary"
     assert mapped["observed_runtime_host"] is None
     assert mapped["runtime_host_verified"] is False
@@ -1087,7 +1087,7 @@ def test_ops_crawler_run_history_reports_health_without_inventing_executor(monke
     mapped = ops_v2._crawler_component(FakeSession())  # type: ignore[arg-type]
 
     assert mapped["status"] == "healthy"
-    assert mapped["configured_owner_host"] == "gen1crawler"
+    assert mapped["configured_owner_host"] == "cloud"
     assert mapped["observed_runtime_host"] is None
     assert mapped["runtime_host_verified"] is False
     assert mapped["status_observation_source"] == "crawler_run_log"

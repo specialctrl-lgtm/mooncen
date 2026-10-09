@@ -487,20 +487,11 @@ def load_production_topology(root: Path = PROJECT_ROOT) -> ProductionTopology:
         for item in services[_CONTROL_PLANE_SERVICE]
         if item.role == "primary"
     )
-    if control_primary.node == active_node:
-        raise ValueError(
-            "production topology crawler_control primary must not be on activeNode"
-        )
-
     staging_primary = next(
         item
         for item in services[_STAGING_DATABASE_SERVICE]
         if item.role == "primary"
     )
-    if staging_primary.node == active_node:
-        raise ValueError(
-            "production topology staging_database primary must not be on activeNode"
-        )
     if staging_primary.node != control_primary.node:
         raise ValueError(
             "production topology staging_database primary must be co-located "
@@ -514,11 +505,17 @@ def load_production_topology(root: Path = PROJECT_ROOT) -> ProductionTopology:
         raise ValueError(
             "production topology crawler primary must have a reviewed worker assignment"
         )
-    forbidden_worker_nodes = {active_node, control_primary.node, staging_primary.node}
-    if worker_nodes & forbidden_worker_nodes:
-        raise ValueError(
-            "production topology crawler workers must not run on web or control nodes"
-        )
+
+    # In multi-node production topologies, control nodes and worker nodes are isolated
+    # from activeNode. When control_primary is deployed on an isolated node, ensure workers
+    # do not run on activeNode or control/staging nodes. When control and crawlers are
+    # consolidated on activeNode (single-node production), co-location is permitted.
+    if control_primary.node != active_node:
+        forbidden_worker_nodes = {active_node, control_primary.node, staging_primary.node}
+        if worker_nodes & forbidden_worker_nodes:
+            raise ValueError(
+                "production topology crawler workers must not run on web or control nodes"
+            )
 
     return ProductionTopology(
         schema_version=1,
