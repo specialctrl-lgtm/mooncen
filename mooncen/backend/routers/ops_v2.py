@@ -2789,6 +2789,89 @@ def quality_categories(
     return {"available": True, "items": rows, "total": len(rows)}
 
 
+@router.get("/quality/crawlers")
+def quality_crawlers(
+    provider: str = Query(default="", max_length=100),
+    limit: int = Query(default=100, ge=1, le=500),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    from backend.ops.quality_engine import calculate_cqs_for_provider, calculate_dqs_for_courses
+
+    # Find providers with active courses or crawler logs
+    params: dict[str, Any] = {"limit": limit}
+    conditions = ["c.is_active = true"]
+    if provider:
+        conditions.append("c.provider = :provider")
+        params["provider"] = provider
+
+    where_sql = " AND ".join(conditions)
+    providers_rows = mapped_rows(
+        db.execute(
+            text(
+                f"""
+                SELECT c.provider, {CONTENT_TYPE_SQL} AS content_type,
+                       COUNT(c.id) AS active_courses,
+                       COUNT(DISTINCT c.branch_id) AS branch_count
+                FROM courses c
+                WHERE {where_sql}
+                GROUP BY c.provider, {CONTENT_TYPE_SQL}
+                ORDER BY active_courses DESC
+                LIMIT :limit
+                """
+            ),
+            params,
+        )
+    )
+
+    items = []
+    for row in providers_rows:
+        prov = row["provider"]
+        cqs_data = calculate_cqs_for_provider(db, provider=prov)
+        dqs_data = calculate_dqs_for_courses(db, provider=prov)
+        items.append({
+            "provider": prov,
+            "content_type": row["content_type"],
+            "active_courses": int(row["active_courses"]),
+            "branch_count": int(row["branch_count"]),
+            "cqs": cqs_data["cqs"],
+            "cqs_measurable": cqs_data["measurable"],
+            "cqs_breakdown": cqs_data["breakdown"],
+            "anomaly": cqs_data["anomaly"],
+            "funnel": cqs_data["funnel"],
+            "dqs": dqs_data["dqs"],
+            "dqs_grade": dqs_data["grade"],
+            "dqs_measurable": dqs_data["measurable"],
+            "dqs_metrics": dqs_data["metrics"],
+            "latest_run": cqs_data.get("latest_run"),
+        })
+
+    return {"available": True, "items": items, "total": len(items)}
+
+
+@router.get("/quality/providers/{provider}/branches")
+def quality_provider_branches(
+    provider: str,
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    from backend.ops.quality_engine import get_provider_branches_quality
+
+    items = get_provider_branches_quality(db, provider=provider)
+    return {"available": True, "provider": provider, "items": items, "total": len(items)}
+
+
+@router.get("/quality/regression")
+def quality_regression(
+    provider: str = Query(default="", max_length=100),
+    limit: int = Query(default=15, ge=1, le=50),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    from backend.ops.quality_engine import get_regression_comparison
+
+    items = get_regression_comparison(db, provider=provider or None, limit=limit)
+    return {"available": True, "items": items, "total": len(items)}
+
+
+
 @router.get("/quality/issues")
 def quality_issues(
     issue_status: str = Query(default="", alias="status", max_length=32),

@@ -2534,3 +2534,130 @@ pre {
     grid-template-columns: 1fr;
   }
 }
+
+/* Advanced Quality Management System Styles */
+.quality-nav-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 8px;
+}
+
+.quality-tab-button {
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quality-tab-button:hover {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.quality-tab-button.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.cqs-score-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.cqs-score-badge.high {
+  background: #e6f7ef;
+  color: #0d8a55;
+  border: 1px solid #a3e2c4;
+}
+
+.cqs-score-badge.mid {
+  background: #fff8e6;
+  color: #b27b00;
+  border: 1px solid #f9d88c;
+}
+
+.cqs-score-badge.low {
+  background: #fdeeee;
+  color: #d32f2f;
+  border: 1px solid #f8b4b4;
+}
+
+.cqs-score-badge.unmeasured {
+  background: #f1f3f4;
+  color: #5f6368;
+  border: 1px solid #dadce0;
+}
+
+.funnel-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--surface-soft);
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.funnel-step {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-align: center;
+  min-width: 85px;
+}
+
+.funnel-step strong {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.funnel-step small {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.funnel-arrow {
+  color: var(--muted);
+  font-weight: bold;
+}
+
+.regression-verdict {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.regression-verdict.REGRESSION {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.regression-verdict.IMPROVED {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.regression-verdict.STABLE {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}

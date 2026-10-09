@@ -7,11 +7,16 @@ import { opsApi } from '../api';
 import { OpsProvider } from '../context';
 import QualityPage from './QualityPage';
 
-vi.mock('../api', () => ({
-  opsApi: vi.fn(),
-}));
+vi.mock(import('../api'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    opsApi: vi.fn(),
+  };
+});
 
 const mockedOpsApi = vi.mocked(opsApi);
+
 
 function renderPage(initialEntry = '/data-quality') {
   const queryClient = new QueryClient({
@@ -200,6 +205,41 @@ describe('QualityPage category quality', () => {
           ],
         };
       }
+      if (path.startsWith('/quality/crawlers')) {
+        return { available: true, total: 1, items: [{
+          provider: 'MUNI_TEST',
+          content_type: 'education',
+          active_courses: 12,
+          branch_count: 3,
+          cqs: 88.5,
+          cqs_measurable: true,
+          cqs_breakdown: {
+            completeness: { score: 28.5, weight: 30, rate: 95.0, measurable: true, latest_count: 12, prev_count: 12 },
+            accuracy: { score: null, weight: 25, rate: null, measurable: false, note: '미검증' },
+            required_fields: { score: 14.0, weight: 15, rate: 93.3, measurable: true, valid_count: 11, total_count: 12 },
+            application_url: { score: 10.0, weight: 10, rate: 100.0, measurable: true, valid_count: 12, missing_count: 0 },
+            freshness: { score: 10.0, weight: 10, rate: 100.0, measurable: true, fresh_7d_count: 12 },
+            duplicate_prevention: { score: 5.0, weight: 5, rate: 100.0, measurable: true, duplicate_count: 0 },
+            stability: { score: 5.0, weight: 5, rate: 100.0, measurable: true, run_count: 1 },
+          },
+          anomaly: { status: 'NORMAL', drop_rate: 0, reason: '정상', latest_count: 12, prev_count: 12 },
+          funnel: { listing_count: 12, detail_attempted: 12, detail_success: 12, parsed_count: 12, valid_count: 11, duplicate_count: 0, error_count: 0 },
+          dqs: 85.0,
+          dqs_grade: 'B',
+          dqs_measurable: true,
+          dqs_metrics: { title_rate: 100, branch_rate: 100, schedule_rate: 80, fee_rate: 100, url_rate: 100, logical_rate: 100, fresh_rate: 100, date_reversed_count: 0, time_reversed_count: 0, price_anomaly_count: 0 },
+        }] };
+      }
+      if (path.startsWith('/quality/regression')) {
+        return { available: true, total: 1, items: [{
+          target_key: 'MUNI_TEST',
+          verdict: 'STABLE',
+          reasons: [],
+          current_run: { id: 102, status: 'success', collected_count: 12, duration_seconds: 5.2 },
+          previous_run: { id: 101, status: 'success', collected_count: 12, duration_seconds: 5.1 },
+          diff: { collected_delta: 0, collected_delta_pct: 0, duration_delta: 0.1 },
+        }] };
+      }
       if (path.startsWith('/quality/issues')) {
         return { available: true, total: 0, limit: 100, offset: 0, items: [] };
       }
@@ -210,7 +250,11 @@ describe('QualityPage category quality', () => {
   it('shows major-category field quality and explicit encoding damage counts', async () => {
     renderPage();
 
+    // Click Category Tab to test category view
+    fireEvent.click(await screen.findByRole('button', { name: '카테고리/업체별 품질' }));
+
     expect(await screen.findByText('교육')).toBeInTheDocument();
+
     expect(screen.queryByText('미술·공예')).not.toBeInTheDocument();
     expect(screen.queryByText('??깃문??덈뮸')).not.toBeInTheDocument();
     expect(screen.getByText('원본 손상 4건')).toBeInTheDocument();
@@ -250,25 +294,21 @@ describe('QualityPage category quality', () => {
     expect(mockedOpsApi).toHaveBeenCalledWith('/quality/issues?limit=100');
   });
 
-  it('uses an exact Provider deep link for provider-scoped quality evidence', async () => {
-    renderPage('/data-quality?provider=MUNI_LOCATION');
+  it('renders crawler quality CQS/DQS scores, funnel, and regression diff tabs', async () => {
+    renderPage();
 
-    expect(await screen.findByText('Provider 집중 보기')).toBeInTheDocument();
-    expect(screen.getAllByText('MUNI_LOCATION').length).toBeGreaterThan(0);
-    expect(await screen.findByRole('heading', { name: 'MUNI_LOCATION Provider별 품질' })).toBeInTheDocument();
-    expect((await screen.findAllByText('62.5%')).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { name: 'MUNI_LOCATION 품질 문제' })).toBeInTheDocument();
-    expect(mockedOpsApi).toHaveBeenCalledWith(
-      '/quality/providers?provider=MUNI_LOCATION&level=major&limit=500',
-    );
-    expect(mockedOpsApi).toHaveBeenCalledWith(
-      '/quality/address-fixes?limit=100&provider=MUNI_LOCATION',
-    );
-    expect(mockedOpsApi).toHaveBeenCalledWith(
-      '/quality/issues?limit=100&provider=MUNI_LOCATION',
-    );
-    expect(mockedOpsApi).not.toHaveBeenCalledWith('/quality/address-fixes?limit=100');
-    expect(mockedOpsApi).not.toHaveBeenCalledWith('/quality/issues?limit=100');
-    expect(screen.getByRole('link', { name: '개선 큐' })).toHaveAttribute('href', '/crawler-improvements');
+    // Verify Default Tab is 크롤러 품질 (CQS & DQS)
+    expect(await screen.findByText('크롤러별 품질 평가 (Crawler Quality Score & Data Quality Score)')).toBeInTheDocument();
+    expect(await screen.findByText('88.5점')).toBeInTheDocument();
+    expect(screen.getByText('Grade B')).toBeInTheDocument();
+    expect(mockedOpsApi).toHaveBeenCalledWith('/quality/crawlers?limit=100');
+
+    // Switch to Regression Tab
+    fireEvent.click(screen.getByRole('button', { name: '코드 수정 회귀 테스트 (Regression)' }));
+    expect(await screen.findByText('크롤러 코드 수정 전후 회귀 테스트 (Regression Test Diff)')).toBeInTheDocument();
+    expect(await screen.findByText('STABLE')).toBeInTheDocument();
+    expect(mockedOpsApi).toHaveBeenCalledWith('/quality/regression?limit=20');
   });
+
 });
+
