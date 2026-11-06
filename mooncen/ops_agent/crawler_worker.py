@@ -666,11 +666,19 @@ def build_crawler_execution(
         "--skip-coordinate-backfill",
         "--skip-category-backfill",
     ]
-    branch = _bounded_text(parameters.get("branch"), maximum=160, field="branch")
-    if branch:
+    branch = _bounded_text(
+        parameters.get("branch") or parameters.get("branch_name"),
+        maximum=160,
+        field="branch",
+    )
+    branch_code = _bounded_text(parameters.get("branch_code"), maximum=160, field="branch_code")
+    if branch or branch_code:
         if provider not in BRANCH_FILTER_PROVIDERS:
             raise ValueError("provider does not support reviewed branch filtering")
-        command.extend(["--branch-name", branch])
+        if branch_code:
+            command.extend(["--branch-code", branch_code])
+        if branch:
+            command.extend(["--branch-name", branch])
     concurrency = parameters.get("concurrency", 1)
     if not isinstance(concurrency, int) or isinstance(concurrency, bool) or not 1 <= concurrency <= 5:
         raise ValueError("concurrency is out of bounds")

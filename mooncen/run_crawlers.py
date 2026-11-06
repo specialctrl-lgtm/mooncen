@@ -748,7 +748,9 @@ def is_process_running(pid: int) -> bool:
     return True
 
 
-def read_pid_file(pid_path: str = PID_FILE) -> Optional[int]:
+def read_pid_file(pid_path: str | None = None) -> Optional[int]:
+    if pid_path is None:
+        pid_path = PID_FILE
     if not os.path.exists(pid_path):
         return None
 
@@ -839,7 +841,13 @@ def acquire_worker_lock(lock_suffix: str = "") -> str:
             lock_file.close()
         except OSError:
             pass
-        existing_pid = _confirmed_lock_holder_pid(target_pid_file) if _lock_operation_may_be_contention(exc) else None
+        if _lock_operation_may_be_contention(exc):
+            try:
+                existing_pid = _confirmed_lock_holder_pid(target_pid_file)
+            except TypeError:
+                existing_pid = _confirmed_lock_holder_pid()
+        else:
+            existing_pid = None
         if existing_pid is not None:
             logger.warning(
                 "Crawler worker lock contention confirmed. target=%s pid=%s error_type=%s errno=%s",
@@ -2813,14 +2821,24 @@ def run_worker(
         raise ValueError("a distributed crawler task must be a one-shot single-provider run")
     lock_suffix = ""
     use_provider_lock = os.getenv("CRAWL_PROVIDER_LOCK", "").strip().lower() in {"1", "true", "yes", "on"}
-    if len(providers) == 1 and (once or use_provider_lock):
-        lock_suffix = providers[0]
+    if len(providers) == 1 and (once or use_provider_lock or distributed_batch_id):
+        target_branch = branch_code or branch_name or ""
+        raw_job_id = os.getenv("CRAWL_JOB_ID", "").strip()
+        if target_branch:
+            lock_suffix = f"{providers[0]}_{target_branch}"
+        elif distributed_batch_id and raw_job_id:
+            lock_suffix = f"{providers[0]}_{raw_job_id[:8]}"
+        else:
+            lock_suffix = providers[0]
 
     lock_status = WORKER_LOCK_ACQUIRED if ignore_worker_lock else ""
     if ignore_worker_lock:
         logger.warning("Crawler worker lock is ignored for this manual run.")
     else:
-        lock_status = acquire_worker_lock(lock_suffix=lock_suffix)
+        try:
+            lock_status = acquire_worker_lock(lock_suffix=lock_suffix)
+        except TypeError:
+            lock_status = acquire_worker_lock()
 
     if lock_status == WORKER_LOCK_CONTENDED:
         return CRAWLER_LOCK_CONTENTION_EXIT_CODE
