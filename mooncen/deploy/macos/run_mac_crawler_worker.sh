@@ -23,7 +23,7 @@ fi
 export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 export PYTHONUNBUFFERED=1
 export TZ=Asia/Seoul
-export WORKER_NODE="mac"
+export WORKER_NODE="${WORKER_NODE:-mac1}"
 
 # Automatically update to latest Git code before starting worker
 if [ -d "${WORK_DIR}/.git" ] && command -v git >/dev/null 2>&1; then

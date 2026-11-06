@@ -59,9 +59,9 @@ scrape_configs:
           role: synology
           alerting: pending
       - targets:
-          - mac:9100
+          - mac1:9100
         labels:
-          node: mac
+          node: mac1
           role: macos
           alerting: pending
 
