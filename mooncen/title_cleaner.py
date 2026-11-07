@@ -20,6 +20,19 @@ TARGET_AGE_TOKEN = (
     r"|\d{2,4}\s*\uB144\uC0DD\s*(?:\uC774\uC0C1|\uC774\uD558|\uBD80\uD130)?)"
 )
 
+# Date list pattern definitions for multi-date / bracketed date removals
+RAW_DATE = r"(?:1[0-2]|0?[1-9])[./](?:3[01]|[12]\d|0?[1-9])"
+RAW_DATE_RANGE = rf"{RAW_DATE}\s*[~-]\s*{RAW_DATE}"
+RAW_DATE_ITEM = rf"(?:{RAW_DATE_RANGE}|{RAW_DATE})"
+DATE_LIST_MULTI = rf"{RAW_DATE_ITEM}(?:\s*,\s*{RAW_DATE_ITEM})+"
+DATE_LIST_ANY = rf"{RAW_DATE_ITEM}(?:\s*,\s*{RAW_DATE_ITEM})*"
+
+DATE_LIST_BRACKET_PATTERN = (
+    rf"[\(\[\{{（［｛]\s*(?:\d+차\s*[:：]?)?\s*{DATE_LIST_ANY}"
+    rf"(?:\s*,\s*\d+회)?(?:[^\)\]\}}）］｝]*?)[\)\]\}}）］｝]"
+)
+UNBRACKETED_DATE_LIST_PATTERN = rf"(?:※\s*수업일\s*[:：]\s*)?{DATE_LIST_MULTI}"
+
 
 def _squash(value: str) -> str:
     value = re.sub(r"\s+", " ", value)
@@ -33,9 +46,55 @@ def _squash(value: str) -> str:
     return value.strip()
 
 
+def _cleanup_title_punct(title: str) -> str:
+    """Clean up dangling punctuation, orphaned commas, and deformed brackets."""
+    # 1. Remove empty or punctuation-only brackets
+    title = re.sub(r"[\(\[\{（［｛]\s*[,/|:;.\s]*\s*[\)\]\}）］｝]", " ", title)
+
+    # 2. Inside brackets, trim leading/trailing commas, colons, slashes
+    def clean_bracket_edges(m: re.Match) -> str:
+        open_b = m.group(1)
+        content = m.group(2).strip()
+        close_b = m.group(3)
+        content = re.sub(r"^[,/|:;\s]+", "", content)
+        content = re.sub(r"[,/|:;\s]+$", "", content)
+        content = re.sub(r"[,:\s]*,\s*,\s*[,:\s]*", ", ", content)
+        return f"{open_b}{content}{close_b}" if content else " "
+
+    for _ in range(2):
+        title = re.sub(r"([\(\[\{（［｛])([^\(\)\[\]\{\}（）［］｛｝]+)([\)\]\}）］｝])", clean_bracket_edges, title)
+        title = re.sub(r"[\(\[\{（［｛]\s*[,/|:;.\s]*\s*[\)\]\}）］｝]", " ", title)
+
+    # 3. Outside brackets: collapse multiple commas or isolated commas
+    title = re.sub(r"[,:\s]*,\s*,\s*[,:\s]*", " ", title)
+    title = re.sub(r"(\s*,\s*){2,}", " ", title)
+    title = re.sub(r"\s*,\s*(?=[(\[{\uff08\uff3b\uff5b]|$)", " ", title)
+    title = re.sub(r"(?<=[)\]}\uff09\uff3d\uff5d])\s*,\s*", " ", title)
+
+    # 4. Handle '(' mistyped for ')' before another '('
+    for _ in range(4):
+        title = re.sub(r"\(\s*([가-힣A-Za-z0-9_ ,/&~-]+?)\s*\(", r"(\1) (", title)
+    title = re.sub(r"\(\s*([가-힣A-Za-z0-9_ ,/&~-]+?)\s*$", r"(\1)", title)
+
+    # 5. Remove dangling colons / '※ 수업일 :'
+    title = re.sub(r"※\s*수업일\s*[:：]?\s*", " ", title)
+    title = re.sub(r"[:：]\s*$", "", title)
+
+    # 6. Final whitespace & bracket squash
+    title = re.sub(r"\s+([)\]\}）］｝])", r"\1", title)
+    title = re.sub(r"([(\[\{（［｛])\s+", r"\1", title)
+    title = re.sub(r"\s*[\(\[\{（［｛]\s*[\)\]\}）］｝]\s*", " ", title)
+    title = re.sub(r"\s+", " ", title)
+    title = re.sub(r"^\s*[-_:|\u2502\u3163\uFF5C\u00B7,.)\]\u2665\u2661\u2605\u2606\u25CE\u25CB\u25CF]+\s*", "", title)
+    title = re.sub(r"\s*[-_:|\u2502\u3163\uFF5C\u00B7,<,([]+\s*$", "", title)
+    return title.strip()
+
+
 def clean_course_title(raw_title: str) -> Tuple[str, str]:
     """Return a display title and the schedule-ish fragments removed from it."""
-    original = _squash(raw_title or "")
+    # Pre-clean deformed parens or multi-commas if present
+    pre_cleaned = _cleanup_title_punct(raw_title or "")
+    original = _squash(pre_cleaned)
     title = original
     removed: list[str] = []
 
@@ -73,6 +132,10 @@ def clean_course_title(raw_title: str) -> Tuple[str, str]:
 
         title = re.sub(r"[\(\[]([^)\]]*(?:\uB144\uC0DD|\uAC1C\uC6D4|\uC138)[^)\]]*)[\)\]]", remember, title)
         title = _squash(title)
+
+    # 0. Strip multi-date / bracketed date lists (e.g. (4차2/1,2/3,2/5,3회), (3차1/25-1/29,5회), 수업일: 12/6, 12/20...)
+    remove(DATE_LIST_BRACKET_PATTERN)
+    remove(UNBRACKETED_DATE_LIST_PATTERN)
 
     remove(r"^[*+]+\s*")
     remove(r"^\uBD04\s*[*]+\s*")
@@ -181,7 +244,7 @@ def clean_course_title(raw_title: str) -> Tuple[str, str]:
     title = re.sub(r"\s*[_-]\s*\uD734\uAC15\s*$", "", title)
     title = re.sub(r"\s+\d{1,2}\s*[~-]\s*$", "", title)
     title = re.sub(r"\s*[~-]\s*\uB9CC\s*$", "", title)
-    title = _squash(title)
+    title = _cleanup_title_punct(title)
 
     # Guardrails: keep the original if the cleaner became too aggressive.
     if len(title) < 3 or len(title) < max(3, len(original) * 0.18):
